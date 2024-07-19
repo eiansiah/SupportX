@@ -29,6 +29,7 @@ public class ArrayList<T> implements ArrayListInterface<T>{
         return true;
     }
 
+    /** @return array size */
     @Override
     public int size() {
         return size;
@@ -48,6 +49,10 @@ public class ArrayList<T> implements ArrayListInterface<T>{
         return (T) elementData[index]; // return value on index.
     }
 
+    /** Replace the element with the respective index.
+     * @param index position of element
+     * @param element new element to replace the old element
+     * @return old element*/
     @Override
     public T set(int index, T element) {
         if (index < 0 || index >= size) {
@@ -62,9 +67,8 @@ public class ArrayList<T> implements ArrayListInterface<T>{
     }
 
     /**
-     * remove elements from custom/your own ArrayList method returns
-     * removedElement on specific index. else it throws IndexOutOfBoundException
-     * if index is negative or greater than size of size.
+     * remove elements from ArrayList method returns
+     * @param object remove specific object
      */
     @Override
     public boolean remove(Object object) {
@@ -87,6 +91,11 @@ public class ArrayList<T> implements ArrayListInterface<T>{
         return true;
     }
 
+    /**
+     * remove elements from ArrayList method returns
+     * @param index removedElement on specific index. else it throws IndexOutOfBoundException
+     * if index is negative or greater than size of size.
+     */
     public boolean remove(int index) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size "
@@ -104,6 +113,8 @@ public class ArrayList<T> implements ArrayListInterface<T>{
         return true;
     }
 
+    /** Check whether arraylist contains certain element
+     * @return boolean  */
     @Override
     public boolean contains(T element) {
         for (int i = 0; i < size; i++) {
@@ -145,9 +156,6 @@ public class ArrayList<T> implements ArrayListInterface<T>{
     /**
      * Returns the index of the first occurrence of the specified element
      * in this list, or -1 if this list does not contain the element.
-     * More formally, returns the lowest index {@code i} such that
-     * {@code Objects.equals(o, get(i))},
-     * or -1 if there is no such index.
      */
     @Override
     public int indexOf(T element) {
