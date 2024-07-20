@@ -3,9 +3,11 @@
 package Libraries;
 
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 
-public class ArrayList<T> implements ArrayListInterface<T>{
+public class ArrayList<T> implements ArrayListInterface<T>, Iterable<T>{
 
     // Define INITIAL_CAPACITY, size of elements of custom ArrayList
     private static final int INITIAL_CAPACITY = 10;
@@ -19,14 +21,12 @@ public class ArrayList<T> implements ArrayListInterface<T>{
     /**
      * Method adds elements to List.
      */
-    public boolean add(T element) {
+    public void add(T element) {
         if (size == elementData.length) {
             ensureCapacity(); // increase current capacity of list, make it
             // double.
         }
         elementData[size++] = element;
-
-        return true;
     }
 
     /** @return array size */
@@ -138,12 +138,12 @@ public class ArrayList<T> implements ArrayListInterface<T>{
      * Method increases capacity of list by making it double.
      */
     private void ensureCapacity() {
-        int newIncreasedCapacity = elementData.length * 2;
+        int newIncreasedCapacity = elementData.length + 10;
         elementData = Arrays.copyOf(elementData, newIncreasedCapacity);
     }
 
     /**
-     * Display ArrayList.
+     * Display ArrayList in terms of 2D array only
      */
     @Override
     public void display() {
@@ -168,6 +168,53 @@ public class ArrayList<T> implements ArrayListInterface<T>{
         }
 
         return -1;
+    }
+
+    /**
+     * Returns the index of the last occurrence of the specified element
+     * in this list, or -1 if this list does not contain the element.
+     */
+    @Override
+    public int lastIndexOf(T element) {
+        if (contains(element)) {
+            for (int i = size - 1; i >= 0; i--) {
+                if (element.equals(elementData[i])) {
+                    return i;
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    /** @return boolean whether is the arraylist empty */
+    @Override
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    /** Added for foreach function to work*/
+    @Override
+    public Iterator<T> iterator() {
+        return new ArrayListIterator();
+    }
+
+    private class ArrayListIterator implements Iterator<T> {
+        private int currentIndex = 0;
+
+        @Override
+        public boolean hasNext() {
+            return currentIndex < size;
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public T next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            return (T) elementData[currentIndex++];
+        }
     }
 
 }
