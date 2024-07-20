@@ -1,7 +1,7 @@
 package Libraries;
 
 public interface ArrayListInterface<T>{
-    boolean add(T element);
+    void add(T element);
     int size();
     T get(int index);
     T set(int index, T element);
@@ -12,6 +12,8 @@ public interface ArrayListInterface<T>{
     //void ensureCapacity();
     void display();
     int indexOf(T element);
+    int lastIndexOf(T element);
+    boolean isEmpty();
 
 
     //TODO: sorting, removeall?
