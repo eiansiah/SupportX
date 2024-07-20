@@ -5,12 +5,12 @@ import Libraries.ArrayList;
 public class ArrayListTesting {
 
     public static void main(String[] args) {
-        scenario5();
+        scenario7();
     }
 
     /** test contains 'string' function and size function*/
     static void scenario1(){
-        ArrayList<String> strings = new ArrayList();
+        ArrayList<String> strings = new ArrayList<>();
 
         strings.add("Hello");
         strings.add("ME");
@@ -23,11 +23,11 @@ public class ArrayListTesting {
 
     /** test contains 'class' function and indexOf function */
     static void scenario2(){
-        ArrayList<testingClass> list = new ArrayList();
+        ArrayList<testingArrayListClass> list = new ArrayList<>();
 
-        testingClass t1 = new testingClass(40, "LOL");
-        testingClass t2 = new testingClass(40, "LOL");
-        testingClass t3 = new testingClass(20, "New");
+        testingArrayListClass t1 = new testingArrayListClass(40, "LOL");
+        testingArrayListClass t2 = new testingArrayListClass(40, "LOL");
+        testingArrayListClass t3 = new testingArrayListClass(20, "New");
 
         list.add(t1);
         list.add(t3);
@@ -39,7 +39,7 @@ public class ArrayListTesting {
 
     /** test get function*/
     static void scenario3(){
-        ArrayList<String> strings = new ArrayList();
+        ArrayList<String> strings = new ArrayList<>();
 
         strings.add("Hello");
         strings.add("ME");
@@ -56,11 +56,11 @@ public class ArrayListTesting {
 
     /** test remove and clear function*/
     static void scenario4(){
-        ArrayList<testingClass> list = new ArrayList<>();
+        ArrayList<testingArrayListClass> list = new ArrayList<>();
 
-        testingClass t1 = new testingClass(40, "LOL");
-        testingClass t2 = new testingClass(40, "LOL");
-        testingClass t3 = new testingClass(20, "New");
+        testingArrayListClass t1 = new testingArrayListClass(40, "LOL");
+        testingArrayListClass t2 = new testingArrayListClass(40, "LOL");
+        testingArrayListClass t3 = new testingArrayListClass(20, "New");
 
         list.add(t1);
         list.add(t2);
@@ -81,9 +81,9 @@ public class ArrayListTesting {
     }
 
     static void scenario5(){
-        ArrayList<testingClass> list = new ArrayList<>();
-        testingClass t1 = new testingClass(40, "LOL");
-        testingClass t2 = new testingClass(20, "New");
+        ArrayList<testingArrayListClass> list = new ArrayList<>();
+        testingArrayListClass t1 = new testingArrayListClass(40, "LOL");
+        testingArrayListClass t2 = new testingArrayListClass(20, "New");
         list.add(t1);
 
         System.out.println("testing name: " + list.get(0).name);
@@ -92,20 +92,55 @@ public class ArrayListTesting {
 
         System.out.println("name (after set): " + list.get(0).name);
     }
+
+    /** testing foreach loop*/
+    static void scenario6(){
+        ArrayList<String> list = new ArrayList<>();
+
+        list.add("Hello");
+        list.add("ME");
+
+        for(String s : list){
+            System.out.println(s);
+        }
+    }
+
+    /** testing lastIndexOf function */
+    static void scenario7(){
+        ArrayList<testingArrayListClass> list = new ArrayList<>();
+
+        testingArrayListClass t1 = new testingArrayListClass(40, "LOL");
+        testingArrayListClass t2 = new testingArrayListClass(12, "new");
+        testingArrayListClass t3 = new testingArrayListClass(17, "JK");
+
+        list.add(t1);
+        list.add(t2);
+        list.add(t2);
+        list.add(t1);
+
+        System.out.println("Size: " + list.size());
+
+        System.out.println("first index of t1 pos: " + list.indexOf(t1));
+        System.out.println("first index of t2 pos: " + list.indexOf(t2));
+        System.out.println("last index of t1 pos: " + list.lastIndexOf(t1));
+        System.out.println("last index of t2 pos: " + list.lastIndexOf(t2));
+
+        System.out.println("last index of t3 pos: " + list.lastIndexOf(t3));
+    }
 }
 
-class testingClass{
+class testingArrayListClass{
     int number;
     String name;
 
-    public testingClass(){}
+    public testingArrayListClass(){}
 
-    public testingClass(int number, String name){
+    public testingArrayListClass(int number, String name){
         this.number = number;
         this.name = name;
     }
 
     public void display(){
-        System.out.println(number + name);
+        System.out.println(number + " " + name);
     }
 }
