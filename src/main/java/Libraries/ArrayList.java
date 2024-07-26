@@ -10,7 +10,7 @@ import java.util.NoSuchElementException;
 public class ArrayList<T> implements ArrayListInterface<T>, Iterable<T>{
 
     // Define INITIAL_CAPACITY, size of elements of custom ArrayList
-    private static final int INITIAL_CAPACITY = 10;
+    private static final int INITIAL_CAPACITY = 16;
     private int size = 0;
     private Object[] elementData;
 
@@ -21,12 +21,12 @@ public class ArrayList<T> implements ArrayListInterface<T>, Iterable<T>{
     /**
      * Method adds elements to List.
      */
-    public void add(T element) {
+    public void add(T newElement) {
         if (size == elementData.length) {
             ensureCapacity(); // increase current capacity of list, make it
             // double.
         }
-        elementData[size++] = element;
+        elementData[size++] = newElement;
     }
 
     /** @return array size */
@@ -51,37 +51,37 @@ public class ArrayList<T> implements ArrayListInterface<T>, Iterable<T>{
 
     /** Replace the element with the respective index.
      * @param index position of element
-     * @param element new element to replace the old element
+     * @param newElement new element to replace the old element
      * @return old element*/
     @Override
-    public T set(int index, T element) {
+    public T set(int index, T newElement) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size "
                     + index);
         }
 
         T oldValue = (T) elementData[index];
-        elementData[index] = element;
+        elementData[index] = newElement;
 
         return oldValue;
     }
 
     /**
      * remove elements from ArrayList method returns
-     * @param object remove specific object
+     * @param element remove specific object
      */
     @Override
-    public boolean remove(Object object) {
+    public boolean remove(Object element) {
         int i = 0;
 
         found: {
-            if (object == null) {
+            if (element == null) {
                 for (; i < size; i++)
                     if (elementData[i] == null)
                         break found;
             } else {
                 for (; i < size; i++)
-                    if (object.equals(elementData[i]))
+                    if (element.equals(elementData[i]))
                         break found;
             }
             return false;
@@ -138,12 +138,12 @@ public class ArrayList<T> implements ArrayListInterface<T>, Iterable<T>{
      * Method increases capacity of list by making it double.
      */
     private void ensureCapacity() {
-        int newIncreasedCapacity = elementData.length + 10;
+        int newIncreasedCapacity = elementData.length * 2;
         elementData = Arrays.copyOf(elementData, newIncreasedCapacity);
     }
 
     /**
-     * Display ArrayList in terms of 2D array only
+     * Display ArrayList in terms of 1D array only
      */
     @Override
     public void display() {
