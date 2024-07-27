@@ -165,7 +165,7 @@ public class Hashmap <K, V> implements HashmapInterface<K, V>{
     /**
      * Removes the mapping for the specified key from this map if present.
      * @param key the key
-     * @return {@code true} if this map contains a mapping for the specified key and has successfully remove it
+     * @return {@code true} if this map contains a mapping for the specified key and has successfully removed it
      */
     public boolean remove(K key) {
         int hash = hash(key);
@@ -191,6 +191,7 @@ public class Hashmap <K, V> implements HashmapInterface<K, V>{
         return false;
     }
 
+    /** Removes all the mapping of key-value in the Hashmap. */
     public void clear(){
         for(int i = 0; i < capacity; i++) {
             table[i] = null;
