@@ -5,7 +5,7 @@ import Libraries.ArrayList;
 public class ArrayListTesting {
 
     public static void main(String[] args) {
-        scenario7();
+        scenario4();
     }
 
     /** test contains 'string' function and size function*/
@@ -68,6 +68,10 @@ public class ArrayListTesting {
 
         System.out.println("Testing contains t1: " + list.contains(t1));
         list.remove(0);
+        System.out.println("Testing contains t2: " + list.contains(t2));
+        list.remove(t2);
+        System.out.println("Testing contains t2 (after removed): " + list.contains(t2));
+
         System.out.println("now: " + list.contains(t1));
 
         System.out.println("Size: " + list.size());

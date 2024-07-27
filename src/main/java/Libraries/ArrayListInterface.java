@@ -5,7 +5,7 @@ public interface ArrayListInterface<T>{
     int size();
     T get(int index);
     T set(int index, T element);
-    boolean remove(T object);
+    boolean remove(T element);
     boolean remove(int index);
     boolean contains(T element);
     void clear();

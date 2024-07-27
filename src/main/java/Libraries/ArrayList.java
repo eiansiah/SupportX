@@ -71,7 +71,7 @@ public class ArrayList<T> implements ArrayListInterface<T>, Iterable<T>{
      * @param element remove specific object
      */
     @Override
-    public boolean remove(Object element) {
+    public boolean remove(T element) {
         int i = 0;
 
         found: {
