@@ -1,5 +1,7 @@
+package Main;
+
+//Use be DonorSystem.Donor,Donee and Volunteers
 public abstract class Applicants {
-    private String id;
     private String name;
     private String email;
     private String phone;
@@ -7,19 +9,10 @@ public abstract class Applicants {
     public Applicants(){
     }
 
-    public Applicants(String id, String name, String email, String phone) {
-        this.id = id;
+    public Applicants(String name, String email, String phone) {
         this.name = name;
         this.email = email;
         this.phone = phone;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -48,6 +41,7 @@ public abstract class Applicants {
 
     @Override
     public String toString() {
-        return "Applicants{" + "id=" + id + ", name=" + name + ", email=" + email + ", phone=" + phone + '}';
+        return "," + name + "," + email + "," + phone;
     }
+
 }
