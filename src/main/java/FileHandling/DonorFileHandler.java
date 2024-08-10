@@ -10,8 +10,8 @@ import Main.Donor;
 import Libraries.ArrayList;
 
 public class DonorFileHandler implements FileHandlingInterface<Donor>{
-    
-    // Write data to DonorSystem.Donor.txt file
+
+    // Write data to Donor.txt file
     @Override
     public void saveData(String filename, Donor donor) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
@@ -21,8 +21,8 @@ public class DonorFileHandler implements FileHandlingInterface<Donor>{
             System.err.println("Error writing to file: " + e.getMessage());
         }
     }
-    
-    // Read DonorSystem.Donor record in the DonorSystem.Donor.txt file
+
+    // Read Donor record in the Donor.txt file
     @Override
     public ArrayList<Donor> readData(String filename) {
         ArrayList<Donor> donors = new ArrayList<>();
@@ -44,7 +44,7 @@ public class DonorFileHandler implements FileHandlingInterface<Donor>{
         }
         return donors;
     }
-    
+
     // Update DonorSystem.Donor record in the DonorSystem.Donor.txt file
     @Override
     public void updateData(String filename, Donor selectedDonor) {
@@ -62,8 +62,8 @@ public class DonorFileHandler implements FileHandlingInterface<Donor>{
         }
         updateMultipleData(filename, donors);
     }
-    
-    // Rewrite all Contents into DonorSystem.Donor.txt file after modifying DonorSystem.Donor array list
+
+    // Rewrite all Contents into Donor.txt file after modifying Donor array list
     @Override
     public void updateMultipleData(String filename, ArrayList<Donor> donors) {
        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
@@ -74,5 +74,25 @@ public class DonorFileHandler implements FileHandlingInterface<Donor>{
             System.err.println("Error writing to file: " + e.getMessage());
         }
     }
-    
+
+    public String getLastDonorId(String fileName) {
+        String defaultId = "DN00000";  // Default value if the file is empty or doesn't exist
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] donorData = line.split(",");
+                defaultId = donorData[0];
+            }
+        } catch (IOException e) {
+            System.err.println("Error reading the file: " + e.getMessage());
+        }
+        return defaultId;
+    }
+
+    public String incrementDonorId(String lastId) {
+        int number = Integer.parseInt(lastId.substring(2)); // Extract the numeric part of the ID
+        number++;  // Increment the number
+        return String.format("DN%05d", number); // Format the new ID with leading zeros
+    }
+
 }

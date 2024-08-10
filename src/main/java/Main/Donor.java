@@ -5,16 +5,14 @@ public class Donor extends Applicants {
     private String id;
     private String category;
     private String type;
-    private static int donorCount;
 
     public Donor (){
 
     }
 
-    public Donor(String name, String email, String phone , String category, String type) {
+    public Donor(String id, String name, String email, String phone , String category, String type) {
         super(name, email, phone);
-        donorCount++;
-        id = String.format("DN%05d", donorCount);
+        this.id = id;
         this.category = category;
         this.type = type;
     }
