@@ -76,7 +76,7 @@ public class DonorFileHandler implements FileHandlingInterface<Donor>{
     }
 
     public String getLastDonorId(String fileName) {
-        String defaultId = "DN00000";  // Default value if the file is empty or doesn't exist
+        String defaultId = "DNR00000";  // Default value if the file is empty or doesn't exist
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
             while ((line = reader.readLine()) != null) {
