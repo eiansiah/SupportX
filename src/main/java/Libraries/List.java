@@ -1,6 +1,6 @@
 package Libraries;
 
-public interface ArrayListInterface<T>{
+public interface List<T>{
     void add(T element);
     int size();
     T get(int index);

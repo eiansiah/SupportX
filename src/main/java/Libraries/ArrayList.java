@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 
-public class ArrayList<T> implements ArrayListInterface<T>, Iterable<T>{
+public class ArrayList<T> implements List<T>, Iterable<T>{
 
     // Define INITIAL_CAPACITY, size of elements of custom ArrayList
     private static final int INITIAL_CAPACITY = 16;
