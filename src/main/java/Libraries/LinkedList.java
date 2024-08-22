@@ -77,9 +77,12 @@ public class LinkedList<T> implements List<T>, Iterable<T> {
     public void addFirst(T element) {
         Node newNode = new Node(element);
 
-        if (head != null) {
+        if (head == null) {
+            tail = newNode;
+        }else{
             newNode.next = head;
         }
+
         head = newNode;
 
         size++;

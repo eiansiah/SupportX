@@ -5,7 +5,7 @@ import Libraries.LinkedList;
 public class LinkedListTesting {
 
     public static void main(String[] args) {
-        scenario9();
+        scenario10();
     }
 
     /** test contains 'string' function and size function*/
@@ -167,6 +167,17 @@ public class LinkedListTesting {
 
         System.out.println();
         list.addFirst("1");
+
+        list.display();
+    }
+
+    /** testing addFirst then addLast */
+    static void scenario10(){
+        LinkedList<String> list = new LinkedList<>();
+
+
+        list.addFirst("2");
+        list.add("3");
 
         list.display();
     }
