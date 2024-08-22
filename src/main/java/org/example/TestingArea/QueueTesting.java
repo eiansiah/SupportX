@@ -4,7 +4,7 @@ import Libraries.Queue;
 public class QueueTesting {
 
     public static void main(String[] args) {
-        scenario4();
+        scenario3();
     }
 
     /** test queue declaration, queue and dequeue function */

@@ -2,10 +2,20 @@
 
 package Libraries;
 
-public class Queue<T> extends ArrayList<T> implements QueueInterface<T> {
+import java.util.Arrays;
+
+public class Queue<T> implements QueueInterface<T> {
+
+    // Define INITIAL_CAPACITY, size of elements of custom ArrayList
+    private static final int INITIAL_CAPACITY = 16;
+    private int size = 0;
+    private Object[] elementData;
+
+    private int frontIndex = 0;
+    private int backIndex = -1;
 
     public Queue() {
-        super();
+        elementData = new Object[INITIAL_CAPACITY];
     }
 
     /**
@@ -14,7 +24,14 @@ public class Queue<T> extends ArrayList<T> implements QueueInterface<T> {
      */
     @Override
     public void enqueue(T element) {
-        add(element);
+        if (size == elementData.length) {
+            ensureCapacity(); // increase current capacity of list, make it
+            // double.
+        }
+
+        backIndex = (backIndex + 1) % elementData.length;
+        elementData[backIndex] = element;
+        size++;
     }
 
     /**
@@ -24,8 +41,12 @@ public class Queue<T> extends ArrayList<T> implements QueueInterface<T> {
     @Override
     public T dequeue() {
         if(!isEmpty()){
-            T element = get(0);
-            remove(0);
+            T element = (T) elementData[frontIndex];
+
+            elementData[frontIndex] = null;
+
+            frontIndex = (frontIndex + 1) % elementData.length;
+            size--;
 
             return element;
         }
@@ -40,9 +61,27 @@ public class Queue<T> extends ArrayList<T> implements QueueInterface<T> {
     @Override
     public T peek() {
         if(!isEmpty()){
-            return get(0);
+            return (T) elementData[frontIndex];
         }
 
         return null;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    @Override
+    public int size() {
+        return size;
+    }
+
+    private void ensureCapacity() {
+        int newIncreasedCapacity = elementData.length * 2;
+
+        Debug.printDebugMsgln("Expand array from " + elementData.length + " to " + newIncreasedCapacity);
+
+        elementData = Arrays.copyOf(elementData, newIncreasedCapacity);
     }
 }
