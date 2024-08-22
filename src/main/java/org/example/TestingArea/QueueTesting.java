@@ -4,7 +4,7 @@ import Libraries.Queue;
 public class QueueTesting {
 
     public static void main(String[] args) {
-        scenario3();
+        scenario1();
     }
 
     /** test queue declaration, queue and dequeue function */
@@ -13,6 +13,21 @@ public class QueueTesting {
 
         queue.enqueue("12");
         queue.enqueue("14");
+        queue.enqueue("15");
+        queue.enqueue("16");
+        queue.enqueue("17");
+        queue.enqueue("18");
+        queue.enqueue("19");
+        queue.enqueue("20");
+        queue.enqueue("21");
+        queue.enqueue("22");
+        queue.enqueue("23");
+        queue.enqueue("24");
+        queue.enqueue("25");
+        queue.enqueue("26");
+        queue.enqueue("27");
+        queue.enqueue("28");
+        queue.enqueue("29");
 
         System.out.println(queue.dequeue());
         System.out.println(queue.dequeue());

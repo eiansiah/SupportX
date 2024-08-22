@@ -1,9 +1,15 @@
 package Libraries;
 
-public class Stack<T> extends ArrayList<T> implements StackInterface<T>{
+import java.util.Arrays;
+
+public class Stack<T> implements StackInterface<T>{
+
+    private static final int INITIAL_CAPACITY = 16;
+    private int size = 0;
+    private Object[] elementData;
 
     public Stack(){
-        super();
+        elementData = new Object[INITIAL_CAPACITY];
     }
 
     /**
@@ -12,7 +18,12 @@ public class Stack<T> extends ArrayList<T> implements StackInterface<T>{
      */
     @Override
     public void push(T element) {
-        add(element);
+        if (size == elementData.length) {
+            ensureCapacity(); // increase current capacity of list, make it
+            // double.
+        }
+
+        elementData[size++] = element;
     }
 
     /**
@@ -23,8 +34,8 @@ public class Stack<T> extends ArrayList<T> implements StackInterface<T>{
     @Override
     public T pop() {
         if(!isEmpty()){
-            T element = get(size() - 1);
-            remove(size() - 1);
+            T element = (T) elementData[--size];
+            elementData[size] = null;
 
             return element;
         }
@@ -40,9 +51,27 @@ public class Stack<T> extends ArrayList<T> implements StackInterface<T>{
     @Override
     public T peek() {
         if(!isEmpty()){
-            return get(size() - 1);
+            return (T) elementData[size - 1];
         }
 
         return null;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    @Override
+    public int size() {
+        return size;
+    }
+
+    private void ensureCapacity() {
+        int newIncreasedCapacity = elementData.length * 2;
+
+        Debug.printDebugMsgln("Expand array from " + elementData.length + " to " + newIncreasedCapacity);
+
+        elementData = Arrays.copyOf(elementData, newIncreasedCapacity);
     }
 }

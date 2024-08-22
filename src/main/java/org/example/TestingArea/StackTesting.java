@@ -5,7 +5,7 @@ import Libraries.Stack;
 public class StackTesting {
 
     public static void main(String[] args) {
-        scenario2();
+        scenario3();
     }
 
     /** test stack declaration, push, pop and peek function */
@@ -32,6 +32,19 @@ public class StackTesting {
         stack.pop().display();
         stack.pop().display();
         stack.pop().display();
+    }
+
+    static void scenario3(){
+        Stack<String> stack = new Stack<>();
+
+        for (int i=1; i<=17; i++){
+            stack.push(i + "");
+        }
+
+        System.out.println("Peek: " + stack.peek());
+        System.out.println(stack.pop());
+        System.out.println(stack.peek());
+
     }
 }
 

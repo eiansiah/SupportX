@@ -6,7 +6,6 @@ import java.util.Arrays;
 
 public class Queue<T> implements QueueInterface<T> {
 
-    // Define INITIAL_CAPACITY, size of elements of custom ArrayList
     private static final int INITIAL_CAPACITY = 16;
     private int size = 0;
     private Object[] elementData;
@@ -36,7 +35,7 @@ public class Queue<T> implements QueueInterface<T> {
 
     /**
      * Retrieves and removes the head of this Queue, or returns null if this Queue is empty.
-     * @return the head of this Queue, or null if this Queue is empty
+     * @return the element removed, or null if empty
      */
     @Override
     public T dequeue() {
@@ -55,8 +54,8 @@ public class Queue<T> implements QueueInterface<T> {
     }
 
     /**
-     * Retrieves, but does not remove, the head of this Queue, or returns null if this Queue is empty.
-     * @return the head of this Queue, or null if this Queue is empty
+     * Retrieves the element at the front of the queue without removing it.
+     * @return the element at the front, or null if empty
      */
     @Override
     public T peek() {
