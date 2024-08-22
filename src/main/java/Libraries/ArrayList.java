@@ -36,9 +36,7 @@ public class ArrayList<T> implements List<T>, Iterable<T>{
      * @throws IndexOutOfBoundsException if the index is out of range
      */
     public void add(int index, T newElement) {
-        if (index < 0 || index > size) {
-            throw new IndexOutOfBoundsException();
-        }
+        checkAddRange(index);
 
         if (size == elementData.length) {
             ensureCapacity(); // increase current capacity of list, make it
@@ -66,10 +64,8 @@ public class ArrayList<T> implements List<T>, Iterable<T>{
     public T get(int index) {
         // if index is negative or greater than size of size, we throw
         // Exception.
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Index: " + index + ", Size "
-                    + index);
-        }
+        checkAddRange(index);
+
         return (T) elementData[index]; // return value on index.
     }
 
@@ -79,10 +75,7 @@ public class ArrayList<T> implements List<T>, Iterable<T>{
      * @return old element*/
     @Override
     public T set(int index, T newElement) {
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Index: " + index + ", Size "
-                    + index);
-        }
+        checkAddRange(index);
 
         T oldValue = (T) elementData[index];
         elementData[index] = newElement;
@@ -121,10 +114,7 @@ public class ArrayList<T> implements List<T>, Iterable<T>{
      * if index is negative or greater than size of size.
      */
     public boolean remove(int index) {
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Index: " + index + ", Size "
-                    + index);
-        }
+        checkAddRange(index);
 
         elementData[index] = null;
 
@@ -163,6 +153,9 @@ public class ArrayList<T> implements List<T>, Iterable<T>{
      */
     private void ensureCapacity() {
         int newIncreasedCapacity = elementData.length * 2;
+
+        Debug.printDebugMsgln("Expand array from " + elementData.length + " to " + newIncreasedCapacity);
+
         elementData = Arrays.copyOf(elementData, newIncreasedCapacity);
     }
 
@@ -217,6 +210,12 @@ public class ArrayList<T> implements List<T>, Iterable<T>{
         return size == 0;
     }
 
+    private void checkAddRange(int index){
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size " + index);
+        }
+    }
+
     /** Added for foreach function to work*/
     @Override
     public Iterator<T> iterator() {
@@ -240,5 +239,4 @@ public class ArrayList<T> implements List<T>, Iterable<T>{
             return (T) elementData[currentIndex++];
         }
     }
-
 }
