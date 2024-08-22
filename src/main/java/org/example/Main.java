@@ -1,6 +1,8 @@
 package org.example;
 
 import Libraries.ArrayList;
+import Libraries.Color;
+import Libraries.Debug;
 
 public class Main {
     public static void main(String[] args) {
