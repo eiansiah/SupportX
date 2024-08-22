@@ -211,7 +211,7 @@ public class ArrayList<T> implements List<T>, Iterable<T>{
     }
 
     private void checkAddRange(int index){
-        if (index < 0 || index > size) {
+        if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size " + index);
         }
     }

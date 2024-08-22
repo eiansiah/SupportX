@@ -5,7 +5,7 @@ import Libraries.ArrayList;
 public class ArrayListTesting {
 
     public static void main(String[] args) {
-        scenario8();
+        scenario3();
     }
 
     /** test contains 'string' function and size function*/
