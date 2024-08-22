@@ -30,13 +30,13 @@ public class DonorFileHandler implements FileHandlingInterface<Donor>{
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
-                Donor donor = new Donor();
-                donor.setId(parts[0]);
-                donor.setName(parts[1]);
-                donor.setEmail(parts[2]);
-                donor.setPhone(parts[3]);
-                donor.setCategory(parts[4]);
-                donor.setType(parts[5]);
+                Donor donor = new Donor(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5]);
+//                donor.setId(parts[0]);
+//                donor.setName(parts[1]);
+//                donor.setEmail(parts[2]);
+//                donor.setPhone(parts[3]);
+//                donor.setCategory(parts[4]);
+//                donor.setType(parts[5]);
                 donors.add(donor);
             }
         } catch (IOException e) {
@@ -76,7 +76,7 @@ public class DonorFileHandler implements FileHandlingInterface<Donor>{
     }
 
     public String getLastDonorId(String fileName) {
-        String defaultId = "DN00000";  // Default value if the file is empty or doesn't exist
+        String defaultId = "DNR00000";  // Default value if the file is empty or doesn't exist
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
             while ((line = reader.readLine()) != null) {
