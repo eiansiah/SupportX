@@ -14,6 +14,10 @@ public class LinkedStack<T> implements StackInterface<T>{
         }
     }
 
+    /**
+     * Pushes the specified element onto the top of this stack.
+     * @param element the element to be pushed onto the stack
+     */
     @Override
     public void push(T element) {
         if(head == null) {
@@ -27,6 +31,10 @@ public class LinkedStack<T> implements StackInterface<T>{
         size++;
     }
 
+    /**
+     * Removes and returns the element at the top of this stack.
+     * @return the element at the top of this stack, or null if the stack is empty
+     */
     @Override
     public T pop() {
         if(!isEmpty()) {
@@ -40,6 +48,10 @@ public class LinkedStack<T> implements StackInterface<T>{
         return null;
     }
 
+    /**
+     * Retrieves, but does not remove, the element at the top of this stack.
+     * @return the element at the top of this stack, or null if the stack is empty
+     */
     @Override
     public T peek() {
         if(!isEmpty()) {
