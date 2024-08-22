@@ -29,6 +29,30 @@ public class ArrayList<T> implements List<T>, Iterable<T>{
         elementData[size++] = newElement;
     }
 
+    /**
+     * Inserts a new element at the specified position in the list.
+     * @param index position at which to insert the new element
+     * @param newElement the element to insert
+     * @throws IndexOutOfBoundsException if the index is out of range
+     */
+    public void add(int index, T newElement) {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        if (size == elementData.length) {
+            ensureCapacity(); // increase current capacity of list, make it
+            // double.
+        }
+
+        for (int i = size; i > index; i--) {
+            elementData[i] = elementData[i - 1];
+        }
+
+        elementData[index] = newElement;
+        size++;
+    }
+
     /** @return array size */
     @Override
     public int size() {

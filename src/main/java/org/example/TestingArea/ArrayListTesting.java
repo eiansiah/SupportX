@@ -5,7 +5,7 @@ import Libraries.ArrayList;
 public class ArrayListTesting {
 
     public static void main(String[] args) {
-        scenario4();
+        scenario8();
     }
 
     /** test contains 'string' function and size function*/
@@ -130,6 +130,25 @@ public class ArrayListTesting {
         System.out.println("last index of t2 pos: " + list.lastIndexOf(t2));
 
         System.out.println("last index of t3 pos: " + list.lastIndexOf(t3));
+    }
+
+    /** testing add(int index, T element)*/
+    static void scenario8(){
+        ArrayList<String> list = new ArrayList<>();
+
+        list.add("1");
+        list.add("2");
+        list.add("3");
+        list.add("5");
+        list.add("6");
+        list.add("7");
+
+        list.display();
+
+        System.out.println();
+        list.add(3, "4");
+
+        list.display();
     }
 }
 
