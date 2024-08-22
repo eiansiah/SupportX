@@ -29,7 +29,7 @@ public class Stack<T> implements StackInterface<T>{
     /**
      * Removes and returns the element at the top of this Stack,
      * or returns null if this Stack is empty.
-     * @return the element at the top of this Stack, or null if this Stack is empty
+     * @return the element at the top of the stack, or null if empty
      */
     @Override
     public T pop() {
@@ -46,7 +46,7 @@ public class Stack<T> implements StackInterface<T>{
     /**
      * Retrieves, but does not remove, the element at the top of this Stack,
      * or returns null if this Stack is empty.
-     * @return the element at the top of this Stack, or null if this Stack is empty
+     * @return the element at the top of the stack, or null if empty
      */
     @Override
     public T peek() {
