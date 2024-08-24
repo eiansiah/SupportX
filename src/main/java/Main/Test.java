@@ -37,6 +37,7 @@ public class Test {
                     break;
                 //Delete Donor
                 case 2:
+                    //Check IF EMPTY
                     displayDonors();
                     // Get the ID to be deleted
                     System.out.print("\nWhich Donor Would you like to delete? Please enter their ID: ");
@@ -86,10 +87,12 @@ public class Test {
                                     donorSelected.setPhone(scanner.nextLine().trim());
                                     break;
                                 case 4:
+                                    //SET ONLY SOME CATEGORIES CAN BE CHANGED TO
                                     System.out.print("Enter new category: ");
                                     donorSelected.setCategory(scanner.nextLine().trim());
                                     break;
                                 case 5:
+                                    //SET ONLY SOME TYPE CAN BE CHANGED TO
                                     System.out.print("Enter new type: ");
                                     donorSelected.setType(scanner.nextLine().trim());
                                     break;
