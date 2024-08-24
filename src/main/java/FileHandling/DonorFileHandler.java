@@ -129,16 +129,16 @@ public class DonorFileHandler implements FileHandlingInterface<Donor>{
 
         // If the file was empty, return a starting ID instead of the default ID
         if (isFileEmpty) {
-            return "DN00000";  // Start the ID sequence from DN00000
+            return "DNR00000";  // Start the ID sequence from DN00000
         }
 
         return defaultId;
     }
 
     public String incrementDonorId(String lastId) {
-        int number = Integer.parseInt(lastId.substring(2)); // Extract the numeric part of the ID
+        int number = Integer.parseInt(lastId.substring(3)); // Extract the numeric part of the ID
         number++;  // Increment the number
-        return String.format("DN%05d", number); // Format the new ID with leading zeros
+        return String.format("DNR%05d", number); // Format the new ID with leading zeros
     }
 
 }
