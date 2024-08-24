@@ -1,12 +1,21 @@
 package Main;
 
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import FileHandling.DoneeFileHandler;
+import FileHandling.DonorFileHandler;
+import Libraries.ArrayList;
 
 public class DoneeTest {
 
     public static void main(String[] args) {
         int choice;
-        
+
+        DoneeFileHandler fileHandler = new DoneeFileHandler();
+        fileHandler.checkAndCreateFile("donee.txt");
+
         do {
             Scanner scanner = new Scanner(System.in);
 
@@ -40,12 +49,12 @@ public class DoneeTest {
                 //Add Donee
                 case 1 -> {
                     // Get the last ID from the file
-//                    String lastId = fileHandler.getLastDonorId("donor.txt");
-//                    // Increment to get the new ID
-//                    String newDonorId = fileHandler.incrementDonorId(lastId);
-//                    Donor donor = AddDonor(newDonorId);
-//                    // Save the donor with the new ID
-//                    fileHandler.saveData("donee.txt", donee);
+                    String lastId = fileHandler.getLastDoneeId("donee.txt");
+                    // Increment to get the new ID
+                    String newDoneeId = fileHandler.incrementDoneeId(lastId);
+                    Donee donee = addDonee(newDoneeId);
+                    // Save the donor with the new ID
+                    fileHandler.saveData("donee.txt", donee);
                 }
                 //Delete Donee
                 case 2 -> {
@@ -65,6 +74,36 @@ public class DoneeTest {
                 }
             }
         }while (choice !=5);
-        
+
+    }
+
+    public static Donee addDonee(String doneeId) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("\nEnter Donee details:");
+
+        String name;
+        String email;
+        String phone;
+        String doneeType;
+        String itemCategoryRequired;
+        String doneeUrgency;
+
+        return null;
+    }
+
+    public static void displayDonees() {
+        DoneeFileHandler fileHandler = new DoneeFileHandler();
+        ArrayList<Donee> donees = fileHandler.readData("donee.txt");
+
+        System.out.println("\nLIST OF DONEES\n");
+        System.out.printf("%-10s %-40s %-30s %-15s %-50s %-15s %-30s %-20s %-15s %n", "Donee ID", "Donee Name", "Donee Email", "Donee Phone", "Donee Address", "Donee Type", "Item Category Required", "Donee Urgency", "Registered Date");
+        System.out.println(String.format("%0" + 120 + "d", 0).replace("0", "-"));
+        for (Donee donee : donees) {
+            System.out.printf("%-10s %-40s %-30s %-15s %-50s %-15s %-30s %-20s %-15s %n", donee.getDoneeID(), donee.getName(), donee.getEmail(), donee.getPhone(), donee.getAddress(), donee.getDoneeType(), donee.getItemCategoryRequired(), donee.getDoneeUrgency(), donee.getRegisteredDate());
+        }
+        System.out.println(String.format("%0" + 120 + "d", 0).replace("0", "-"));
     }
 }
+
+

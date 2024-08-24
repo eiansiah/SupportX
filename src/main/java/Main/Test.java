@@ -3,8 +3,7 @@ package Main;
 import FileHandling.DonorFileHandler;
 import Libraries.ArrayList;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import Main.Validation;
 
 public class Test {
 
@@ -49,78 +48,24 @@ public class Test {
                 // Modify Donor
                 case 3:
                     displayDonors();
-
                     // Get the ID to be modified
                     System.out.print("\nWhich Donor Would you like to modify? Please enter their ID: ");
                     String donorIDToModify = scanner.next().trim();
-
                     // Read all donors from the file
                     ArrayList<Donor> donors = fileHandler.readData("donor.txt");
-                    boolean donorFound = false;
-
-                    for (Donor donorSelected : donors) {
-                        if (donorSelected.getId().equals(donorIDToModify)) {
-                            donorFound = true;
-
-                            // Prompt user for which part to modify
-                            System.out.println("Which part do you want to modify?");
-                            System.out.println("1. Name");
-                            System.out.println("2. Email");
-                            System.out.println("3. Phone");
-                            System.out.println("4. Category");
-                            System.out.println("5. Type");
-                            System.out.print("Please select an option (1-5): ");
-                            int choice = scanner.nextInt();
-                            scanner.nextLine();  // Consume the newline
-
-                            switch (choice) {
-                                case 1:
-                                    System.out.print("Enter new name: ");
-                                    donorSelected.setName(scanner.nextLine().trim());
-                                    break;
-                                case 2:
-                                    System.out.print("Enter new email: ");
-                                    donorSelected.setEmail(scanner.nextLine().trim());
-                                    break;
-                                case 3:
-                                    System.out.print("Enter new phone number: ");
-                                    donorSelected.setPhone(scanner.nextLine().trim());
-                                    break;
-                                case 4:
-                                    //SET ONLY SOME CATEGORIES CAN BE CHANGED TO
-                                    System.out.print("Enter new category: ");
-                                    donorSelected.setCategory(scanner.nextLine().trim());
-                                    break;
-                                case 5:
-                                    //SET ONLY SOME TYPE CAN BE CHANGED TO
-                                    System.out.print("Enter new type: ");
-                                    donorSelected.setType(scanner.nextLine().trim());
-                                    break;
-                                default:
-                                    System.out.println("Invalid choice. No changes were made.");
-                                    break;
-                            }
-
-                            // Update the donor in the file
-                            fileHandler.updateMultipleData("donor.txt", donors);
-                            System.out.println("Donor with ID " + donorIDToModify + " has been updated.");
-                            break;
-                        }
-                    }
-
-                    if (!donorFound) {
-                        System.out.println("Donor with ID " + donorIDToModify + " was not found.");
-                    }
-
+                    // Modify the donor using the modifyDonor method
+                    modifyDonor(donorIDToModify, donors, fileHandler);
                     break;
 
                 //See All Donor
                 case 4:
                     displayDonors();
+                    break;
 
                 //Terminate
                 default:
                     System.out.println("\nTerminating Session...");
+                    break;
 
             }
         } while (option >= 1 && option <= 4);
@@ -132,66 +77,81 @@ public class Test {
 
         System.out.println("\nEnter Donor details:");
 
-        String name;
-        String email;
-        String phone;
-        String category;
-        String type;
-
-        Pattern nameFormat = Pattern.compile("^[A-Za-z]{2}[A-Za-zâ€˜\\-/.]{1,30}$");
-        do {
-            System.out.print("Name: ");
-            name = scanner.nextLine().trim();
-            Matcher matcher = nameFormat.matcher(name);
-            if (!matcher.matches() || name.isEmpty()) {
-                System.err.println("Invalid name. Only alphabets and spaces are allowed. Please enter a valid name.");
-            }
-        } while (!nameFormat.matcher(name).matches() || name.isEmpty());
-
-        Pattern emailFormat = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
-        do {
-            System.out.print("Email: ");
-            email = scanner.nextLine().trim();
-            Matcher matcher = emailFormat.matcher(email);
-            if (!matcher.matches()) {
-                System.err.println("Invalid email format. Please enter a valid email.");
-            }
-        } while (!emailFormat.matcher(email).matches());
-
-        Pattern phoneFormat = Pattern.compile("^(\\d{10})$");
-        do {
-            System.out.print("Phone: ");
-            phone = scanner.nextLine().trim();
-            Matcher matcher = phoneFormat.matcher(phone);
-            if (!matcher.matches()) {
-                System.err.println("Invalid phone number format. Please enter a valid phone number (e.g.1234567890).");
-            }
-        } while (!phoneFormat.matcher(phone).matches());
-
-        do {
-            System.out.print("Please enter a valid category (e.g.: Government, Private, Public): ");
-            category = scanner.nextLine().trim();
-
-            if (!category.equals("Government") && !category.equals("Private") && !category.equals("Public")) {
-                System.err.println("Invalid category selected. Please enter a valid category (e.g.: Government, Private, Public).");
-            }
-        } while (!category.equals("Government") && !category.equals("Private") && !category.equals("Public"));
-
-        do {
-            System.out.print("Please enter a valid type (e.g.: Individual, Organization): ");
-            type = scanner.nextLine().trim();
-
-            if (!type.equals("Individual") && !type.equals("Organization")) {
-                System.err.println("Invalid type selected. Please enter a valid type (e.g.: Individual, Organization).");
-            }
-        } while (!type.equals("Individual") && !type.equals("Organization"));
+        String name = Validation.validateName(scanner);
+        String email = Validation.validateEmail(scanner);
+        String phone = Validation.validatePhone(scanner);
+        String category = Validation.validateCategory(scanner);
+        String type = Validation.validateType(scanner);
 
         return new Donor(donorId, name, email, phone, category, type);
     }
 
+    public static void modifyDonor(String donorIDToModify, ArrayList<Donor> donors, DonorFileHandler fileHandler) {
+        Scanner scanner = new Scanner(System.in);
+        boolean donorFound = false;
+
+        for (Donor donorSelected : donors) {
+            if (donorSelected.getId().equals(donorIDToModify)) {
+                donorFound = true;
+                String choice;
+
+                do {
+                    // Prompt user for which part to modify
+                    System.out.println("\nWhich part do you want to modify?");
+                    System.out.println("1. Name");
+                    System.out.println("2. Email");
+                    System.out.println("3. Phone");
+                    System.out.println("4. Category");
+                    System.out.println("5. Type");
+                    System.out.println("X. Stop modifying");
+                    System.out.print("Please select an option (1-5 or X): ");
+                    choice = scanner.nextLine().trim();
+
+                    switch (choice) {
+                        case "1":
+                            donorSelected.setName(Validation.validateName(scanner));
+                            break;
+                        case "2":
+                            donorSelected.setEmail(Validation.validateEmail(scanner));
+                            break;
+                        case "3":
+                            donorSelected.setPhone(Validation.validatePhone(scanner));
+                            break;
+                        case "4":
+                            donorSelected.setCategory(Validation.validateCategory(scanner));
+                            break;
+                        case "5":
+                            donorSelected.setType(Validation.validateType(scanner));
+                            break;
+
+                        case "x":
+                            System.out.println("Exiting modification.");
+                            break;
+                        default:
+                            System.out.println("Invalid choice. Please select a valid option.");
+                            break;
+                    }
+
+                    if (!choice.equalsIgnoreCase("X")) {
+                        System.out.println("Donor with ID " + donorIDToModify + " has been updated.");
+                    }
+
+                } while (!choice.equalsIgnoreCase("X"));
+
+                // Update the donor in the file after all modifications
+                fileHandler.updateMultipleData("donor.txt", donors);
+                break;
+            }
+        }
+
+        if (!donorFound) {
+            System.out.println("Donor with ID " + donorIDToModify + " was not found.");
+        }
+    }
+
     public static void displayDonors() {
         DonorFileHandler fileHandler = new DonorFileHandler();
-        ArrayList<Donor> donors = fileHandler.readData("Donor.txt");
+        ArrayList<Donor> donors = fileHandler.readData("donor.txt");
 
         System.out.println("\nLIST OF DONORS\n");
         System.out.printf("%-10s%-35s%-20s%-15s%-15s%-15s%n", "Donor ID", "Donor Name", "Donor Email", "Donor Phone", "Donor Category", "Donor Type");
@@ -201,5 +161,4 @@ public class Test {
         }
         System.out.println(String.format("%0" + 120 + "d", 0).replace("0", "-"));
     }
-
 }
