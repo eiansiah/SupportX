@@ -46,7 +46,6 @@ public class LinkedQueue<T> implements QueueInterface<T>{
 
             return currentNode.data;
         }
-
         return null;
     }
 
