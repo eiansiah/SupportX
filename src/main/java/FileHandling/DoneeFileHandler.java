@@ -129,7 +129,7 @@ public class DoneeFileHandler implements FileHandlingInterface<Donee> {
         return defaultId;
     }
 
-    public String incrementDonorId(String lastId) {
+    public String incrementDoneeId(String lastId) {
         int number = Integer.parseInt(lastId.substring(3)); // Extract the numeric part of the ID
         number++;  // Increment the number
         return String.format("DNE%05d", number); // Format the new ID with leading zeros
