@@ -2,8 +2,10 @@ package Main;
 
 import FileHandling.DonorFileHandler;
 import Libraries.ArrayList;
+import Utilities.Validation;
+import Utilities.DonorSorter;
+
 import java.util.Scanner;
-import Main.Validation;
 
 public class Test {
 
@@ -16,8 +18,8 @@ public class Test {
             Scanner scanner = new Scanner(System.in);
 
             System.out.println("\n1. Add Donor");
-            System.out.println("2. Delete Donor");
-            System.out.println("3. Modify Donors");
+            System.out.println("2. Remove Donor");
+            System.out.println("3. Update Donors");
             System.out.println("4. See All Donors");
             System.out.println("5. Terminate Session");
             System.out.print("What would you like to do : ");
@@ -39,7 +41,7 @@ public class Test {
                     //Check IF EMPTY
                     displayDonors();
                     // Get the ID to be deleted
-                    System.out.print("\nWhich Donor Would you like to delete? Please enter their ID: ");
+                    System.out.print("\nWhich Donor Would you like to remove? Please enter their ID: ");
                     String donorIdToDelete = scanner.next().trim();
                     // Delete the donor
                     fileHandler.deleteData("donor.txt", donorIdToDelete);
@@ -49,7 +51,7 @@ public class Test {
                 case 3:
                     displayDonors();
                     // Get the ID to be modified
-                    System.out.print("\nWhich Donor Would you like to modify? Please enter their ID: ");
+                    System.out.print("\nWhich Donor Would you like to update? Please enter their ID: ");
                     String donorIDToModify = scanner.next().trim();
                     // Read all donors from the file
                     ArrayList<Donor> donors = fileHandler.readData("donor.txt");
@@ -97,7 +99,7 @@ public class Test {
 
                 do {
                     // Prompt user for which part to modify
-                    System.out.println("\nWhich part do you want to modify?");
+                    System.out.println("\nWhich part do you want to update?");
                     System.out.println("1. Name");
                     System.out.println("2. Email");
                     System.out.println("3. Phone");
@@ -153,12 +155,117 @@ public class Test {
         DonorFileHandler fileHandler = new DonorFileHandler();
         ArrayList<Donor> donors = fileHandler.readData("donor.txt");
 
-        System.out.println("\nLIST OF DONORS\n");
-        System.out.printf("%-10s%-35s%-20s%-15s%-15s%-15s%n", "Donor ID", "Donor Name", "Donor Email", "Donor Phone", "Donor Category", "Donor Type");
-        System.out.println(String.format("%0" + 120 + "d", 0).replace("0", "-"));
-        for (Donor donor : donors) {
-            System.out.printf("%-10s%-35s%-20s%-15s%-15s%-15s%n", donor.getId(), donor.getName(), donor.getEmail(), donor.getPhone(), donor.getCategory(), donor.getType());
+        Scanner scanner = new Scanner(System.in);
+        int pageSize = 10;  // Number of donors to display per page
+        int currentPage = 0;
+        int totalDonors = donors.size();
+        boolean done = false;
+
+        while (!done) {
+            int start = currentPage * pageSize;
+            int end = Math.min(start + pageSize, totalDonors);
+
+            System.out.println("\nLIST OF DONORS (Page " + (currentPage + 1) + ")\n");
+            System.out.println(String.format("%0" + 45 + "d", 0).replace("0", "-"));
+            System.out.printf("%-10s%-35s%n", "Donor ID", "Donor Name");
+            System.out.println(String.format("%0" + 45 + "d", 0).replace("0", "-"));
+
+            for (int i = start; i < end; i++) {
+                Donor donor = donors.get(i);
+                System.out.printf("%-10s%-35s%n", donor.getId(), donor.getName());
+            }
+            System.out.println(String.format("%0" + 45 + "d", 0).replace("0", "-"));
+
+            System.out.println("\nOptions:");
+            if (currentPage > 0) {
+                System.out.println("P - Previous Page");
+            }
+            if (end < totalDonors) {
+                System.out.println("N - Next Page");
+            }
+            System.out.println("D - Details (Enter donor ID to view details)");
+            System.out.println("S - Sort Data");
+            System.out.println("X - Exit");
+
+            System.out.print("Select an option: ");
+            String option = scanner.nextLine().trim().toUpperCase();
+
+            switch (option) {
+                case "P":
+                    if (currentPage > 0) {
+                        currentPage--;
+                    } else {
+                        System.out.println("You are already on the first page.");
+                    }
+                    break;
+                case "N":
+                    if (end < totalDonors) {
+                        currentPage++;
+                    } else {
+                        System.out.println("You are already on the last page.");
+                    }
+                    break;
+                case "D":
+                    System.out.print("Enter Donor ID to view details: ");
+                    String donorID = scanner.nextLine().trim();
+
+                    Donor selectedDonor = null;
+                    for (Donor donor : donors) {
+                        if (donor.getId().equals(donorID)) {
+                            selectedDonor = donor;
+                            break;
+                        }
+                    }
+
+                    if (selectedDonor != null) {
+                        System.out.println("\nDonor Details:");
+                        System.out.printf("%-15s: %s%n", "ID", selectedDonor.getId());
+                        System.out.printf("%-15s: %s%n", "Name", selectedDonor.getName());
+                        System.out.printf("%-15s: %s%n", "Email", selectedDonor.getEmail());
+                        System.out.printf("%-15s: %s%n", "Phone", selectedDonor.getPhone());
+                        System.out.printf("%-15s: %s%n", "Category", selectedDonor.getCategory());
+                        System.out.printf("%-15s: %s%n", "Type", selectedDonor.getType());
+                    } else {
+                        System.out.println("Donor with ID " + donorID + " not found.");
+                    }
+                    done = true;
+                    break;
+
+                case "S":
+                    System.out.println("\n1 - Sort by Name Ascending");
+                    System.out.println("2 - Sort by Name Descending");
+                    System.out.println("3 - Sort by ID Descending");
+                    System.out.print("Choose a sorting criterion: ");
+
+                    int sortOption = scanner.nextInt();
+                    scanner.nextLine(); // Consume newline
+
+                    switch (sortOption) {
+                        case 1:
+                            DonorSorter.sortName(donors);
+                            break;
+                        case 2:
+                            DonorSorter.sortNameDescending(donors);
+                            break;
+                        case 3:
+                            DonorSorter.reverseID(donors);
+                            break;
+                        default:
+                            System.out.println("Invalid sorting option.");
+                            break;
+                    }
+                    break;
+
+                case "X":
+                    done = true;
+                    break;
+
+                default:
+                    System.out.println("Invalid option. Please try again.");
+                    break;
+            }
         }
-        System.out.println(String.format("%0" + 120 + "d", 0).replace("0", "-"));
     }
+
+
 }
