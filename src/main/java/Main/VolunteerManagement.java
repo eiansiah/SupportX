@@ -36,8 +36,20 @@ public class VolunteerManagement {
                 System.out.println(" ");
                 System.out.print("Enter choice: ");
 
-                int choice = scanner.nextInt();
-                scanner.nextLine();
+                String input = scanner.nextLine().trim();
+
+                if (input.isEmpty()) {
+                    System.out.println(Color.RED + "Input cannot be empty. Please try again." + Color.RESET);
+                    continue;
+                }
+
+                int choice;
+                try {
+                    choice = Integer.parseInt(input);
+                } catch (NumberFormatException e) {
+                    System.out.println(Color.RED + "Invalid input. Please enter a number." + Color.RESET);
+                    continue;
+                }
 
                 switch (choice) {
                     case 1:
@@ -53,7 +65,7 @@ public class VolunteerManagement {
                         searchVolunteer();
                         break;
                     case 5:
-//                        assignVolunteer();
+//                    assignVolunteer();
                         break;
                     case 6:
                         listVolunteers();
@@ -62,10 +74,10 @@ public class VolunteerManagement {
                         filterVolunteers();
                         break;
                     case 8:
-//                        searchEventsByVolunteer();
+//                    searchEventsByVolunteer();
                         break;
                     case 9:
-//                        viewReports(); 
+//                    viewReports(); 
                         break;
                     case 10:
                         return;
@@ -73,8 +85,8 @@ public class VolunteerManagement {
                         System.out.println(Color.RED + "Invalid choice. Please try again." + Color.RESET);
                 }
             } catch (Exception e) {
-                System.out.println(Color.RED + "Invalid input. Please try again!!!" + Color.RESET);
-                scanner.nextLine(); // Consume invalid input
+                System.out.println(Color.RED + "An error occurred. Please try again!!!" + Color.RESET);
+                scanner.nextLine();
             }
         }
     }
@@ -248,6 +260,7 @@ public class VolunteerManagement {
                     System.out.println("5. Email");
                     System.out.println("6. Availability");
                     System.out.println("7. Back");
+                    System.out.println(" ");
                     System.out.print("Enter choice: ");
 
                     int modifyChoice = scanner.nextInt();
@@ -289,6 +302,7 @@ public class VolunteerManagement {
     private static void modifyName(Volunteer volunteer) {
         System.out.print("Enter new name (leave blank to keep current): ");
         String name = scanner.nextLine().trim();
+        System.out.println(" ");
         if (!name.isEmpty() && name.matches("[a-zA-Z\\s]+")) {
             volunteer.setName(name);
         } else if (!name.isEmpty()) {
@@ -300,6 +314,7 @@ public class VolunteerManagement {
         while (true) {
             System.out.print("Enter new age (leave blank to keep current): ");
             String ageInput = scanner.nextLine().trim();
+            System.out.println(" ");
 
             if (ageInput.isEmpty()) {
                 break;
@@ -307,6 +322,7 @@ public class VolunteerManagement {
 
             try {
                 int age = Integer.parseInt(ageInput);
+                System.out.println(" ");
                 if (age > 0) {
                     volunteer.setAge(ageInput);
                     break;
@@ -322,6 +338,7 @@ public class VolunteerManagement {
     private static void modifyGender(Volunteer volunteer) {
         while (true) {
             System.out.print("Enter new gender (Male, Female, Other) (leave blank to keep current): ");
+            System.out.println(" ");
             String gender = scanner.nextLine().trim();
             if (gender.isEmpty()) {
                 break;
@@ -338,6 +355,7 @@ public class VolunteerManagement {
     private static void modifyPhone(Volunteer volunteer) {
         while (true) {
             System.out.print("Enter new contact number (leave blank to keep current): ");
+            System.out.println(" ");
             String phone = scanner.nextLine().trim();
             if (phone.isEmpty()) {
                 break;
@@ -354,6 +372,7 @@ public class VolunteerManagement {
     private static void modifyEmail(Volunteer volunteer) {
         while (true) {
             System.out.print("Enter new email (leave blank to keep current): ");
+            System.out.println(" ");
             String email = scanner.nextLine().trim();
             if (email.isEmpty()) {
                 break;
@@ -483,7 +502,7 @@ public class VolunteerManagement {
             return;
         }
 
-        System.out.println("List of Volunteers:");
+        System.out.println("List of Volunteers");
         System.out.println("-------------------");
         for (Volunteer volunteer : volunteers) {
             System.out.println(volunteer.getId() + " " + volunteer.getName());
@@ -495,6 +514,7 @@ public class VolunteerManagement {
         System.out.println("1. Age");
         System.out.println("2. Gender");
         System.out.println("3. Availability");
+        System.out.println(" ");
         System.out.print("Enter choice: ");
 
         int filterChoice = scanner.nextInt();
@@ -524,12 +544,17 @@ public class VolunteerManagement {
         int maxAge = scanner.nextInt();
         scanner.nextLine();
 
+        boolean found = false;
         System.out.println("Volunteers between " + minAge + " and " + maxAge + " years old:");
         for (Volunteer volunteer : volunteers) {
             int age = Integer.parseInt(volunteer.getAge());
             if (age >= minAge && age <= maxAge) {
                 System.out.println(volunteer.getId() + " " + volunteer.getName());
+                found = true;
             }
+        }
+        if (!found) {
+            System.out.println(Color.YELLOW + "No volunteers found within the specified age range." + Color.RESET);
         }
     }
 
@@ -542,11 +567,16 @@ public class VolunteerManagement {
             return;
         }
 
+        boolean found = false;
         System.out.println("Volunteers with gender " + gender + ":");
         for (Volunteer volunteer : volunteers) {
             if (volunteer.getGender().equalsIgnoreCase(gender)) {
                 System.out.println(volunteer.getId() + " " + volunteer.getName());
+                found = true;
             }
+        }
+        if (!found) {
+            System.out.println(Color.YELLOW + "No volunteers found with the specified gender." + Color.RESET);
         }
     }
 
@@ -559,11 +589,16 @@ public class VolunteerManagement {
             return;
         }
 
+        boolean found = false;
         System.out.println("Volunteers available on " + availability + ":");
         for (Volunteer volunteer : volunteers) {
             if (volunteer.getAvailability().equalsIgnoreCase(availability)) {
                 System.out.println(volunteer.getId() + " " + volunteer.getName());
+                found = true;
             }
+        }
+        if (!found) {
+            System.out.println(Color.YELLOW + "No volunteers found with the specified availability." + Color.RESET);
         }
     }
 
@@ -613,7 +648,6 @@ public class VolunteerManagement {
 //    private static void viewReports() {
 //        System.out.println("Summary of Volunteers Report");
 //    }
-    
     private static boolean isValidInput(String input) {
         return input != null && !input.trim().isEmpty();
     }

@@ -13,7 +13,7 @@ public class Volunteer extends Applicants implements Serializable {
 
     }
 
-    public Volunteer(String id, String gender, String age, String name, String email, String phone, String availability) {
+    public Volunteer(String id,  String name,  String age, String gender, String phone, String email, String availability) {
         super(name, email, phone);
         this.id = id;
         this.gender = gender;
@@ -55,7 +55,7 @@ public class Volunteer extends Applicants implements Serializable {
 
     @Override
     public String toString() {
-        return id + "," + gender + "," + age + super.toString() + "," + availability;
+        return id + "," + gender + "," + age + super.toString()+ "," + availability;
     }
 
 }
