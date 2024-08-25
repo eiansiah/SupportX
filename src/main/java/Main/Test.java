@@ -149,7 +149,7 @@ public class Test {
         }
 
         if (!donorFound) {
-            System.out.println(Color.YELLOW + "Donor with ID " + donorIDToModify + " was not found." + Color.RESET);
+            System.out.println(Color.BRIGHT_YELLOW + "Donor with ID " + donorIDToModify + " was not found." + Color.RESET);
         }
     }
 
@@ -228,7 +228,7 @@ public class Test {
                         System.out.printf("%-15s: %s%n", "Category", selectedDonor.getCategory());
                         System.out.printf("%-15s: %s%n", "Type", selectedDonor.getType());
                     } else {
-                        System.out.println(Color.YELLOW + "Donor with ID " + donorID + " not found." + Color.RESET);
+                        System.out.println(Color.BRIGHT_YELLOW + "Donor with ID " + donorID + " not found." + Color.RESET);
                     }
                     done = true;
                     break;
@@ -255,7 +255,7 @@ public class Test {
 
                             // Error handling for no donors found after filtering
                             if (donors.isEmpty()) {
-                                System.out.println(Color.YELLOW + "No donors found with names starting with " + letter + "." + Color.RESET);
+                                System.out.println(Color.BRIGHT_YELLOW + "No donors found with names starting with " + letter + "." + Color.RESET);
                             }
                         }
                     } else if (filterChoice == 2) {
@@ -288,7 +288,7 @@ public class Test {
 
                             // Error handling for no donors found after filtering
                             if (donors.isEmpty()) {
-                                System.out.println(Color.YELLOW + "No donors found in the '" + category + "' category." + Color.RESET);
+                                System.out.println(Color.BRIGHT_YELLOW + "No donors found in the '" + category + "' category." + Color.RESET);
                             }
                         }
                     } else if (filterChoice == 3) {
@@ -317,7 +317,7 @@ public class Test {
 
                             // Error handling for no donors found after filtering
                             if (donors.isEmpty()) {
-                                System.out.println(Color.YELLOW + "No donors found of type '" + type + "'." + Color.RESET);
+                                System.out.println(Color.BRIGHT_YELLOW + "No donors found of type '" + type + "'." + Color.RESET);
                             }
                         }
                     } else {
