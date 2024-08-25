@@ -21,7 +21,7 @@ public class VolunteerManagement {
     private static void handle() {
         while (true) {
             try {
-                System.out.println("\nVolunteer Management System");
+                System.out.println(Color.BLUE + "\nVolunteer Management System" + Color.RESET);
                 System.out.println("----------------------------");
                 System.out.println("1. Add Volunteer");
                 System.out.println("2. Delete Volunteer");
@@ -107,7 +107,7 @@ public class VolunteerManagement {
             name = scanner.nextLine();
             if (!isValidInput(name)) {
                 System.out.println(Color.RED + "Sorry! Empty field! Please enter a valid name." + Color.RESET);
-            } else if (!name.matches("[a-zA-Z\\s]+")) {
+            } else if (!name.matches("[a-zA-Z\\s-]+")) {
                 System.out.println(Color.RED + "Sorry! Invalid name. Please enter a valid name containing only letters." + Color.RESET);
             } else {
                 volunteer.setName(name);
@@ -303,7 +303,7 @@ public class VolunteerManagement {
         System.out.print("Enter new name (leave blank to keep current): ");
         String name = scanner.nextLine().trim();
         System.out.println(" ");
-        if (!name.isEmpty() && name.matches("[a-zA-Z\\s]+")) {
+        if (!name.isEmpty() && name.matches("[a-zA-Z\\s-]+")) {
             volunteer.setName(name);
         } else if (!name.isEmpty()) {
             System.out.println(Color.RED + "Invalid name. Please enter a valid name containing only letters." + Color.RESET);
