@@ -33,7 +33,7 @@ public class DoneeFileHandler implements FileHandlingInterface<Donee> {
     public void saveData(String filename, Donee donee) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
             writer.write(donee.toString() + "\n");
-            System.out.println("Donee details saved successfully.\n");
+            System.out.println("Donee details saved successfully.");
         } catch (IOException e) {
             System.err.println("Error writing to file: " + e.getMessage());
         }
@@ -96,7 +96,7 @@ public class DoneeFileHandler implements FileHandlingInterface<Donee> {
         for (int i = 0; i < donees.size(); i++) {
             if (donees.get(i).getDoneeID().equals(doneeID)) {
                 donees.remove(i);
-                System.out.println("Donee with ID " + doneeID + " has been removed.");
+                System.out.println("**Donee with ID " + doneeID + " has been removed successfully**");
                 break;  // Exit the loop after removing the donor
             }
         }
