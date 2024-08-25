@@ -1,6 +1,7 @@
 package FileHandling;
 
 import Libraries.ArrayList;
+import Libraries.Color;
 import Main.Volunteer;
 
 import java.io.BufferedReader;
@@ -18,12 +19,12 @@ public class VolunteerFileHandler implements FileHandlingInterface<Volunteer> {
         try {
             if (!file.exists()) {
                 file.createNewFile();
-                System.out.println("File created: " + filename);
+                System.out.println(Color.GREEN + "File created: " + filename + Color.RESET);
             } else {
-                System.out.println("System Ready");
+                System.out.println(Color.GREEN + "System Ready" + Color.RESET);
             }
         } catch (IOException e) {
-            System.err.println("Error creating the file: " + e.getMessage());
+            System.err.println(Color.RED + "Error creating the file: " + e.getMessage() + Color.RESET);
         }
     }
 
@@ -31,9 +32,9 @@ public class VolunteerFileHandler implements FileHandlingInterface<Volunteer> {
     public void saveData(String filename, Volunteer volunteer) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
             writer.write(volunteer.toString() + "\n");
-            System.out.println("Volunteer details saved successfully.");
+            System.out.println(Color.GREEN + "Volunteer details saved successfully." + Color.RESET);
         } catch (IOException e) {
-            System.err.println("Error writing to file: " + e.getMessage());
+            System.err.println(Color.RED + "Error writing to file: " + e.getMessage() + Color.RESET);
         }
     }
 
@@ -56,8 +57,11 @@ public class VolunteerFileHandler implements FileHandlingInterface<Volunteer> {
                     volunteers.add(volunteer);
                 }
             }
+            if (volunteers.size() == 0) {
+                System.out.println(Color.YELLOW + "No volunteers found in the file." + Color.RESET);
+            }
         } catch (IOException e) {
-            System.err.println("Error reading file: " + e.getMessage());
+            System.err.println(Color.RED + "Error reading file: " + e.getMessage() + Color.RESET);
         }
         return volunteers;
     }
@@ -66,6 +70,7 @@ public class VolunteerFileHandler implements FileHandlingInterface<Volunteer> {
     public void updateData(String filename, Volunteer updatedVolunteer) {
         ArrayList<Volunteer> volunteers = readData(filename);
 
+        boolean updated = false;
         for (Volunteer volunteer : volunteers) {
             if (volunteer.getId().equals(updatedVolunteer.getId())) {
                 volunteer.setName(updatedVolunteer.getName());
@@ -74,10 +79,17 @@ public class VolunteerFileHandler implements FileHandlingInterface<Volunteer> {
                 volunteer.setPhone(updatedVolunteer.getPhone());
                 volunteer.setEmail(updatedVolunteer.getEmail());
                 volunteer.setAvailability(updatedVolunteer.getAvailability());
+                updated = true;
                 break;
             }
         }
-        updateMultipleData(filename, volunteers);
+        
+        if (updated) {
+            updateMultipleData(filename, volunteers);
+            System.out.println(Color.GREEN + "Volunteer details updated successfully." + Color.RESET);
+        } else {
+            System.out.println(Color.YELLOW + "Volunteer with ID " + updatedVolunteer.getId() + " not found." + Color.RESET);
+        }
     }
 
     @Override
@@ -86,8 +98,9 @@ public class VolunteerFileHandler implements FileHandlingInterface<Volunteer> {
             for (Volunteer volunteer : volunteers) {
                 writer.write(volunteer.toString() + "\n");
             }
+            System.out.println(Color.GREEN + "All volunteer details updated successfully." + Color.RESET);
         } catch (IOException e) {
-            System.err.println("Error writing to file: " + e.getMessage());
+            System.err.println(Color.RED + "Error writing to file: " + e.getMessage() + Color.RESET);
         }
     }
 
@@ -100,7 +113,7 @@ public class VolunteerFileHandler implements FileHandlingInterface<Volunteer> {
                 defaultId = volunteerData[0];
             }
         } catch (IOException e) {
-            System.err.println("Error reading the file: " + e.getMessage());
+            System.err.println(Color.RED + "Error reading the file: " + e.getMessage() + Color.RESET);
         }
         return defaultId;
     }
@@ -116,12 +129,20 @@ public class VolunteerFileHandler implements FileHandlingInterface<Volunteer> {
         ArrayList<Volunteer> volunteers = readData(filename);
         ArrayList<Volunteer> updatedVolunteers = new ArrayList<>();
 
+        boolean deleted = false;
         for (Volunteer volunteer : volunteers) {
             if (!volunteer.getId().equals(volunteerId)) {
                 updatedVolunteers.add(volunteer);
+            } else {
+                deleted = true;
             }
         }
 
-        updateMultipleData(filename, updatedVolunteers);
+        if (deleted) {
+            updateMultipleData(filename, updatedVolunteers);
+            System.out.println(Color.GREEN + "Volunteer with ID " + volunteerId + " deleted successfully." + Color.RESET);
+        } else {
+            System.out.println(Color.YELLOW + "Volunteer with ID " + volunteerId + " not found." + Color.RESET);
+        }
     }
 }
