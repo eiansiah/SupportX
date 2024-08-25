@@ -1,6 +1,5 @@
 package Main;
 
-import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Scanner;
