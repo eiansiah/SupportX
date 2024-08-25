@@ -2,6 +2,7 @@ package FileHandling;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -10,13 +11,30 @@ import Main.Donor;
 import Libraries.ArrayList;
 
 public class DonorFileHandler implements FileHandlingInterface<Donor>{
-
+    
+    @Override
+    public void checkAndCreateFile(String filename) {
+        File file = new File(filename);
+        try {
+            if (!file.exists()) {
+                file.createNewFile();
+                System.out.println("File created: " + filename);
+            } else {
+                //System.out.println("File exists: " + filename);
+                System.out.println("System Ready");
+                
+            }
+        } catch (IOException e) {
+            System.err.println("Error creating the file: " + e.getMessage());
+        }
+    }
+    
     // Write data to Donor.txt file
     @Override
     public void saveData(String filename, Donor donor) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
             writer.write(donor.toString() + "\n");
-            System.out.println("DonorSystem.Donor details saved successfully.");
+            System.out.println("Donor details saved successfully.");
         } catch (IOException e) {
             System.err.println("Error writing to file: " + e.getMessage());
         }
@@ -74,25 +92,53 @@ public class DonorFileHandler implements FileHandlingInterface<Donor>{
             System.err.println("Error writing to file: " + e.getMessage());
         }
     }
+    
+    // Update all Contents from Donor.txt file after deleting selected Donor from array list
+    @Override
+    public void deleteData(String filename, String donorID){
+        ArrayList<Donor> donors = readData(filename);
+        
+        // Find the donor with the given ID and remove it
+        for (int i = 0; i < donors.size(); i++) {
+             if (donors.get(i).getId().equals(donorID)) {
+                donors.remove(i);
+                System.out.println("Donor with ID " + donorID + " has been removed.");
+                break;  // Exit the loop after removing the donor
+            }
+        }
+         // Rewrite the updated list back to the file
+        updateMultipleData(filename, donors);
+    }
 
     public String getLastDonorId(String fileName) {
         String defaultId = "DNR00000";  // Default value if the file is empty or doesn't exist
+        boolean isFileEmpty = true;  // Flag to check if the file is empty
+
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] donorData = line.split(",");
-                defaultId = donorData[0];
+                isFileEmpty = false;  // If we read at least one line, the file is not empty
+                String[] donorData = line.split(","); //make a list where the item are split based on the ","
+                if (donorData.length > 0) {
+                    defaultId = donorData[0];
+                }
             }
         } catch (IOException e) {
             System.err.println("Error reading the file: " + e.getMessage());
         }
+
+        // If the file was empty, return a starting ID instead of the default ID
+        if (isFileEmpty) {
+            return "DNR00000";  // Start the ID sequence from DN00000
+        }
+
         return defaultId;
     }
 
     public String incrementDonorId(String lastId) {
-        int number = Integer.parseInt(lastId.substring(2)); // Extract the numeric part of the ID
+        int number = Integer.parseInt(lastId.substring(3)); // Extract the numeric part of the ID
         number++;  // Increment the number
-        return String.format("DN%05d", number); // Format the new ID with leading zeros
+        return String.format("DNR%05d", number); // Format the new ID with leading zeros
     }
 
 }

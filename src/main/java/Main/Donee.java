@@ -15,14 +15,14 @@ public class Donee extends Applicants {
         this.registeredDate = LocalDate.now(); // For test purposes
     }
 
-    public Donee (String doneeID, String name, String email, String phone, String address, String doneeType, String itemCategoryRequired, String doneeUrgency) {
+    public Donee (String doneeID, String name, String email, String phone, String address, String doneeType, String itemCategoryRequired, String doneeUrgency, LocalDate registeredDate) {
         super (name, email, phone);
         this.doneeID = doneeID;
         this.address = address;
         this.doneeType = doneeType;
         this.itemCategoryRequired = itemCategoryRequired;
         this.doneeUrgency = doneeUrgency;
-        this.registeredDate = LocalDate.now();
+        this.registeredDate = registeredDate;
     }
 
     public String getDoneeID() {
@@ -71,6 +71,6 @@ public class Donee extends Applicants {
 
     @Override
     public String toString() {
-        return (doneeID + "," + super.toString() + "," + address + "," + doneeType + "," + doneeUrgency + "," + registeredDate);
+        return (doneeID + super.toString() + "," + address + "," + doneeType + "," + itemCategoryRequired + "," + doneeUrgency + "," + registeredDate);
     }
 }
