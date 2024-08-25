@@ -8,10 +8,11 @@ import Libraries.ArrayList;
 
 public class DoneeTest {
 
+    static DoneeFileHandler fileHandler = new DoneeFileHandler();
+
     public static void main(String[] args) {
         int choice;
 
-        DoneeFileHandler fileHandler = new DoneeFileHandler();
         fileHandler.checkAndCreateFile("donee.txt");
 
         System.out.println("\nWelcome to Donee Management Subsystem!");
@@ -55,28 +56,22 @@ public class DoneeTest {
                     Donee donee = addDonee(newDoneeId);
                     // Save the donor with the new ID
                     fileHandler.saveData("donee.txt", donee);
+                    System.out.print("\nPress any key to return to main menu.....");
+                    scanner.nextLine();
                     break;
                 //Delete Donee
                 case 2:
+                    displayDonees();
+                    deleteDonee();
+                    System.out.print("\nPress any key to return to main menu.....");
+                    scanner.nextLine();
                     break;
                 //Modify Donee
                 case 3:
                     displayDonees();
-                    String doneeId;
-                    // Get the ID to be modified
-                    do {
-                        System.out.print("\nWhich donee would you like to modify? Please enter the corresponding Donee ID: ");
-                        doneeId = scanner.nextLine().trim();
-
-                        if (doneeId.isEmpty()) {
-                            System.out.println("Empty input detected. Please enter a valid donee ID.");
-                        }
-                    } while (doneeId.isEmpty());
-
-                    // Read all donees from the file
-                    ArrayList<Donee> donees = fileHandler.readData("donee.txt");
-                    // Modify the donee using the modifyDonor method
-                    modifyDonee(doneeId, donees, fileHandler);
+                    modifyDonee(readDonees());
+                    System.out.print("\nPress any key to return to main menu.....");
+                    scanner.nextLine();
                     break;
                 //View Donee Details
                 case 4:
@@ -89,7 +84,23 @@ public class DoneeTest {
                     System.out.println("\nExiting Program...");
             }
         }while (choice !=5);
+    }
 
+    public static String obtainDoneeId(){
+        Scanner scanner = new Scanner(System.in);
+        String doneeId;
+
+        doneeId = scanner.nextLine().trim();
+
+        if (doneeId.isEmpty()) {
+            System.out.println("Empty input detected. Please enter a valid donee ID.");
+        }
+
+        return doneeId;
+    }
+
+    public static ArrayList<Donee> readDonees(){
+        return fileHandler.readData("donee.txt");
     }
 
     public static Donee addDonee(String doneeId) {
@@ -110,9 +121,25 @@ public class DoneeTest {
         return new Donee(doneeId, name, email, phone, address, doneeType, itemCategory, doneeUrgency, registeredDate);
     }
 
-    public static void modifyDonee(String doneeId, ArrayList<Donee> donees, DoneeFileHandler fileHandler) {
+    public static void deleteDonee() {
+        String doneeId;
+        do {
+            System.out.print("\nWhich donee would you like to delete? Please enter the Donee ID: ");
+            doneeId = obtainDoneeId();
+        } while (doneeId.isEmpty());
+        // Delete donee
+        fileHandler.deleteData("donee.txt", doneeId);
+    }
+
+    public static void modifyDonee(ArrayList<Donee> donees) {
         Scanner scanner = new Scanner(System.in);
         boolean doneeFound = false;
+        String doneeId;
+
+        do {
+            System.out.print("\nWhich donee would you like to modify? Please enter the Donee ID: ");
+            doneeId = obtainDoneeId();
+        } while (doneeId.isEmpty());
 
         for (Donee doneeSelected : donees) {
             if (doneeSelected.getDoneeID().equals(doneeId)) {
@@ -188,8 +215,7 @@ public class DoneeTest {
     }
 
     public static void displayDonees() {
-        DoneeFileHandler fileHandler = new DoneeFileHandler();
-        ArrayList<Donee> donees = fileHandler.readData("donee.txt");
+        ArrayList<Donee> donees = readDonees();
 
         System.out.println("\nLIST OF DONEES\n");
         System.out.printf("%-10s %-40s %-30s %-15s %-50s %-15s %-30s %-20s %-15s %n", "Donee ID", "Donee Name", "Donee Email", "Donee Phone", "Donee Address", "Donee Type", "Item Category Required", "Donee Urgency", "Registered Date");
@@ -200,5 +226,3 @@ public class DoneeTest {
         System.out.println(String.format("%0" + 200 + "d", 0).replace("0", "-"));
     }
 }
-
-
