@@ -5,7 +5,6 @@ import Main.Donor;
 
 public class DonorSorter {
 
-
     // Bubble Sort by Name in Ascending Order
     public static void sortName(ArrayList<Donor> object) {
         for (int i = 0; i < object.size() - 1; i++) {

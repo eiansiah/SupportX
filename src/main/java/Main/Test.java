@@ -2,6 +2,7 @@ package Main;
 
 import FileHandling.DonorFileHandler;
 import Libraries.ArrayList;
+import Utilities.DonorFilter;
 import Utilities.Validation;
 import Utilities.DonorSorter;
 
@@ -17,11 +18,11 @@ public class Test {
         do {
             Scanner scanner = new Scanner(System.in);
 
-            System.out.println("\n1. Add Donor");
-            System.out.println("2. Remove Donor");
-            System.out.println("3. Update Donors");
-            System.out.println("4. See All Donors");
-            System.out.println("5. Terminate Session");
+            System.out.println("\n1 - Add Donor");
+            System.out.println("2 - Remove Donor");
+            System.out.println("3 - Update Donors");
+            System.out.println("4 - See All Donors");
+            System.out.println("5 - Terminate Session");
             System.out.print("What would you like to do : ");
             option = scanner.nextInt();
 
@@ -100,12 +101,12 @@ public class Test {
                 do {
                     // Prompt user for which part to modify
                     System.out.println("\nWhich part do you want to update?");
-                    System.out.println("1. Name");
-                    System.out.println("2. Email");
-                    System.out.println("3. Phone");
-                    System.out.println("4. Category");
-                    System.out.println("5. Type");
-                    System.out.println("X. Stop modifying");
+                    System.out.println("1 - Name");
+                    System.out.println("2 - Email");
+                    System.out.println("3 - Phone");
+                    System.out.println("4 - Category");
+                    System.out.println("5 - Type");
+                    System.out.println("X - Stop updating");
                     System.out.print("Please select an option (1-5 or X): ");
                     choice = scanner.nextLine().trim();
 
@@ -166,7 +167,6 @@ public class Test {
             int end = Math.min(start + pageSize, totalDonors);
 
             System.out.println("\nLIST OF DONORS (Page " + (currentPage + 1) + ")\n");
-            System.out.println(String.format("%0" + 45 + "d", 0).replace("0", "-"));
             System.out.printf("%-10s%-35s%n", "Donor ID", "Donor Name");
             System.out.println(String.format("%0" + 45 + "d", 0).replace("0", "-"));
 
@@ -184,7 +184,8 @@ public class Test {
                 System.out.println("N - Next Page");
             }
             System.out.println("D - Details (Enter donor ID to view details)");
-            System.out.println("S - Sort Data");
+            System.out.println("F - Filter Donor");
+            System.out.println("S - Sort Donor");
             System.out.println("X - Exit");
 
             System.out.print("Select an option: ");
@@ -230,6 +231,105 @@ public class Test {
                     }
                     done = true;
                     break;
+
+                case "F":
+                    System.out.println("\nFilter Options:");
+                    System.out.println("1 - Filter by Name Starting Letter");
+                    System.out.println("2 - Filter by Category");
+                    System.out.println("3 - Filter by Type");
+                    System.out.print("Select a filter option: ");
+                    int filterChoice = scanner.nextInt();
+                    scanner.nextLine();
+
+                    if (filterChoice == 1) {
+                        System.out.print("Enter starting letter: ");
+                        String input = scanner.nextLine().toUpperCase().trim();
+
+                        // Error handling for empty input
+                        if (input.isEmpty()) {
+                            System.out.println("Invalid input. Starting letter cannot be empty.");
+                        } else {
+                            char letter = input.toUpperCase().charAt(0);
+                            donors = DonorFilter.filterByName(donors, letter);
+
+                            // Error handling for no donors found after filtering
+                            if (donors.isEmpty()) {
+                                System.out.println("No donors found with names starting with " + letter + ".");
+                            }
+                        }
+                    } else if (filterChoice == 2) {
+                        System.out.println("\nSelect category:");
+                        System.out.println("1. Government");
+                        System.out.println("2. Private");
+                        System.out.println("3. Public");
+                        System.out.print("Enter category number: ");
+                        String category = null;
+                        int categoryChoice = scanner.nextInt();
+                        scanner.nextLine(); // Consume the newline character
+
+                        switch (categoryChoice) {
+                            case 1:
+                                category = "Government";
+                                break;
+                            case 2:
+                                category = "Private";
+                                break;
+                            case 3:
+                                category = "Public";
+                                break;
+                            default:
+                                System.out.println("Invalid category choice. Please select a valid option.");
+                                break;
+                        }
+
+                        if (category != null) {
+                            donors = DonorFilter.filterByCategory(donors, category);
+
+                            // Error handling for no donors found after filtering
+                            if (donors.isEmpty()) {
+                                System.out.println("No donors found in the '" + category + "' category.");
+                            }
+                        }
+                    } else if (filterChoice == 3) {
+                        System.out.println("\nSelect type:");
+                        System.out.println("1. Individual");
+                        System.out.println("2. Organization");
+                        System.out.print("Enter type number: ");
+                        String type = null;
+                        int typeChoice = scanner.nextInt();
+                        scanner.nextLine(); // Consume the newline character
+
+                        switch (typeChoice) {
+                            case 1:
+                                type = "Individual";
+                                break;
+                            case 2:
+                                type = "Organization";
+                                break;
+                            default:
+                                System.out.println("Invalid type choice. Please select a valid option.");
+                                break;
+                        }
+
+                        if (type != null) {
+                            donors = DonorFilter.filterByType(donors, type);
+
+                            // Error handling for no donors found after filtering
+                            if (donors.isEmpty()) {
+                                System.out.println("No donors found of type '" + type + "'.");
+                            }
+                        }
+                    } else {
+                        // Error handling for invalid filter choice
+                        System.out.println("Invalid filter choice. Please select a valid option.");
+                    }
+
+
+                    // Update totalDonors after filtering
+                    totalDonors = donors.size();
+                    currentPage = 0;  // Reset to first page after applying filter
+                    break;
+
 
                 case "S":
                     System.out.println("\n1 - Sort by Name Ascending");
