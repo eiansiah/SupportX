@@ -1,21 +1,33 @@
-package org.example.TestingArea;
-import Libraries.LinkedQueue;
+package org.example.TestingArea.ADT;
+import Libraries.Queue;
 
-public class LinkedQueueTesting {
+public class QueueTesting {
 
     public static void main(String[] args) {
-        scenario4();
+        scenario1();
     }
 
     /** test queue declaration, queue and dequeue function */
     static void scenario1(){
-        LinkedQueue<String> queue = new LinkedQueue<>();
+        Queue<String> queue = new Queue<>();
 
         queue.enqueue("12");
         queue.enqueue("14");
         queue.enqueue("15");
         queue.enqueue("16");
         queue.enqueue("17");
+        queue.enqueue("18");
+        queue.enqueue("19");
+        queue.enqueue("20");
+        queue.enqueue("21");
+        queue.enqueue("22");
+        queue.enqueue("23");
+        queue.enqueue("24");
+        queue.enqueue("25");
+        queue.enqueue("26");
+        queue.enqueue("27");
+        queue.enqueue("28");
+        queue.enqueue("29");
 
         System.out.println(queue.dequeue());
         System.out.println(queue.dequeue());
@@ -23,7 +35,7 @@ public class LinkedQueueTesting {
 
     /** test declaration and enqueue different types */
     static void scenario2(){
-        LinkedQueue<testingStackClass> queue = new LinkedQueue<>();
+        Queue<testingStackClass> queue = new Queue<>();
 
         //Error
         /*queue.enqueue("12");
@@ -35,10 +47,10 @@ public class LinkedQueueTesting {
 
     /** test arraylist function */
     static void scenario3(){
-        LinkedQueue<testingLinkedQueueClass> queue = new LinkedQueue<>();
+        Queue<testingStackClass> queue = new Queue<>();
 
-        queue.enqueue(new testingLinkedQueueClass(12, "Lol"));
-        queue.enqueue(new testingLinkedQueueClass(14, "new"));
+        queue.enqueue(new testingStackClass(12, "Lol"));
+        queue.enqueue(new testingStackClass(14, "new"));
 
         queue.dequeue().display();
         queue.dequeue().display();
@@ -47,7 +59,7 @@ public class LinkedQueueTesting {
 
     /** test peek function */
     static void scenario4(){
-        LinkedQueue<String> queue = new LinkedQueue<>();
+        Queue<String> queue = new Queue<>();
 
         queue.enqueue("12");
         queue.enqueue("14");
@@ -59,13 +71,13 @@ public class LinkedQueueTesting {
     }
 }
 
-class testingLinkedQueueClass{
+class testingQueueClass{
     int number;
     String name;
 
-    public testingLinkedQueueClass(){}
+    public testingQueueClass(){}
 
-    public testingLinkedQueueClass(int number, String name){
+    public testingQueueClass(int number, String name){
         this.number = number;
         this.name = name;
     }
