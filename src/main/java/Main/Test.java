@@ -5,6 +5,7 @@ import Libraries.ArrayList;
 import Utilities.DonorFilter;
 import Utilities.Validation;
 import Utilities.DonorSorter;
+import Libraries.Color;
 
 import java.util.Scanner;
 
@@ -131,12 +132,12 @@ public class Test {
                             System.out.println("Exiting modification.");
                             break;
                         default:
-                            System.out.println("Invalid choice. Please select a valid option.");
+                            System.out.println(Color.RED +"Invalid choice. Please select a valid option." + Color.RESET);
                             break;
                     }
 
                     if (!choice.equalsIgnoreCase("X")) {
-                        System.out.println("Donor with ID " + donorIDToModify + " has been updated.");
+                        System.out.println(Color.GREEN + "Donor with ID " + donorIDToModify + " has been updated." + Color.RESET);
                     }
 
                 } while (!choice.equalsIgnoreCase("X"));
@@ -148,7 +149,7 @@ public class Test {
         }
 
         if (!donorFound) {
-            System.out.println("Donor with ID " + donorIDToModify + " was not found.");
+            System.out.println(Color.YELLOW + "Donor with ID " + donorIDToModify + " was not found." + Color.RESET);
         }
     }
 
@@ -227,7 +228,7 @@ public class Test {
                         System.out.printf("%-15s: %s%n", "Category", selectedDonor.getCategory());
                         System.out.printf("%-15s: %s%n", "Type", selectedDonor.getType());
                     } else {
-                        System.out.println("Donor with ID " + donorID + " not found.");
+                        System.out.println(Color.YELLOW + "Donor with ID " + donorID + " not found." + Color.RESET);
                     }
                     done = true;
                     break;
@@ -247,14 +248,14 @@ public class Test {
 
                         // Error handling for empty input
                         if (input.isEmpty()) {
-                            System.out.println("Invalid input. Starting letter cannot be empty.");
+                            System.out.println(Color.RED +"Invalid input. Starting letter cannot be empty." + Color.RESET);
                         } else {
                             char letter = input.toUpperCase().charAt(0);
                             donors = DonorFilter.filterByName(donors, letter);
 
                             // Error handling for no donors found after filtering
                             if (donors.isEmpty()) {
-                                System.out.println("No donors found with names starting with " + letter + ".");
+                                System.out.println(Color.YELLOW + "No donors found with names starting with " + letter + "." + Color.RESET);
                             }
                         }
                     } else if (filterChoice == 2) {
@@ -278,7 +279,7 @@ public class Test {
                                 category = "Public";
                                 break;
                             default:
-                                System.out.println("Invalid category choice. Please select a valid option.");
+                                System.out.println(Color.RED + "Invalid category choice. Please select a valid option." + Color.RESET);
                                 break;
                         }
 
@@ -287,7 +288,7 @@ public class Test {
 
                             // Error handling for no donors found after filtering
                             if (donors.isEmpty()) {
-                                System.out.println("No donors found in the '" + category + "' category.");
+                                System.out.println(Color.YELLOW + "No donors found in the '" + category + "' category." + Color.RESET);
                             }
                         }
                     } else if (filterChoice == 3) {
@@ -307,7 +308,7 @@ public class Test {
                                 type = "Organization";
                                 break;
                             default:
-                                System.out.println("Invalid type choice. Please select a valid option.");
+                                System.out.println(Color.RED + "Invalid type choice. Please select a valid option." + Color.RESET);
                                 break;
                         }
 
@@ -316,12 +317,12 @@ public class Test {
 
                             // Error handling for no donors found after filtering
                             if (donors.isEmpty()) {
-                                System.out.println("No donors found of type '" + type + "'.");
+                                System.out.println(Color.YELLOW + "No donors found of type '" + type + "'." + Color.RESET);
                             }
                         }
                     } else {
                         // Error handling for invalid filter choice
-                        System.out.println("Invalid filter choice. Please select a valid option.");
+                        System.out.println(Color.RED + "Invalid filter choice. Please select a valid option." + Color.RESET);
                     }
 
 
@@ -351,7 +352,7 @@ public class Test {
                             DonorSorter.reverseID(donors);
                             break;
                         default:
-                            System.out.println("Invalid sorting option.");
+                            System.out.println(Color.RED + "Invalid sorting option." + Color.RESET);
                             break;
                     }
                     break;
@@ -361,7 +362,7 @@ public class Test {
                     break;
 
                 default:
-                    System.out.println("Invalid option. Please try again.");
+                    System.out.println(Color.RED + "Invalid option. Please try again." + Color.RESET);
                     break;
             }
         }

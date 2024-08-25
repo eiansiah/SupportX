@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import Libraries.Color;
 import Main.Donor;
 import Libraries.ArrayList;
 
@@ -21,7 +22,7 @@ public class DonorFileHandler implements FileHandlingInterface<Donor>{
                 System.out.println("File created: " + filename);
             } else {
                 //System.out.println("File exists: " + filename);
-                System.out.println("System Ready");
+                System.out.println(Color.BRIGHT_CYAN + "System Ready" + Color.RESET);
                 
             }
         } catch (IOException e) {
@@ -34,7 +35,7 @@ public class DonorFileHandler implements FileHandlingInterface<Donor>{
     public void saveData(String filename, Donor donor) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
             writer.write(donor.toString() + "\n");
-            System.out.println("Donor details saved successfully.");
+            System.out.println(Color.GREEN + "Donor details saved successfully." + Color.RESET);
         } catch (IOException e) {
             System.err.println("Error writing to file: " + e.getMessage());
         }
@@ -102,7 +103,7 @@ public class DonorFileHandler implements FileHandlingInterface<Donor>{
         for (int i = 0; i < donors.size(); i++) {
              if (donors.get(i).getId().equals(donorID)) {
                 donors.remove(i);
-                System.out.println("Donor with ID " + donorID + " has been removed.");
+                System.out.println(Color.YELLOW + "Donor with ID " + donorID + " has been removed." + Color.RESET);
                 break;  // Exit the loop after removing the donor
             }
         }
