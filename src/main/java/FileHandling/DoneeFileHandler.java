@@ -33,7 +33,7 @@ public class DoneeFileHandler implements FileHandlingInterface<Donee> {
     public void saveData(String filename, Donee donee) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
             writer.write(donee.toString() + "\n");
-            System.out.println("Donee details saved successfully.");
+            System.out.println("Donee details saved successfully.\n");
         } catch (IOException e) {
             System.err.println("Error writing to file: " + e.getMessage());
         }

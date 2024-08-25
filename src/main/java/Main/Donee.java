@@ -71,6 +71,6 @@ public class Donee extends Applicants {
 
     @Override
     public String toString() {
-        return (doneeID + "," + super.toString() + "," + address + "," + doneeType + "," + doneeUrgency + "," + registeredDate);
+        return (doneeID + super.toString() + "," + address + "," + doneeType + "," + itemCategoryRequired + "," + doneeUrgency + "," + registeredDate);
     }
 }
