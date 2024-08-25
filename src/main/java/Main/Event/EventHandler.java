@@ -43,8 +43,6 @@ public class EventHandler {
         UniversalFileHandler.removeData(eventFilePath, event.toString());
     }
 
-
-
     private static String generateEventID(){
         return new Random().nextInt(1000) + "";
     }
