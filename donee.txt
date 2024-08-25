@@ -1,0 +1,2 @@
+DNE00001,Bye,siah@siah,0123456789,Kuala,Individual,Monetary Aid,Moderate,2024-08-25
+DNE00003,Niubi,niubi@cao.com,0163336666,Kuala Selangor,Individual,Medical Device,Moderate,2024-08-25
