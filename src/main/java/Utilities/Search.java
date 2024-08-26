@@ -6,6 +6,12 @@ import Libraries.Debug;
 
 public class Search {
 
+    /**
+     * Searches for the first line in a file that contains the specified text.
+     * @param _filePath path to the file to be searched
+     * @param textToSearch the text to search for in the file
+     * @return the first line containing the specified text, or null if no match is found or if the file could not be read
+     */
     public static String searchFirstMatchesStringFromFile(String _filePath, String textToSearch) {
         ArrayList<String> fileData = UniversalFileHandler.readData(_filePath);
 
@@ -22,6 +28,14 @@ public class Search {
         return null;
     }
 
+    /**
+     * Searches for the first line in a file that contains the specified text in a specified field.
+     * @param _filePath path to the file to be searched
+     * @param textToSearch the text to search for in the file
+     * @param separator the delimiter used to split each line into fields
+     * @param index the index of the field to search within
+     * @return the first line containing the specified text in the specified field, or null if no match is found, the index is out of range, or if the file could not be read
+     */
     public static String searchFirstMatchesStringFromFile(String _filePath, String textToSearch, String separator, int index) {
         ArrayList<String> fileData = UniversalFileHandler.readData(_filePath);
 
@@ -45,6 +59,12 @@ public class Search {
         return null;
     }
 
+    /**
+     * Searches for all lines in a file that contain the specified text.
+     * @param _filePath path to the file to be searched
+     * @param textToSearch the text to search for in the file
+     * @return a list of all lines containing the specified text, or an empty list if no matches are found or if the file could not be read
+     */
     public static ArrayList<String> searchAllMatchesString(String _filePath, String textToSearch) {
         ArrayList<String> fileData = UniversalFileHandler.readData(_filePath);
         ArrayList<String> temp = new ArrayList<>();
@@ -60,6 +80,14 @@ public class Search {
         return temp;
     }
 
+    /**
+     * Searches for all lines in a file that contain the specified text in a specified field.
+     * @param _filePath path to the file to be searched
+     * @param textToSearch the text to search for in the file
+     * @param separator the delimiter used to split each line into fields
+     * @param index the index of the field to search within
+     * @return a list of all lines containing the specified text in the specified field, or an empty list if no matches are found, the index is out of range, or if the file could not be read
+     */
     public static ArrayList<String> searchAllMatchesString(String _filePath, String textToSearch, String separator, int index) {
         ArrayList<String> fileData = UniversalFileHandler.readData(_filePath);
         ArrayList<String> temp = new ArrayList<>();
