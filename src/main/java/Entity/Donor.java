@@ -1,4 +1,6 @@
-package Main;
+package Entity;
+
+import Main.Applicants;
 
 public class Donor extends Applicants {
 
