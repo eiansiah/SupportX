@@ -1,6 +1,7 @@
 package FileHandling;
 
 import Libraries.ArrayList;
+import Libraries.Color;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -11,7 +12,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import Main.Donee;
+import Entity.Donee;
 
 public class DoneeFileHandler implements FileHandlingInterface<Donee> {
      @Override
@@ -20,12 +21,12 @@ public class DoneeFileHandler implements FileHandlingInterface<Donee> {
          try {
              if (!file.exists()) {
                  file.createNewFile();
-                 System.out.println("File created: " + filename);
+                 System.out.println(Color.BRIGHT_GREEN + "File created: " + filename + Color.RESET);
              } else {
-                 System.out.println("System Ready");
+                 System.out.println(Color.BRIGHT_GREEN + "System Ready!" + Color.RESET);
              }
          } catch (IOException e) {
-             System.err.println("Error creating the file: " + e.getMessage());
+             System.err.println(Color.RED + "Error creating the file: " + e.getMessage() + Color.RESET);
          }
      }
 
@@ -33,9 +34,9 @@ public class DoneeFileHandler implements FileHandlingInterface<Donee> {
     public void saveData(String filename, Donee donee) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
             writer.write(donee.toString() + "\n");
-            System.out.println("Donee details saved successfully.");
+            System.out.println(Color.BRIGHT_GREEN + "\nNew donee added successfully!" + Color.RESET);
         } catch (IOException e) {
-            System.err.println("Error writing to file: " + e.getMessage());
+            System.err.println(Color.RED + "Error writing to file: " + e.getMessage() + Color.RESET);
         }
     }
 

@@ -1,4 +1,6 @@
-package Main;
+package Entity;
+
+import Main.Applicants;
 
 import java.time.LocalDate;
 
