@@ -27,13 +27,69 @@ public class DonorFunctions {
         return new Donor(donorId, name, email, phone, category, type);
     }
 
+    public static void deleteDonor(String donorIDToDelete, ArrayList<Donor> donors, DonorFileHandler fileHandler) {
+        Scanner scanner = new Scanner(System.in);
+        Donor selectedDonor = null;
+
+        // Search for the donor by ID
+        for (Donor donor : donors) {
+            if (donor.getId().equals(donorIDToDelete)) {
+                selectedDonor = donor;
+                break;
+            }
+        }
+
+        if (selectedDonor != null) {
+            // Display the donor's information before deletion
+            System.out.println("\nDonor Details:");
+            System.out.printf("%-15s: %s%n", "ID", selectedDonor.getId());
+            System.out.printf("%-15s: %s%n", "Name", selectedDonor.getName());
+            System.out.printf("%-15s: %s%n", "Email", selectedDonor.getEmail());
+            System.out.printf("%-15s: %s%n", "Phone", selectedDonor.getPhone());
+            System.out.printf("%-15s: %s%n", "Category", selectedDonor.getCategory());
+            System.out.printf("%-15s: %s%n", "Type", selectedDonor.getType());
+
+            System.out.print("\nAre you sure you want to delete this donor? (Y/N): ");
+            String confirmation = scanner.nextLine().trim().toUpperCase();
+
+            if (confirmation.equals("Y")) {
+                donors.remove(selectedDonor);
+                fileHandler.updateMultipleData("donor.txt", donors);
+                System.out.println(Color.RED + "Donor with ID " + donorIDToDelete + " has been deleted." + Color.RESET);
+            } else {
+                System.out.println(Color.YELLOW + "Deletion cancelled." + Color.RESET);
+            }
+        } else {
+            Message.displayDataNotFoundMessage("Donor with ID " + donorIDToDelete + " was not found.");
+        }
+    }
+
     public static void modifyDonor(String donorIDToModify, ArrayList<Donor> donors, DonorFileHandler fileHandler) {
         Scanner scanner = new Scanner(System.in);
-        boolean donorFound = false;
+        Donor selectedDonor = null;
 
-        for (Donor donorSelected : donors) {
-            if (donorSelected.getId().equals(donorIDToModify)) {
-                donorFound = true;
+        // Search for the donor by ID
+        for (Donor donor : donors) {
+            if (donor.getId().equals(donorIDToModify)) {
+                selectedDonor = donor;
+                break;
+            }
+        }
+
+        if (selectedDonor != null) {
+            // Display the donor's information before modification
+            System.out.println("\nDonor Details:");
+            System.out.printf("%-15s: %s%n", "ID", selectedDonor.getId());
+            System.out.printf("%-15s: %s%n", "Name", selectedDonor.getName());
+            System.out.printf("%-15s: %s%n", "Email", selectedDonor.getEmail());
+            System.out.printf("%-15s: %s%n", "Phone", selectedDonor.getPhone());
+            System.out.printf("%-15s: %s%n", "Category", selectedDonor.getCategory());
+            System.out.printf("%-15s: %s%n", "Type", selectedDonor.getType());
+
+            System.out.print("\nDo you want to proceed with modifying this donor? (Y/N): ");
+            String confirmation = scanner.nextLine().trim().toUpperCase();
+
+            if (confirmation.equals("Y")) {
                 String choice;
 
                 do {
@@ -50,22 +106,22 @@ public class DonorFunctions {
 
                     switch (choice) {
                         case "1":
-                            donorSelected.setName(Validation.validateName(scanner));
+                            selectedDonor.setName(Validation.validateName(scanner));
                             break;
                         case "2":
-                            donorSelected.setEmail(Validation.validateEmail(scanner));
+                            selectedDonor.setEmail(Validation.validateEmail(scanner));
                             break;
                         case "3":
-                            donorSelected.setPhone(Validation.validatePhone(scanner));
+                            selectedDonor.setPhone(Validation.validatePhone(scanner));
                             break;
                         case "4":
-                            donorSelected.setCategory(Validation.validateCategory(scanner));
+                            selectedDonor.setCategory(Validation.validateCategory(scanner));
                             break;
                         case "5":
-                            donorSelected.setType(Validation.validateType(scanner));
+                            selectedDonor.setType(Validation.validateType(scanner));
                             break;
 
-                        case "x":
+                        case "X":
                             Message.displayEndUpdateMessage();
                             break;
                         default:
@@ -81,11 +137,11 @@ public class DonorFunctions {
 
                 // Update the donor in the file after all modifications
                 fileHandler.updateMultipleData("donor.txt", donors);
-                break;
-            }
-        }
 
-        if (!donorFound) {
+            } else {
+                System.out.println(Color.YELLOW + "Modification cancelled." + Color.RESET);
+            }
+        } else {
             Message.displayDataNotFoundMessage("Donor with ID " + donorIDToModify + " was not found.");
         }
     }
