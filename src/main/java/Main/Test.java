@@ -43,25 +43,24 @@ public class Test {
                     break;
                 //Delete Donor
                 case 2:
-                    //Check IF EMPTY
-                    DonorFunctions.displayDonors();
                     // Get the ID to be deleted
                     System.out.print("\nWhich Donor Would you like to remove? Please enter their ID: ");
                     String donorIdToDelete = scanner.next().trim();
+
+                    ArrayList<Donor> donors = fileHandler.readData("donor.txt");
                     // Delete the donor
-                    fileHandler.deleteData("donor.txt", donorIdToDelete);
+                    DonorFunctions.deleteDonor(donorIdToDelete, donors, fileHandler);
+//                    fileHandler.deleteData("donor.txt", donorIdToDelete);
                     break;
 
                 // Modify Donor
                 case 3:
-                    DonorFunctions.displayDonors();
-                    // Get the ID to be modified
                     System.out.print("\nWhich Donor Would you like to update? Please enter their ID: ");
-                    String donorIDToModify = scanner.next().trim();
+                    String donorIDToUpdate = scanner.next().trim();
                     // Read all donors from the file
-                    ArrayList<Donor> donors = fileHandler.readData("donor.txt");
+                    ArrayList<Donor> donorsUpdate = fileHandler.readData("donor.txt");
                     // Modify the donor using the modifyDonor method
-                    DonorFunctions.modifyDonor(donorIDToModify, donors, fileHandler);
+                    DonorFunctions.modifyDonor(donorIDToUpdate, donorsUpdate, fileHandler);
                     break;
 
                 //See All Donor
