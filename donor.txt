@@ -997,4 +997,3 @@ DNR00996,Andy McIllrick,amcillrickro@intel.com,3421431261,Public,Individual
 DNR00997,Willyt Toolin,wtoolinrp@adobe.com,2097842327,Public,Individual
 DNR00998,Inge Giovanazzi,igiovanazzirq@mlb.com,2143140293,Private,Organization
 DNR00999,Rog Skepper,rskepperrr@ucla.edu,3843364510,Public,Organization
-DNR01000,Sue Harold,sharold0@ucla.edu,9138633415,Government,Organization
