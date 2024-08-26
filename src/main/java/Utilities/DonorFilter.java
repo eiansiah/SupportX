@@ -1,7 +1,7 @@
 package Utilities;
 
 import Libraries.ArrayList;
-import Main.Donor;
+import Entity.Donor;
 
 public class DonorFilter {
 

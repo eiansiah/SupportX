@@ -8,7 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import Libraries.Color;
-import Main.Donor;
+import Entity.Donor;
 import Libraries.ArrayList;
 
 public class DonorFileHandler implements FileHandlingInterface<Donor>{
