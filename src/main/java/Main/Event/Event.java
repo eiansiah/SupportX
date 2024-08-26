@@ -19,7 +19,7 @@ public class Event{
     private String description;
     private EventStatus eventStatus;
     
-    private final String separator = "!,!";
+    public static final String separator = "!,!";
 
     public Event(String eventID, LocalDateTime startDateTime, LocalDateTime endDateTime, String venue, int minVolunteerPax, int maxVolunteerPax, String description, EventStatus eventStatus) {
         this.eventID = eventID;
