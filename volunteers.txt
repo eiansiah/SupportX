@@ -103,3 +103,4 @@ VL00102,Male,22,max,max@aa.my,0168273613,weekdays
 VL00103,Female,24,ella,ella@aa.my,0192837612,weekends
 VL00104,siah e-ian,21,male,01283783783,eian@gmail.com,weekends
 VL00105,eddie sim hor kang,20,male,01727627622,edd@ded.com,weekends
+VL00106,lily,female,21,01355575577,qq@ss.com,weekends
