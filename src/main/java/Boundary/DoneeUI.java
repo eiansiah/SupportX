@@ -1,4 +1,4 @@
-package Main;
+package Boundary;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 import Entity.Donee;
 
-import Utilities.DoneeSorter;
+import Control.DoneeSorter;
 import Utilities.Message;
 import Utilities.Validation;
 
@@ -15,7 +15,7 @@ import FileHandling.DoneeFileHandler;
 import Libraries.ArrayList;
 import Libraries.Color;
 
-public class DoneeManagement {
+public class DoneeUI {
 
     private static final DoneeFileHandler fileHandler = new DoneeFileHandler();
     private static final Scanner scanner = new Scanner(System.in);
