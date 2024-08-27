@@ -1,8 +1,14 @@
 package Main;
 
+import FileHandling.UniversalFileHandler;
 import FileHandling.VolunteerFileHandler;
 import Libraries.ArrayList;
 import Libraries.Color;
+import Libraries.Debug;
+import Main.Event.Event;
+import Main.Event.EventHandler;
+import Main.Event.EventStatus;
+import Main.Event.EventVolunteer;
 
 import java.util.Scanner;
 
@@ -65,7 +71,7 @@ public class VolunteerManagement {
                         searchVolunteer();
                         break;
                     case 5:
-//                    assignVolunteer();
+                        assignVolunteer();
                         break;
                     case 6:
                         listVolunteers();
@@ -74,7 +80,7 @@ public class VolunteerManagement {
                         filterVolunteers();
                         break;
                     case 8:
-//                    searchEventsByVolunteer();
+                        searchEventsByVolunteer();
                         break;
                     case 9:
 //                    viewReports(); 
@@ -89,6 +95,86 @@ public class VolunteerManagement {
                 scanner.nextLine();
             }
         }
+    }
+
+    private static void assignVolunteer() {
+        ArrayList<Event> upcomingEvents = EventHandler.searchAllEventByEventStatus(EventStatus.UPCOMING);
+
+        //Display
+        if(upcomingEvents == null || upcomingEvents.isEmpty()) {
+            System.out.println("No upcoming event. ");
+            return;
+        }
+
+        for (Event event : upcomingEvents) {
+            System.out.println(event.eventID()+ " " + event.startDateTime()+ " " + event.endDateTime()+ " " + event.venue());
+        }
+
+        Event eventChosen;
+        while (true){
+            System.out.print("Enter event ID: ");
+            String eventID = scanner.nextLine().trim();
+
+            Event event = EventHandler.searchEventByEventID(eventID);
+
+            if(event == null) {
+                System.out.println(Color.RED + "Invalid event ID. Please try again." + Color.RESET);
+            }else{
+                eventChosen = event;
+                break;
+            }
+        }
+
+        //Display
+        for(Volunteer volunteer : volunteers) {
+            System.out.println(volunteer.toString());
+        }
+
+        String volunteerID;
+        while (true){
+            System.out.print("Enter volunteer ID: ");
+            volunteerID = scanner.nextLine().trim();
+
+            boolean idExist = false;
+            for(Volunteer volunteer : volunteers) {
+                if (volunteer.getId().equals(volunteerID)) {
+                    idExist = true;
+                    break;
+                }
+            }
+
+            if(!idExist) {
+                System.out.println(Color.RED + "Volunteer ID not exist. Please try again." + Color.RESET);
+                continue;
+            }
+
+            ArrayList<EventVolunteer> whatEventVolunteerJoined = EventHandler.getEventVolunteerJoined(volunteerID);
+            boolean crashed = false;
+            if(whatEventVolunteerJoined != null){
+                for(EventVolunteer eventVolunteer: whatEventVolunteerJoined){
+                    Event event = EventHandler.searchEventByEventID(eventVolunteer.eventID());
+
+                    if(!(eventChosen.endDateTime().isBefore(event.startDateTime()) || eventChosen.startDateTime().isAfter(event.endDateTime()))) {
+                        // Schedule crash
+                        System.out.println(Color.RED + "The event selected crashed with volunteer schedule " + event.eventID() + ". Please try again." + Color.RESET);
+                        crashed = true;
+                        break;
+                    }
+                }
+            }
+
+            if(crashed) {
+                continue;
+            }
+
+            EventHandler.addEventVolunteer(eventChosen.eventID(), volunteerID);
+            System.out.println(volunteerID + " has been assigned to " + eventChosen.eventID());
+            break;
+        }
+    }
+
+    private static void searchEventsByVolunteer(){
+        //TODO: refer to EventHandler.java getEventVolunteerJoined?
     }
 
     private static void addVolunteer() {

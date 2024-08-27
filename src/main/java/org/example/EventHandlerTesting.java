@@ -5,6 +5,6 @@ import Main.Event.EventHandler;
 
 public class EventHandlerTesting {
     public static void main(String[] args) {
-        Event event = EventHandler.searchEventByEventID("351");
+
     }
 }
