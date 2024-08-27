@@ -56,4 +56,8 @@ public class Message {
         System.out.print(Color.BRIGHT_YELLOW + "\nExiting system. " + reason + Color.RESET);
     }
 
+    public static void displayInvalidFormatMessage(String item){
+        System.out.println(Color.RED + "\nInvalid " + item + " format entered. Please try again." + Color.RESET);
+    }
+
 }
