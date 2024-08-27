@@ -13,7 +13,7 @@ public class searchTesting {
 
     public static void addDummy(){
         for (int i = 0; i < 30; i++) {
-            Event event = EventHandler.addNewEvent(LocalDateTime.now(), LocalDateTime.now().plusDays(1), "TARUMT", 0, 0, "");
+            Event event = EventHandler.addNewEvent(LocalDateTime.now(), LocalDateTime.now().plusDays(1), "TARUMT", "");
         }
     }
 

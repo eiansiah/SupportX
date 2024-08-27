@@ -1,10 +1,8 @@
 package Main;
 
-import FileHandling.UniversalFileHandler;
 import FileHandling.VolunteerFileHandler;
 import Libraries.ArrayList;
 import Libraries.Color;
-import Libraries.Debug;
 import Main.Event.Event;
 import Main.Event.EventHandler;
 import Main.Event.EventStatus;
@@ -302,6 +300,9 @@ public class VolunteerManagement {
             if (volunteerToRemove != null) {
                 volunteers.remove(volunteerToRemove);
                 fileHandler.updateMultipleData(FILE_NAME, volunteers);
+
+                EventHandler.removeVolunteerFromAllVolunteerEvent(volunteerToRemove.getId());
+
                 System.out.println(Color.GREEN + "Volunteer deleted successfully." + Color.RESET);
                 break;
             } else {
