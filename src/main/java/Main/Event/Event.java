@@ -2,13 +2,6 @@ package Main.Event;
 
 import java.time.LocalDateTime;
 
-enum EventStatus{
-    UPCOMING,
-    ONGOING,
-    COMPLETED,
-    CANCELLED
-}
-
 public class Event{
     private final String eventID;
     private LocalDateTime startDateTime;

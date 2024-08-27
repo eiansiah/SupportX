@@ -11,7 +11,5 @@ public class Main {
 
         //TODO: ADT hashmap with multiple key
         //TODO: Multi algorithm to store data. example: <List> list of donee --> filter with condition --> <Queue> Delivery flow, near to far to near (circle)
-
-
     }
 }

@@ -7,13 +7,23 @@ enum VolunteerStatus{
 
 public class EventVolunteer{
     private final String eventID;
-    private final String VolunteerID;
+    private final String volunteerID;
     private VolunteerStatus volunteerStatus;
+
+    public static final String separator = "!,!";
 
     public EventVolunteer(String eventID, String volunteerID, VolunteerStatus volunteerStatus) {
         this.eventID = eventID;
-        VolunteerID = volunteerID;
+        this.volunteerID = volunteerID;
         this.volunteerStatus = volunteerStatus;
+    }
+
+    public EventVolunteer(String eventVolunteer) {
+        String[] data = eventVolunteer.split(separator);
+
+        eventID = data[0];
+        volunteerID = data[1];
+        volunteerStatus = VolunteerStatus.valueOf(data[2]);
     }
 
     public String eventID() {
@@ -21,7 +31,7 @@ public class EventVolunteer{
     }
 
     public String VolunteerID() {
-        return VolunteerID;
+        return volunteerID;
     }
 
     public VolunteerStatus volunteerStatus() {
@@ -30,5 +40,9 @@ public class EventVolunteer{
 
     public void setVolunteerStatus(VolunteerStatus volunteerStatus) {
         this.volunteerStatus = volunteerStatus;
+    }
+
+    public String toString(){
+        return eventID + separator + volunteerID + separator + volunteerStatus;
     }
 }

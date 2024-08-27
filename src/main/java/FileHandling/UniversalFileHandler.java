@@ -1,6 +1,7 @@
 package FileHandling;
 
 import Libraries.ArrayList;
+import Libraries.Color;
 
 import java.io.*;
 
@@ -161,7 +162,7 @@ public class UniversalFileHandler {
 
             return tempData;
         }catch(IOException e){
-            System.err.println("Error remove data from file: " + e.getMessage());
+            System.out.println(Color.RED + "Error reading data from file: " + e.getMessage() + Color.RESET);
         }
 
         return null;
