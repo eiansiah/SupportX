@@ -55,8 +55,9 @@ public class Volunteer extends Applicants implements Serializable {
 
     @Override
     public String toString() {
-        return id + "," + gender + "," + age + super.toString()+ "," + availability;
+        return id + "," + super.name + "," + gender + "," + age + "," + super.phone + "," + super.email + "," + availability;
     }
+
 
 }
 

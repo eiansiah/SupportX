@@ -2,9 +2,9 @@ package Main;
 
 //Use be DonorSystem.Donor,Donee and Volunteers
 public abstract class Applicants {
-    private String name;
-    private String email;
-    private String phone;
+    public String name;
+    public String email;
+    public String phone;
 
     public Applicants(){
     }
