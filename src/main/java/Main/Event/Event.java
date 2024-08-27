@@ -7,20 +7,20 @@ public class Event{
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
     private String venue;
-    private int minVolunteerPax; // equals 0, no down limit
-    private int maxVolunteerPax; // equals 0, no up limit
+    //private int minVolunteerPax; // equals 0, no down limit
+    //private int maxVolunteerPax; // equals 0, no up limit
     private String description;
     private EventStatus eventStatus;
     
     public static final String separator = "!,!";
 
-    public Event(String eventID, LocalDateTime startDateTime, LocalDateTime endDateTime, String venue, int minVolunteerPax, int maxVolunteerPax, String description, EventStatus eventStatus) {
+    public Event(String eventID, LocalDateTime startDateTime, LocalDateTime endDateTime, String venue/*, int minVolunteerPax, int maxVolunteerPax*/, String description, EventStatus eventStatus) {
         this.eventID = eventID;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
         this.venue = venue;
-        this.minVolunteerPax = minVolunteerPax;
-        this.maxVolunteerPax = maxVolunteerPax;
+        //this.minVolunteerPax = minVolunteerPax;
+        //this.maxVolunteerPax = maxVolunteerPax;
         this.description = description;
         this.eventStatus = eventStatus;
     }
@@ -32,10 +32,10 @@ public class Event{
         startDateTime = LocalDateTime.parse(data[1]);
         endDateTime = LocalDateTime.parse(data[2]);
         venue = data[3];
-        minVolunteerPax = Integer.parseInt(data[4]);
-        maxVolunteerPax = Integer.parseInt(data[5]);
-        description = data[6];
-        eventStatus = EventStatus.valueOf(data[7]);
+        //minVolunteerPax = Integer.parseInt(data[4]);
+        //maxVolunteerPax = Integer.parseInt(data[5]);
+        description = data[4];
+        eventStatus = EventStatus.valueOf(data[5]);
     }
 
     public String eventID() {
@@ -68,7 +68,7 @@ public class Event{
         return this;
     }
 
-    public int minVolunteerPax() {
+    /*public int minVolunteerPax() {
         return minVolunteerPax;
     }
 
@@ -82,7 +82,7 @@ public class Event{
 
     public void setMaxVolunteerPax(int maxVolunteerPax) {
         this.maxVolunteerPax = maxVolunteerPax;
-    }
+    }*/
 
     public String description() {
         return description;
@@ -101,7 +101,7 @@ public class Event{
     }
 
     public String toString() {
-        return eventID + separator + startDateTime + separator + endDateTime + separator + venue + separator + minVolunteerPax + separator + maxVolunteerPax + separator + description + separator + eventStatus;
+        return eventID + separator + startDateTime + separator + endDateTime + separator + venue + separator + description + separator + eventStatus;
     }
 }
 
