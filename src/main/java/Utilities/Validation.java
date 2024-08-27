@@ -10,7 +10,7 @@ public class Validation {
         String name;
         Pattern nameFormat = Pattern.compile("^[A-Za-z]{2}[A-Za-zâ€˜\\-/.]{1,30}$");
         do {
-            System.out.print("\nName: ");
+//            System.out.print("\nName: ");
             name = scanner.nextLine().trim();
             Matcher matcher = nameFormat.matcher(name);
             if (!matcher.matches() || name.isEmpty()) {
