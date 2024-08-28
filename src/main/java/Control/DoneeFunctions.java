@@ -1,25 +1,23 @@
 package Control;
 
 import java.time.LocalDate;
-import java.util.Objects;
 import java.util.Scanner;
 
 import Entity.Donee;
 
 import FileHandling.DoneeFileHandler;
 
-import Utilities.Message;
-import Utilities.DoneeMessageUI;
-import Utilities.NewValidation;
-
+import Libraries.GeneralFunction;
 import Libraries.ArrayList;
-import Libraries.Color;
+
+import Utilities.Message;
+import Utilities.NewValidation;
 
 import Boundary.DoneeUI;
 
 public class DoneeFunctions {
 
-    private ArrayList<Donee> doneeList;
+    private static ArrayList<Donee> doneeList;
     private static final DoneeFileHandler fileHandler = new DoneeFileHandler();
     private static final Scanner scanner = new Scanner(System.in); //To be shifted
 
@@ -53,10 +51,10 @@ public class DoneeFunctions {
                     addDonee();
                     break;
                 case 2: //Delete Donee
-                    deleteDonee(readDonees());
+                    deleteDoneeHandler(readDonees());
                     break;
                 case 3: //Modify Donee
-//                    modifyDonee(readDonees());
+                    modifyDoneeHandler(readDonees());
                     break;
                 case 4: //View Donee Details
                     displayDonees(readDonees());
@@ -84,7 +82,7 @@ public class DoneeFunctions {
         doneeId = scanner.nextLine().trim();
 
         if (doneeId.isEmpty()) {
-            Message.displayEmptyInputMessage("Please enter a valid ID.");
+            Message.displayEmptyInputMessage("Please enter a valid Donee ID.");
         }
 
         return doneeId;
@@ -100,8 +98,7 @@ public class DoneeFunctions {
 
         fileHandler.saveData("donee.txt", newDonee);
 
-        Message.displayExitMessage("Press any key to return to main menu.....");
-        scanner.nextLine();
+        GeneralFunction.enterToContinue();
     }
 
     public static Donee inputDoneeDetails(String doneeID){
@@ -214,16 +211,26 @@ public class DoneeFunctions {
         return new Donee(doneeID, name, email, phone, address, doneeType, itemCategory, doneeUrgency, registeredDate);
     }
 
-    public static void deleteDonee(ArrayList<Donee> donees) {
+    public static void deleteDoneeHandler(ArrayList<Donee> donees){
+        doneeList = deleteDoneeCore(donees);
+
+        fileHandler.updateMultipleData("donee.txt", doneeList);
+
+        GeneralFunction.enterToContinue();
+    }
+
+    public static ArrayList<Donee> deleteDoneeCore(ArrayList<Donee> donees) {
         String doneeId;
-        Scanner scanner = new Scanner(System.in);
         Donee selectedDonee = null;
 
-        System.out.println("\nWhich donee would you like to delete?");
         do {
-            System.out.print("Please enter the Donee ID (Or X to return) : ");
+            DoneeUI.deleteDoneeUI();
             doneeId = obtainDoneeId().toUpperCase();
         } while (doneeId.isEmpty());
+
+        if (doneeId.equals("X")){
+            return donees;
+        }
 
         // Search for the donor by ID
         for (Donee donee : donees) {
@@ -235,128 +242,208 @@ public class DoneeFunctions {
 
         if (selectedDonee != null) {
             // Display the donor's information before deletion
-            System.out.println("\nDonee Details:");
-            System.out.printf("%-25s: %s%n", "Donee ID", selectedDonee.getDoneeID());
-            System.out.printf("%-25s: %s%n", "Name", selectedDonee.getName());
-            System.out.printf("%-25s: %s%n", "Email", selectedDonee.getEmail());
-            System.out.printf("%-25s: %s%n", "Phone", selectedDonee.getPhone());
-            System.out.printf("%-25s: %s%n", "Address", selectedDonee.getAddress());
-            System.out.printf("%-25s: %s%n", "Donee Type", selectedDonee.getDoneeType());
-            System.out.printf("%-25s: %s%n", "Item Category Required", selectedDonee.getItemCategoryRequired());
-            System.out.printf("%-25s: %s%n", "Donee Urgency", selectedDonee.getDoneeUrgency());
-            System.out.printf("%-25s: %s%n", "Registered Date", selectedDonee.getRegisteredDate());
+            DoneeUI.displayIndividualDoneeDetailsUI(selectedDonee.getDoneeID(), selectedDonee.getName(), selectedDonee.getEmail(), selectedDonee.getPhone(), selectedDonee.getAddress(), selectedDonee.getDoneeType(), selectedDonee.getItemCategoryRequired(), selectedDonee.getDoneeUrgency(), selectedDonee.getRegisteredDate());
 
-            System.out.print("\nAre you sure you want to delete this donee? (Y/N): ");
-            String confirmation = scanner.nextLine().trim().toUpperCase();
+            String confirmation;
+            boolean deleteValid;
+            do {
+                confirmation = DoneeUI.deleteDoneeConfirmationUI();
 
-            if (confirmation.equals("Y")) {
-                donees.remove(selectedDonee);
-                fileHandler.updateMultipleData("donee.txt", donees);
-                System.out.println(Color.BRIGHT_GREEN + "\nDonee with ID " + doneeId + " has been deleted successfully!" + Color.RESET);
-            } else {
-                System.out.println(Color.BRIGHT_YELLOW + "\nOperation cancelled." + Color.RESET);
-            }
+                if (confirmation.equals("Y")) {
+                    donees.remove(selectedDonee);
+                    DoneeUI.deleteDoneeSuccessfulMessage(doneeId);
+                    deleteValid = true;
+                } else if (confirmation.equals("N")) {
+                    DoneeUI.deleteDoneeOperationAbortMessage();
+                    deleteValid = true;
+                } else {
+                    Message.displayInvalidInputMessage("Please enter only Y for Yes or N for No.");
+                    deleteValid = false;
+                }
+            } while (confirmation.isEmpty() || !deleteValid);
+
         } else {
             Message.displayDataNotFoundMessage("Donee with ID " + doneeId + " was not found.");
         }
 
-        Message.displayExitMessage("Press any key to return to main menu.....");
-        scanner.nextLine();
+        return donees;
     }
 
-//    public static void modifyDonee(ArrayList<Donee> donees) {
-//        Scanner scanner = new Scanner(System.in);
-//        boolean doneeFound = false;
-//        String doneeId;
-//
-//        do {
-//            System.out.print("\nWhich donee would you like to modify? Please enter the Donee ID: ");
-//            doneeId = obtainDoneeId();
-//        } while (doneeId.isEmpty());
-//
-//        for (Donee doneeSelected : donees) {
-//            if (doneeSelected.getDoneeID().equals(doneeId)) {
-//                doneeFound = true;
-//                char choice = ' ';
-//
-//                System.out.println("\nDonee Details:");
-//                System.out.printf("%-25s: %s%n", "Donee ID", doneeSelected.getDoneeID());
-//                System.out.printf("%-25s: %s%n", "Name", doneeSelected.getName());
-//                System.out.printf("%-25s: %s%n", "Email", doneeSelected.getEmail());
-//                System.out.printf("%-25s: %s%n", "Phone", doneeSelected.getPhone());
-//                System.out.printf("%-25s: %s%n", "Address", doneeSelected.getAddress());
-//                System.out.printf("%-25s: %s%n", "Donee Type", doneeSelected.getDoneeType());
-//                System.out.printf("%-25s: %s%n", "Item Category Required", doneeSelected.getItemCategoryRequired());
-//                System.out.printf("%-25s: %s%n", "Donee Urgency", doneeSelected.getDoneeUrgency());
-//                System.out.printf("%-25s: %s%n", "Registered Date", doneeSelected.getRegisteredDate());
-//
-//                do {
-//                    // Prompt user for which part to modify
-//                    System.out.println("\nWhich part do you want to modify?");
-//                    System.out.println("1. Name");
-//                    System.out.println("2. Email");
-//                    System.out.println("3. Phone");
-//                    System.out.println("4. Address");
-//                    System.out.println("5. Donee Type");
-//                    System.out.println("6. Item Category Required");
-//                    System.out.println("7. Donee Urgency");
-//                    System.out.println("X. Return to main menu\n");
-//                    System.out.print("Please select an option (1-7 or X): ");
-//                    String input = scanner.nextLine().trim();
-//
-//                    if (input.isEmpty()) {
-//                        System.out.println("Empty input detected. Please enter an option between 1-7 and X.");
-//                        continue;
-//                    }
-//
-//                    choice = input.toUpperCase().charAt(0);
-//
-//                    if (Character.isDigit(choice) && choice >= '1' && choice <= '7' || choice == 'X') {
-//                        switch (choice) {
-//                            case '1':
-//                                doneeSelected.setName(NewValidation.validateName(scanner));
-//                                break;
-//                            case '2':
-//                                doneeSelected.setEmail(NewValidation.validateEmail(scanner));
-//                                break;
-//                            case '3':
-//                                doneeSelected.setPhone(NewValidation.validatePhone(scanner));
-//                                break;
-//                            case '4':
-//                                doneeSelected.setAddress(NewValidation.validateAddress(scanner));
-//                                break;
-//                            case '5':
-//                                doneeSelected.setDoneeType(NewValidation.validateDoneeType(scanner));
-//                                break;
-//                            case '6':
-//                                doneeSelected.setItemCategoryRequired(NewValidation.validateItemCategory(scanner));
-//                                break;
-//                            case '7':
-//                                doneeSelected.setDoneeUrgency(NewValidation.validateDoneeUrgency(scanner));
-//                                break;
-//                        }
-//
-//                        if (choice != 'X'){
-//                            System.out.println(Color.BRIGHT_GREEN + "\nDonee with ID " + doneeId + " has been updated successfully." + Color.RESET);
-//                        }
-//                    } else {
-//                        System.out.println("Invalid input. Please enter a valid option between 1-7 and X.");
-//                    }
-//                } while (choice != 'X');
-//
-//                // Update the donor in the file after all modifications
-//                fileHandler.updateMultipleData("donee.txt", donees);
-//                break;
-//            }
-//        }
-//
-//        if (!doneeFound) {
-//            System.out.println(Color.BRIGHT_YELLOW + "\nDonee with ID " + doneeId + " was not found" + Color.RESET);
-//        }
-//
-//        Message.displayExitMessage("Press any key to return to main menu.....");
-//        scanner.nextLine();
-//    }
+    public static void modifyDoneeHandler(ArrayList<Donee> donees){
+        doneeList = modifyDoneeCore(donees);
+
+        fileHandler.updateMultipleData("donee.txt", doneeList);
+
+        GeneralFunction.enterToContinue();
+    }
+
+    public static ArrayList<Donee> modifyDoneeCore(ArrayList<Donee> donees) {
+        Scanner scanner = new Scanner(System.in);
+        boolean doneeFound = false;
+        String doneeId;
+
+        do {
+            DoneeUI.modifyDoneeUI();
+            doneeId = obtainDoneeId();
+        } while (doneeId.isEmpty());
+
+        for (Donee doneeSelected : donees) {
+            if (doneeSelected.getDoneeID().equals(doneeId)) {
+                doneeFound = true;
+                char choice = ' ';
+
+                DoneeUI.displayIndividualDoneeDetailsUI(doneeSelected.getDoneeID(), doneeSelected.getName(), doneeSelected.getEmail(), doneeSelected.getPhone(), doneeSelected.getAddress(), doneeSelected.getDoneeType(), doneeSelected.getItemCategoryRequired(), doneeSelected.getDoneeUrgency(), doneeSelected.getRegisteredDate());
+
+                do {
+                    // Prompt user for which part to modify
+                    String modifyChoice = DoneeUI.modifyTypeUI();
+
+                    if (modifyChoice.isEmpty()) {
+                        System.out.println("Empty input detected. Please enter an option between 1-7 and X.");
+                        continue;
+                    }
+
+                    choice = modifyChoice.toUpperCase().charAt(0);
+
+                    if (Character.isDigit(choice) && choice >= '1' && choice <= '7' || choice == 'X') {
+                        boolean isValid;
+                        switch (choice) {
+                            case '1':
+                                String name;
+                                do {
+                                    name = DoneeUI.inputDoneeNameUI();
+                                    isValid = NewValidation.validateName(name);
+                                    if (!isValid) {
+                                        Message.displayInvalidFormatMessage("name");
+                                    }
+                                } while (!isValid);
+                                doneeSelected.setName(name);
+                                break;
+                            case '2':
+                                String email;
+                                do {
+                                    email = DoneeUI.inputDoneeEmailUI();
+                                    isValid = NewValidation.validateEmail(email);
+                                    if (!isValid) {
+                                        Message.displayInvalidFormatMessage("email");
+                                    }
+                                } while (!isValid);
+                                doneeSelected.setEmail(email);
+                                break;
+                            case '3':
+                                String phone;
+                                do {
+                                    phone = DoneeUI.inputDoneePhoneUI();
+                                    isValid = NewValidation.validatePhone(phone);
+                                    if (!isValid) {
+                                        Message.displayInvalidFormatMessage("phone");
+                                    }
+                                } while (!isValid);
+                                doneeSelected.setPhone(phone);
+                                break;
+                            case '4':
+                                String address;
+                                do {
+                                    address = DoneeUI.inputDoneeAddressUI();
+                                    isValid = NewValidation.validateAddress(address);
+                                    if (!isValid) {
+                                        Message.displayEmptyInputMessage("Please do not leave address input blank.");
+                                    }
+                                } while (!isValid);
+                                doneeSelected.setAddress(address);
+                                break;
+                            case '5':
+                                String doneeType = "";
+                                do{
+                                    int doneeTypeOption = 0;
+                                    String doneeTypeChoice = DoneeUI.inputDoneeTypeUI();
+                                    try {
+                                        doneeTypeOption = Integer.parseInt(doneeTypeChoice);
+                                        if (doneeTypeOption >= 1 && doneeTypeOption <= 3) {
+                                            isValid = true;  // Exit loop for valid choice input
+                                        } else {
+                                            Message.displayInvalidChoiceMessage("Please select a valid item category (1-3).");
+                                            isValid = false;
+                                        }
+                                    } catch (NumberFormatException e) {  // Catch any non-integer inputs
+                                        Message.displayInvalidInputMessage("Please enter a valid number and ensure input is not empty.");
+                                        isValid = false;
+                                    }
+
+                                    if (isValid)
+                                        doneeType = NewValidation.validateDoneeType(doneeTypeOption);
+
+                                } while (!isValid);
+                                doneeSelected.setDoneeType(doneeType);
+                                break;
+                            case '6':
+                                String itemCategory = "";
+                                do{
+                                    int itemCategoryOption = 0;
+                                    String itemCategoryChoice = DoneeUI.inputItemCategoryUI();
+                                    try {
+                                        itemCategoryOption = Integer.parseInt(itemCategoryChoice);
+                                        if (itemCategoryOption >= 1 && itemCategoryOption <= 7) {
+                                            isValid = true;  // Exit loop for valid choice input
+                                        } else {
+                                            Message.displayInvalidChoiceMessage("Please select a valid item category (1-7).");
+                                            isValid = false;
+                                        }
+                                    } catch (NumberFormatException e) {  // Catch any non-integer inputs
+                                        Message.displayInvalidInputMessage("Please enter a valid number and ensure input is not empty.");
+                                        isValid = false;
+                                    }
+
+                                    if (isValid)
+                                        itemCategory = NewValidation.validateItemCategory(choice);
+
+                                } while (!isValid);
+                                doneeSelected.setItemCategoryRequired(itemCategory);
+                                break;
+                            case '7':
+                                String doneeUrgency = "";
+                                do{
+                                    int doneeUrgencyOption = 0;
+                                    String doneeUrgencyChoice = DoneeUI.inputDoneeUrgencyUI();
+                                    try {
+                                        doneeUrgencyOption = Integer.parseInt(doneeUrgencyChoice);
+                                        if (doneeUrgencyOption >= 1 && doneeUrgencyOption <= 3) {
+                                            isValid = true;  // Exit loop for valid choice input
+                                        } else {
+                                            Message.displayInvalidChoiceMessage("Please select a valid item category (1-3).");
+                                            isValid = false;
+                                        }
+                                    } catch (NumberFormatException e) {  // Catch any non-integer inputs
+                                        Message.displayInvalidInputMessage("Please enter a valid number and ensure input is not empty.");
+                                        isValid = false;
+                                    }
+
+                                    if (isValid)
+                                        doneeUrgency = NewValidation.validateDoneeUrgency(choice);
+
+                                } while (!isValid);
+                                doneeSelected.setDoneeUrgency(doneeUrgency);
+                                break;
+                        }
+
+                        if (choice != 'X'){
+                            DoneeUI.updateDoneeSuccessfulMessage(doneeId);
+                        }
+                    } else {
+                        Message.displayInvalidInputMessage("Please enter a valid option between 1-7 and X.");
+                    }
+                } while (choice != 'X');
+
+                break;
+            }
+        }
+
+        if (!doneeFound) {
+            Message.displayDataNotFoundMessage("Donee with ID " + doneeId + " was not found.");
+        }
+
+        return donees;
+    }
 
     public static void displayDonees(ArrayList<Donee> donees){
         Scanner scanner = new Scanner(System.in);
@@ -372,33 +459,9 @@ public class DoneeFunctions {
             int end = Math.min(start + pageSize, totalDonees);
             boolean displayOptionValid = true;
 
-            System.out.println("\n**LIST OF DONEES (Page " + (currentPage + 1) + ")**\n");
-            System.out.printf("%-10s %-25s %-15s %-15s %n", "Donee ID", "Donee Name", "Donee Phone", "Donee Urgency");
-            System.out.println(String.format("%0" + 65 + "d", 0).replace("0", "-"));
-
-            for (int i = start; i < end; i++) {
-                Donee donee = donees.get(i);
-                System.out.printf("%-10s %-25s %-15s %-15s %n", donee.getDoneeID(), donee.getName(), donee.getPhone(), donee.getDoneeUrgency());
-            }
-            System.out.println(String.format("%0" + 65 + "d", 0).replace("0", "-"));
-
-            System.out.println("\nOptions:");
-
-            if (currentPage > 0) {
-                System.out.println("P - Previous Page");
-            }
-            if (end < totalDonees) {
-                System.out.println("N - Next Page");
-            }
-
-            System.out.println("D - Individual Details (Enter donee ID to view details)");
-            System.out.println("S - Sort Donee");
-            System.out.println("X - Exit");
-
             do{
                 do {
-                    System.out.print("\nSelect an option: ");
-                    displayOption = scanner.nextLine().trim().toUpperCase();
+                    displayOption = DoneeUI.displayDoneeTableUI(start, currentPage, end, donees, totalDonees);
 
                     if (displayOption.isEmpty()) {
                         Message.displayEmptyInputMessage("Empty input detected. Please enter a valid option (D, S, X)");
@@ -410,7 +473,7 @@ public class DoneeFunctions {
                         if (currentPage > 0) {
                             currentPage--;
                         } else {
-                            System.out.println("You are already on the first page.");
+                            DoneeUI.displayFirstPageMessage();
                         }
                         displayOptionValid = true;
                         break;
@@ -418,13 +481,16 @@ public class DoneeFunctions {
                         if (end < totalDonees) {
                             currentPage++;
                         } else {
-                            System.out.println("You are already on the last page.");
+                            DoneeUI.displayLastPageMessage();
                         }
                         displayOptionValid = true;
                         break;
                     case "D":
-                        System.out.print("Enter Donee ID to view details: ");
-                        String doneeID = scanner.nextLine().trim();
+                        String doneeID;
+                        do {
+                            DoneeUI.displayDoneeUI();
+                            doneeID = obtainDoneeId().toUpperCase();
+                        } while (doneeID.isEmpty());
 
                         Donee selectedDonee = null;
                         for (Donee donee : donees) {
@@ -435,36 +501,22 @@ public class DoneeFunctions {
                         }
 
                         if (selectedDonee != null) {
-                            System.out.println("\nDonee Details:");
-                            System.out.printf("%-25s: %s%n", "Donee ID", selectedDonee.getDoneeID());
-                            System.out.printf("%-25s: %s%n", "Name", selectedDonee.getName());
-                            System.out.printf("%-25s: %s%n", "Email", selectedDonee.getEmail());
-                            System.out.printf("%-25s: %s%n", "Phone", selectedDonee.getPhone());
-                            System.out.printf("%-25s: %s%n", "Address", selectedDonee.getAddress());
-                            System.out.printf("%-25s: %s%n", "Donee Type", selectedDonee.getDoneeType());
-                            System.out.printf("%-25s: %s%n", "Item Category Required", selectedDonee.getItemCategoryRequired());
-                            System.out.printf("%-25s: %s%n", "Donee Urgency", selectedDonee.getDoneeUrgency());
-                            System.out.printf("%-25s: %s%n", "Registered Date", selectedDonee.getRegisteredDate());
+                            DoneeUI.displayIndividualDoneeDetailsUI(selectedDonee.getDoneeID(), selectedDonee.getName(), selectedDonee.getEmail(), selectedDonee.getPhone(), selectedDonee.getAddress(), selectedDonee.getDoneeType(), selectedDonee.getItemCategoryRequired(), selectedDonee.getDoneeUrgency(), selectedDonee.getRegisteredDate());
                         } else {
-                            System.out.println(Color.YELLOW + "Donee with ID " + doneeID + " not found." + Color.RESET);
+                            Message.displayDataNotFoundMessage("Donee with ID " + doneeID + " was not found.");
                         }
                         done = true;
                         displayOptionValid = true;
-                        Message.displayGeneralMessage("Press any key to return to donee list.....");
-                        scanner.nextLine();
+                        GeneralFunction.enterToContinue();
                         break;
                     case "S":
                         int sortOption;
-                        System.out.println("\nSorting Criterion: ");
-                        System.out.println("1 - Sort by Donee Urgency (Priority)");
-                        System.out.println("2 - Sort by Ascending/Descending Order");
 
                         while (true) { //Input Validation Loop
-                            System.out.print("\nSelect a sorting criterion: ");
-                            String inputSortOption = scanner.nextLine().trim();
+                            String inputSortOption = DoneeUI.sortDoneeUI();
 
                             if (inputSortOption.isEmpty()) {
-                                Message.displayEmptyInputMessage("Please select a sorting criterion (1 or 2).");
+                                Message.displayEmptyInputMessage("Please select a valid sorting criterion (1 or 2).");
                             } else {
                                 try {
                                     sortOption = Integer.parseInt(inputSortOption);
@@ -492,8 +544,7 @@ public class DoneeFunctions {
                         break;
                     case "X":
                         done = false;
-                        Message.displayExitMessage("Press any key to return to main menu.....");
-                        scanner.nextLine();
+                        GeneralFunction.enterToContinue();
                         displayOptionValid = true;
                         break;
                     default:
@@ -509,37 +560,31 @@ public class DoneeFunctions {
         int filterChoice;
 
         do {
-            System.out.println("\nFilter Donees by Category:");
-            System.out.println("1. Donee Type");
-            System.out.println("2. Donee Urgency");
-            System.out.println("3. Return to main menu");
-
             while (true) { //Input Validation Loop
-                System.out.print("\nSelect a category: ");
-                String filterInput = scanner.nextLine().trim();  // Read the input as a string and trim any surrounding spaces
+                String filterInput = DoneeUI.filterDoneeUI();  // Read the input as a string and trim any surrounding spaces
 
                 if (filterInput.isEmpty()) {
-                    System.out.println(Color.RED + "Empty input detected. Please enter a number between 1 and 3." + Color.RESET);
+                    Message.displayEmptyInputMessage("Please enter a number between 1 and 3.");
                 } else {
                     try {
                         filterChoice = Integer.parseInt(filterInput);
                         if (filterChoice >= 1 && filterChoice <= 3) {
                             break;  // Exit loop for valid choice input
                         } else {
-                            System.out.println(Color.RED + "Invalid input. Please enter a number between 1 and 3." + Color.RESET);
+                            Message.displayInvalidChoiceMessage("Please enter a number between 1 and 3.");
                         }
                     } catch (NumberFormatException e) {  // Catch any non-integer inputs
-                        System.out.println(Color.RED + "Invalid input. Please enter a number." + Color.RESET);
+                        Message.displayInvalidInputMessage("Please enter a valid number.");
                     }
                 }
             }
 
             switch (filterChoice) {
                 case 1:
-                    filterByType(donees);
+                    DoneeFilter.filterByType(donees);
                     break;
                 case 2:
-                    filterByUrgency(readDonees());
+                    DoneeFilter.filterByUrgency(readDonees());
                     break;
                 case 3:
                     break;
@@ -547,226 +592,7 @@ public class DoneeFunctions {
 
         } while (filterChoice != 3);
 
-        Message.displayExitMessage("Press any key to return to main menu.....");
-        scanner.nextLine();
-    }
-
-    public static void filterByType(ArrayList<Donee> donees) {
-        int filterType;
-        Scanner scanner = new Scanner(System.in);
-
-        do {
-            System.out.println("\nFilter by Donee Types:");
-            System.out.println("1. Individual");
-            System.out.println("2. Organization");
-            System.out.println("3. Family");
-            System.out.println("4. Back");
-
-            while (true) { //Input Validation Loop
-                System.out.print("\nSelect a donee type: ");
-                String filterTypeInput = scanner.nextLine().trim();  // Read the input as a string and trim any surrounding spaces
-
-                if (filterTypeInput.isEmpty()) {
-                    System.out.println(Color.RED + "Empty input detected. Please enter a number between 1 and 4." + Color.RESET);
-                } else {
-                    try {
-                        filterType = Integer.parseInt(filterTypeInput);
-                        if (filterType >= 1 && filterType <= 4) {
-                            break;  // Exit loop for valid choice input
-                        } else {
-                            System.out.println(Color.RED + "Invalid input. Please enter a number between 1 and 4." + Color.RESET);
-                        }
-                    } catch (NumberFormatException e) {  // Catch any non-integer inputs
-                        System.out.println(Color.RED + "Invalid input. Please enter a number." + Color.RESET);
-                    }
-                }
-            }
-
-            switch (filterType) {
-                case 1:
-                    individualFilter(donees);
-                    break;
-                case 2:
-                    organizationFilter(donees);
-                    break;
-                case 3:
-                    familyFilter(donees);
-                    break;
-                default:
-                    System.out.print("\nReturning to filter menu.....\n");
-            }
-
-            if (filterType != 4) {
-                System.out.print("\nPress any key to return to menu.....");
-                scanner.nextLine();
-            }
-        } while (filterType != 4);
-    }
-
-    public static void individualFilter(ArrayList<Donee> donees){
-        boolean found = false;
-
-        System.out.println("\n**Individual Type Donee List**\n");
-        System.out.printf("%-10s %-25s %-15s %-15s %-20s %n", "Donee ID", "Donee Name", "Donee Phone", "Donee Type", "Registered Date");
-        System.out.println(String.format("%0" + 85 + "d", 0).replace("0", "-"));
-        for (Donee donee : donees) {
-            if (Objects.equals(donee.getDoneeType(), "Individual")) {
-                System.out.printf("%-10s %-25s %-15s %-15s %-20s %n", donee.getDoneeID(), donee.getName(), donee.getPhone(), donee.getDoneeType(), donee.getRegisteredDate());
-
-                found = true;
-            }
-        }
-        if (!found) {
-            System.out.println(Color.YELLOW + "\nNo donees found within the specified donee type.\n" + Color.RESET);
-        }
-        System.out.println(String.format("%0" + 85 + "d", 0).replace("0", "-"));
-    }
-
-    public static void organizationFilter(ArrayList<Donee> donees){
-        boolean found = false;
-
-        System.out.println("\n**Organization Type Donee List**\n");
-        System.out.printf("%-10s %-25s %-15s %-15s %-20s %n", "Donee ID", "Donee Name", "Donee Phone", "Donee Type", "Registered Date");
-        System.out.println(String.format("%0" + 85 + "d", 0).replace("0", "-"));
-        for (Donee donee : donees) {
-            if (Objects.equals(donee.getDoneeType(), "Organization")) {
-                System.out.printf("%-10s %-25s %-15s %-15s %-20s %n", donee.getDoneeID(), donee.getName(), donee.getPhone(), donee.getDoneeType(), donee.getRegisteredDate());
-
-                found = true;
-            }
-        }
-        if (!found) {
-            System.out.println(Color.YELLOW + "No donees found within the specified donee type." + Color.RESET);
-        }
-        System.out.println(String.format("%0" + 85 + "d", 0).replace("0", "-"));
-    }
-
-    public static void familyFilter(ArrayList<Donee> donees){
-        boolean found = false;
-
-        System.out.println("\n**Family Type Donee List**\n");
-        System.out.printf("%-10s %-25s %-15s %-15s %-20s %n", "Donee ID", "Donee Name", "Donee Phone", "Donee Type", "Registered Date");
-        System.out.println(String.format("%0" + 85 + "d", 0).replace("0", "-"));
-        for (Donee donee : donees) {
-            if (Objects.equals(donee.getDoneeType(), "Family")) {
-                System.out.printf("%-10s %-25s %-15s %-15s %-20s %n", donee.getDoneeID(), donee.getName(), donee.getPhone(), donee.getDoneeType(), donee.getRegisteredDate());
-
-                found = true;
-            }
-        }
-        if (!found) {
-            System.out.println(Color.YELLOW + "No donees found within the specified donee type." + Color.RESET);
-        }
-        System.out.println(String.format("%0" + 85 + "d", 0).replace("0", "-"));
-    }
-
-    public static void filterByUrgency(ArrayList<Donee> donees){
-        int filterUrgency;
-        Scanner scanner = new Scanner(System.in);
-
-        do {
-            System.out.println("\nFilter by Donee Urgency:");
-            System.out.println("1. Low");
-            System.out.println("2. Moderate");
-            System.out.println("3. High");
-            System.out.println("4. Back");
-
-            while (true) { //Input Validation Loop
-                System.out.print("\nSelect a donee urgency category: ");
-                String filterUrgencyInput = scanner.nextLine().trim();  // Read the input as a string and trim any surrounding spaces
-
-                if (filterUrgencyInput.isEmpty()) {
-                    System.out.println(Color.RED + "Empty input detected. Please enter a number between 1 and 4." + Color.RESET);
-                } else {
-                    try {
-                        filterUrgency = Integer.parseInt(filterUrgencyInput);
-                        if (filterUrgency >= 1 && filterUrgency <= 4) {
-                            break;  // Exit loop for valid choice input
-                        } else {
-                            System.out.println(Color.RED + "Invalid input. Please enter a number between 1 and 4." + Color.RESET);
-                        }
-                    } catch (NumberFormatException e) {  // Catch any non-integer inputs
-                        System.out.println(Color.RED + "Invalid input. Please enter a number." + Color.RESET);
-                    }
-                }
-            }
-
-            switch (filterUrgency) {
-                case 1:
-                    filterLowUrgency(donees);
-                    break;
-                case 2:
-                    filterModerateUrgency(donees);
-                    break;
-                case 3:
-                    filterHighUrgency(donees);
-                    break;
-                default:
-                    System.out.print("\nReturning to filter menu.....\n");
-            }
-
-            if (filterUrgency != 4) {
-                System.out.print("\nPress any key to return to menu.....");
-                scanner.nextLine();
-            }
-        } while (filterUrgency != 4);
-    }
-
-    public static void filterLowUrgency(ArrayList<Donee> donees){
-        boolean found = false;
-
-        System.out.println("\n**Low Urgency Donee List**\n");
-        System.out.printf("%-10s %-25s %-15s %-15s %-20s %n", "Donee ID", "Donee Name", "Donee Phone", "Donee Urgency", "Registered Date");
-        System.out.println(String.format("%0" + 85 + "d", 0).replace("0", "-"));
-        for (Donee donee : donees) {
-            if (Objects.equals(donee.getDoneeUrgency(), "Low")) {
-                System.out.printf("%-10s %-25s %-15s %-15s %-20s %n", donee.getDoneeID(), donee.getName(), donee.getPhone(), donee.getDoneeUrgency(), donee.getRegisteredDate());
-
-                found = true;
-            }
-        }
-        if (!found) {
-            System.out.println(Color.YELLOW + "No donees found within the specified urgency category." + Color.RESET);
-        }
-        System.out.println(String.format("%0" + 85 + "d", 0).replace("0", "-"));
-    }
-
-    public static void filterModerateUrgency(ArrayList<Donee> donees){
-        boolean found = false;
-
-        System.out.println("\n**Moderate Urgency Donee List**\n");
-        System.out.printf("%-10s %-25s %-15s %-15s %-20s %n", "Donee ID", "Donee Name", "Donee Phone", "Donee Urgency", "Registered Date");
-        System.out.println(String.format("%0" + 85 + "d", 0).replace("0", "-"));
-        for (Donee donee : donees) {
-            if (Objects.equals(donee.getDoneeUrgency(), "Moderate")) {
-                System.out.printf("%-10s %-25s %-15s %-15s %-20s %n", donee.getDoneeID(), donee.getName(), donee.getPhone(), donee.getDoneeUrgency(), donee.getRegisteredDate());
-
-                found = true;
-            }
-        }
-        if (!found) {
-            System.out.println(Color.YELLOW + "No donees found within the specified urgency category." + Color.RESET);
-        }
-        System.out.println(String.format("%0" + 85 + "d", 0).replace("0", "-"));
-    }
-
-    public static void filterHighUrgency(ArrayList<Donee> donees){
-        boolean found = false;
-
-        System.out.println("\n**High Urgency Donee List**\n");
-        System.out.printf("%-10s %-25s %-15s %-15s %-20s %n", "Donee ID", "Donee Name", "Donee Phone", "Donee Urgency", "Registered Date");
-        System.out.println(String.format("%0" + 85 + "d", 0).replace("0", "-"));
-        for (Donee donee : donees) {
-            if (Objects.equals(donee.getDoneeUrgency(), "High")) {
-                System.out.printf("%-10s %-25s %-15s %-15s %-20s %n", donee.getDoneeID(), donee.getName(), donee.getPhone(), donee.getDoneeUrgency(), donee.getRegisteredDate());
-
-                found = true;
-            }
-        }
-        if (!found) {
-            System.out.println(Color.YELLOW + "No donees found within the specified urgency category." + Color.RESET);
-        }
-        System.out.println(String.format("%0" + 85 + "d", 0).replace("0", "-"));
+        GeneralFunction.enterToContinue();
     }
 
     public static void main (String[] args) {

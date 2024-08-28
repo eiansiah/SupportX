@@ -9,11 +9,11 @@ public class Message {
     }
 
     public static void displayGeneralMessage(String msg) {
-        System.out.print("\n" + Color.BRIGHT_YELLOW + msg + Color.RESET);
+        System.out.print(Color.BRIGHT_YELLOW + msg + Color.RESET);
     }
 
     public static void displayInvalidChoiceMessage(String reason) {
-        System.out.println(Color.RED + "\nInvalid choice. " + reason + Color.RESET);
+        System.out.println(Color.RED + "Invalid choice. " + reason + Color.RESET);
     }
 
     public static void displayInvalidInputMessage(String reason) {
@@ -25,7 +25,7 @@ public class Message {
     }
 
     public static void displayEmptyInputMessage(String reason) {
-        System.out.println(Color.BRIGHT_YELLOW + "\nEmpty input detected. " + reason + Color.RESET);
+        System.out.println(Color.BRIGHT_YELLOW + "Empty input detected. " + reason + Color.RESET);
     }
 
     public static void displayInvalidChoiceMessage() {
