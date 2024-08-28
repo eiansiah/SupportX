@@ -4,7 +4,6 @@ import FileHandling.UniversalFileHandler;
 import Libraries.ArrayList;
 import Utilities.Search;
 
-import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.Random;
 
@@ -119,9 +118,33 @@ public class EventHandler {
         return events;
     }
 
-    public static void modifyEvent(String eventID, String _eventName, LocalDateTime _startDateTime, LocalDateTime _endDateTime, String _venue, /*int _minVolunteerPax, int _maxVolunteerPax,*/ String _description, EventStatus eventStatus){
+    public static ArrayList<String> getAllEventVolunteerID(){
+        ArrayList<String> eventVolunteersString = UniversalFileHandler.readData(eventVolunteerFilePath);
+        ArrayList<String> eventVolunteerIDs = new ArrayList<>();
+
+        for(String eventVolunteerString : eventVolunteersString) {
+            String volunteerID = eventVolunteerString.split(Event.separator)[1];
+
+            boolean exists = false;
+
+            for(String _volunteerID : eventVolunteerIDs){
+                if(_volunteerID.equals(volunteerID)) {
+                    exists = true;
+                    break;
+                }
+            }
+
+            if(!exists) {
+                eventVolunteerIDs.add(volunteerID);
+            }
+        }
+
+        return eventVolunteerIDs;
+    }
+
+    public static void modifyEvent(String eventID, String _eventName, String _venue, /*int _minVolunteerPax, int _maxVolunteerPax,*/ String _description, EventStatus eventStatus){
         Event eventOld = searchEventByEventID(eventID);
-        Event eventNew = new Event(eventID, _eventName, _startDateTime, _endDateTime, _venue, /*_minVolunteerPax, _maxVolunteerPax,*/ _description, eventStatus);
+        Event eventNew = new Event(eventID, _eventName, eventOld.startDateTime(), eventOld.endDateTime(), _venue, /*_minVolunteerPax, _maxVolunteerPax,*/ _description, eventStatus);
 
         UniversalFileHandler.modifyData(eventFilePath, eventOld.toString(), eventNew.toString());
     }

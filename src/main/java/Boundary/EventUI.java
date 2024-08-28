@@ -2,16 +2,18 @@ package Boundary;
 
 import Libraries.ArrayList;
 import Libraries.Color;
+import Libraries.Debug;
 import Libraries.GeneralFunction;
 import Main.Event.Event;
 import Main.Event.EventHandler;
+import Main.Event.EventStatus;
+import Main.Event.EventVolunteer;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
-import static Utilities.Message.displayEmptyInputMessage;
 import static Utilities.Message.displayGeneralErrorMsg;
 
 public class EventUI {
@@ -69,10 +71,11 @@ public class EventUI {
                         listAllEventUI();
                         break;
                     case 6:
-                        removeEventFromVolunteer();
+                        removeEventFromVolunteerUI();
                         break;
                     case 7:
                         listAllEventForVolunteerUI();
+                        GeneralFunction.enterToContinue();
                         break;
                     case 8:
                         generateReportsUI();
@@ -215,11 +218,68 @@ public class EventUI {
     }
 
     private static void searchEventUI(){
+        Scanner sc = new Scanner(System.in);
 
+        while(true){
+            System.out.print("Enter event name (x to stop): ");
+
+            String eventName = sc.nextLine();
+
+            if(eventName.isEmpty()){
+                displayGeneralErrorMsg("Input can't be empty");
+                continue;
+            }
+
+            if(eventName.equals("x")){
+                break;
+            }
+
+            ArrayList<Event> events = EventHandler.searchAllEventByEventName(eventName);
+
+            for(Event event: events){
+                System.out.println(event.eventID() + " " + event.eventName() + " " + event.startDateTime() + " " + event.endDateTime() + " " + event.eventStatus());
+            }
+
+            GeneralFunction.enterToContinue();
+        }
     }
 
     private static void amendEventDetailsUI(){
+        System.out.println(Color.YELLOW + "Disclaimer" + Color.RESET);
+        System.out.println(Color.YELLOW + "1. Only upcoming event allow to modify" + Color.RESET);
+        System.out.println(Color.YELLOW + "2. Time of the event are not allow to modify to avoid crashed schedule" + Color.RESET);
 
+        ArrayList<Event> events = EventHandler.searchAllEventByEventStatus(EventStatus.UPCOMING);
+
+        for(Event event: events){
+            System.out.println(event.eventID() + " " + event.eventName() + " " + event.startDateTime() + " " + event.endDateTime() + " " + event.venue() + " " + event.description());
+        }
+
+        Scanner sc = new Scanner(System.in);
+        String eventID;
+
+        root: {
+            while(true) {
+                System.out.print("Enter event ID: ");
+                eventID = sc.nextLine();
+
+                for (Event event : events) {
+                    if (event.eventID().equals(eventID)) {
+                        break root;
+                    }
+                }
+
+                displayGeneralErrorMsg("Event ID does not exist. Please try again.");
+            }
+        }
+
+        String eventName = getEventName();
+        String venue = getVenueInput();
+        String description = getDescription();
+
+        EventHandler.modifyEvent(eventID, eventName, venue, description, EventStatus.UPCOMING);
+
+        System.out.println(Color.GREEN + "Event modified" + Color.RESET);
     }
 
     private static void listAllEventUI(){
@@ -231,14 +291,88 @@ public class EventUI {
         for(Event event: allEvents){
             System.out.println(event.eventID() + event.eventName() + " " + event.startDateTime() + " " + event.endDateTime() + " " + event.venue() + event.description() + " " + event.eventStatus());
         }
+
+        GeneralFunction.enterToContinue();
     }
 
-    private static void removeEventFromVolunteer(){
+    private static void removeEventFromVolunteerUI(){
+        ArrayList <EventVolunteer> eventsJoined = listAllEventForVolunteerUI();
+        Scanner sc = new Scanner(System.in);
 
+        if(eventsJoined == null){
+            GeneralFunction.enterToContinue();
+            return;
+        }
+
+        while(true){
+            System.out.print("Enter event ID to opt out event: ");
+            String eventID = sc.nextLine();
+
+            if(eventID.isEmpty()){
+                displayGeneralErrorMsg("Input can't be empty");
+                continue;
+            }
+
+            for (EventVolunteer eventVolunteer: eventsJoined){
+                if(eventVolunteer.eventID().equals(eventID)){
+                    EventHandler.removeVolunteerFromVolunteerEvent(eventID, eventVolunteer.VolunteerID());
+                    System.out.println(Color.GREEN + "Remove successfully");
+                    return;
+                }
+            }
+
+            displayGeneralErrorMsg("Event ID does not exist. Please try again.");
+        }
     }
 
-    private static void listAllEventForVolunteerUI(){
+    private static ArrayList <EventVolunteer> listAllEventForVolunteerUI(){
+        ArrayList<String> eventVolunteers = EventHandler.getAllEventVolunteerID();
 
+        if(eventVolunteers.isEmpty()){
+            displayGeneralErrorMsg("Don't have any volunteer joining any event. ");
+            return null;
+        }
+
+        for(String eventVolunteerID : eventVolunteers){
+            System.out.println(eventVolunteerID);
+        }
+
+        Scanner sc = new Scanner(System.in);
+        String volunteerID;
+        while (true){
+            System.out.print("Enter volunteerID: ");
+            volunteerID = sc.nextLine();
+
+            if(volunteerID.isEmpty()){
+                displayGeneralErrorMsg("Input can't be empty");
+                continue;
+            }
+
+            if(!eventVolunteers.contains(volunteerID)){
+                displayGeneralErrorMsg("Volunteer does not exist. Please try again.");
+                continue;
+            }
+
+            break;
+        }
+
+        ArrayList <EventVolunteer> eventsJoined = EventHandler.getEventVolunteerJoined(volunteerID);
+
+        if(eventsJoined == null){
+            displayGeneralErrorMsg(Color.RED + "Volunteer doesn't join any event");
+            GeneralFunction.enterToContinue();
+
+            return null;
+        }
+
+        System.out.println("Volunteer joins:");
+        for(EventVolunteer eventVolunteer: eventsJoined){
+            Event event = EventHandler.searchEventByEventID(eventVolunteer.eventID());
+
+            System.out.println(event.eventID()+ " " + event.eventName() + " " + event.eventStatus());
+        }
+
+        return eventsJoined;
     }
 
     private static void generateReportsUI(){
