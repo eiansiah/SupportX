@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 public class Event{
     private final String eventID;
+    private String eventName;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
     private String venue;
@@ -14,8 +15,9 @@ public class Event{
     
     public static final String separator = "!,!";
 
-    public Event(String eventID, LocalDateTime startDateTime, LocalDateTime endDateTime, String venue/*, int minVolunteerPax, int maxVolunteerPax*/, String description, EventStatus eventStatus) {
+    public Event(String eventID, String eventName, LocalDateTime startDateTime, LocalDateTime endDateTime, String venue/*, int minVolunteerPax, int maxVolunteerPax*/, String description, EventStatus eventStatus) {
         this.eventID = eventID;
+        this.eventName = eventName;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
         this.venue = venue;
@@ -29,26 +31,30 @@ public class Event{
         String[] data = event.split(separator);
 
         eventID = data[0];
-        startDateTime = LocalDateTime.parse(data[1]);
-        endDateTime = LocalDateTime.parse(data[2]);
-        venue = data[3];
+        eventName = data[1];
+        startDateTime = LocalDateTime.parse(data[2]);
+        endDateTime = LocalDateTime.parse(data[3]);
+        venue = data[4];
         //minVolunteerPax = Integer.parseInt(data[4]);
         //maxVolunteerPax = Integer.parseInt(data[5]);
-        description = data[4];
-        eventStatus = EventStatus.valueOf(data[5]);
+        description = data[5];
+        eventStatus = EventStatus.valueOf(data[6]);
     }
 
     public String eventID() {
         return eventID;
     }
 
+    public String eventName() { return eventName; }
+
+    public void setEventName(String eventName) { this.eventName = eventName; }
+
     public LocalDateTime startDateTime() {
         return startDateTime;
     }
 
-    public Event setStartDateTime(LocalDateTime startDateTime) {
+    public void setStartDateTime(LocalDateTime startDateTime) {
         this.startDateTime = startDateTime;
-        return this;
     }
 
     public LocalDateTime endDateTime() {
@@ -63,9 +69,8 @@ public class Event{
         return venue;
     }
 
-    public Event setVenue(String venue) {
+    public void setVenue(String venue) {
         this.venue = venue;
-        return this;
     }
 
     /*public int minVolunteerPax() {
@@ -101,7 +106,7 @@ public class Event{
     }
 
     public String toString() {
-        return eventID + separator + startDateTime + separator + endDateTime + separator + venue + separator + description + separator + eventStatus;
+        return eventID + separator + eventName + separator + startDateTime + separator + endDateTime + separator + venue + separator + description + separator + eventStatus;
     }
 }
 
