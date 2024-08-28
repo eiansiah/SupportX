@@ -3,6 +3,7 @@ package Boundary;
 import Entity.Donor;
 import Libraries.ArrayList;
 import Libraries.Color;
+import Utilities.Message;
 
 import java.util.Scanner;
 
@@ -25,7 +26,7 @@ public class DonorUI {
         System.out.println("7. Exit");
         System.out.print("\nSelect an option to proceed : ");
 
-        return scanner.nextLine().trim();
+        return scanner.next().trim();
     }
 
     public static void addDonorUI() {
@@ -54,7 +55,7 @@ public class DonorUI {
         System.out.println("3. Public");
         System.out.print("Enter new category number: ");
 
-        return scanner.nextLine().trim();
+        return scanner.next().trim();
     }
 
     public static String inputDonorTypeUI(){
@@ -63,7 +64,7 @@ public class DonorUI {
         System.out.println("2. Organization");
         System.out.print("Please enter new donor type: ");
 
-        return scanner.nextLine().trim();
+        return scanner.next().trim();
     }
 
     public static String inputRemoveDonorIDUI(){
@@ -132,16 +133,36 @@ public class DonorUI {
         System.out.println(Color.RED + "Donor with ID " + donorIDToModify + " has been deleted." + Color.RESET);
     }
 
-    public static String displayDonorTable(int pageSize, int currentPage, int totalDonors, ArrayList<Donor> donors, int start, int end){
+    public static String displayDonorTable(int pageSize, int currentPage, int totalDonors, ArrayList<Donor> donors, int start, int end,boolean showCategory, boolean showType){
         System.out.println("\nLIST OF DONORS (Page " + (currentPage + 1) + ")\n");
-        System.out.printf("%-10s%-35s%n", "Donor ID", "Donor Name");
-        System.out.println(String.format("%0" + 45 + "d", 0).replace("0", "-"));
+        // Adjust the header based on what needs to be displayed
+
+        if (showType && showCategory) {
+            System.out.printf("%-10s%-20s%-20s%-15s%n", "Donor ID", "Donor Name", "Category", "Type");
+        } else if (showCategory) {
+            System.out.printf("%-10s%-20s%-20s%n", "Donor ID", "Donor Name", "Category");
+        }else if (showType) {
+            System.out.printf("%-10s%-20s%-20s%n", "Donor ID", "Donor Name", "Type");
+        } else {
+            System.out.printf("%-10s%-35s%n", "Donor ID", "Donor Name");
+        }
+
+        System.out.println(String.format("%0" + 70 + "d", 0).replace("0", "-"));
 
         for (int i = start; i < end; i++) {
             Donor donor = donors.get(i);
-            System.out.printf("%-10s%-35s%n", donor.getId(), donor.getName());
+            if (showType && showCategory) {
+                System.out.printf("%-10s%-20s%-20s%-15s%n", donor.getId(), donor.getName(), donor.getCategory(), donor.getType());
+            } else if (showCategory) {
+                System.out.printf("%-10s%-20s%-20s%n", donor.getId(), donor.getName(), donor.getCategory());
+            }else if (showType) {
+                System.out.printf("%-10s%-20s%-20s%n", donor.getId(), donor.getName(), donor.getType());
+            } else {
+                System.out.printf("%-10s%-35s%n", donor.getId(), donor.getName());
+            }
         }
-        System.out.println(String.format("%0" + 45 + "d", 0).replace("0", "-"));
+        System.out.println(String.format("%0" + 70 + "d", 0).replace("0", "-"));
+
 
         System.out.println("\nOptions:");
         if (currentPage > 0) {
@@ -157,7 +178,7 @@ public class DonorUI {
 
         System.out.print("Select an option: ");
 
-        return scanner.nextLine().trim().toUpperCase();
+        return scanner.next().trim().toUpperCase();
     }
 
     public static void atFirstPage(){
@@ -187,13 +208,23 @@ public class DonorUI {
         System.out.println("1 - Filter by Name Starting Letter");
         System.out.println("2 - Filter by Category");
         System.out.println("3 - Filter by Type");
+        System.out.println("4 - Reset Filter");
         System.out.print("Select a filter option: ");
         return scanner.nextInt();
     }
 
-    public static String filterChoiceName(){
+    public static String filterChoiceName() {
+        scanner.nextLine();
         System.out.print("Enter starting letter: ");
-        return scanner.nextLine().toUpperCase().trim();
+        String input = scanner.next();
+
+        // Error handling for empty input within this method itself
+        if (input.isEmpty()) {
+            Message.displayInvalidInputMessage("Starting letter cannot be empty.");
+            return filterChoiceName(); // Recursively ask for valid input
+        }
+
+        return input.toUpperCase();
     }
 
     public static int filterChoiceCategory(){
@@ -202,6 +233,7 @@ public class DonorUI {
         System.out.println("2. Private");
         System.out.println("3. Public");
         System.out.print("Enter category number: ");
+        scanner.nextLine();
         return scanner.nextInt();
     }
 
@@ -210,6 +242,7 @@ public class DonorUI {
         System.out.println("1. Individual");
         System.out.println("2. Organization");
         System.out.print("Enter type number: ");
+        scanner.nextLine();
         return scanner.nextInt();
     }
 
