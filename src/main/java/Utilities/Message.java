@@ -60,4 +60,16 @@ public class Message {
         System.out.println(Color.RED + "\nInvalid " + item + " format entered. Please try again." + Color.RESET);
     }
 
+    public static void displayRemoveCancelMessage(){
+        System.out.println(Color.YELLOW + "Deletion cancelled." + Color.RESET);
+    }
+
+    public static void displayUpdateCancelMessage(){
+        System.out.println(Color.YELLOW + "Updating cancelled." + Color.RESET);
+    }
+
+    public static void displayFilterCancelMessage(){
+        System.out.println(Color.YELLOW + "Filtering cancelled." + Color.RESET);
+    }
+
 }
