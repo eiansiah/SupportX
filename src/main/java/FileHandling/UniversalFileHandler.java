@@ -2,6 +2,7 @@ package FileHandling;
 
 import Libraries.ArrayList;
 import Libraries.Color;
+import Libraries.Debug;
 
 import java.io.*;
 
@@ -75,7 +76,7 @@ public class UniversalFileHandler {
 
             boolean flag = file.renameTo(rename);
 
-            System.out.println(flag ? "File Successfully Rename" : "Operation Failed");
+            Debug.printDebugMsgln(flag ? "File Successfully Rename" : "Operation Failed");
 
             file.delete();
         }catch(IOException e){
@@ -119,7 +120,7 @@ public class UniversalFileHandler {
 
             boolean flag = file.renameTo(rename);
 
-            System.out.println(flag ? "File Successfully Rename" : "Operation Failed");
+            Debug.printDebugMsgln(flag ? "File Successfully Rename" : "Operation Failed");
 
             file.delete();
         }catch(IOException e){

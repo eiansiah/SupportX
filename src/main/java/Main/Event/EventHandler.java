@@ -12,7 +12,7 @@ public class EventHandler {
     private final static String eventFilePath = "event.txt";
     private final static String eventVolunteerFilePath = "eventVolunteer.txt";
 
-    public static Event addNewEvent(LocalDateTime _startDateTime, LocalDateTime _endDateTime, String _venue, /*int _minVolunteerPax, int _maxVolunteerPax,*/ String _description){
+    public static Event addNewEvent(String _eventName, LocalDateTime _startDateTime, LocalDateTime _endDateTime, String _venue, /*int _minVolunteerPax, int _maxVolunteerPax,*/ String _description){
 
         if(_endDateTime.isBefore(_startDateTime)) {
             return null;
@@ -28,6 +28,7 @@ public class EventHandler {
 
         Event newEvent = new Event(
                 generateEventID(),
+                _eventName,
                 _startDateTime,
                 _endDateTime,
                 _venue,
@@ -44,10 +45,27 @@ public class EventHandler {
 
     public static void removeEvent(Event event){
         UniversalFileHandler.removeData(eventFilePath, event.toString());
+        UniversalFileHandler.removeData(eventVolunteerFilePath, Search.searchAllMatchesString(eventVolunteerFilePath, event.eventID(), Event.separator, 0));
+    }
+
+    public static ArrayList<EventVolunteer> searchEventVolunteerByEventID(String eventID){
+        ArrayList<String> eventVolunteerStrings = Search.searchAllMatchesString(eventVolunteerFilePath, eventID, Event.separator, 0);
+        ArrayList<EventVolunteer> eventVolunteers = new ArrayList<>();
+
+        if(eventVolunteerStrings == null) {
+            return null;
+        }
+
+        for (String eventVolunteerString : eventVolunteerStrings) {
+            EventVolunteer eventVolunteer = new EventVolunteer(eventVolunteerString);
+            eventVolunteers.add(eventVolunteer);
+        }
+
+        return eventVolunteers;
     }
 
     public static Event searchEventByEventID(String eventID){
-        String eventString = Search.searchFirstMatchesStringFromFile(eventFilePath, eventID, Event.separator, 0);
+        String eventString = Search.searchFirstMatchesStringFromFile(eventFilePath, eventID, Event.separator, 6);
 
         if(eventString == null) {
             return null;
@@ -57,7 +75,7 @@ public class EventHandler {
     }
 
     public static ArrayList<Event> searchAllEventByEventStatus(EventStatus eventStatus){
-        ArrayList<String> eventListString = Search.searchAllMatchesString(eventFilePath, eventStatus.toString(), Event.separator, 5);
+        ArrayList<String> eventListString = Search.searchAllMatchesString(eventFilePath, eventStatus.toString(), Event.separator, 6);
         ArrayList<Event> events = new ArrayList<>();
 
         if(eventListString == null) {
@@ -84,9 +102,9 @@ public class EventHandler {
         return events;
     }
 
-    public static void modifyEvent(String eventID, LocalDateTime _startDateTime, LocalDateTime _endDateTime, String _venue, /*int _minVolunteerPax, int _maxVolunteerPax,*/ String _description, EventStatus eventStatus){
+    public static void modifyEvent(String eventID, String _eventName, LocalDateTime _startDateTime, LocalDateTime _endDateTime, String _venue, /*int _minVolunteerPax, int _maxVolunteerPax,*/ String _description, EventStatus eventStatus){
         Event eventOld = searchEventByEventID(eventID);
-        Event eventNew = new Event(eventID, _startDateTime, _endDateTime, _venue, /*_minVolunteerPax, _maxVolunteerPax,*/ _description, eventStatus);
+        Event eventNew = new Event(eventID, _eventName, _startDateTime, _endDateTime, _venue, /*_minVolunteerPax, _maxVolunteerPax,*/ _description, eventStatus);
 
         UniversalFileHandler.modifyData(eventFilePath, eventOld.toString(), eventNew.toString());
     }
