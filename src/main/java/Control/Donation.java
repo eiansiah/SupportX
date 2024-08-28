@@ -210,7 +210,9 @@ public class Donation {
             FileWriter writeFile = new FileWriter("Food.txt");
             for (DonationItem item : itemList) {
                 if (item instanceof Food) {
-                    writeFile.write(item.getItemCode() + "#" + item.getItemName() + "#" + item.getQuantity() + "#" + ((Food) item).getNetWeight() + "#" + ((Food) item).getExpiryDate() + "#" + ((Food) item).getFoodType() + "#" + ((Food) item).getVenueCode() + "\n");
+                    writeFile.write(item.getItemCode() + "#" + item.getItemName() + "#" + item.getQuantity()
+                            + "#" + ((Food) item).getNetWeight() + "#" + ((Food) item).getExpiryDate() + "#"
+                            + ((Food) item).getFoodType() + "#" + ((Food) item).getVenueCode() + "\n");
                 }
             }
             writeFile.close();
@@ -262,7 +264,9 @@ public class Donation {
             FileWriter writeFile = new FileWriter("Beverage.txt");
             for (DonationItem item : itemList) {
                 if (item instanceof Beverage) {
-                    writeFile.write(item.getItemCode() + "#" + item.getItemName() + "#" + item.getQuantity() + "#" + ((Beverage) item).getNetVolume() + "#" + ((Beverage) item).getExpiryDate() + "#" + ((Beverage) item).getVenueCode() + "\n");
+                    writeFile.write(item.getItemCode() + "#" + item.getItemName() + "#" + item.getQuantity()
+                            + "#" + ((Beverage) item).getNetVolume() + "#" + ((Beverage) item).getExpiryDate()
+                            + "#" + ((Beverage) item).getVenueCode() + "\n");
                 }
             }
             writeFile.close();
@@ -313,7 +317,10 @@ public class Donation {
             FileWriter writeFile = new FileWriter("Clothing.txt");
             for (DonationItem item : itemList) {
                 if (item instanceof Clothing) {
-                    writeFile.write(item.getItemCode() + "#" + item.getItemName() + "#" + item.getQuantity() + "#" + ((Clothing) item).getSize() + "#" + ((Clothing) item).getClothingCategory() + "#" + ((Clothing) item).getGender() + "#" + ((Clothing) item).getAge() + "#" + ((Clothing) item).getVenueCode() + "\n");
+                    writeFile.write(item.getItemCode() + "#" + item.getItemName() + "#" + item.getQuantity()
+                            + "#" + ((Clothing) item).getSize() + "#" + ((Clothing) item).getClothingCategory()
+                            + "#" + ((Clothing) item).getGender() + "#" + ((Clothing) item).getAge() + "#"
+                            + ((Clothing) item).getVenueCode() + "\n");
                 }
             }
             writeFile.close();
@@ -368,7 +375,10 @@ public class Donation {
             FileWriter writeFile = new FileWriter("PersonalCare.txt");
             for (DonationItem item : itemList) {
                 if (item instanceof PersonalCare) {
-                    writeFile.write(item.getItemCode() + "#" + item.getItemName() + "#" + item.getQuantity() + "#" + ((PersonalCare) item).getNetWeight() + "#" + ((PersonalCare) item).getExpiryDate() + "#" + ((PersonalCare) item).getGender() + "#" + ((PersonalCare) item).getAge() + "#" + ((PersonalCare) item).getPersonalCareCategory() + "#" + ((PersonalCare) item).getVenueCode() + "\n");
+                    writeFile.write(item.getItemCode() + "#" + item.getItemName() + "#" + item.getQuantity() + "#"
+                            + ((PersonalCare) item).getNetWeight() + "#" + ((PersonalCare) item).getExpiryDate() + "#"
+                            + ((PersonalCare) item).getGender() + "#" + ((PersonalCare) item).getAge() + "#"
+                            + ((PersonalCare) item).getPersonalCareCategory() + "#" + ((PersonalCare) item).getVenueCode() + "\n");
                 }
             }
             writeFile.close();
@@ -416,7 +426,8 @@ public class Donation {
             FileWriter writeFile = new FileWriter("MedicalDevice.txt");
             for (DonationItem item : itemList) {
                 if (item instanceof MedicalDevice) {
-                    writeFile.write(item.getItemCode() + "#" + item.getItemName() + "#" + item.getQuantity() + "#" + ((MedicalDevice) item).getVenueCode() + "#" + ((MedicalDevice) item).getDescription() + "\n");
+                    writeFile.write(item.getItemCode() + "#" + item.getItemName() + "#" + item.getQuantity() + "#"
+                            + ((MedicalDevice) item).getVenueCode() + "#" + ((MedicalDevice) item).getDescription() + "\n");
                 }
             }
             writeFile.close();
@@ -472,7 +483,10 @@ public class Donation {
             FileWriter writeFile = new FileWriter("Medicine.txt");
             for (DonationItem item : itemList) {
                 if (item instanceof Medicine) {
-                    writeFile.write(item.getItemCode() + "#" + item.getItemName() + "#" + item.getQuantity() + "#" + ((Medicine) item).getNetWeight() + "#" + ((Medicine) item).getExpiryDate() + "#" + ((Medicine) item).getGender() + "#" + ((Medicine) item).getAge() + "#" + ((Medicine) item).getVenueCode() + "#" + ((Medicine) item).getDosageForm() + "#" + ((Medicine) item).getDescription() + "\n");
+                    writeFile.write(item.getItemCode() + "#" + item.getItemName() + "#" + item.getQuantity() + "#"
+                            + ((Medicine) item).getNetWeight() + "#" + ((Medicine) item).getExpiryDate() + "#"
+                            + ((Medicine) item).getGender() + "#" + ((Medicine) item).getAge() + "#" + ((Medicine) item).getVenueCode()
+                            + "#" + ((Medicine) item).getDosageForm() + "#" + ((Medicine) item).getDescription() + "\n");
                 }
             }
             writeFile.close();
@@ -521,7 +535,8 @@ public class Donation {
             FileWriter writeFile = new FileWriter("Money.txt");
             for (DonationItem item : itemList) {
                 if (item instanceof Money) {
-                    writeFile.write(item.getItemCode() + "#" + item.getItemName() + "#" + item.getQuantity() + "#" + ((Money) item).getSource() + "#" + ((Money) item).getAmount() + "\n");
+                    writeFile.write(item.getItemCode() + "#" + item.getItemName() + "#" + item.getQuantity() + "#"
+                            + ((Money) item).getSource() + "#" + ((Money) item).getAmount() + "\n");
                 }
             }
             writeFile.close();
@@ -795,7 +810,9 @@ public class Donation {
                     if (_temp.equalsIgnoreCase("N") || _temp.equalsIgnoreCase("Y")) {
                         if (_temp.equalsIgnoreCase("Y")) {
                             for (DonationItem item : foodList) {
-                                if (item.getItemName().equals(_name) && ((Food) item).getExpiryDate().equals(_expiryDate) && ((Food) item).getNetWeight() == _netWeight && ((Food) item).getFoodType().equals(_foodType) && ((Food) item).getVenueCode().equals(_venueCode)) {
+                                if (item.getItemName().equals(_name) && ((Food) item).getExpiryDate().equals(_expiryDate)
+                                        && ((Food) item).getNetWeight() == _netWeight && ((Food) item).getFoodType().equals(_foodType)
+                                        && ((Food) item).getVenueCode().equals(_venueCode)) {
                                     item.setQuantity(item.getQuantity() + _qty);
                                     addItemToRecord(recordItem, recordQty, item, _qty);
                                     break;
@@ -1210,7 +1227,8 @@ public class Donation {
                         System.out.println("Sorry! Invalid Clothing Size. Please do not leave the field empty.");
                     } else {
                         if (!_clothCategory.equals("Footwear")) {
-                            if ((!_size.equals("XS")) && (!_size.equals("S")) && (!_size.equals("M")) && (!_size.equals("L")) && (!_size.equals("XL")) && (!_size.equals("XXL")) && (!_size.equals("XXXL"))) {
+                            if ((!_size.equals("XS")) && (!_size.equals("S")) && (!_size.equals("M"))
+                                    && (!_size.equals("L")) && (!_size.equals("XL")) && (!_size.equals("XXL")) && (!_size.equals("XXXL"))) {
                                 System.out.println("Sorry! Invalid Clothing Size for " + _clothCategory + ". Please enter a valid size.");
                             } else {
                                 break;
@@ -1218,7 +1236,8 @@ public class Donation {
                         }
                         if (_clothCategory.equals("Footwear")) {
                             if (_age.equals("Kids")) {
-                                if ((Integer.parseInt(_size) >= 10 && Integer.parseInt(_size) >= 13.5) || (Integer.parseInt(_size) >= 1 && Integer.parseInt(_size) >= 6)) {
+                                if ((Integer.parseInt(_size) >= 10 && Integer.parseInt(_size) >= 13.5)
+                                        || (Integer.parseInt(_size) >= 1 && Integer.parseInt(_size) >= 6)) {
                                     break;
                                 } else {
                                     System.out.println("Sorry! Invalid Clothing Size for " + _age + " " + _clothCategory + ". Please enter a valid size.");
@@ -1234,19 +1253,22 @@ public class Donation {
                                     if (Integer.parseInt(_size) >= 5 && Integer.parseInt(_size) >= 14) {
                                         break;
                                     } else {
-                                        System.out.println("Sorry! Invalid Clothing Size for " + _gender + " " + _age + " " + _clothCategory + ". Please enter a valid size.");
+                                        System.out.println("Sorry! Invalid Clothing Size for " + _gender + " " + _age + " "
+                                                + _clothCategory + ". Please enter a valid size.");
                                     }
                                 } else if (_gender.equals("Women")) {
                                     if (Integer.parseInt(_size) >= 2 && Integer.parseInt(_size) >= 10) {
                                         break;
                                     } else {
-                                        System.out.println("Sorry! Invalid Clothing Size for " + _gender + " " + _age + " " + _clothCategory + ". Please enter a valid size.");
+                                        System.out.println("Sorry! Invalid Clothing Size for " + _gender + " " + _age + " "
+                                                + _clothCategory + ". Please enter a valid size.");
                                     }
                                 } else {
                                     if (Integer.parseInt(_size) >= 2 && Integer.parseInt(_size) >= 14) {
                                         break;
                                     } else {
-                                        System.out.println("Sorry! Invalid Clothing Size for " + _gender + " " + _age + " " + _clothCategory + ". Please enter a valid size.");
+                                        System.out.println("Sorry! Invalid Clothing Size for " + _gender + " " + _age + " "
+                                                + _clothCategory + ". Please enter a valid size.");
                                     }
                                 }
 
@@ -1498,10 +1520,13 @@ public class Donation {
     }
 
     //Check Food Exist - Control
-    public boolean checkExistBeforeFood(ArrayList<DonationItem> foodList, String _name, LocalDate _expiryDate, double _netWeight, String _foodType, String _venueCode) {
+    public boolean checkExistBeforeFood(ArrayList<DonationItem> foodList, String _name, LocalDate _expiryDate, double _netWeight,
+            String _foodType, String _venueCode) {
         boolean exist = false;
         for (DonationItem item : foodList) {
-            if (item.getItemName().equals(_name) && ((Food) item).getExpiryDate().equals(_expiryDate) && ((Food) item).getNetWeight() == _netWeight && ((Food) item).getFoodType().equals(_foodType) && ((Food) item).getVenueCode().equals(_venueCode)) {
+            if (item.getItemName().equals(_name) && ((Food) item).getExpiryDate().equals(_expiryDate)
+                    && ((Food) item).getNetWeight() == _netWeight && ((Food) item).getFoodType().equals(_foodType)
+                    && ((Food) item).getVenueCode().equals(_venueCode)) {
                 exist = true;
                 break;
             }
@@ -1513,7 +1538,8 @@ public class Donation {
     public boolean checkExistBeforeBeverage(ArrayList<DonationItem> beverageList, String _name, LocalDate _expiryDate, double _netVolume, String _venueCode) {
         boolean exist = false;
         for (DonationItem item : beverageList) {
-            if (item.getItemName().equals(_name) && ((Beverage) item).getExpiryDate().equals(_expiryDate) && ((Beverage) item).getNetVolume() == _netVolume && ((Beverage) item).getVenueCode().equals(_venueCode)) {
+            if (item.getItemName().equals(_name) && ((Beverage) item).getExpiryDate().equals(_expiryDate)
+                    && ((Beverage) item).getNetVolume() == _netVolume && ((Beverage) item).getVenueCode().equals(_venueCode)) {
                 exist = true;
                 break;
             }
@@ -1522,10 +1548,13 @@ public class Donation {
     }
 
     //Check Clothing Exist - Control
-    public boolean checkExistBeforeClothing(ArrayList<DonationItem> clothingList, String _name, String _size, String _clothCategory, String _age, String _gender, String _venueCode) {
+    public boolean checkExistBeforeClothing(ArrayList<DonationItem> clothingList, String _name, String _size,
+            String _clothCategory, String _age, String _gender, String _venueCode) {
         boolean exist = false;
         for (DonationItem item : clothingList) {
-            if (item.getItemName().equals(_name) && ((Clothing) item).getSize().equals(_size) && ((Clothing) item).getClothingCategory().equals(_clothCategory) && ((Clothing) item).getAge().equals(_age) && ((Clothing) item).getGender().equals(_gender) && ((Clothing) item).getVenueCode().equals(_venueCode)) {
+            if (item.getItemName().equals(_name) && ((Clothing) item).getSize().equals(_size) && ((Clothing) item).getClothingCategory().equals(_clothCategory)
+                    && ((Clothing) item).getAge().equals(_age) && ((Clothing) item).getGender().equals(_gender)
+                    && ((Clothing) item).getVenueCode().equals(_venueCode)) {
                 exist = true;
                 break;
             }
@@ -1534,10 +1563,14 @@ public class Donation {
     }
 
     //Check Personal Care Exist - Control
-    public boolean checkExistBeforePersonalCare(ArrayList<DonationItem> personalCareList, String _name, LocalDate _expiryDate, double _netWeight, String _pcCategory, String _age, String _gender, String _venueCode) {
+    public boolean checkExistBeforePersonalCare(ArrayList<DonationItem> personalCareList, String _name,
+            LocalDate _expiryDate, double _netWeight, String _pcCategory, String _age, String _gender, String _venueCode) {
         boolean exist = false;
         for (DonationItem item : personalCareList) {
-            if (item.getItemName().equals(_name) && ((PersonalCare) item).getExpiryDate().equals(_expiryDate) && ((PersonalCare) item).getNetWeight() == (_netWeight) && ((PersonalCare) item).getPersonalCareCategory().equals(_pcCategory) && ((PersonalCare) item).getAge().equals(_age) && ((PersonalCare) item).getGender().equals(_gender) && ((PersonalCare) item).getVenueCode().equals(_venueCode)) {
+            if (item.getItemName().equals(_name) && ((PersonalCare) item).getExpiryDate().equals(_expiryDate)
+                    && ((PersonalCare) item).getNetWeight() == (_netWeight) && ((PersonalCare) item).getPersonalCareCategory().equals(_pcCategory)
+                    && ((PersonalCare) item).getAge().equals(_age) && ((PersonalCare) item).getGender().equals(_gender)
+                    && ((PersonalCare) item).getVenueCode().equals(_venueCode)) {
                 exist = true;
                 break;
             }
@@ -1558,11 +1591,15 @@ public class Donation {
     }
 
     //Check Medicine Exist - Control
-    public boolean checkExistBeforeMedicine(ArrayList<DonationItem> medicineList, String _name, LocalDate _expiryDate, double _netWeight, String _dosageForm, String _age, String _gender, String _venueCode) {
+    public boolean checkExistBeforeMedicine(ArrayList<DonationItem> medicineList, String _name, LocalDate _expiryDate,
+            double _netWeight, String _dosageForm, String _age, String _gender, String _venueCode) {
         boolean exist = false;
         for (DonationItem item : medicineList) {
 
-            if (item.getItemName().equals(_name) && ((Medicine) item).getExpiryDate().equals(_expiryDate) && ((Medicine) item).getNetWeight() == (_netWeight) && ((Medicine) item).getDosageForm().equals(_dosageForm) && ((Medicine) item).getAge().equals(_age) && ((Medicine) item).getGender().equals(_gender) && ((Medicine) item).getVenueCode().equals(_venueCode)) {
+            if (item.getItemName().equals(_name) && ((Medicine) item).getExpiryDate().equals(_expiryDate)
+                    && ((Medicine) item).getNetWeight() == (_netWeight) && ((Medicine) item).getDosageForm().equals(_dosageForm)
+                    && ((Medicine) item).getAge().equals(_age) && ((Medicine) item).getGender().equals(_gender)
+                    && ((Medicine) item).getVenueCode().equals(_venueCode)) {
                 exist = true;
                 break;
             }
@@ -1699,7 +1736,8 @@ public class Donation {
                     if (_temp.equalsIgnoreCase("N") || _temp.equalsIgnoreCase("Y")) {
                         if (_temp.equalsIgnoreCase("Y")) {
                             for (DonationItem item : beverageList) {
-                                if (item.getItemName().equals(_name) && ((Beverage) item).getExpiryDate().equals(_expiryDate) && ((Beverage) item).getNetVolume() == _netVolume && ((Beverage) item).getVenueCode().equals(_venueCode)) {
+                                if (item.getItemName().equals(_name) && ((Beverage) item).getExpiryDate().equals(_expiryDate)
+                                        && ((Beverage) item).getNetVolume() == _netVolume && ((Beverage) item).getVenueCode().equals(_venueCode)) {
                                     item.setQuantity(item.getQuantity() + _qty);
                                     addItemToRecord(recordItem, recordQty, item, _qty);
                                     break;
@@ -1743,7 +1781,8 @@ public class Donation {
 
     //Display Clothing Category - Boundary
     public void displayClothingCategory() {
-        System.out.println("Clothing Category:\n1. Tops\n2. Bottoms\n3. Outerwear\n4. Dress\n5. Innerwear\n6. Sportswear\n7. Footwear\n8. Accessories\n9. Sleepwear\n");
+        System.out.println("Clothing Category:\n1. Tops\n2. Bottoms\n3. Outerwear\n4. Dress\n5. Innerwear");
+        System.out.println("6. Sportswear\n7. Footwear\n8. Accessories\n9. Sleepwear\n");
     }
 
     //Display Gender - Boundary
@@ -1758,7 +1797,10 @@ public class Donation {
 
     //Display Size-Boundary
     public void displaySize() {
-        System.out.println("Size: XS / S / M / L / XL / XXL / XXXL\n**This size is only available for Tops, Bottoms, Outerwear, Dress, Innerwear, Sportswear, Sleepwear\n**This sizes are only applicable for Kids, Teens, Adults and Seniors\n\nFootwear Size:\n1. Kids 10-13.5 1-6\n2. Teens 6-8\n3. Adults & Seniors - Men 6-14\n4. Adults & Seniors - Women 2-10\n5. Adults & Seniors - Neutral 2-14\n");
+        System.out.print("Size: XS / S / M / L / XL / XXL / XXXL\n**This size is only available for Tops,");
+        System.out.println("Bottoms, Outerwear, Dress, Innerwear, Sportswear, Sleepwear\n**This sizes are only applicable for Kids, Teens, Adults and Seniors");
+        System.out.println("\nFootwear Size:\n1. Kids 10-13.5 1-6\n2. Teens 6-8\n3. Adults & Seniors - Men 6-14\n4. Adults & Seniors - Women 2-10");
+        System.out.println("5. Adults & Seniors - Neutral 2-14\n");
     }
 
     //Add Clothing
@@ -1828,7 +1870,10 @@ public class Donation {
                     if (_temp.equalsIgnoreCase("N") || _temp.equalsIgnoreCase("Y")) {
                         if (_temp.equalsIgnoreCase("Y")) {
                             for (DonationItem item : clothingList) {
-                                if (item.getItemName().equals(_name) && ((Clothing) item).getSize().equals(_size) && ((Clothing) item).getClothingCategory().equals(_clothCategory) && ((Clothing) item).getAge().equals(_age) && ((Clothing) item).getGender().equals(_gender) && ((Clothing) item).getVenueCode().equals(_venueCode)) {
+                                if (item.getItemName().equals(_name) && ((Clothing) item).getSize().equals(_size)
+                                        && ((Clothing) item).getClothingCategory().equals(_clothCategory)
+                                        && ((Clothing) item).getAge().equals(_age) && ((Clothing) item).getGender().equals(_gender)
+                                        && ((Clothing) item).getVenueCode().equals(_venueCode)) {
                                     item.setQuantity(item.getQuantity() + _qty);
                                     addItemToRecord(recordItem, recordQty, item, _qty);
                                     break;
@@ -1865,12 +1910,15 @@ public class Donation {
         displayGender();
         displayAge();
         displayVenueCode();
-        System.out.println("Instruction: Please enter the field accordingly. \nEnter '-' for expiry date if the product does not have an expiry date.\nEnter '-999' for netweight if the product does not have a net weight.\nEnter 'X' to back to the previous page.\n");
+        System.out.println("Instruction: Please enter the field accordingly. \nEnter '-' for expiry date if the product does not have an expiry date.");
+        System.out.println("Enter '-999' for netweight if the product does not have a net weight.\nEnter 'X' to back to the previous page.\n");
     }
 
     //Display Personal care category - Boundary
     public void displayPCCat() {
-        System.out.println("Personal Care Category:\n1. Skin care (Moisturizers, Cleansers, Toners)\n2. Hair Care (Shampoo, Conditioners, Hair Masks)\n3. Body Care (Body Wash, Soap, Body Scrubs)\n4. Oral Care (Toothpaste, Toothbrush, Mouthwash)\n5. Personal Hygiene (Sanitary Pads, Nail Clippers, Cotton Swabs)\n");
+        System.out.println("Personal Care Category:\n1. Skin care (Moisturizers, Cleansers, Toners)\n2. Hair Care (Shampoo, Conditioners, Hair Masks)");
+        System.out.println("3. Body Care (Body Wash, Soap, Body Scrubs)\n4. Oral Care (Toothpaste, Toothbrush, Mouthwash)");
+        System.out.println("5. Personal Hygiene (Sanitary Pads, Nail Clippers, Cotton Swabs)\n");
     }
 
     //Add Personal Care
@@ -1950,7 +1998,11 @@ public class Donation {
                     if (_temp.equalsIgnoreCase("N") || _temp.equalsIgnoreCase("Y")) {
                         if (_temp.equalsIgnoreCase("Y")) {
                             for (DonationItem item : personalCareList) {
-                                if (item.getItemName().equals(_name) && ((PersonalCare) item).getExpiryDate().equals(_expiryDate) && ((PersonalCare) item).getNetWeight() == (_netWeight) && ((PersonalCare) item).getPersonalCareCategory().equals(_pcCategory) && ((PersonalCare) item).getAge().equals(_age) && ((PersonalCare) item).getGender().equals(_gender) && ((PersonalCare) item).getVenueCode().equals(_venueCode)) {
+                                if (item.getItemName().equals(_name) && ((PersonalCare) item).getExpiryDate().equals(_expiryDate)
+                                        && ((PersonalCare) item).getNetWeight() == (_netWeight)
+                                        && ((PersonalCare) item).getPersonalCareCategory().equals(_pcCategory)
+                                        && ((PersonalCare) item).getAge().equals(_age) && ((PersonalCare) item).getGender().equals(_gender)
+                                        && ((PersonalCare) item).getVenueCode().equals(_venueCode)) {
                                     item.setQuantity(item.getQuantity() + _qty);
                                     addItemToRecord(recordItem, recordQty, item, _qty);
                                     break;
@@ -1985,6 +2037,13 @@ public class Donation {
         System.out.println("\nAdd Medical Device\n");
         displayVenueCode();
         System.out.println("Instruction: Please enter the field accordingly. \nEnter 'X' to back to the previous page.\n");
+    }
+
+    public static String inputActionToDescription() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Do you wanna \n1. Append Description \n2. Keep original version\n3. Keep the current version");
+        System.out.print("\nX. Stop this Addition of Donation\nPick an option(1-3, X): ");
+        return scanner.nextLine();
     }
 
     //Add Medical Device
@@ -2039,8 +2098,7 @@ public class Donation {
                     if (_temp.equalsIgnoreCase("N") || _temp.equalsIgnoreCase("Y")) {
                         if (_temp.equalsIgnoreCase("Y")) {
                             while (true) {
-                                System.out.print("Do you wanna \n1. Append Description \n2. Keep original version\n3. Keep the current version\nX. Stop this Addition of Donation\nPick an option(1-3, X): ");
-                                _temp = scanner.nextLine();
+                                _temp = inputActionToDescription();
                                 if (_temp.equals("1") || _temp.equals("2") || _temp.equals("3")) {
                                     for (DonationItem item : medicalDeviceList) {
                                         if (item.getItemName().equals(_name) && ((MedicalDevice) item).getVenueCode().equals(_venueCode)) {
@@ -2189,11 +2247,14 @@ public class Donation {
                     if (_temp.equalsIgnoreCase("N") || _temp.equalsIgnoreCase("Y")) {
                         if (_temp.equalsIgnoreCase("Y")) {
                             while (true) {
-                                System.out.print("Do you wanna \n1. Append Description \n2. Keep original version\n3. Keep the current version\nX. Stop this Addition of Donation\nPick an option(1-3, X): ");
-                                _temp = scanner.nextLine();
+                                _temp = inputActionToDescription();
                                 if (_temp.equals("1") || _temp.equals("2") || _temp.equals("3")) {
                                     for (DonationItem item : medicineList) {
-                                        if (item.getItemName().equals(_name) && ((Medicine) item).getExpiryDate().equals(_expiryDate) && ((Medicine) item).getNetWeight() == (_netWeight) && ((Medicine) item).getDosageForm().equals(_dosageForm) && ((Medicine) item).getAge().equals(_age) && ((Medicine) item).getGender().equals(_gender) && ((Medicine) item).getVenueCode().equals(_venueCode)) {
+                                        if (item.getItemName().equals(_name) && ((Medicine) item).getExpiryDate().equals(_expiryDate)
+                                                && ((Medicine) item).getNetWeight() == (_netWeight)
+                                                && ((Medicine) item).getDosageForm().equals(_dosageForm)
+                                                && ((Medicine) item).getAge().equals(_age) && ((Medicine) item).getGender().equals(_gender)
+                                                && ((Medicine) item).getVenueCode().equals(_venueCode)) {
                                             if (_temp.equals("1")) {
                                                 _description = ((Medicine) item).getDescription() + _description;
                                             } else if (_temp.equals("2")) {
@@ -2241,7 +2302,8 @@ public class Donation {
 
     //Display Source - Boundary
     public void displaySource() {
-        System.out.println("Source: \nEnter 'E001' if the source is from e-banking.\nEnter venue code if the source is from a collection location. \nEnter event code if the source if from an event.\n");
+        System.out.println("Source: \nEnter 'E001' if the source is from e-banking.\nEnter venue code if the source is from a collection location. ");
+        System.out.println("Enter event code if the source if from an event.\n");
     }
 
     //Display Add Money Instruction - Boundary
@@ -2484,9 +2546,11 @@ public class Donation {
 
     //Display Food - Boundary
     public void displayFood(ArrayList<DonationItem> foodList) {
-        System.out.printf("%-10s %-20s %-20s %-20s %-20s %-15s %-15s\n", "Item Code", "Item Name", "Net Weight (kg)", "Expiry Date", "Food Type", "Quantity", "Venue Code");
+        System.out.printf("%-10s %-20s %-20s %-20s %-20s %-15s %-15s\n", "Item Code", "Item Name", "Net Weight (kg)", "Expiry Date", "Food Type",
+                "Quantity", "Venue Code");
         for (DonationItem item : foodList) {
-            System.out.printf("%-10s %-20s %-20s %-20s %-20s %-15s %-15s\n", item.getItemCode(), item.getItemName(), ((Food) item).getNetWeight(), ((Food) item).getExpiryDate(), ((Food) item).getFoodType(), item.getQuantity(), ((Food) item).getVenueCode());
+            System.out.printf("%-10s %-20s %-20s %-20s %-20s %-15s %-15s\n", item.getItemCode(), item.getItemName(), ((Food) item).getNetWeight(),
+                    ((Food) item).getExpiryDate(), ((Food) item).getFoodType(), item.getQuantity(), ((Food) item).getVenueCode());
         }
     }
 
@@ -2494,15 +2558,19 @@ public class Donation {
     public void displayBeverage(ArrayList<DonationItem> beverageList) {
         System.out.printf("%-10s %-20s %-20s %-20s %-15s %-15s\n", "Item Code", "Item Name", "Net Volume (ml)", "Expiry Date", "Quantity", "Venue Code");
         for (DonationItem item : beverageList) {
-            System.out.printf("%-10s %-20s %-20s %-20s %-15s %-15s\n", item.getItemCode(), item.getItemName(), ((Beverage) item).getNetVolume(), ((Beverage) item).getExpiryDate(), item.getQuantity(), ((Beverage) item).getVenueCode());
+            System.out.printf("%-10s %-20s %-20s %-20s %-15s %-15s\n", item.getItemCode(), item.getItemName(), ((Beverage) item).getNetVolume(),
+                    ((Beverage) item).getExpiryDate(), item.getQuantity(), ((Beverage) item).getVenueCode());
         }
     }
 
     //Display Clothing - Boundary
     public void displayClothing(ArrayList<DonationItem> clothingList) {
-        System.out.printf("%-10s %-20s %-20s %-20s %-20s %-20s %-15s %-15s\n", "Item Code", "Item Name", "Clothing Category", "Gender", "Age Group", "Size", "Quantity", "Venue Code");
+        System.out.printf("%-10s %-20s %-20s %-20s %-20s %-20s %-15s %-15s\n", "Item Code", "Item Name", "Clothing Category",
+                "Gender", "Age Group", "Size", "Quantity", "Venue Code");
         for (DonationItem item : clothingList) {
-            System.out.printf("%-10s %-20s %-20s %-20s %-20s %-20s %-15s %-15s\n", item.getItemCode(), item.getItemName(), ((Clothing) item).getClothingCategory(), ((Clothing) item).getGender(), ((Clothing) item).getAge(), ((Clothing) item).getSize(), item.getQuantity(), ((Clothing) item).getVenueCode());
+            System.out.printf("%-10s %-20s %-20s %-20s %-20s %-20s %-15s %-15s\n", item.getItemCode(), item.getItemName(),
+                    ((Clothing) item).getClothingCategory(), ((Clothing) item).getGender(), ((Clothing) item).getAge(),
+                    ((Clothing) item).getSize(), item.getQuantity(), ((Clothing) item).getVenueCode());
         }
     }
 
@@ -2510,23 +2578,34 @@ public class Donation {
     public void displayMedicalDevice(ArrayList<DonationItem> medicalDeviceList) {
         System.out.printf("%-10s %-20s %-15s %-15s %-50s\n", "Item Code", "Item Name", "Quantity", "Venue Code", "Description");
         for (DonationItem item : medicalDeviceList) {
-            System.out.printf("%-10s %-20s %-15s %-15s %-50s\n", item.getItemCode(), item.getItemName(), item.getQuantity(), ((MedicalDevice) item).getVenueCode(), ((MedicalDevice) item).getDescription());
+            System.out.printf("%-10s %-20s %-15s %-15s %-50s\n", item.getItemCode(), item.getItemName(), item.getQuantity(),
+                    ((MedicalDevice) item).getVenueCode(), ((MedicalDevice) item).getDescription());
         }
     }
 
     //Display Personal Care - Boundary
     public void displayPersonalCare(ArrayList<DonationItem> personalCareList) {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        System.out.printf("%-10s %-20s %-25s %-10s %-15s %-20s %-15s %-15s %-15s\n", "Item Code", "Item Name", "Personal Care Category", "Gender", "Age Group", "Net Weight (g)", "Expiry date", "Quantity", "Venue Code");
+        System.out.printf("%-10s %-20s %-25s %-10s %-15s %-20s %-15s %-15s %-15s\n", "Item Code", "Item Name", "Personal Care Category",
+                "Gender", "Age Group", "Net Weight (g)", "Expiry date", "Quantity", "Venue Code");
         for (DonationItem item : personalCareList) {
             if (((PersonalCare) item).getNetWeight() == -999) {
-                System.out.printf("%-10s %-20s %-25s %-10s %-15s %-20s %-15s %-15s %-15s\n", item.getItemCode(), item.getItemName(), ((PersonalCare) item).getPersonalCareCategory(), ((PersonalCare) item).getGender(), ((PersonalCare) item).getAge(), "-", ((PersonalCare) item).getExpiryDate().format(dateFormat), item.getQuantity(), ((PersonalCare) item).getVenueCode());
+                System.out.printf("%-10s %-20s %-25s %-10s %-15s %-20s %-15s %-15s %-15s\n", item.getItemCode(), item.getItemName(),
+                        ((PersonalCare) item).getPersonalCareCategory(), ((PersonalCare) item).getGender(), ((PersonalCare) item).getAge(),
+                        "-", ((PersonalCare) item).getExpiryDate().format(dateFormat), item.getQuantity(), ((PersonalCare) item).getVenueCode());
             } else if (((PersonalCare) item).getNetWeight() == -999 && ((PersonalCare) item).getExpiryDate().format(dateFormat).equals("2000-12-31")) {
-                System.out.printf("%-10s %-20s %-25s %-10s %-15s %-20s %-15s %-15s %-15s\n", item.getItemCode(), item.getItemName(), ((PersonalCare) item).getPersonalCareCategory(), ((PersonalCare) item).getGender(), ((PersonalCare) item).getAge(), "-", "-", item.getQuantity(), ((PersonalCare) item).getVenueCode());
+                System.out.printf("%-10s %-20s %-25s %-10s %-15s %-20s %-15s %-15s %-15s\n", item.getItemCode(), item.getItemName(),
+                        ((PersonalCare) item).getPersonalCareCategory(), ((PersonalCare) item).getGender(), ((PersonalCare) item).getAge(),
+                        "-", "-", item.getQuantity(), ((PersonalCare) item).getVenueCode());
             } else if (((PersonalCare) item).getExpiryDate().format(dateFormat).equals("2000-12-31")) {
-                System.out.printf("%-10s %-20s %-25s %-10s %-15s %-20s %-15s %-15s %-15s\n", item.getItemCode(), item.getItemName(), ((PersonalCare) item).getPersonalCareCategory(), ((PersonalCare) item).getGender(), ((PersonalCare) item).getAge(), ((PersonalCare) item).getNetWeight(), "-", item.getQuantity(), ((PersonalCare) item).getVenueCode());
+                System.out.printf("%-10s %-20s %-25s %-10s %-15s %-20s %-15s %-15s %-15s\n", item.getItemCode(), item.getItemName(),
+                        ((PersonalCare) item).getPersonalCareCategory(), ((PersonalCare) item).getGender(), ((PersonalCare) item).getAge(),
+                        ((PersonalCare) item).getNetWeight(), "-", item.getQuantity(), ((PersonalCare) item).getVenueCode());
             } else {
-                System.out.printf("%-10s %-20s %-25s %-10s %-15s %-20s %-15s %-15s %-15s\n", item.getItemCode(), item.getItemName(), ((PersonalCare) item).getPersonalCareCategory(), ((PersonalCare) item).getGender(), ((PersonalCare) item).getAge(), ((PersonalCare) item).getNetWeight(), ((PersonalCare) item).getExpiryDate().format(dateFormat), item.getQuantity(), ((PersonalCare) item).getVenueCode());
+                System.out.printf("%-10s %-20s %-25s %-10s %-15s %-20s %-15s %-15s %-15s\n", item.getItemCode(), item.getItemName(),
+                        ((PersonalCare) item).getPersonalCareCategory(), ((PersonalCare) item).getGender(), ((PersonalCare) item).getAge(),
+                        ((PersonalCare) item).getNetWeight(), ((PersonalCare) item).getExpiryDate().format(dateFormat), item.getQuantity(),
+                        ((PersonalCare) item).getVenueCode());
             }
         }
     }
@@ -2541,9 +2620,12 @@ public class Donation {
 
     //Display Medicine - Boundary
     public void displayMedicine(ArrayList<DonationItem> medicineList) {
-        System.out.printf("%-10s %-20s %-15s %-15s %-15s %-20s %-20s %-15s %-15s %-50s\n", "Item Code", "Item Name", "Dosage Form", "Gender", "Age Group", "Net Weight (g)", "Expiry date", "Quantity", "Venue Code", "Description");
+        System.out.printf("%-10s %-20s %-15s %-15s %-15s %-20s %-20s %-15s %-15s %-50s\n", "Item Code", "Item Name", "Dosage Form",
+                "Gender", "Age Group", "Net Weight (g)", "Expiry date", "Quantity", "Venue Code", "Description");
         for (DonationItem item : medicineList) {
-            System.out.printf("%-10s %-20s %-15s %-15s %-15s %-20s %-20s %-15s %-15s %-50s\n", item.getItemCode(), item.getItemName(), ((Medicine) item).getDosageForm(), ((Medicine) item).getGender(), ((Medicine) item).getAge(), ((Medicine) item).getNetWeight(), ((Medicine) item).getExpiryDate(), item.getQuantity(), ((Medicine) item).getVenueCode(), ((Medicine) item).getDescription());
+            System.out.printf("%-10s %-20s %-15s %-15s %-15s %-20s %-20s %-15s %-15s %-50s\n", item.getItemCode(), item.getItemName(),
+                    ((Medicine) item).getDosageForm(), ((Medicine) item).getGender(), ((Medicine) item).getAge(), ((Medicine) item).getNetWeight(),
+                    ((Medicine) item).getExpiryDate(), item.getQuantity(), ((Medicine) item).getVenueCode(), ((Medicine) item).getDescription());
         }
     }
 
@@ -2687,7 +2769,8 @@ public class Donation {
         if (dRecordList.isEmpty()) {
             displayEmptyList();
         } else {
-            System.out.printf("%-25s %-10s %-20s %-10s %-20s %-10s %-20s\n", "Donation Record ID", "Donor ID", "Donor Name", "Item Code", "Item Name", "Quantity", "Date Time");
+            System.out.printf("%-25s %-10s %-20s %-10s %-20s %-10s %-20s\n", "Donation Record ID", "Donor ID", "Donor Name", "Item Code",
+                    "Item Name", "Quantity", "Date Time");
             for (DonationRecord record : dRecordList) {
                 displaySingleRecordWithDonorID(record);
             }
@@ -2699,19 +2782,25 @@ public class Donation {
         int qtyIndex = 0;
         int amtIndex = 0;
         if (record.getItem().get(0) instanceof Money) {
-            System.out.printf("%-25s %-10s %-20s %-10s %-20s %-10s %-20s\n", record.getRecordID(), record.getDonor().getId(), record.getDonor().getName(), record.getItem().get(0).getItemCode(), record.getItem().get(0).getItemName(), record.getAmount().get(amtIndex), record.getDonationDateTime().format(dateFormat));
+            System.out.printf("%-25s %-10s %-20s %-10s %-20s %-10s %-20s\n", record.getRecordID(), record.getDonor().getId(),
+                    record.getDonor().getName(), record.getItem().get(0).getItemCode(), record.getItem().get(0).getItemName(),
+                    record.getAmount().get(amtIndex), record.getDonationDateTime().format(dateFormat));
             amtIndex++;
         } else {
-            System.out.printf("%-25s %-10s %-20s %-10s %-20s %-10s %-20s\n", record.getRecordID(), record.getDonor().getId(), record.getDonor().getName(), record.getItem().get(0).getItemCode(), record.getItem().get(0).getItemName(), record.getQty().get(qtyIndex), record.getDonationDateTime().format(dateFormat));
+            System.out.printf("%-25s %-10s %-20s %-10s %-20s %-10s %-20s\n", record.getRecordID(), record.getDonor().getId(),
+                    record.getDonor().getName(), record.getItem().get(0).getItemCode(), record.getItem().get(0).getItemName(),
+                    record.getQty().get(qtyIndex), record.getDonationDateTime().format(dateFormat));
             qtyIndex++;
         }
         if (record.getItem().size() > 1) {
             for (int i = 1; i < record.getItem().size(); i++) {
                 if (record.getItem().get(i) instanceof Money) {
-                    System.out.printf("%-25s %-10s %-20s %-10s %-20s %-10s %-20s\n", "", "", "", record.getItem().get(i).getItemCode(), record.getItem().get(i).getItemName(), record.getAmount().get(amtIndex), "");
+                    System.out.printf("%-25s %-10s %-20s %-10s %-20s %-10s %-20s\n", "", "", "", record.getItem().get(i).getItemCode(),
+                            record.getItem().get(i).getItemName(), record.getAmount().get(amtIndex), "");
                     amtIndex++;
                 } else {
-                    System.out.printf("%-25s %-10s %-20s %-10s %-20s %-10s %-20s\n", "", "", "", record.getItem().get(i).getItemCode(), record.getItem().get(i).getItemName(), record.getQty().get(qtyIndex), "");
+                    System.out.printf("%-25s %-10s %-20s %-10s %-20s %-10s %-20s\n", "", "", "", record.getItem().get(i).getItemCode(),
+                            record.getItem().get(i).getItemName(), record.getQty().get(qtyIndex), "");
                     qtyIndex++;
                 }
             }
@@ -2723,19 +2812,23 @@ public class Donation {
         int qtyIndex = 0;
         int amtIndex = 0;
         if (record.getItem().get(0) instanceof Money) {
-            System.out.printf("%-25s %-10s %-20s %-10s %-20s\n", record.getRecordID(), record.getItem().get(0).getItemCode(), record.getItem().get(0).getItemName(), record.getAmount().get(amtIndex), record.getDonationDateTime().format(dateFormat));
+            System.out.printf("%-25s %-10s %-20s %-10s %-20s\n", record.getRecordID(), record.getItem().get(0).getItemCode(),
+                    record.getItem().get(0).getItemName(), record.getAmount().get(amtIndex), record.getDonationDateTime().format(dateFormat));
             amtIndex++;
         } else {
-            System.out.printf("%-25s %-10s %-20s %-10s %-20s\n", record.getRecordID(), record.getItem().get(0).getItemCode(), record.getItem().get(0).getItemName(), record.getQty().get(qtyIndex), record.getDonationDateTime().format(dateFormat));
+            System.out.printf("%-25s %-10s %-20s %-10s %-20s\n", record.getRecordID(), record.getItem().get(0).getItemCode(),
+                    record.getItem().get(0).getItemName(), record.getQty().get(qtyIndex), record.getDonationDateTime().format(dateFormat));
             qtyIndex++;
         }
         if (record.getItem().size() > 1) {
             for (int i = 1; i < record.getItem().size(); i++) {
                 if (record.getItem().get(i) instanceof Money) {
-                    System.out.printf("%-25s %-10s %-20s %-10s %-20s\n", "", record.getItem().get(i).getItemCode(), record.getItem().get(i).getItemName(), record.getAmount().get(amtIndex), "");
+                    System.out.printf("%-25s %-10s %-20s %-10s %-20s\n", "", record.getItem().get(i).getItemCode(),
+                            record.getItem().get(i).getItemName(), record.getAmount().get(amtIndex), "");
                     amtIndex++;
                 } else {
-                    System.out.printf("%-25s %-10s %-20s %-10s %-20s\n", "", record.getItem().get(i).getItemCode(), record.getItem().get(i).getItemName(), record.getQty().get(qtyIndex), "");
+                    System.out.printf("%-25s %-10s %-20s %-10s %-20s\n", "", record.getItem().get(i).getItemCode(),
+                            record.getItem().get(i).getItemName(), record.getQty().get(qtyIndex), "");
                     qtyIndex++;
                 }
             }
@@ -2791,7 +2884,9 @@ public class Donation {
                                     //display amend option
                                     displayAmendOption(option);
                                     amdOption = checkAmendOption(option);
-                                    if ((option == 7 && amdOption == 3) || (option == 6 && amdOption == 10) || (option == 5 && amdOption == 5) || (option == 4 && amdOption == 9) || (option == 3 && amdOption == 8) || (option == 2 && amdOption == 6) || (option == 1 && amdOption == 7)) {
+                                    if ((option == 7 && amdOption == 3) || (option == 6 && amdOption == 10) || (option == 5 && amdOption == 5) ||
+                                            (option == 4 && amdOption == 9) || (option == 3 && amdOption == 8) || (option == 2 && amdOption == 6) ||
+                                            (option == 1 && amdOption == 7)) {
                                         amend = true;
                                         break;
                                     } else {
@@ -2886,22 +2981,29 @@ public class Donation {
                     if (item.getItemCode().equals(itemCode)) {
                         switch (option) {
                             case 1:
-                                exist = checkExistBeforeFood(itemlist, _temp, ((Food) item).getExpiryDate(), ((Food) item).getNetWeight(), ((Food) item).getFoodType(), ((Food) item).getVenueCode());
+                                exist = checkExistBeforeFood(itemlist, _temp, ((Food) item).getExpiryDate(), ((Food) item).getNetWeight(),
+                                        ((Food) item).getFoodType(), ((Food) item).getVenueCode());
                                 break;
                             case 2:
-                                exist = checkExistBeforeBeverage(itemlist, _temp, ((Beverage) item).getExpiryDate(), ((Beverage) item).getNetVolume(), ((Beverage) item).getVenueCode());
+                                exist = checkExistBeforeBeverage(itemlist, _temp, ((Beverage) item).getExpiryDate(), ((Beverage) item).getNetVolume(),
+                                        ((Beverage) item).getVenueCode());
                                 break;
                             case 3:
-                                exist = checkExistBeforeClothing(itemlist, _temp, ((Clothing) item).getSize(), ((Clothing) item).getClothingCategory(), ((Clothing) item).getAge(), ((Clothing) item).getGender(), ((Clothing) item).getVenueCode());
+                                exist = checkExistBeforeClothing(itemlist, _temp, ((Clothing) item).getSize(), ((Clothing) item).getClothingCategory(),
+                                        ((Clothing) item).getAge(), ((Clothing) item).getGender(), ((Clothing) item).getVenueCode());
                                 break;
                             case 4:
-                                exist = checkExistBeforePersonalCare(itemlist, _temp, ((PersonalCare) item).getExpiryDate(), ((PersonalCare) item).getNetWeight(), ((PersonalCare) item).getPersonalCareCategory(), ((PersonalCare) item).getAge(), ((PersonalCare) item).getGender(), ((PersonalCare) item).getVenueCode());
+                                exist = checkExistBeforePersonalCare(itemlist, _temp, ((PersonalCare) item).getExpiryDate(),
+                                        ((PersonalCare) item).getNetWeight(), ((PersonalCare) item).getPersonalCareCategory(),
+                                        ((PersonalCare) item).getAge(), ((PersonalCare) item).getGender(), ((PersonalCare) item).getVenueCode());
                                 break;
                             case 5:
                                 exist = checkExistBeforeMedicalDevice(itemlist, _temp, ((MedicalDevice) item).getVenueCode());
                                 break;
                             default:
-                                exist = checkExistBeforeMedicine(itemlist, _temp, ((Medicine) item).getExpiryDate(), ((Medicine) item).getNetWeight(), ((Medicine) item).getDosageForm(), ((Medicine) item).getAge(), ((Medicine) item).getGender(), ((Medicine) item).getVenueCode());
+                                exist = checkExistBeforeMedicine(itemlist, _temp, ((Medicine) item).getExpiryDate(), ((Medicine) item).getNetWeight(),
+                                        ((Medicine) item).getDosageForm(), ((Medicine) item).getAge(), ((Medicine) item).getGender(),
+                                        ((Medicine) item).getVenueCode());
                                 break;
                         }
                         if (exist) {
@@ -3072,16 +3174,22 @@ public class Donation {
                     if (item.getItemCode().equals(itemCode)) {
                         switch (option) {
                             case 1:
-                                exist = checkExistBeforeFood(itemlist, item.getItemName(), ((Food) item).getExpiryDate(), _temp3, ((Food) item).getFoodType(), ((Food) item).getVenueCode());
+                                exist = checkExistBeforeFood(itemlist, item.getItemName(), ((Food) item).getExpiryDate(), _temp3,
+                                        ((Food) item).getFoodType(), ((Food) item).getVenueCode());
                                 break;
                             case 2:
-                                exist = checkExistBeforeBeverage(itemlist, item.getItemName(), ((Beverage) item).getExpiryDate(), _temp3, ((Beverage) item).getVenueCode());
+                                exist = checkExistBeforeBeverage(itemlist, item.getItemName(), ((Beverage) item).getExpiryDate(),
+                                        _temp3, ((Beverage) item).getVenueCode());
                                 break;
                             case 4:
-                                exist = checkExistBeforePersonalCare(itemlist, item.getItemName(), ((PersonalCare) item).getExpiryDate(), _temp3, ((PersonalCare) item).getPersonalCareCategory(), ((PersonalCare) item).getAge(), ((PersonalCare) item).getGender(), ((PersonalCare) item).getVenueCode());
+                                exist = checkExistBeforePersonalCare(itemlist, item.getItemName(), ((PersonalCare) item).getExpiryDate(),
+                                        _temp3, ((PersonalCare) item).getPersonalCareCategory(), ((PersonalCare) item).getAge(),
+                                        ((PersonalCare) item).getGender(), ((PersonalCare) item).getVenueCode());
                                 break;
                             default:
-                                exist = checkExistBeforeMedicine(itemlist, item.getItemName(), ((Medicine) item).getExpiryDate(), _temp3, ((Medicine) item).getDosageForm(), ((Medicine) item).getAge(), ((Medicine) item).getGender(), ((Medicine) item).getVenueCode());
+                                exist = checkExistBeforeMedicine(itemlist, item.getItemName(), ((Medicine) item).getExpiryDate(), _temp3,
+                                        ((Medicine) item).getDosageForm(), ((Medicine) item).getAge(), ((Medicine) item).getGender(),
+                                        ((Medicine) item).getVenueCode());
                                 break;
                         }
                         if (exist) {
@@ -3137,16 +3245,22 @@ public class Donation {
                     if (item.getItemCode().equals(itemCode)) {
                         switch (option) {
                             case 1:
-                                exist = checkExistBeforeFood(itemlist, item.getItemName(), _temp4, ((Food) item).getNetWeight(), ((Food) item).getFoodType(), ((Food) item).getVenueCode());
+                                exist = checkExistBeforeFood(itemlist, item.getItemName(), _temp4, ((Food) item).getNetWeight(),
+                                        ((Food) item).getFoodType(), ((Food) item).getVenueCode());
                                 break;
                             case 2:
-                                exist = checkExistBeforeBeverage(itemlist, item.getItemName(), _temp4, ((Beverage) item).getNetVolume(), ((Beverage) item).getVenueCode());
+                                exist = checkExistBeforeBeverage(itemlist, item.getItemName(), _temp4, ((Beverage) item).getNetVolume(),
+                                        ((Beverage) item).getVenueCode());
                                 break;
                             case 4:
-                                exist = checkExistBeforePersonalCare(itemlist, item.getItemName(), _temp4, ((PersonalCare) item).getNetWeight(), ((PersonalCare) item).getPersonalCareCategory(), ((PersonalCare) item).getAge(), ((PersonalCare) item).getGender(), ((PersonalCare) item).getVenueCode());
+                                exist = checkExistBeforePersonalCare(itemlist, item.getItemName(), _temp4, ((PersonalCare) item).getNetWeight(),
+                                        ((PersonalCare) item).getPersonalCareCategory(), ((PersonalCare) item).getAge(),
+                                        ((PersonalCare) item).getGender(), ((PersonalCare) item).getVenueCode());
                                 break;
                             default:
-                                exist = checkExistBeforeMedicine(itemlist, item.getItemName(), _temp4, ((Medicine) item).getNetWeight(), ((Medicine) item).getDosageForm(), ((Medicine) item).getAge(), ((Medicine) item).getGender(), ((Medicine) item).getVenueCode());
+                                exist = checkExistBeforeMedicine(itemlist, item.getItemName(), _temp4, ((Medicine) item).getNetWeight(),
+                                        ((Medicine) item).getDosageForm(), ((Medicine) item).getAge(), ((Medicine) item).getGender(),
+                                        ((Medicine) item).getVenueCode());
                                 break;
                         }
                         if (exist) {
@@ -3185,13 +3299,18 @@ public class Donation {
                     if (item.getItemCode().equals(itemCode)) {
                         switch (option) {
                             case 3:
-                                exist = checkExistBeforeClothing(itemlist, item.getItemName(), ((Clothing) item).getSize(), ((Clothing) item).getClothingCategory(), _temp, ((Clothing) item).getGender(), ((Clothing) item).getVenueCode());
+                                exist = checkExistBeforeClothing(itemlist, item.getItemName(), ((Clothing) item).getSize(),
+                                        ((Clothing) item).getClothingCategory(), _temp, ((Clothing) item).getGender(), ((Clothing) item).getVenueCode());
                                 break;
                             case 4:
-                                exist = checkExistBeforePersonalCare(itemlist, item.getItemName(), ((PersonalCare) item).getExpiryDate(), ((PersonalCare) item).getNetWeight(), ((PersonalCare) item).getPersonalCareCategory(), _temp, ((PersonalCare) item).getGender(), ((PersonalCare) item).getVenueCode());
+                                exist = checkExistBeforePersonalCare(itemlist, item.getItemName(), ((PersonalCare) item).getExpiryDate(),
+                                        ((PersonalCare) item).getNetWeight(), ((PersonalCare) item).getPersonalCareCategory(), _temp,
+                                        ((PersonalCare) item).getGender(), ((PersonalCare) item).getVenueCode());
                                 break;
                             default:
-                                exist = checkExistBeforeMedicine(itemlist, item.getItemName(), ((Medicine) item).getExpiryDate(), ((Medicine) item).getNetWeight(), ((Medicine) item).getDosageForm(), _temp, ((Medicine) item).getGender(), ((Medicine) item).getVenueCode());
+                                exist = checkExistBeforeMedicine(itemlist, item.getItemName(), ((Medicine) item).getExpiryDate(),
+                                        ((Medicine) item).getNetWeight(), ((Medicine) item).getDosageForm(), _temp, ((Medicine) item).getGender(),
+                                        ((Medicine) item).getVenueCode());
                                 break;
                         }
                         if (exist) {
@@ -3227,13 +3346,18 @@ public class Donation {
                     if (item.getItemCode().equals(itemCode)) {
                         switch (option) {
                             case 3:
-                                exist = checkExistBeforeClothing(itemlist, item.getItemName(), ((Clothing) item).getSize(), ((Clothing) item).getClothingCategory(), ((Clothing) item).getAge(), _temp, ((Clothing) item).getVenueCode());
+                                exist = checkExistBeforeClothing(itemlist, item.getItemName(), ((Clothing) item).getSize(), 
+                                        ((Clothing) item).getClothingCategory(), ((Clothing) item).getAge(), _temp, ((Clothing) item).getVenueCode());
                                 break;
                             case 4:
-                                exist = checkExistBeforePersonalCare(itemlist, item.getItemName(), ((PersonalCare) item).getExpiryDate(), ((PersonalCare) item).getNetWeight(), ((PersonalCare) item).getPersonalCareCategory(), ((PersonalCare) item).getAge(), _temp, ((PersonalCare) item).getVenueCode());
+                                exist = checkExistBeforePersonalCare(itemlist, item.getItemName(), ((PersonalCare) item).getExpiryDate(), 
+                                        ((PersonalCare) item).getNetWeight(), ((PersonalCare) item).getPersonalCareCategory(), 
+                                        ((PersonalCare) item).getAge(), _temp, ((PersonalCare) item).getVenueCode());
                                 break;
                             default:
-                                exist = checkExistBeforeMedicine(itemlist, item.getItemName(), ((Medicine) item).getExpiryDate(), ((Medicine) item).getNetWeight(), ((Medicine) item).getDosageForm(), ((Medicine) item).getAge(), _temp, ((Medicine) item).getVenueCode());
+                                exist = checkExistBeforeMedicine(itemlist, item.getItemName(), ((Medicine) item).getExpiryDate(), 
+                                        ((Medicine) item).getNetWeight(), ((Medicine) item).getDosageForm(), ((Medicine) item).getAge(),
+                                        _temp, ((Medicine) item).getVenueCode());
                                 break;
                         }
                         if (exist) {
@@ -3258,7 +3382,8 @@ public class Donation {
                 }
             }
             //Venue Code
-        } else if ((amdOption == 7 && (option == 3 || option == 6)) || (amdOption == 6 && option == 1) || (amdOption == 5 && option == 2) || (amdOption == 8 && option == 4) || (amdOption == 3 && option == 5)) {
+        } else if ((amdOption == 7 && (option == 3 || option == 6)) || (amdOption == 6 && option == 1) || (amdOption == 5 && option == 2) 
+                || (amdOption == 8 && option == 4) || (amdOption == 3 && option == 5)) {
             displayVenueCode();
             _temp = getNvalidateVenueCode();
             if (_temp.equals("")) {
@@ -3269,22 +3394,29 @@ public class Donation {
                     if (item.getItemCode().equals(itemCode)) {
                         switch (option) {
                             case 1:
-                                exist = checkExistBeforeFood(itemlist, item.getItemName(), ((Food) item).getExpiryDate(), ((Food) item).getNetWeight(), ((Food) item).getFoodType(), _temp);
+                                exist = checkExistBeforeFood(itemlist, item.getItemName(), ((Food) item).getExpiryDate(), ((Food) item).getNetWeight(),
+                                        ((Food) item).getFoodType(), _temp);
                                 break;
                             case 2:
-                                exist = checkExistBeforeBeverage(itemlist, item.getItemName(), ((Beverage) item).getExpiryDate(), ((Beverage) item).getNetVolume(), _temp);
+                                exist = checkExistBeforeBeverage(itemlist, item.getItemName(), ((Beverage) item).getExpiryDate(), ((Beverage) item).getNetVolume(),
+                                        _temp);
                                 break;
                             case 3:
-                                exist = checkExistBeforeClothing(itemlist, item.getItemName(), ((Clothing) item).getSize(), ((Clothing) item).getClothingCategory(), ((Clothing) item).getAge(), ((Clothing) item).getGender(), _temp);
+                                exist = checkExistBeforeClothing(itemlist, item.getItemName(), ((Clothing) item).getSize(), ((Clothing) item).getClothingCategory(), 
+                                        ((Clothing) item).getAge(), ((Clothing) item).getGender(), _temp);
                                 break;
                             case 4:
-                                exist = checkExistBeforePersonalCare(itemlist, item.getItemName(), ((PersonalCare) item).getExpiryDate(), ((PersonalCare) item).getNetWeight(), ((PersonalCare) item).getPersonalCareCategory(), ((PersonalCare) item).getAge(), ((PersonalCare) item).getGender(), _temp);
+                                exist = checkExistBeforePersonalCare(itemlist, item.getItemName(), ((PersonalCare) item).getExpiryDate(), 
+                                        ((PersonalCare) item).getNetWeight(), ((PersonalCare) item).getPersonalCareCategory(), ((PersonalCare) item).getAge(), 
+                                        ((PersonalCare) item).getGender(), _temp);
                                 break;
                             case 5:
                                 exist = checkExistBeforeMedicalDevice(itemlist, item.getItemName(), _temp);
                                 break;
                             default:
-                                exist = checkExistBeforeMedicine(itemlist, item.getItemName(), ((Medicine) item).getExpiryDate(), ((Medicine) item).getNetWeight(), ((Medicine) item).getDosageForm(), ((Medicine) item).getAge(), ((Medicine) item).getGender(), _temp);
+                                exist = checkExistBeforeMedicine(itemlist, item.getItemName(), ((Medicine) item).getExpiryDate(), 
+                                        ((Medicine) item).getNetWeight(), ((Medicine) item).getDosageForm(), ((Medicine) item).getAge(), 
+                                        ((Medicine) item).getGender(), _temp);
                                 break;
                         }
                         if (exist) {
@@ -3327,7 +3459,8 @@ public class Donation {
                 boolean exist;
                 for (DonationItem item : itemlist) {
                     if (item.getItemCode().equals(itemCode)) {
-                        exist = checkExistBeforeFood(itemlist, item.getItemName(), ((Food) item).getExpiryDate(), ((Food) item).getNetWeight(), _temp, ((Food) item).getVenueCode());
+                        exist = checkExistBeforeFood(itemlist, item.getItemName(), ((Food) item).getExpiryDate(), 
+                                ((Food) item).getNetWeight(), _temp, ((Food) item).getVenueCode());
                         if (exist) {
                             System.out.println("Modification Failed! The same record exists.");
                             return false;
@@ -3349,7 +3482,9 @@ public class Donation {
                 boolean exist;
                 for (DonationItem item : itemlist) {
                     if (item.getItemCode().equals(itemCode)) {
-                        exist = checkExistBeforeClothing(itemlist, item.getItemName(), ((Clothing) item).getSize(), _temp, ((Clothing) item).getAge(), ((Clothing) item).getGender(), ((Clothing) item).getVenueCode());
+                        exist = checkExistBeforeClothing(itemlist, item.getItemName(), 
+                                ((Clothing) item).getSize(), _temp, ((Clothing) item).getAge(), ((Clothing) item).getGender(),
+                                ((Clothing) item).getVenueCode());
                         if (exist) {
                             System.out.println("Modification Failed! The same record exists.");
                             return false;
@@ -3371,7 +3506,9 @@ public class Donation {
                 boolean exist;
                 for (DonationItem item : itemlist) {
                     if (item.getItemCode().equals(itemCode)) {
-                        exist = checkExistBeforePersonalCare(itemlist, item.getItemName(), ((PersonalCare) item).getExpiryDate(), ((PersonalCare) item).getNetWeight(), _temp, ((PersonalCare) item).getAge(), ((PersonalCare) item).getGender(), ((PersonalCare) item).getVenueCode());
+                        exist = checkExistBeforePersonalCare(itemlist, item.getItemName(), ((PersonalCare) item).getExpiryDate(),
+                                ((PersonalCare) item).getNetWeight(), _temp, ((PersonalCare) item).getAge(), ((PersonalCare) item).getGender(),
+                                ((PersonalCare) item).getVenueCode());
                         if (exist) {
                             System.out.println("Modification Failed! The same record exists.");
                             return false;
@@ -3393,7 +3530,8 @@ public class Donation {
                 boolean exist;
                 for (DonationItem item : itemlist) {
                     if (item.getItemCode().equals(itemCode)) {
-                        exist = checkExistBeforeMedicine(itemlist, item.getItemName(), ((Medicine) item).getExpiryDate(), ((Medicine) item).getNetWeight(), _temp, ((Medicine) item).getAge(), ((Medicine) item).getGender(), ((Medicine) item).getVenueCode());
+                        exist = checkExistBeforeMedicine(itemlist, item.getItemName(), ((Medicine) item).getExpiryDate(), ((Medicine) item).getNetWeight(),
+                                _temp, ((Medicine) item).getAge(), ((Medicine) item).getGender(), ((Medicine) item).getVenueCode());
                         if (exist) {
                             System.out.println("Modification Failed! The same record exists.");
                             return false;
@@ -3423,7 +3561,8 @@ public class Donation {
                 boolean exist;
                 for (DonationItem item : itemlist) {
                     if (item.getItemCode().equals(itemCode)) {
-                        exist = checkExistBeforeClothing(itemlist, item.getItemName(), _temp, ((Clothing) item).getClothingCategory(), ((Clothing) item).getAge(), ((Clothing) item).getGender(), ((Clothing) item).getVenueCode());
+                        exist = checkExistBeforeClothing(itemlist, item.getItemName(), _temp, ((Clothing) item).getClothingCategory(),
+                                ((Clothing) item).getAge(), ((Clothing) item).getGender(), ((Clothing) item).getVenueCode());
                         if (exist) {
                             System.out.println("Modification Failed! The same record exists.");
                             return false;
@@ -4395,7 +4534,8 @@ public class Donation {
             }
         }
         for (DonationItem pc : pcList) {
-            if ((((PersonalCare) pc).getExpiryDate().isBefore(LocalDate.now())) && !(((PersonalCare) pc).getExpiryDate().equals(LocalDate.parse("2000-12-31", dateFormat)))) {
+            if ((((PersonalCare) pc).getExpiryDate().isBefore(LocalDate.now())) 
+                    && !(((PersonalCare) pc).getExpiryDate().equals(LocalDate.parse("2000-12-31", dateFormat)))) {
                 expiredItemList3.add(pc);
             }
         }
