@@ -109,7 +109,6 @@ public class DoneeUI {
         System.out.printf("%-25s: %s%n", "Item Category Required", itemCategory);
         System.out.printf("%-25s: %s%n", "Donee Urgency", doneeUrgency);
         System.out.printf("%-25s: %s%n", "Registered Date", registeredDate);
-        System.out.print("\n");
     }
 
     public static String deleteDoneeConfirmationUI(){
@@ -131,7 +130,7 @@ public class DoneeUI {
     }
 
     public static String modifyTypeUI(){
-        System.out.println("Which part do you want to modify?");
+        System.out.println("\nWhich part do you want to modify?");
         System.out.println("1. Name");
         System.out.println("2. Email");
         System.out.println("3. Phone");
