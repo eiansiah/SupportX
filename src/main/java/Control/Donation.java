@@ -633,6 +633,22 @@ public class Donation {
         System.out.println("**Note that a donation can have one or many items.");
         System.out.println("**Leaving this page to go back Donation Page will end this session for this donation for this donor.\n");
     }
+    
+    public void displayVenueCode(){
+        System.out.println("Venue Code");
+        try {
+            File myObj = new File("Venue.txt");
+            Scanner readerFile = new Scanner(myObj);
+            while (readerFile.hasNextLine()) {
+                String[] venueList = readerFile.nextLine().split("#");
+                    System.out.printf("%-10s %-20s\n",venueList[0],venueList[1]);
+            }
+            readerFile.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
 
     public void addItemToRecord(ArrayList<DonationItem> recordItem, ArrayList<Integer> recordQty, DonationItem item, int qty) {
         recordItem.add(item);
@@ -812,6 +828,7 @@ public class Donation {
     public void displayInstructionAddFood() {
         System.out.println("\nAdd Food\n");
         displayFoodType();
+        displayVenueCode();
         System.out.println("\nInstruction: Please enter the field accordingly. \nEnter 'X' to back to the previous page.\n");
     }
 
@@ -1242,6 +1259,7 @@ public class Donation {
                 }
             }
         } else {
+            System.out.println("Size: -");
             _size = "-";
         }
         return _size;
@@ -1620,6 +1638,7 @@ public class Donation {
     //Display Add Beverage Instruction - Boundary
     public void displayInstructionAddBeverage() {
         System.out.println("\nAdd Beverage");
+        displayVenueCode();
         System.out.println("\nInstruction: Please enter the field accordingly. \nEnter 'X' to back to the previous page.\n");
     }
 
@@ -1716,6 +1735,7 @@ public class Donation {
         displayGender();
         displayAge();
         displaySize();
+        displayVenueCode();
         System.out.println("Instruction: Please enter the field accordingly. \nEnter 'X' to back to the previous page.\n");
     }
 
@@ -1842,6 +1862,7 @@ public class Donation {
         displayPCCat();
         displayGender();
         displayAge();
+        displayVenueCode();
         System.out.println("Instruction: Please enter the field accordingly. \nEnter '-' for expiry date if the product does not have an expiry date.\nEnter '-999' for netweight if the product does not have a net weight.\nEnter 'X' to back to the previous page.\n");
     }
 
@@ -1960,6 +1981,7 @@ public class Donation {
     //Display Add Medical Device Instruction - Boundary
     public void displayInstructionAddMedicalDevice() {
         System.out.println("\nAdd Medical Device\n");
+        displayVenueCode();
         System.out.println("Instruction: Please enter the field accordingly. \nEnter 'X' to back to the previous page.\n");
     }
 
@@ -2073,6 +2095,7 @@ public class Donation {
         displayDSForm();
         displayGender();
         displayAge();
+        displayVenueCode();
         System.out.println("Instruction: Please enter the field accordingly. \nEnter 'X' to back to the previous page.\n");
     }
 
@@ -2885,7 +2908,7 @@ public class Donation {
                     }
                 }
             }
-            //Quantity
+        //Quantity
         } else if (amdOption == 2 && option >= 1 && option <= 6) {
             ArrayList<DonationRecord> searchResultsRecord = new ArrayList<DonationRecord>();
             ArrayList<DonationRecord> recordlist = new ArrayList<DonationRecord>();
@@ -3023,7 +3046,7 @@ public class Donation {
                 }
             }
 
-            //Net Weight & Net Volume
+        //Net Weight & Net Volume
         } else if (amdOption == 3 && (option == 1 || option == 6 || option == 2 || option == 4)) {
             if (option == 2) {
                 _temp3 = getNvalidateNetVolume();
@@ -3078,7 +3101,7 @@ public class Donation {
                     }
                 }
             }
-            //Description
+        //Description
         } else if ((amdOption == 4 && option == 5) || (amdOption == 9 && option == 6)) {
             _temp = getNvalidateDescription();
             if (_temp.equalsIgnoreCase("X")) {
@@ -3096,7 +3119,7 @@ public class Donation {
                     }
                 }
             }
-            //Expiry Date
+        //Expiry Date
         } else if (amdOption == 4 && (option == 1 || option == 6 || option == 2 || option == 4)) {
             _temp4 = getNvalidateExpiryDate();
             if (_temp4.equals(LocalDate.parse("2000-12-30", dateFormat))) {
@@ -3143,8 +3166,9 @@ public class Donation {
                     }
                 }
             }
-            //Age
+        //Age
         } else if ((amdOption == 6 && (option == 4 || option == 6)) || (amdOption == 5 && option == 3)) {
+            displayAge();
             _temp = getNvalidateAge();
             if (_temp.equals("")) {
                 return false;
@@ -3184,8 +3208,9 @@ public class Donation {
                     }
                 }
             }
-            //Gender
+        //Gender
         } else if ((amdOption == 5 && (option == 4 || option == 6)) || (amdOption == 4 && option == 3)) {
+            displayGender();
             _temp = getNvalidateGender();
             if (_temp.equals("")) {
                 return false;
@@ -3225,8 +3250,9 @@ public class Donation {
                     }
                 }
             }
-            //Venue Code
+        //Venue Code
         } else if ((amdOption == 7 && (option == 3 || option == 6)) || (amdOption == 6 && option == 1) || (amdOption == 5 && option == 2) || (amdOption == 8 && option == 4) || (amdOption == 3 && option == 5)) {
+            displayVenueCode();
             _temp = getNvalidateVenueCode();
             if (_temp.equals("")) {
                 return false;
@@ -3284,8 +3310,9 @@ public class Donation {
                     }
                 }
             }
-            //Food Type
+        //Food Type
         } else if (amdOption == 5 && option == 1) {
+            displayFoodType();
             _temp = getNvalidateFoodType();
             if (_temp.equals("")) {
                 return false;
@@ -3305,8 +3332,9 @@ public class Donation {
                     }
                 }
             }
-            //Clothing category
+        //Clothing category
         } else if (amdOption == 3 && option == 3) {
+            displayClothingCategory();
             _temp = getNvalidateClothingCategory();
             if (_temp.equals("")) {
                 return false;
@@ -3326,8 +3354,9 @@ public class Donation {
                     }
                 }
             }
-            //Personal Care Category
+        //Personal Care Category
         } else if (amdOption == 7 && option == 4) {
+            displayPCCat();
             _temp = getNvalidatePCCat();
             if (_temp.equals("")) {
                 return false;
@@ -3347,8 +3376,9 @@ public class Donation {
                     }
                 }
             }
-            //Dosage Form
+        //Dosage Form
         } else if (amdOption == 8 && option == 6) {
+            displayDSForm();
             _temp = getNvalidateDosageForm();
             if (_temp.equals("")) {
                 return false;
@@ -3368,8 +3398,9 @@ public class Donation {
                     }
                 }
             }
-            //Size
+        //Size
         } else if (amdOption == 6 && option == 3) {
+            displaySize();
             String _clothCat = "", _age = "", _gender = "";
             for (DonationItem item2 : itemlist) {
                 if (item2.getItemCode().equals(itemCode)) {
@@ -3397,7 +3428,7 @@ public class Donation {
                     }
                 }
             }
-            //amount
+        //amount
         } else if (amdOption == 1 && option == 7) {
             ArrayList<DonationRecord> searchResultsRecord = new ArrayList<DonationRecord>();
             ArrayList<DonationRecord> recordlist = new ArrayList<DonationRecord>();
@@ -3511,6 +3542,7 @@ public class Donation {
 
             //source
         } else {
+            displaySource();
             _temp = getNvalidateSource();
             if (_temp.equals("")) {
                 return false;
