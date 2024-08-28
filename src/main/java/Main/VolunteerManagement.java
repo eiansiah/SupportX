@@ -81,7 +81,7 @@ public class VolunteerManagement {
                         searchEventsByVolunteer();
                         break;
                     case 9:
-//                    viewReports(); 
+                        viewReports();
                         break;
                     case 10:
                         return;
@@ -171,9 +171,55 @@ public class VolunteerManagement {
         }
     }
 
-    private static void searchEventsByVolunteer(){
-        //TODO: refer to EventHandler.java getEventVolunteerJoined?
+    private static void searchEventsByVolunteer() {
+    System.out.println("List of Volunteers");
+    System.out.println("------------------");
+    for (Volunteer volunteer : volunteers) {
+        System.out.println("ID: " + volunteer.getId() + ", Name: " + volunteer.getName());
     }
+
+    System.out.print("\nEnter Volunteer ID to search: ");
+    String volunteerID = scanner.nextLine().trim();
+
+    Volunteer volunteerToSearch = null;
+    for (Volunteer volunteer : volunteers) {
+        if (volunteer.getId().equals(volunteerID)) {
+            volunteerToSearch = volunteer;
+            break;
+        }
+    }
+
+    if (volunteerToSearch != null) {
+        System.out.println("\nVolunteer Details");
+        System.out.println("-------------------");
+        System.out.println("ID: " + volunteerToSearch.getId());
+        System.out.println("Name: " + volunteerToSearch.getName());
+        System.out.println("Availability: " + volunteerToSearch.getAvailability());
+        System.out.println(" ");
+
+        // Retrieve events associated with this volunteer
+        ArrayList<EventVolunteer> eventVolunteers = EventHandler.getEventVolunteerJoined(volunteerID);
+
+        if (eventVolunteers != null && !eventVolunteers.isEmpty()) {
+            System.out.println("\nEvents Joined by Volunteer");
+            System.out.println("---------------------------");
+            for (EventVolunteer eventVolunteer : eventVolunteers) {
+                Event event = EventHandler.searchEventByEventID(eventVolunteer.eventID());
+                if (event != null) {
+                    System.out.println("Event ID: " + event.eventID());
+                    System.out.println("Event Name: " + event.eventName());
+                    System.out.println("Event Description: " + event.description());
+                    System.out.println("Event Start DateTime: " + event.startDateTime());
+                    System.out.println("---------------------------");
+                }
+            }
+        } else {
+            System.out.println(Color.YELLOW + "No events found for this volunteer." + Color.RESET);
+        }
+    } else {
+        System.out.println(Color.YELLOW + "Volunteer does not exist." + Color.RESET);
+    }
+}
 
     private static void addVolunteer() {
         System.out.println("\nEnter Volunteer details");
@@ -515,74 +561,43 @@ public class VolunteerManagement {
             System.out.println(Color.YELLOW + "Volunteer does not exist." + Color.RESET);
         }
     }
+    
+    private static void viewReports() {
+        if (volunteers.isEmpty()) {
+            System.out.println(Color.YELLOW + "No volunteers available." + Color.RESET);
+            return;
+        }
 
-//    private static void assignVolunteer() {
-//        System.out.println("Assign a Volunteer");
-//        System.out.println("-------------------");
-//
-//        if (volunteers.isEmpty()) {
-//            System.out.println("No volunteers available to assign.");
-//            return;
-//        }
-//
-//        if (events.isEmpty()) {
-//            System.out.println("No events available for assignment.");
-//            return;
-//        }
-//        
-//        System.out.println("Available Events:");
-//        for (Event event : events) {
-//            System.out.println(event);
-//        }
-//
-//        Event selectedEvent = null;
-//        while (true) {
-//            System.out.print("Enter Event ID to assign volunteers: ");
-//            String eventId = scanner.nextLine().trim();
-//
-//            for (Event event : events) {
-//                if (event.getEventId().equalsIgnoreCase(eventId)) {
-//                    selectedEvent = event;
-//                    break;
-//                }
-//            }
-//
-//            if (selectedEvent != null) {
-//                break;
-//            } else {
-//                System.out.println("Invalid Event ID. Please enter a valid Event ID.");
-//            }
-//        }
-//
-//        // List available volunteers
-//        System.out.println("Available Volunteers:");
-//        for (Volunteer volunteer : volunteers) {
-//            System.out.println(volunteer.getId() + " " + volunteer.getName());
-//        }
-//
-//        // Select a volunteer
-//        while (true) {
-//            System.out.print("Enter Volunteer ID to assign to the event: ");
-//            String volunteerId = scanner.nextLine().trim();
-//
-//            Volunteer selectedVolunteer = null;
-//            for (Volunteer volunteer : volunteers) {
-//                if (volunteer.getId().equalsIgnoreCase(volunteerId)) {
-//                    selectedVolunteer = volunteer;
-//                    break;
-//                }
-//            }
-//
-//            if (selectedVolunteer != null) {
-//                // Assign the volunteer to the selected event
-//                selectedEvent.addVolunteer(selectedVolunteer);
-//                System.out.println("Volunteer " + selectedVolunteer.getName() + " assigned to event " + selectedEvent.getEventName() + " successfully.");
-//                break;
-//            } else {
-//                System.out.println("Invalid Volunteer ID. Please enter a valid Volunteer ID.");
-//            }
-//        }
-//    }
+        System.out.println("Summary Report: Volunteers and Their Events");
+        System.out.println("--------------------------------------------------------");
+        System.out.printf("%-15s %-20s %-30s%n", "Volunteer ID", "Volunteer Name", "Events Participated");
+        System.out.println("--------------------------------------------------------");
+
+        for (Volunteer volunteer : volunteers) {
+            // Get the list of events the volunteer has participated in
+            ArrayList<EventVolunteer> eventVolunteers = EventHandler.getEventVolunteerJoined(volunteer.getId());
+
+            // If the volunteer has participated in events, list them
+            if (eventVolunteers != null && !eventVolunteers.isEmpty()) {
+                for (EventVolunteer eventVolunteer : eventVolunteers) {
+                    System.out.printf("%-15s %-20s %-30s%n",
+                            volunteer.getId(),
+                            volunteer.getName(),
+                            eventVolunteer.eventID() + " (" + eventVolunteer.eventID() + ")");
+                }
+            } else {
+                // If the volunteer hasn't participated in any events, indicate so
+                System.out.printf("%-15s %-20s %-30s%n",
+                        volunteer.getId(),
+                        volunteer.getName(),
+                        "No events participated");
+            }
+        }
+
+        System.out.println("--------------------------------------------------------");
+    }
+
+
     private static void listVolunteers() {
         if (volunteers.isEmpty()) {
             System.out.println(Color.YELLOW + "No volunteers available." + Color.RESET);
@@ -689,52 +704,6 @@ public class VolunteerManagement {
         }
     }
 
-//    private static void searchEventsByVolunteer() {
-//        System.out.println("Search Events by Volunteer");
-//
-//        // Check if there are volunteers
-//        if (volunteers.isEmpty()) {
-//            System.out.println("No volunteers available.");
-//            return;
-//        }
-//
-//        // List current volunteers
-//        System.out.println("List of Volunteers:");
-//        for (Volunteer volunteer : volunteers) {
-//            System.out.println(volunteer.getId() + " " + volunteer.getName());
-//        }
-//
-//        System.out.print("Enter Volunteer ID to search for events: ");
-//        String volunteerID = scanner.nextLine().trim();
-//
-//        Volunteer volunteer = null;
-//        for (Volunteer v : volunteers) {
-//            if (v.getId().equals(volunteerID)) {
-//                volunteer = v;
-//                break;
-//            }
-//        }
-//
-//        if (volunteer != null) {
-//            System.out.println("Events for Volunteer " + volunteer.getName() + ":");
-//            boolean found = false;
-//            for (Event event : events) {
-//                if (event.getAssignedVolunteers().contains(volunteer)) {
-//                    System.out.println(event);
-//                    found = true;
-//                }
-//            }
-//
-//            if (!found) {
-//                System.out.println("No events found for this volunteer.");
-//            }
-//        } else {
-//            System.out.println("Volunteer not found.");
-//        }
-//    }
-//    private static void viewReports() {
-//        System.out.println("Summary of Volunteers Report");
-//    }
     private static boolean isValidInput(String input) {
         return input != null && !input.trim().isEmpty();
     }
