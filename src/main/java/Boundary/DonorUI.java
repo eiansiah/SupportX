@@ -138,30 +138,30 @@ public class DonorUI {
         // Adjust the header based on what needs to be displayed
 
         if (showType && showCategory) {
-            System.out.printf("%-10s%-20s%-20s%-15s%n", "Donor ID", "Donor Name", "Category", "Type");
+            System.out.printf("%-10s%-35s%-20s%-15s%n", "Donor ID", "Donor Name", "Category", "Type");
         } else if (showCategory) {
-            System.out.printf("%-10s%-20s%-20s%n", "Donor ID", "Donor Name", "Category");
+            System.out.printf("%-10s%-35s%-20s%n", "Donor ID", "Donor Name", "Category");
         }else if (showType) {
-            System.out.printf("%-10s%-20s%-20s%n", "Donor ID", "Donor Name", "Type");
+            System.out.printf("%-10s%-35s%-20s%n", "Donor ID", "Donor Name", "Type");
         } else {
             System.out.printf("%-10s%-35s%n", "Donor ID", "Donor Name");
         }
 
-        System.out.println(String.format("%0" + 70 + "d", 0).replace("0", "-"));
+        System.out.println(String.format("%0" + 85 + "d", 0).replace("0", "-"));
 
         for (int i = start; i < end; i++) {
             Donor donor = donors.get(i);
             if (showType && showCategory) {
-                System.out.printf("%-10s%-20s%-20s%-15s%n", donor.getId(), donor.getName(), donor.getCategory(), donor.getType());
+                System.out.printf("%-10s%-35s%-20s%-15s%n", donor.getId(), donor.getName(), donor.getCategory(), donor.getType());
             } else if (showCategory) {
-                System.out.printf("%-10s%-20s%-20s%n", donor.getId(), donor.getName(), donor.getCategory());
+                System.out.printf("%-10s%-35s%-20s%n", donor.getId(), donor.getName(), donor.getCategory());
             }else if (showType) {
-                System.out.printf("%-10s%-20s%-20s%n", donor.getId(), donor.getName(), donor.getType());
+                System.out.printf("%-10s%-25s%-20s%n", donor.getId(), donor.getName(), donor.getType());
             } else {
                 System.out.printf("%-10s%-35s%n", donor.getId(), donor.getName());
             }
         }
-        System.out.println(String.format("%0" + 70 + "d", 0).replace("0", "-"));
+        System.out.println(String.format("%0" + 85 + "d", 0).replace("0", "-"));
 
 
         System.out.println("\nOptions:");
@@ -208,7 +208,8 @@ public class DonorUI {
         System.out.println("1 - Filter by Name Starting Letter");
         System.out.println("2 - Filter by Category");
         System.out.println("3 - Filter by Type");
-        System.out.println("4 - Reset Filter");
+        System.out.println("4 - Clear Filter");
+        System.out.println("5 - Cancel Filter");
         System.out.print("Select a filter option: ");
         return scanner.nextInt();
     }

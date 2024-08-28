@@ -5,8 +5,6 @@ import Entity.Donor;
 import FileHandling.DonorFileHandler;
 
 import Libraries.ArrayList;
-import Libraries.Stack;
-import Libraries.Color;
 
 import Boundary.DonorUI;
 
@@ -33,8 +31,9 @@ public class DonorFunctions {
 
         fileHandler.checkAndCreateFile("donor.txt");
 
+        DonorUI.DonorWelcomeMessage();
+
         do {
-            DonorUI.DonorWelcomeMessage();
 
             String inputChoice = DonorUI.getMainMenuChoice();
 
@@ -345,11 +344,6 @@ public class DonorFunctions {
 
     public static void displayDonors(ArrayList<Donor> donors) {
 
-        Stack<Integer> filterStateStack = new Stack<>(); // Using stack to revert showCategory and showType later
-
-        final int SHOW_CATEGORY_BIT = 1;
-        final int SHOW_TYPE_BIT = 2;
-
         Scanner scanner = new Scanner(System.in);
         int pageSize = 10;  // Number of donors to display per page
         int currentPage = 0;
@@ -362,7 +356,7 @@ public class DonorFunctions {
             int start = currentPage * pageSize;
             int end = Math.min(start + pageSize, totalDonors);
 
-            String option = DonorUI.displayDonorTable(pageSize,currentPage,totalDonors,donors, start, end , showCategory,showType);
+            String option = DonorUI.displayDonorTable(pageSize, currentPage, totalDonors, donors, start, end, showCategory, showType);
 
             switch (option) {
                 case "P":
@@ -372,6 +366,7 @@ public class DonorFunctions {
                         DonorUI.atFirstPage();
                     }
                     break;
+
                 case "N":
                     if (end < totalDonors) {
                         currentPage++;
@@ -379,10 +374,9 @@ public class DonorFunctions {
                         DonorUI.atLastPage();
                     }
                     break;
+
                 case "D":
-
                     String donorID = DonorUI.inputCheckDonorIDUI();
-
                     Donor selectedDonor = null;
                     for (Donor donor : donors) {
                         if (donor.getId().equals(donorID)) {
@@ -400,7 +394,6 @@ public class DonorFunctions {
                                 selectedDonor.getCategory(),
                                 selectedDonor.getType()
                         );
-
                     } else {
                         DonorUI.donorNotFoundMsg(donorID);
                     }
@@ -412,27 +405,26 @@ public class DonorFunctions {
                 case "F":
                     int filterChoice = DonorUI.filterMenu();
 
+                    ArrayList<Donor> donorCopy = new ArrayList<>();
+                    for (Donor donor : donors) {
+                        donorCopy.add(donor);
+                    }
+
                     if (filterChoice == 1) {
                         String input = DonorUI.filterChoiceName();
-
-                        // Error handling for empty input
-                        if (!input.isEmpty()){
+                        if (!input.isEmpty()) {
                             char letter = input.charAt(0);
                             donors = DonorFilter.filterByName(donors, letter);
 
-                            // Error handling for no donors found after filtering
                             if (donors.isEmpty()) {
                                 Message.displayDataNotFoundMessage("No donors found with names starting with " + letter + ".");
                             }
                         }
-                        // Push the current state (no filters applied yet)
-                        filterStateStack.push((showCategory ? SHOW_CATEGORY_BIT : 0) | (showType ? SHOW_TYPE_BIT : 0));
-
                     } else if (filterChoice == 2) {
-
-                        String category = null;
                         int categoryChoice = DonorUI.filterChoiceCategory();
+                        String category = null;
                         showCategory = true;
+
                         switch (categoryChoice) {
                             case 1:
                                 category = "Government";
@@ -450,18 +442,18 @@ public class DonorFunctions {
 
                         if (category != null) {
                             donors = DonorFilter.filterByCategory(donors, category);
+                            donorCopy = new ArrayList<>();
+                            for (Donor donor : donors) {
+                                donorCopy.add(donor);
+                            }
 
-                            // Error handling for no donors found after filtering
                             if (donors.isEmpty()) {
-                                Message.displayDataNotFoundMessage("No donors found in the '" + category + "' category.");System.out.println(Color.BRIGHT_YELLOW + "No donors found in the '" + category + "' category." + Color.RESET);
+                                Message.displayDataNotFoundMessage("No donors found in the '" + category + "' category.");
                             }
                         }
-                        // Push the current state
-                        filterStateStack.push((showCategory ? SHOW_CATEGORY_BIT : 0) | (showType ? SHOW_TYPE_BIT : 0));
-
                     } else if (filterChoice == 3) {
-                        String type = null;
                         int typeChoice = DonorUI.filterChoiceType();
+                        String type = null;
                         showType = true;
 
                         switch (typeChoice) {
@@ -478,42 +470,26 @@ public class DonorFunctions {
 
                         if (type != null) {
                             donors = DonorFilter.filterByType(donors, type);
+                            donorCopy = new ArrayList<>();
+                            for (Donor donor : donors) {
+                                donorCopy.add(donor);
+                            }
 
-                            // Error handling for no donors found after filtering
                             if (donors.isEmpty()) {
                                 Message.displayDataNotFoundMessage("No donors found of type '" + type + "'.");
                             }
                         }
-                        // Push the current state
-                        filterStateStack.push((showCategory ? SHOW_CATEGORY_BIT : 0) | (showType ? SHOW_TYPE_BIT : 0));
-
                     } else if (filterChoice == 4) {
-                        // Reset the filter by popping the last state
-                        if (!filterStateStack.isEmpty()) {
-                            int lastState = filterStateStack.pop();
-                            // checks whether the SHOW_CATEGORY_BIT was set in the lastState.
-                            // performs AND operation between lastState and SHOW_CATEGORY_BIT. The result will be non-zero if the SHOW_CATEGORY_BIT was set in lastState.
-                            // If the result is non-zero, showCategory is set to true, meaning the category filter should be displayed. Otherwise, it is set to false.
-                            showCategory = (lastState & SHOW_CATEGORY_BIT) != 0;
-                            //If the result is non-zero, showType is set to true, meaning the type filter should be displayed. Otherwise, it is set to false.
-                            showType = (lastState & SHOW_TYPE_BIT) != 0;
                             donors = DonorFilter.resetFilter(donors);
-                        } else {
-                            // Handle the case where there's nothing to pop
-                            showType = false;
                             showCategory = false;
-                            donors = DonorFilter.resetFilter(donors);
-                        }
+                            showType = false;
                     } else {
-                        // Error handling for invalid filter choice
                         Message.displayInvalidChoiceMessage("Please select a valid option.");
                     }
 
-                    // Update totalDonors after filtering
                     totalDonors = donors.size();
-                    currentPage = 0;  // Reset to first page after applying filter
+                    currentPage = 0;  // Reset to the first page after applying the filter
                     break;
-
 
                 case "S":
                     int sortOption = DonorUI.SortMenu();
