@@ -1,5 +1,6 @@
 package Control;
 
+import FileHandling.DonorFileHandler;
 import Libraries.ArrayList;
 import Entity.Donor;
 
@@ -38,4 +39,12 @@ public class DonorFilter {
         }
         return filteredList;
     }
+
+    // Reset Filter
+    public static ArrayList<Donor> resetFilter(ArrayList<Donor> objects) {
+        DonorFileHandler fileHandler = new DonorFileHandler();
+
+        return fileHandler.readData("donor.txt");
+    }
+
 }

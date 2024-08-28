@@ -1,10 +1,7 @@
 package Control;
 
-import Boundary.DoneeUI;
-import Entity.Donee;
 import Entity.Donor;
 
-import FileHandling.DoneeFileHandler;
 import FileHandling.DonorFileHandler;
 
 import Libraries.ArrayList;
@@ -13,7 +10,6 @@ import Libraries.Color;
 import Boundary.DonorUI;
 
 import Utilities.NewValidation;
-import Utilities.Validation;
 import Utilities.Message;
 
 import java.util.Scanner;
@@ -22,7 +18,6 @@ public class DonorFunctions {
 
     private ArrayList<Donor> donorArrayList;
     private static final DonorFileHandler fileHandler = new DonorFileHandler();
-    private static final Scanner scanner = new Scanner(System.in); //To be shifted
 
     public DonorFunctions (){
         donorArrayList = readDonors();
@@ -63,6 +58,7 @@ public class DonorFunctions {
                     displayDonors(readDonors());
                     break;
                 case 5: //View Donor Donation
+                    //displayDonorDonation();
                     break;
                 case 6: //View reports
                     break;
@@ -174,7 +170,6 @@ public class DonorFunctions {
     }
 
     public static void deleteDonor(ArrayList<Donor> donors) {
-        Scanner scanner = new Scanner(System.in);
         Donor selectedDonor = null;
 
         String donorIDToDelete = DonorUI.inputRemoveDonorIDUI();
@@ -211,7 +206,6 @@ public class DonorFunctions {
     }
 
     public static void modifyDonor(ArrayList<Donor> donors) {
-        Scanner scanner = new Scanner(System.in);
         Donor selectedDonor = null;
         String donorIDToModify = DonorUI.inputUpdateDonorIDUI();
 
@@ -353,12 +347,14 @@ public class DonorFunctions {
         int currentPage = 0;
         int totalDonors = donors.size();
         boolean done = false;
+        boolean showCategory = false;
+        boolean showType = false;
 
         while (!done) {
             int start = currentPage * pageSize;
             int end = Math.min(start + pageSize, totalDonors);
 
-            String option = DonorUI.displayDonorTable(pageSize,currentPage,totalDonors,donors, start, end);
+            String option = DonorUI.displayDonorTable(pageSize,currentPage,totalDonors,donors, start, end , showCategory,showType);
 
             switch (option) {
                 case "P":
@@ -408,16 +404,13 @@ public class DonorFunctions {
 
                 case "F":
                     int filterChoice = DonorUI.filterMenu();
-                    scanner.nextLine();
 
                     if (filterChoice == 1) {
                         String input = DonorUI.filterChoiceName();
 
                         // Error handling for empty input
-                        if (input.isEmpty()) {
-                            Message.displayInvalidInputMessage("Starting letter cannot be empty.");
-                        } else {
-                            char letter = input.toUpperCase().charAt(0);
+                        if (!input.isEmpty()){
+                            char letter = input.charAt(0);
                             donors = DonorFilter.filterByName(donors, letter);
 
                             // Error handling for no donors found after filtering
@@ -429,8 +422,7 @@ public class DonorFunctions {
 
                         String category = null;
                         int categoryChoice = DonorUI.filterChoiceCategory();
-                        scanner.nextLine(); // Consume the newline character
-
+                        showCategory = true;
                         switch (categoryChoice) {
                             case 1:
                                 category = "Government";
@@ -457,7 +449,7 @@ public class DonorFunctions {
                     } else if (filterChoice == 3) {
                         String type = null;
                         int typeChoice = DonorUI.filterChoiceType();
-                        scanner.nextLine(); // Consume the newline character
+                        showType = true;
 
                         switch (typeChoice) {
                             case 1:
@@ -479,6 +471,10 @@ public class DonorFunctions {
                                 Message.displayDataNotFoundMessage("No donors found of type '" + type + "'.");
                             }
                         }
+                    } else if (filterChoice == 4) {
+                        donors = DonorFilter.resetFilter(donors);
+                        showType = false;
+                        showCategory =false;
                     } else {
                         // Error handling for invalid filter choice
                         Message.displayInvalidChoiceMessage("Please select a valid option.");
@@ -492,7 +488,6 @@ public class DonorFunctions {
 
                 case "S":
                     int sortOption = DonorUI.SortMenu();
-                    scanner.nextLine(); // Consume newline
 
                     switch (sortOption) {
                         case 1:
