@@ -26,6 +26,8 @@ public class EventUI {
 
         root: {
             while(true) {
+                GeneralFunction.clearScreen();
+
                 subsystemMenuDisplay();
 
                 int action = 0;
@@ -75,7 +77,6 @@ public class EventUI {
                         break;
                     case 7:
                         listAllEventForVolunteerUI();
-                        GeneralFunction.enterToContinue();
                         break;
                     case 8:
                         generateReportsUI();
@@ -88,7 +89,9 @@ public class EventUI {
     }
 
     private static void addNewEventUI(){
-        System.out.println("Add new event");
+        GeneralFunction.clearScreen();
+
+        GeneralFunction.printTitle("Add New Event", 40, "-", "|");
 
         String eventName = getEventName();
         LocalDateTime eventStartDateTime = getStartTimeInput();
@@ -99,6 +102,8 @@ public class EventUI {
         EventHandler.addNewEvent(eventName, eventStartDateTime, eventEndDateTime, venue, description);
 
         System.out.println(Color.GREEN + "New event added" + Color.RESET);
+
+        GeneralFunction.enterToContinue();
     }
 
     private static String getEventName(){
@@ -189,14 +194,7 @@ public class EventUI {
     }
 
     private static void removeEventUI(){
-        System.out.println("Event list");
-
-        for(Event event: EventHandler.getAllEvent()){
-            System.out.println(event.eventID() + " " + event.startDateTime() + " " + event.endDateTime() + " " + event.venue() + " " + event.eventStatus());
-        }
-
-        GeneralFunction.repeatPrint("-", 10);
-        System.out.println();
+        EventDisplay(EventHandler.getAllEvent(), "All events", 102);
 
         Scanner sc = new Scanner(System.in);
         Event eventChosen;
@@ -215,10 +213,16 @@ public class EventUI {
         }
 
         EventHandler.removeEvent(eventChosen);
+        System.out.println(Color.GREEN + "Removed event" + Color.RESET);
+        GeneralFunction.enterToContinue();
     }
 
     private static void searchEventUI(){
+        GeneralFunction.clearScreen();
+
         Scanner sc = new Scanner(System.in);
+
+        GeneralFunction.printTitle("Search Event with Name", 50, "-", "|");
 
         while(true){
             System.out.print("Enter event name (x to stop): ");
@@ -236,24 +240,31 @@ public class EventUI {
 
             ArrayList<Event> events = EventHandler.searchAllEventByEventName(eventName);
 
-            for(Event event: events){
-                System.out.println(event.eventID() + " " + event.eventName() + " " + event.startDateTime() + " " + event.endDateTime() + " " + event.eventStatus());
+            if(events == null || events.isEmpty()){
+                displayGeneralErrorMsg("Event name does not exist. Please try again.");
+                continue;
             }
 
-            GeneralFunction.enterToContinue();
+            EventDisplay(events, "All events", 102);
         }
     }
 
     private static void amendEventDetailsUI(){
+        GeneralFunction.clearScreen();
+
         System.out.println(Color.YELLOW + "Disclaimer" + Color.RESET);
         System.out.println(Color.YELLOW + "1. Only upcoming event allow to modify" + Color.RESET);
         System.out.println(Color.YELLOW + "2. Time of the event are not allow to modify to avoid crashed schedule" + Color.RESET);
 
         ArrayList<Event> events = EventHandler.searchAllEventByEventStatus(EventStatus.UPCOMING);
 
-        for(Event event: events){
-            System.out.println(event.eventID() + " " + event.eventName() + " " + event.startDateTime() + " " + event.endDateTime() + " " + event.venue() + " " + event.description());
+        if(events == null){
+            displayGeneralErrorMsg("No upcoming event to modify.");
+            GeneralFunction.enterToContinue();
+            return;
         }
+
+        EventDisplay(events, "All Upcoming Events", 102);
 
         Scanner sc = new Scanner(System.in);
         String eventID;
@@ -280,17 +291,15 @@ public class EventUI {
         EventHandler.modifyEvent(eventID, eventName, venue, description, EventStatus.UPCOMING);
 
         System.out.println(Color.GREEN + "Event modified" + Color.RESET);
+        GeneralFunction.enterToContinue();
     }
 
     private static void listAllEventUI(){
+        GeneralFunction.clearScreen();
+
         ArrayList<Event> allEvents = EventHandler.getAllEvent();
 
-        System.out.println("All events");
-        GeneralFunction.repeatPrint("-", 10);
-
-        for(Event event: allEvents){
-            System.out.println(event.eventID() + event.eventName() + " " + event.startDateTime() + " " + event.endDateTime() + " " + event.venue() + event.description() + " " + event.eventStatus());
-        }
+        EventDisplay(allEvents, "All events", 102);
 
         GeneralFunction.enterToContinue();
     }
@@ -316,7 +325,9 @@ public class EventUI {
             for (EventVolunteer eventVolunteer: eventsJoined){
                 if(eventVolunteer.eventID().equals(eventID)){
                     EventHandler.removeVolunteerFromVolunteerEvent(eventID, eventVolunteer.VolunteerID());
-                    System.out.println(Color.GREEN + "Remove successfully");
+                    System.out.println(Color.GREEN + "Remove successfully" + Color.RESET);
+
+                    GeneralFunction.enterToContinue();
                     return;
                 }
             }
@@ -326,21 +337,33 @@ public class EventUI {
     }
 
     private static ArrayList <EventVolunteer> listAllEventForVolunteerUI(){
+        GeneralFunction.clearScreen();
+
         ArrayList<String> eventVolunteers = EventHandler.getAllEventVolunteerID();
 
         if(eventVolunteers.isEmpty()){
             displayGeneralErrorMsg("Don't have any volunteer joining any event. ");
+            GeneralFunction.enterToContinue();
             return null;
         }
 
+        System.out.print("|");
+        GeneralFunction.repeatPrint("-", 9);
+        System.out.println("|");
+        System.out.printf("| %5s   |\n", "ID");
+
         for(String eventVolunteerID : eventVolunteers){
-            System.out.println(eventVolunteerID);
+            System.out.println("| " + eventVolunteerID + " |");
         }
+
+        System.out.print("|");
+        GeneralFunction.repeatPrint("-", 9);
+        System.out.println("|");
 
         Scanner sc = new Scanner(System.in);
         String volunteerID;
         while (true){
-            System.out.print("Enter volunteerID: ");
+            System.out.print("Enter volunteerID to view event list: ");
             volunteerID = sc.nextLine();
 
             if(volunteerID.isEmpty()){
@@ -365,30 +388,84 @@ public class EventUI {
             return null;
         }
 
-        System.out.println("Volunteer joins:");
+        GeneralFunction.printTitle("Event Joined", 42, "-", "|");
         for(EventVolunteer eventVolunteer: eventsJoined){
             Event event = EventHandler.searchEventByEventID(eventVolunteer.eventID());
 
-            System.out.println(event.eventID()+ " " + event.eventName() + " " + event.eventStatus());
+            System.out.printf("| %6s %20s %10s |\n", event.eventID(), event.eventName(), event.eventStatus());
         }
+
+        System.out.print("|");
+        GeneralFunction.repeatPrint("-", 40);
+        System.out.println("|");
 
         return eventsJoined;
     }
 
     private static void generateReportsUI(){
+        //TODO: how much event ongoing this month
+        //TODO: how much event Upcoming this month
 
+        GeneralFunction.clearScreen();
+
+        GeneralFunction.printTitle("Event Summary Report " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMM-yyyy")), 50, "-", "|");
+
+        ArrayList<Event> allEvent = EventHandler.getAllEvent();
+        ArrayList<Event> ongoingEvent = new ArrayList<>();
+        ArrayList<Event> upcomingEvent = new ArrayList<>();
+        ArrayList<Event> completeEvent = new ArrayList<>();
+
+        for(Event event : allEvent){
+            if(event.eventStatus() == EventStatus.UPCOMING){
+                upcomingEvent.add(event);
+            } else if (event.eventStatus() == EventStatus.ONGOING){
+                ongoingEvent.add(event);
+            } else if (event.eventStatus() == EventStatus.COMPLETED){
+                completeEvent.add(event);
+            }
+        }
+
+        System.out.printf("| %-46s |\n", "Number of ongoing events: " + ongoingEvent.size());
+        System.out.printf("| %-46s |\n", "Number of upcoming events: " + upcomingEvent.size());
+        System.out.printf("| %-46s |\n", "Total number of events has ended: " + completeEvent.size());
+        System.out.printf("| %-46s |\n", "Total number of events had registered: " + allEvent.size());
+
+        System.out.print("|");
+        GeneralFunction.repeatPrint("-", 48);
+        System.out.println("|");
+
+
+        GeneralFunction.enterToContinue();
     }
 
     private static void subsystemMenuDisplay(){
-        System.out.println(Color.BLUE + "Event Menu" + Color.RESET);
-        System.out.println("----------------------------");
-        System.out.println("1. Add a new event");
-        System.out.println("2. Remove an event");
-        System.out.println("3. Search an event");
-        System.out.println("4. Amend an event details");
-        System.out.println("5. List all events");
-        System.out.println("6. Remove an event from a volunteer");
-        System.out.println("7. List all events for a volunteer");
-        System.out.println("8. Generate summary reports");
+        GeneralFunction.printTitle("Event menu", 41, "-", "|");
+        System.out.println("| 1. Add a new event                    |");
+        System.out.println("| 2. Remove an event                    |");
+        System.out.println("| 3. Search an event                    |");
+        System.out.println("| 4. Amend an event details             |");
+        System.out.println("| 5. List all events                    |");
+        System.out.println("| 6. Remove an event from a volunteer   |");
+        System.out.println("| 7. List all events for a volunteer    |");
+        System.out.println("| 8. Generate summary reports           |");
+        System.out.print("|");
+        GeneralFunction.repeatPrint("-", 39);
+        System.out.println("|");
+    }
+
+    private static void EventDisplay(ArrayList<Event> events, String title, int width){
+        GeneralFunction.printTitle(title, width, "-", "|");
+        System.out.printf("| %6s %20s %16s %16s %25s %10s |\n", "ID", "Event Name", "Start Date Time", "End Date Time", "Venue","Status");
+
+        for(Event event: events){
+            System.out.print("|");
+            DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            System.out.printf(" %6s %20s %16s %16s %25s %10s ", event.eventID(), event.eventName(), event.startDateTime().format(df), event.endDateTime().format(df), event.venue(), event.eventStatus());
+            System.out.println("|");
+        }
+
+        System.out.print("|");
+        GeneralFunction.repeatPrint("-", width - 2);
+        System.out.println("|");
     }
 }
