@@ -58,8 +58,7 @@ public class DonorUI {
     }
 
     public static String inputDonorTypeUI(){
-        System.out.println("\nDonor Types");
-        System.out.println(String.format("%0" + 15 + "d", 0).replace("0", "-"));
+        System.out.println("\nSelect types:");
         System.out.println("1. Individual");
         System.out.println("2. Organization");
         System.out.print("Please enter new donor type: ");

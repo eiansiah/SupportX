@@ -484,7 +484,6 @@ public class DonorFunctions {
                         Message.displayInvalidChoiceMessage("Please select a valid option.");
                     }
 
-
                     // Update totalDonors after filtering
                     totalDonors = donors.size();
                     currentPage = 0;  // Reset to first page after applying filter
