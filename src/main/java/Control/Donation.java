@@ -4,6 +4,7 @@
  */
 package Control;
 //import entity
+
 import Entity.DonationItem;
 import Entity.DonationRecord;
 import Entity.Food;
@@ -37,6 +38,7 @@ import Libraries.ArrayList;
 import static Main.Event.EventHandler.searchEventByEventID;
 //will be removed for boundary
 import java.util.Scanner;
+
 /**
  *
  * @author vivia
@@ -45,9 +47,9 @@ public class Donation {
 
     public Donation() {
     }
-    
-    private DonorFunctions donorHandling= new DonorFunctions();
-    
+
+    private DonorFunctions donorHandling = new DonorFunctions();
+
     //Load Files
     //Load Donation Record File
     public void loadIntoDR(ArrayList<DonationRecord> recordList) {
@@ -64,6 +66,7 @@ public class Donation {
         try {
             File myObj = new File("DonationRecord.txt");
             myObj.createNewFile();
+            DonationRecord.setNextRecordID(1);
 
             try {
                 Scanner readerFile = new Scanner(myObj);
@@ -101,7 +104,7 @@ public class Donation {
                     //Get Donor Object
                     DonationRecord record = new DonationRecord(recordID, donor, recordItemList, qty, amt, donationDateTime);
                     recordList.add(record);
-                    DonationRecord.setNextRecordID(recordID+1);
+                    DonationRecord.setNextRecordID(recordID + 1);
                 }
 
                 readerFile.close();
@@ -118,7 +121,7 @@ public class Donation {
     public void loadBackDRFile(ArrayList<DonationRecord> recordList) {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         try {
-            FileWriter writeFile = new FileWriter("Food.txt");
+            FileWriter writeFile = new FileWriter("DonationRecord.txt");
             for (DonationRecord record : recordList) {
                 String line = record.getRecordID() + "#" + record.getDonor().getId() + "#";
                 for (int i = 0; i < record.getItem().size(); i++) {
@@ -531,7 +534,6 @@ public class Donation {
     //Donation Home Page
     public void donationHome() {
 
-
         int option;
         while (true) {
             displayMenuDonationHome();
@@ -633,15 +635,15 @@ public class Donation {
         System.out.println("**Note that a donation can have one or many items.");
         System.out.println("**Leaving this page to go back Donation Page will end this session for this donation for this donor.\n");
     }
-    
-    public void displayVenueCode(){
-        System.out.println("Venue Code");
+
+    public void displayVenueCode() {
+        System.out.println("\nVenue Code");
         try {
             File myObj = new File("Venue.txt");
             Scanner readerFile = new Scanner(myObj);
             while (readerFile.hasNextLine()) {
                 String[] venueList = readerFile.nextLine().split("#");
-                    System.out.printf("%-10s %-20s\n",venueList[0],venueList[1]);
+                System.out.printf("%-10s %-20s\n", venueList[0], venueList[1]);
             }
             readerFile.close();
         } catch (FileNotFoundException e) {
@@ -2245,6 +2247,7 @@ public class Donation {
     //Display Add Money Instruction - Boundary
     public void displayInstructionAddMoney() {
         System.out.println("\nAdd Money\n");
+        displayVenueCode();
         displaySource();
         System.out.println("Instruction: Please enter the field accordingly. \nEnter 'X' to back to the previous page.\n");
     }
@@ -2614,6 +2617,7 @@ public class Donation {
     public void searchDonation() {
         ArrayList<DonationItem> fullList = new ArrayList<DonationItem>();
         loadIntoAll(fullList);
+        displayAllDonation(fullList);
         ArrayList<DonationRecord> fullRecord = new ArrayList<DonationRecord>();
         loadIntoDR(fullRecord);
         DonationItem searchResultsItem = null;
@@ -2664,6 +2668,7 @@ public class Donation {
             } else {
                 lineToDisplay = ((Money) searchResultsItem).toString();
             }
+            System.out.println("Results Found: ");
             displaySingleItem(lineToDisplay);
             //display search results record
             displayDonationRecordAssociated(searchResultsRecord);
@@ -2690,13 +2695,14 @@ public class Donation {
     }
 
     public void displaySingleRecordWithDonorID(DonationRecord record) {
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         int qtyIndex = 0;
         int amtIndex = 0;
         if (record.getItem().get(0) instanceof Money) {
-            System.out.printf("%-25s %-10s %-20s %-10s %-20s %-10s %-20s\n", record.getRecordID(), record.getDonor().getId(), record.getDonor().getName(), record.getItem().get(0).getItemCode(), record.getItem().get(0).getItemName(), record.getAmount().get(amtIndex), record.getDonationDateTime());
+            System.out.printf("%-25s %-10s %-20s %-10s %-20s %-10s %-20s\n", record.getRecordID(), record.getDonor().getId(), record.getDonor().getName(), record.getItem().get(0).getItemCode(), record.getItem().get(0).getItemName(), record.getAmount().get(amtIndex), record.getDonationDateTime().format(dateFormat));
             amtIndex++;
         } else {
-            System.out.printf("%-25s %-10s %-20s %-10s %-20s %-10s %-20s\n", record.getRecordID(), record.getDonor().getId(), record.getDonor().getName(), record.getItem().get(0).getItemCode(), record.getItem().get(0).getItemName(), record.getQty().get(qtyIndex), record.getDonationDateTime());
+            System.out.printf("%-25s %-10s %-20s %-10s %-20s %-10s %-20s\n", record.getRecordID(), record.getDonor().getId(), record.getDonor().getName(), record.getItem().get(0).getItemCode(), record.getItem().get(0).getItemName(), record.getQty().get(qtyIndex), record.getDonationDateTime().format(dateFormat));
             qtyIndex++;
         }
         if (record.getItem().size() > 1) {
@@ -2713,13 +2719,14 @@ public class Donation {
     }
 
     public void displaySingleRecordWithoutDonorID(DonationRecord record) {
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         int qtyIndex = 0;
         int amtIndex = 0;
         if (record.getItem().get(0) instanceof Money) {
-            System.out.printf("%-25s %-10s %-20s %-10s %-20s\n", record.getRecordID(), record.getItem().get(0).getItemCode(), record.getItem().get(0).getItemName(), record.getAmount().get(amtIndex), record.getDonationDateTime());
+            System.out.printf("%-25s %-10s %-20s %-10s %-20s\n", record.getRecordID(), record.getItem().get(0).getItemCode(), record.getItem().get(0).getItemName(), record.getAmount().get(amtIndex), record.getDonationDateTime().format(dateFormat));
             amtIndex++;
         } else {
-            System.out.printf("%-25s %-10s %-20s %-10s %-20s\n", record.getRecordID(), record.getItem().get(0).getItemCode(), record.getItem().get(0).getItemName(), record.getQty().get(qtyIndex), record.getDonationDateTime());
+            System.out.printf("%-25s %-10s %-20s %-10s %-20s\n", record.getRecordID(), record.getItem().get(0).getItemCode(), record.getItem().get(0).getItemName(), record.getQty().get(qtyIndex), record.getDonationDateTime().format(dateFormat));
             qtyIndex++;
         }
         if (record.getItem().size() > 1) {
@@ -2750,7 +2757,7 @@ public class Donation {
     //Input search item code
     public String inputSearchItemCode() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter Item Code to be searched (or X to return to Donation Page): ");
+        System.out.print("Enter Item Code to be searched (or X to return to Donation Page): ");
         return scanner.nextLine();
     }
 
@@ -2908,7 +2915,7 @@ public class Donation {
                     }
                 }
             }
-        //Quantity
+            //Quantity
         } else if (amdOption == 2 && option >= 1 && option <= 6) {
             ArrayList<DonationRecord> searchResultsRecord = new ArrayList<DonationRecord>();
             ArrayList<DonationRecord> recordlist = new ArrayList<DonationRecord>();
@@ -2917,7 +2924,7 @@ public class Donation {
             loadIntoDR(recordlist2);
             searchRecord(itemCode, searchResultsRecord);
             displayDonationRecordAssociated(searchResultsRecord);
-            System.out.println("Action:\n1. Remove a record\n2.Amend a record quantity\nX. Stop this modification.");
+            System.out.println("Action:\n1. Remove from a record\n2. Amend a record quantity\nX. Stop this modification.");
             while (true) {
                 Scanner scanner = new Scanner(System.in);
                 System.out.print("Your choice (1-2, X): ");
@@ -3046,7 +3053,7 @@ public class Donation {
                 }
             }
 
-        //Net Weight & Net Volume
+            //Net Weight & Net Volume
         } else if (amdOption == 3 && (option == 1 || option == 6 || option == 2 || option == 4)) {
             if (option == 2) {
                 _temp3 = getNvalidateNetVolume();
@@ -3101,7 +3108,7 @@ public class Donation {
                     }
                 }
             }
-        //Description
+            //Description
         } else if ((amdOption == 4 && option == 5) || (amdOption == 9 && option == 6)) {
             _temp = getNvalidateDescription();
             if (_temp.equalsIgnoreCase("X")) {
@@ -3119,7 +3126,7 @@ public class Donation {
                     }
                 }
             }
-        //Expiry Date
+            //Expiry Date
         } else if (amdOption == 4 && (option == 1 || option == 6 || option == 2 || option == 4)) {
             _temp4 = getNvalidateExpiryDate();
             if (_temp4.equals(LocalDate.parse("2000-12-30", dateFormat))) {
@@ -3166,7 +3173,7 @@ public class Donation {
                     }
                 }
             }
-        //Age
+            //Age
         } else if ((amdOption == 6 && (option == 4 || option == 6)) || (amdOption == 5 && option == 3)) {
             displayAge();
             _temp = getNvalidateAge();
@@ -3208,7 +3215,7 @@ public class Donation {
                     }
                 }
             }
-        //Gender
+            //Gender
         } else if ((amdOption == 5 && (option == 4 || option == 6)) || (amdOption == 4 && option == 3)) {
             displayGender();
             _temp = getNvalidateGender();
@@ -3250,7 +3257,7 @@ public class Donation {
                     }
                 }
             }
-        //Venue Code
+            //Venue Code
         } else if ((amdOption == 7 && (option == 3 || option == 6)) || (amdOption == 6 && option == 1) || (amdOption == 5 && option == 2) || (amdOption == 8 && option == 4) || (amdOption == 3 && option == 5)) {
             displayVenueCode();
             _temp = getNvalidateVenueCode();
@@ -3310,7 +3317,7 @@ public class Donation {
                     }
                 }
             }
-        //Food Type
+            //Food Type
         } else if (amdOption == 5 && option == 1) {
             displayFoodType();
             _temp = getNvalidateFoodType();
@@ -3332,7 +3339,7 @@ public class Donation {
                     }
                 }
             }
-        //Clothing category
+            //Clothing category
         } else if (amdOption == 3 && option == 3) {
             displayClothingCategory();
             _temp = getNvalidateClothingCategory();
@@ -3354,7 +3361,7 @@ public class Donation {
                     }
                 }
             }
-        //Personal Care Category
+            //Personal Care Category
         } else if (amdOption == 7 && option == 4) {
             displayPCCat();
             _temp = getNvalidatePCCat();
@@ -3376,7 +3383,7 @@ public class Donation {
                     }
                 }
             }
-        //Dosage Form
+            //Dosage Form
         } else if (amdOption == 8 && option == 6) {
             displayDSForm();
             _temp = getNvalidateDosageForm();
@@ -3398,7 +3405,7 @@ public class Donation {
                     }
                 }
             }
-        //Size
+            //Size
         } else if (amdOption == 6 && option == 3) {
             displaySize();
             String _clothCat = "", _age = "", _gender = "";
@@ -3428,7 +3435,7 @@ public class Donation {
                     }
                 }
             }
-        //amount
+            //amount
         } else if (amdOption == 1 && option == 7) {
             ArrayList<DonationRecord> searchResultsRecord = new ArrayList<DonationRecord>();
             ArrayList<DonationRecord> recordlist = new ArrayList<DonationRecord>();
@@ -3437,7 +3444,7 @@ public class Donation {
             loadIntoDR(recordlist2);
             searchRecord(itemCode, searchResultsRecord);
             displayDonationRecordAssociated(searchResultsRecord);
-            System.out.println("Action:\n1. Remove a record\n2.Amend a record quantity\nX. Stop this modification.");
+            System.out.println("Action:\n1. Remove from a record\n2. Amend a record quantity\nX. Stop this modification.");
             while (true) {
                 Scanner scanner = new Scanner(System.in);
                 System.out.print("Your choice (1-2, X): ");
@@ -3480,8 +3487,8 @@ public class Donation {
                         //reduce quantity, if 0 then remove item
                         for (DonationItem item : itemlist) {
                             if (item.getItemCode().equals(itemCode)) {
-                                ((Money)item).setAmount(((Money)item).getAmount() - _temp3);
-                                if (((Money)item).getAmount() == 0) {
+                                ((Money) item).setAmount(((Money) item).getAmount() - _temp3);
+                                if (((Money) item).getAmount() == 0) {
                                     itemlist.remove(item);
                                 }
                                 loadBackDRFile(recordlist);
@@ -3516,13 +3523,13 @@ public class Donation {
                                             double changes = _temp3 - record.getAmount().get(amtIndex);
                                             for (DonationItem item : itemlist) {
                                                 if (item.getItemCode().equals(itemCode)) {
-                                                    ((Money)item).setAmount(((Money)item).getAmount() + changes);
-                                                    if (((Money)item).getAmount() == 0) {
+                                                    ((Money) item).setAmount(((Money) item).getAmount() + changes);
+                                                    if (((Money) item).getAmount() == 0) {
                                                         itemlist.remove(item);
                                                     }
                                                     loadBackDRFile(recordlist);
                                                     loadBackMoneyFile(itemlist);
-                                                   
+
                                                     break;
                                                 }
                                             }
@@ -3845,7 +3852,7 @@ public class Donation {
 
     //Display Track Donation  - Boundary
     public void displayTrackDonation() {
-        System.out.println("\nTrack Donation by Category\n");
+        System.out.println("\nTrack Donation by Category");
         ArrayList<DonationItem> itemlist = new ArrayList<DonationItem>();
         for (int i = 1; i <= 7; i++) {
             displayBasedOnCatOption(i, itemlist);
@@ -3867,9 +3874,9 @@ public class Donation {
         loadIntoDR(fullRecord);
         loadIntoDR(fullRecord2);
         System.out.println("\nDonation by Different Donor");
-        if(fullRecord.isEmpty()){
+        if (fullRecord.isEmpty()) {
             displayEmptyList();
-        }else{
+        } else {
             for (DonationRecord record : fullRecord) {
                 checkedList = new ArrayList<DonationRecord>();
                 for (DonationRecord record2 : fullRecord2) {
@@ -3882,6 +3889,7 @@ public class Donation {
                         fullRecord2.remove(record3);
                     }
                 }
+
                 displaySingleDonorRecords(checkedList, record.getDonor());
             }
         }
@@ -3902,9 +3910,9 @@ public class Donation {
         loadIntoAll(fullList);
         displayAllDonation(fullList);
         int filter = 0, sort = 0, option = 0;
-        if(fullList.isEmpty()){
+        if (fullList.isEmpty()) {
             enterContinue();
-        }else{
+        } else {
             while (true) {
                 if (filter == 0 && sort == 0) {
                     displayFullDonationActionMenu();
@@ -3983,7 +3991,6 @@ public class Donation {
                     loadIntoAll(fullList);
                     sortBeforeDisplay(fullList, sort);
                     displayAllDonation(fullList);
-                    System.out.println("yett2");
                 } else {
                     //let user filter by quantity
                     int fqOption;
@@ -3992,7 +3999,6 @@ public class Donation {
                     if (fqOption != 4) {
                         filterByQuantity(fullList, sort, fqOption);
                         displayAllDonation(fullList);
-                        System.out.println("yett");
                     } else {
                         break;
                     }
@@ -4021,7 +4027,6 @@ public class Donation {
                     int index = 0;
                     for (DonationItem item2 : itemlist2) {
                         if (!(item2 instanceof Money)) {
-                            System.out.println(index + "yeet" + (Double.parseDouble(String.valueOf(item2.getQuantity())) > ((Money) item).getAmount()));
                             if (Double.parseDouble(String.valueOf(item2.getQuantity())) > ((Money) item).getAmount()) {
                                 itemlist.remove(item);
                                 itemlist.add(index - 1, item);
@@ -4620,8 +4625,8 @@ public class Donation {
         ArrayList<DonationItem> fullList = new ArrayList<DonationItem>();
         loadIntoAll(fullList);
         int total[] = new int[6];
-        int max[] = {0, 0, 0};
-        int maxIndex[] = {0, 0, 0};
+        int max[] = {-1, -1, -1};
+        int maxIndex[] = {-1, -1, -1};
         total[0] = 0;
         total[1] = 0;
         total[2] = 0;
@@ -4656,12 +4661,12 @@ public class Donation {
                 maxIndex[2] = maxIndex[1];
                 maxIndex[1] = maxIndex[0];
                 maxIndex[0] = i;
-            } else if (total[i] > max[1]||total[i] == max[0]) {
+            } else if (total[i] > max[1] || total[i] == max[0]) {
                 max[2] = max[1];
                 max[1] = total[i];
                 maxIndex[2] = maxIndex[1];
                 maxIndex[1] = i;
-            } else if (total[i] > max[2]||total[i] ==max[1]) {
+            } else if (total[i] > max[2] || total[i] == max[1]) {
                 max[2] = total[i];
                 maxIndex[2] = i;
             }
@@ -4703,6 +4708,9 @@ public class Donation {
         System.out.print("|\n");
         for (int i = 0; i < 3; i++) {
             switch (maxIndex[i]) {
+                case -1:
+                    System.out.printf("|%-5s |%-30s |%-30s|\n", i + 1, "", 0);
+                    break;
                 case 0:
                     System.out.printf("|%-5s |%-30s |%-30s|\n", i + 1, "Food", max[i]);
                     break;
