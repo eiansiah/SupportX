@@ -397,9 +397,8 @@ public class DonorFunctions {
                         DonorUI.donorNotFoundMsg(donorID);
                     }
 
-                    DonorUI.pressKeyToContinue();
+                    DonorUI.pressKeyToGoBack();
                     scanner.nextLine();
-//                    done = true;
                     break;
 
                 case "F":
