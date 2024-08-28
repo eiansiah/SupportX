@@ -1,5 +1,7 @@
 package Libraries;
 
+import java.util.Comparator;
+
 public interface List<T>{
     void add(T element);
     int size();
