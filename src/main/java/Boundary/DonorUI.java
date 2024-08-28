@@ -199,7 +199,7 @@ public class DonorUI {
         System.out.println(Color.RED + "Donor with ID " + donorID + " not found." + Color.RESET);
     }
 
-    public static void pressKeyToContinue(){
+    public static void pressKeyToGoBack(){
         System.out.println("Press any key to return to previous page.....");
     }
 
