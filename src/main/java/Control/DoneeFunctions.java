@@ -299,7 +299,7 @@ public class DoneeFunctions {
                     String modifyChoice = DoneeUI.modifyTypeUI();
 
                     if (modifyChoice.isEmpty()) {
-                        System.out.println("Empty input detected. Please enter an option between 1-7 and X.");
+                        Message.displayEmptyInputMessage("Please enter an option between 1-7 and X.");
                         continue;
                     }
 
