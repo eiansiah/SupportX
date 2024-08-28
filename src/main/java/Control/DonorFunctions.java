@@ -70,16 +70,19 @@ public class DonorFunctions {
         } while (choice >= 1 && choice <= 6);
     }
 
-    public static Boolean checkIfDonorExist(String DonorID){
-        ArrayList<Donor> checkDonors = readDonors();
+    public static Donor checkIfDonorExist(String donorID) {
+        ArrayList<Donor> checkDonors = readDonors(); // Assuming readDonors() retrieves the list of donors
 
         // Check for the donor by ID
         for (Donor donor : checkDonors) {
-            if (donor.getId().equals(DonorID)) {
-                return true;
+            if (donor.getId().equals(donorID)) {
+                return donor; // Return the entire Donor object if found
             }
         }
-        return false;
+
+        // If the donor is not found, display a message and return null
+        Message.displayDataNotFoundMessage("Donor with ID " + donorID + " was not found.");
+        return null;
     }
 
     public static void addDonor() {
