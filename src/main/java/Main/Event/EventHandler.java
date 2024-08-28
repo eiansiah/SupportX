@@ -4,6 +4,7 @@ import FileHandling.UniversalFileHandler;
 import Libraries.ArrayList;
 import Utilities.Search;
 
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.Random;
 
@@ -65,13 +66,29 @@ public class EventHandler {
     }
 
     public static Event searchEventByEventID(String eventID){
-        String eventString = Search.searchFirstMatchesStringFromFile(eventFilePath, eventID, Event.separator, 6);
+        String eventString = Search.searchFirstMatchesStringFromFile(eventFilePath, eventID, Event.separator, 0);
 
         if(eventString == null) {
             return null;
         }
 
         return new Event(eventString);
+    }
+
+    public static ArrayList<Event> searchAllEventByEventName(String eventName){
+        ArrayList<String> eventListString = Search.searchAllMatchesString(eventFilePath, eventName, Event.separator, 1);
+        ArrayList<Event> events = new ArrayList<>();
+
+        if(eventListString == null) {
+            return null;
+        }
+
+        for(String eventString : eventListString) {
+            Event event = new Event(eventString);
+            events.add(event);
+        }
+
+        return events;
     }
 
     public static ArrayList<Event> searchAllEventByEventStatus(EventStatus eventStatus){
