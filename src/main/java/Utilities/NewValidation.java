@@ -7,14 +7,9 @@ import java.util.regex.Pattern;
 public class NewValidation {
 
     public static boolean validateName(String name) {
-        Pattern nameFormat = Pattern.compile("^[A-Za-z]{2}[A-Za-zâ€˜\\-/.]{1,30}$");
-//        do {
-//            System.out.print("\nName: ");
-//            name = scanner.nextLine().trim();
+        Pattern nameFormat = Pattern.compile("^[A-Za-z]{2}[A-Za-zâ€˜\\- /.]{1,30}$");
             Matcher matcher = nameFormat.matcher(name);
-        //                System.out.println("Invalid name. Only alphabets and spaces are allowed. Please enter a valid name.");
         return matcher.matches() && !name.isEmpty();
-//        } while (!nameFormat.matcher(name).matches() || name.isEmpty());
     }
 
     public static boolean validateEmail(String email) {
@@ -33,29 +28,8 @@ public class NewValidation {
         return !address.isEmpty();
     }
 
-    public static String validateCategory(Scanner scanner) {
+    public static String validateCategory(int choice) {
         String category;
-        int choice = 0;
-
-        do {
-            if (choice != 0) {
-                System.out.println("Invalid choice. Please select a valid category (1-3).");
-            }
-
-            System.out.println("\nPlease select a category:");
-            System.out.println("1. Government");
-            System.out.println("2. Private");
-            System.out.println("3. Public");
-
-            while (!scanner.hasNextInt()) {
-                System.out.println("Invalid input. Please enter a number (1-3).");
-                scanner.next(); // Clear the invalid input
-            }
-
-            choice = scanner.nextInt();
-            scanner.nextLine(); // Consume the newline character
-
-        } while (choice < 1 || choice > 3);
 
         switch (choice) {
             case 1:
@@ -100,33 +74,15 @@ public class NewValidation {
         return itemCategory;
     }
 
-    public static String validateType(Scanner scanner) {
+    public static String validateDonorType(int typeChoice) {
         String type;
-        int choice = 0;
 
-        do {
-            if (choice != 0) {
-                System.out.println("Invalid choice. Please select a valid type (1-2).");
-            }
-
-            System.out.println("\nPlease select a type:");
-            System.out.println("1. Individual");
-            System.out.println("2. Organization");
-
-            while (!scanner.hasNextInt()) {
-                System.out.println("Invalid input. Please enter a number (1-2).\n");
-                scanner.next(); // Clear the invalid input
-            }
-
-            choice = scanner.nextInt();
-            scanner.nextLine(); // Consume the newline character
-
-        } while (choice < 1 || choice > 2);
-
-        if (choice == 1) {
-            type = "Individual";
-        } else {
-            type = "Organization";
+        switch (typeChoice) {
+            case 1:
+                type = "Individual";
+                break;
+            default:
+                type = "Organization";
         }
 
         return type;
