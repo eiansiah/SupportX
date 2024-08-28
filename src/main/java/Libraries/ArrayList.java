@@ -3,6 +3,7 @@
 package Libraries;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -213,6 +214,21 @@ public class ArrayList<T> implements List<T>, Iterable<T>{
     private void checkAddRange(int index){
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size " + index);
+        }
+    }
+    
+    public void sort(Comparator<? super T> comparator) {
+        int n = size();
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                // Use the comparator to compare two elements
+                if (comparator.compare(get(j), get(j + 1)) > 0) {
+                    // Swap list[j] and list[j+1]
+                    T temp = get(j);
+                    set(j, get(j + 1));
+                    set(j + 1, temp);
+                }
+            }
         }
     }
 
