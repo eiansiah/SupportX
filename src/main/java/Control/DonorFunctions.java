@@ -1,22 +1,34 @@
 package Control;
 
+
 import Entity.Donor;
 
 import FileHandling.DonorFileHandler;
 
 import Libraries.ArrayList;
+import Libraries.Hashmap;
 
 import Boundary.DonorUI;
 
+import Main.Event.Event;
 import Utilities.NewValidation;
 import Utilities.Message;
 
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class DonorFunctions {
 
-    private ArrayList<Donor> donorArrayList;
+    private static ArrayList<Donor> donorArrayList;
+
+    // HashMap to store Donor ID -> List of Donations
+    private Hashmap<String, ArrayList<Donation>> donorDonationsMap = new Hashmap<>();
+    // HashMap to store Donor ID -> List of Events
+    private HashMap<String, ArrayList<Event>> donorEventsMap = new HashMap<>();
+
     private static final DonorFileHandler fileHandler = new DonorFileHandler();
+
+
 
     public DonorFunctions (){
         donorArrayList = readDonors();
@@ -25,6 +37,24 @@ public class DonorFunctions {
     public static ArrayList<Donor> readDonors(){
         return fileHandler.readData("donor.txt");
     }
+
+//    private void populateDonorMaps() {
+//        for (Donor donor : donorArrayList) {
+//            String donorID = donor.getId(); // Assuming Donor class has a getDonorID() method
+//
+//            // Retrieve and add donations for this donor
+//            ArrayList<Donation> donations = donor.getDonations(); // Assuming Donor class has a getDonations() method
+//            if (donations != null && !donations.isEmpty()) {
+//                donorDonationsMap.put(donorID, donations);
+//            }
+//
+//            // Retrieve and add events for this donor
+//            ArrayList<Event> events = donor.getEvents(); // Assuming Donor class has a getEvents() method
+//            if (events != null && !events.isEmpty()) {
+//                donorEventsMap.put(donorID, events);
+//            }
+//        }
+//    }
 
     public void runDonorSystem() {
         int choice = 0;
@@ -61,6 +91,7 @@ public class DonorFunctions {
                     //displayDonorDonation();
                     break;
                 case 6: //View reports
+                    //viewDonorReport();
                     break;
                 default: //Exit
                     Message.displayExitMessage();
@@ -394,6 +425,10 @@ public class DonorFunctions {
                                 selectedDonor.getCategory(),
                                 selectedDonor.getType()
                         );
+
+//                        DonorUI.displayDonorDonation(donorDonationsMap, donorID);
+//                        DonorUI.displayDonorEvent(donorEventsMap, donorID);
+
                     } else {
                         DonorUI.donorNotFoundMsg(donorID);
                     }
@@ -404,11 +439,6 @@ public class DonorFunctions {
 
                 case "F":
                     int filterChoice = DonorUI.filterMenu();
-
-                    ArrayList<Donor> donorCopy = new ArrayList<>();
-                    for (Donor donor : donors) {
-                        donorCopy.add(donor);
-                    }
 
                     if (filterChoice == 1) {
                         String input = DonorUI.filterChoiceName();
@@ -442,10 +472,6 @@ public class DonorFunctions {
 
                         if (category != null) {
                             donors = DonorFilter.filterByCategory(donors, category);
-                            donorCopy = new ArrayList<>();
-                            for (Donor donor : donors) {
-                                donorCopy.add(donor);
-                            }
 
                             if (donors.isEmpty()) {
                                 Message.displayDataNotFoundMessage("No donors found in the '" + category + "' category.");
@@ -470,19 +496,17 @@ public class DonorFunctions {
 
                         if (type != null) {
                             donors = DonorFilter.filterByType(donors, type);
-                            donorCopy = new ArrayList<>();
-                            for (Donor donor : donors) {
-                                donorCopy.add(donor);
-                            }
 
                             if (donors.isEmpty()) {
                                 Message.displayDataNotFoundMessage("No donors found of type '" + type + "'.");
                             }
                         }
                     } else if (filterChoice == 4) {
-                            donors = DonorFilter.resetFilter(donors);
-                            showCategory = false;
-                            showType = false;
+                        donors = DonorFilter.resetFilter(donors);
+                        showCategory = false;
+                        showType = false;
+                    }else if (filterChoice == 5) {
+                        Message.displayFilterCancelMessage();
                     } else {
                         Message.displayInvalidChoiceMessage("Please select a valid option.");
                     }
@@ -519,6 +543,10 @@ public class DonorFunctions {
                     break;
             }
         }
+    }
+
+    public static void viewDonorReport(ArrayList<Donor> donors){
+
     }
 
     public static void main (String[] args) {
