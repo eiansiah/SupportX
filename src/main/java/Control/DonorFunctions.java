@@ -79,8 +79,8 @@ public class DonorFunctions {
             }
         }
 
-        // If the donor is not found, display a message and return null
-        Message.displayDataNotFoundMessage("Donor with ID " + donorID + " was not found.");
+//        // If the donor is not found, display a message and return null
+//        Message.displayDataNotFoundMessage("Donor with ID " + donorID + " was not found.");
         return null;
     }
 
