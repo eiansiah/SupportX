@@ -1,6 +1,10 @@
 package Boundary;
 
+import Control.Donation;
 import Entity.Donor;
+import Libraries.Hashmap;
+import Main.Event.Event;
+
 import Libraries.ArrayList;
 import Libraries.Color;
 import Utilities.Message;
@@ -156,7 +160,7 @@ public class DonorUI {
             } else if (showCategory) {
                 System.out.printf("%-10s%-35s%-20s%n", donor.getId(), donor.getName(), donor.getCategory());
             }else if (showType) {
-                System.out.printf("%-10s%-25s%-20s%n", donor.getId(), donor.getName(), donor.getType());
+                System.out.printf("%-10s%-35s%-20s%n", donor.getId(), donor.getName(), donor.getType());
             } else {
                 System.out.printf("%-10s%-35s%n", donor.getId(), donor.getName());
             }
@@ -194,6 +198,46 @@ public class DonorUI {
         System.out.print("Enter Donor ID to view details: ");
         return scanner.nextLine().trim();
     }
+
+    public static void displayDonorDonation(Hashmap<String, ArrayList<Donation>> donorDonationsMap, String donorID) {
+        System.out.println("\nDONATION DETAILS\n");
+
+        ArrayList<Donation> donations = donorDonationsMap.get(donorID);
+
+        if (donations == null || donations.isEmpty()) {
+            System.out.println("This donor has not made any donations.");
+        } else {
+            System.out.printf("%-15s%-25s%-20s%n", "Donation ID", "Donation Type", "Date of Donation");
+
+            for (Donation donation : donations) {
+                System.out.printf("%-15s%-25s%-20s%n");
+//                        ,donation.getDonationID(),
+//                        donation.getDonationType(),
+//                        donation.getDateOfDonation());
+            }
+        }
+    }
+
+
+    public static void displayDonorEvent(Hashmap<String, ArrayList<Event>> donorEventsMap, String donorID) {
+        System.out.println("\nEVENT DETAILS\n");
+
+        ArrayList<Event> events = donorEventsMap.get(donorID);
+
+        if (events == null || events.isEmpty()) {
+            System.out.println("This donor has not attended any events.");
+        } else {
+            System.out.printf("%-15s%-25s%-20s%n", "Event ID", "Event Type", "Date Attended");
+
+            for (Event event : events) {
+                System.out.printf("%-15s%-25s%-20s%n");
+//                        ,event.getEventID(),
+//                        event.getEventType(),
+//                        event.getDateAttended());
+            }
+        }
+    }
+
 
     public static void donorNotFoundMsg(String donorID){
         System.out.println(Color.RED + "Donor with ID " + donorID + " not found." + Color.RESET);
@@ -254,7 +298,5 @@ public class DonorUI {
         System.out.print("Choose a sorting criterion: ");
         return scanner.nextInt();
     }
-
-
 
 }
