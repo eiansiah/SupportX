@@ -1,10 +1,10 @@
 package Control;
 
 
+import Boundary.VolunteerUI;
 import Entity.Volunteer;
 import FileHandling.VolunteerFileHandler;
 import Libraries.ArrayList;
-import Libraries.Color;
 import Libraries.Hashmap;
 import Libraries.ListInterface;
 import Main.Event.Event;
@@ -29,23 +29,7 @@ public class VolunteerFunctions {
         
         while (true) {
             try {
-                System.out.println(Color.BLUE + "\nVolunteer Management System" + Color.RESET);
-                System.out.println("----------------------------");
-                System.out.println("1. Add Volunteer");
-                System.out.println("2. Delete Volunteer");
-                System.out.println("3. Modify Volunteer");
-                System.out.println("4. Search Volunteer");
-                System.out.println("5. Assign Volunteer");
-                System.out.println("6. List All Volunteers");
-                System.out.println("7. List of Volunteers and Events");
-                System.out.println("8. Filter Volunteers");
-                System.out.println("9. Search Events by Volunteer");
-                System.out.println("10. View Summary Reports");
-                System.out.println("11. Back");
-                System.out.println(" ");
-                System.out.print("Enter choice: ");
-
-                String input = scanner.nextLine().trim();
+                String input = VolunteerUI.mainMenu();
 
                 if (input.isEmpty()) {
                     Message.displayGeneralErrorMsg("Input cannot be empty. Please try again.");
@@ -92,6 +76,8 @@ public class VolunteerFunctions {
                         viewSummaryReport();
                         break;
                     case 11:
+                        //test this
+                        Message.displayExitMessage();
                         return;
                     default:
                         Message.displayInvalidInputMessage("Invalid choice. Please try again.");
@@ -113,9 +99,9 @@ public class VolunteerFunctions {
         }
 
         for (int i = 0; i < upcomingEvents.size(); i++) {
-            Event event = upcomingEvents.get(i);
+            
 
-            System.out.println(event.eventID() + " " + event.startDateTime() + " " + event.endDateTime() + " " + event.venue());
+            VolunteerUI.upcomingEventsUI();
         }
 
         Event eventChosen;
@@ -913,6 +899,10 @@ public class VolunteerFunctions {
             Message.displayDataNotFoundMessage("No volunteers found with the specified availability.");
         }
     }
-
+    
+    public static void main (String args[]){
+        VolunteerFunctions volunteerFunctions = new VolunteerFunctions();
+        volunteerFunctions.runVolunteerSystem();
+    }
 
 }
