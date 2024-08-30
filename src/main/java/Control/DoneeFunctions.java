@@ -10,6 +10,7 @@ import FileHandling.DoneeFileHandler;
 import Libraries.GeneralFunction;
 import Libraries.ArrayList;
 
+import Libraries.List;
 import Utilities.Message;
 import Utilities.NewValidation;
 
@@ -17,6 +18,7 @@ import Boundary.DoneeUI;
 
 public class DoneeFunctions {
 
+//    List<Donee> doneeList = new ArrayList<>();
     private static ArrayList<Donee> doneeList;
     private static final DoneeFileHandler fileHandler = new DoneeFileHandler();
     private static final Scanner scanner = new Scanner(System.in); //To be shifted
@@ -65,6 +67,7 @@ public class DoneeFunctions {
                     filterDonees(readDonees());
                     break;
                 case 7: //View reports
+                    summaryReport(readDonees());
                     break;
                 case 8:
                     break;
@@ -593,6 +596,89 @@ public class DoneeFunctions {
         } while (filterChoice != 3);
 
         GeneralFunction.enterToContinue();
+    }
+
+    public static void summaryReport(ArrayList<Donee> donees){
+        int highUrgencyCount = 0;
+        int mediumUrgencyCount = 0;
+        int lowUrgencyCount = 0;
+        int individualCount = 0;
+        int organisationCount = 0;
+        int familyCount = 0;
+        int foodCount = 0;
+        int beverageCount = 0;
+        int clothingCount = 0;
+        int personalCount = 0;
+        int deviceCount = 0;
+        int medicineCount = 0;
+        int moneyCount =0;
+
+        doneeList = donees;
+
+        GeneralFunction.printTitle("Donee Management Subsystem Summary Report", 87, "--", "|");
+
+        for (Donee donee : doneeList) {
+            String urgency = donee.getDoneeUrgency();
+            if ("High".equalsIgnoreCase(urgency)) {
+                highUrgencyCount++;
+            } else if ("Moderate".equalsIgnoreCase(urgency)) {
+                mediumUrgencyCount++;
+            } else if ("Low".equalsIgnoreCase(urgency)) {
+                lowUrgencyCount++;
+            }
+        }
+
+        DoneeUI.reportDoneeUrgencyUI(highUrgencyCount,mediumUrgencyCount,lowUrgencyCount);
+
+        DoneeUI.printEmptyLine();
+        GeneralFunction.repeatPrint("=", 50);
+        DoneeUI.printEmptyLine();
+
+        for (Donee donee : doneeList) {
+            String doneeType = donee.getDoneeType();
+            if ("Individual".equalsIgnoreCase(doneeType)) {
+                individualCount++;
+            } else if ("Organization".equalsIgnoreCase(doneeType)) {
+                organisationCount++;
+            } else if ("Family".equalsIgnoreCase(doneeType)) {
+                familyCount++;
+            }
+        }
+
+        DoneeUI.reportDoneeTypeUI(individualCount, organisationCount, familyCount);
+
+        DoneeUI.printEmptyLine();
+        GeneralFunction.repeatPrint("=", 50);
+        DoneeUI.printEmptyLine();
+
+        for (Donee donee : doneeList) {
+            String doneeCategory = donee.getItemCategoryRequired();
+            if ("Food".equalsIgnoreCase(doneeCategory)) {
+                foodCount++;
+            } else if ("Beverage".equalsIgnoreCase(doneeCategory)) {
+                beverageCount++;
+            } else if ("Clothing".equalsIgnoreCase(doneeCategory)) {
+                clothingCount++;
+            } else if ("Personal Care".equalsIgnoreCase(doneeCategory)) {
+                personalCount++;
+            } else if ("Medical Device".equalsIgnoreCase(doneeCategory)) {
+                deviceCount++;
+            } else if ("Medicine".equalsIgnoreCase(doneeCategory)) {
+                medicineCount++;
+            } else if ("Monetary Aid".equalsIgnoreCase(doneeCategory)) {
+                moneyCount++;
+            }
+        }
+
+        DoneeUI.reportItemCategoryUI(foodCount, beverageCount, clothingCount, personalCount, deviceCount, medicineCount, moneyCount);
+
+        DoneeUI.printEmptyLine();
+
+        GeneralFunction.printTitle("Report generated on: " + LocalDate.now(), 87, "--", "|");
+
+        DoneeUI.printEmptyLine();
+        GeneralFunction.enterToContinue();
+
     }
 
     public static void main (String[] args) {
