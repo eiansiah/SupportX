@@ -194,6 +194,10 @@ public class DonorUI {
     }
 
     public static String inputCheckDonorIDUI(){
+        // Clear the buffer if needed
+        if (scanner.hasNextLine()) {
+            scanner.nextLine();
+        }
         // Get the ID to be checked
         System.out.print("Enter Donor ID to view details: ");
         return scanner.nextLine().trim();

@@ -1,42 +1,54 @@
 package Control;
 
-
+import Entity.DonationItem;
+import Entity.DonationRecord;
 import Entity.Donor;
 
+//Data Handling
 import FileHandling.DonorFileHandler;
 
+//ADT
 import Libraries.ArrayList;
 import Libraries.Hashmap;
 
+//Boundaries
 import Boundary.DonorUI;
 
+//Utilities
 import Main.Event.Event;
 import Utilities.NewValidation;
 import Utilities.Message;
-
-import java.util.HashMap;
-import java.util.Scanner;
 
 public class DonorFunctions {
 
     private static ArrayList<Donor> donorArrayList;
 
+    // ArrayList to temporary store data for donation item
+    private static ArrayList<DonationItem> donationItemArrayList = new ArrayList<>();
+    // ArrayList to temporary store data for donation item
+    private static ArrayList<DonationRecord> donationRecordArrayList = new ArrayList<>();
     // HashMap to store Donor ID -> List of Donations
-    private Hashmap<String, ArrayList<Donation>> donorDonationsMap = new Hashmap<>();
+    private Hashmap<String, ArrayList<DonationRecord>> donorDonationsMap = new Hashmap<>();
     // HashMap to store Donor ID -> List of Events
-    private HashMap<String, ArrayList<Event>> donorEventsMap = new HashMap<>();
+    private Hashmap<String, ArrayList<Event>> donorEventsMap = new Hashmap<>();
 
-    private static final DonorFileHandler fileHandler = new DonorFileHandler();
-
-
+    private static final DonorFileHandler donorFileHandler = new DonorFileHandler();
 
     public DonorFunctions (){
         donorArrayList = readDonors();
     }
 
     public static ArrayList<Donor> readDonors(){
-        return fileHandler.readData("donor.txt");
+        return donorFileHandler.readData("donor.txt");
     }
+
+    public void printDonationRecords(ArrayList<DonationRecord> donationRecords) {
+        for (DonationRecord record : donationRecords) {
+            System.out.println(record);
+            System.out.println(); // Print a blank line between records
+        }
+    }
+
 
 //    private void populateDonorMaps() {
 //        for (Donor donor : donorArrayList) {
@@ -59,7 +71,7 @@ public class DonorFunctions {
     public void runDonorSystem() {
         int choice = 0;
 
-        fileHandler.checkAndCreateFile("donor.txt");
+        donorFileHandler.checkAndCreateFile("donor.txt");
 
         DonorUI.DonorWelcomeMessage();
 
@@ -117,12 +129,12 @@ public class DonorFunctions {
 
     public static void addDonor() {
         // Get the last ID from the file
-        String lastId = fileHandler.getLastDonorId("donor.txt");
+        String lastId = donorFileHandler.getLastDonorId("donor.txt");
         // Increment to get the new ID
-        String newDonorId = fileHandler.incrementDonorId(lastId);
+        String newDonorId = donorFileHandler.incrementDonorId(lastId);
         Donor donor = inputDonorDetails(newDonorId);
         // Save the donor with the new ID
-        fileHandler.saveData("donor.txt", donor);
+        donorFileHandler.saveData("donor.txt", donor);
     }
 
     public static Donor inputDonorDetails(String donorId){
@@ -228,7 +240,7 @@ public class DonorFunctions {
 
             if (confirmation.equals("Y")) {
                 donors.remove(selectedDonor);
-                fileHandler.updateMultipleData("donor.txt", donors);
+                donorFileHandler.updateMultipleData("donor.txt", donors);
                 DonorUI.displayDeleteDonorMsg(donorIDToDelete);
             } else {
                 Message.displayRemoveCancelMessage();
@@ -363,7 +375,7 @@ public class DonorFunctions {
                 } while (!choice.equalsIgnoreCase("X"));
 
                 // Update the donor in the file after all modifications
-                fileHandler.updateMultipleData("donor.txt", donors);
+                donorFileHandler.updateMultipleData("donor.txt", donors);
 
             } else {
                 Message.displayUpdateCancelMessage();
@@ -375,7 +387,6 @@ public class DonorFunctions {
 
     public static void displayDonors(ArrayList<Donor> donors) {
 
-        Scanner scanner = new Scanner(System.in);
         int pageSize = 10;  // Number of donors to display per page
         int currentPage = 0;
         int totalDonors = donors.size();
@@ -434,7 +445,6 @@ public class DonorFunctions {
                     }
 
                     DonorUI.pressKeyToGoBack();
-                    scanner.nextLine();
                     break;
 
                 case "F":
@@ -545,12 +555,15 @@ public class DonorFunctions {
         }
     }
 
-    public static void viewDonorReport(ArrayList<Donor> donors){
+
+
+    public void viewDonorReport(String donorID) {
 
     }
 
     public static void main (String[] args) {
         DonorFunctions donorFunctions = new DonorFunctions(); //Create an arraylist
         donorFunctions.runDonorSystem();
+
     }
 }
