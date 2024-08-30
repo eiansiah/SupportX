@@ -1,2 +1,4 @@
-211!,!Food donation!,!2024-08-29T12:00!,!2024-08-30T12:00!,!Haven!,!!,!UPCOMING
-617!,!Blood charity!,!2024-08-29T01:00!,!2024-08-29T06:00!,!Sport complex!,!Free food and milo!,!UPCOMING
+706113!,!Blood!,!2024-08-31T12:00!,!2024-08-31T13:00!,!Tar!,!!,!UPCOMING
+828188!,!food!,!2024-08-31T12:00!,!2024-08-31T13:00!,!Tarc!,!!,!UPCOMING
+928188!,!food!,!2024-08-30T12:00!,!2024-08-31T13:00!,!Tarc!,!!,!ONGOING
+128188!,!food!,!2024-08-30T12:00!,!2024-08-30T13:00!,!Tarc!,!!,!COMPLETED
