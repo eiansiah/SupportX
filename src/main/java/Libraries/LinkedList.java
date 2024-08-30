@@ -1,3 +1,4 @@
+/*
 package Libraries;
 
 import java.util.Iterator;
@@ -18,20 +19,24 @@ public class LinkedList<T> implements ListInterface<T>, Iterable<T> {
         }
     }
 
-    /**
+    */
+/**
      * Adds the specified element to the end of this list.
      * @param element the element to be added
-     */
+     *//*
+
     @Override
     public void add(T element) {
         addLast(element);
     }
 
-    /**
+    */
+/**
      * Inserts the specified element at the specified position in this list.
      * @param index the index at which to insert the element
      * @param element the element to be inserted
-     */
+     *//*
+
     public void add( int index, T element) {
         checkAddRange(index);
 
@@ -53,10 +58,12 @@ public class LinkedList<T> implements ListInterface<T>, Iterable<T> {
         size++;
     }
 
-    /**
+    */
+/**
      * Appends the specified element to the end of this list.
      * @param element the element to be appended
-     */
+     *//*
+
     public void addLast(T element) {
         Node newNode = new Node(element);
 
@@ -70,10 +77,12 @@ public class LinkedList<T> implements ListInterface<T>, Iterable<T> {
         size++;
     }
 
-    /**
+    */
+/**
      * Inserts the specified element at the beginning of this list.
      * @param element the element to be inserted
-     */
+     *//*
+
     public void addFirst(T element) {
         Node newNode = new Node(element);
 
@@ -93,12 +102,14 @@ public class LinkedList<T> implements ListInterface<T>, Iterable<T> {
         return size;
     }
 
-    /**
+    */
+/**
      * Returns the element at the specified position in this list.
      * @param index the index of the element to return
      * @return the element at the specified index
      * @throws IndexOutOfBoundsException if the index is out of range
-     */
+     *//*
+
     @Override
     public T get(int index) {
         checkAddRange(index);
@@ -112,13 +123,15 @@ public class LinkedList<T> implements ListInterface<T>, Iterable<T> {
         return current.data;
     }
 
-    /**
+    */
+/**
      * Replaces the element at the specified position in this list with the specified element.
      * @param index the index of the element to replace
      * @param element the new element
      * @return the old element at the specified index
      * @throws IndexOutOfBoundsException if the index is out of range
-     */
+     *//*
+
     @Override
     public T set(int index, T element) {
         checkAddRange(index);
@@ -134,11 +147,13 @@ public class LinkedList<T> implements ListInterface<T>, Iterable<T> {
         return old;
     }
 
-    /**
+    */
+/**
      * Removes the first occurrence of the specified element from this list.
      * @param element the element to be removed
      * @return true if the element was removed, false otherwise
-     */
+     *//*
+
     @Override
     public boolean remove(T element) {
 
@@ -186,12 +201,14 @@ public class LinkedList<T> implements ListInterface<T>, Iterable<T> {
         return false; //not found any related element
     }
 
-    /**
+    */
+/**
      * Removes the element at the specified position in this list.
      * @param index the index of the element to be removed
      * @return true if the element was removed, false otherwise
      * @throws IndexOutOfBoundsException if the index is out of range
-     */
+     *//*
+
     @Override
     public boolean remove(int index) {
         checkAddRange(index);
@@ -215,11 +232,13 @@ public class LinkedList<T> implements ListInterface<T>, Iterable<T> {
         return true;
     }
 
-    /**
+    */
+/**
      * Returns true if this list contains the specified element.
      * @param element the element to check for
      * @return true if the list contains the element, false otherwise
-     */
+     *//*
+
     @Override
     public boolean contains(T element) {
 
@@ -254,11 +273,13 @@ public class LinkedList<T> implements ListInterface<T>, Iterable<T> {
         }
     }
 
-    /**
+    */
+/**
      * Returns the index of the first occurrence of the specified element
      * @param element the element to find
      * @return the index of the element, or -1 if not found
-     */
+     *//*
+
     @Override
     public int indexOf(T element) {
         Node current = head;
@@ -275,11 +296,13 @@ public class LinkedList<T> implements ListInterface<T>, Iterable<T> {
         return -1;
     }
 
-    /**
+    */
+/**
      * Returns the index of the last occurrence of the specified element
      * @param element the element to find
      * @return the index of the last occurrence, or -1 if not found
-     */
+     *//*
+
     @Override
     public int lastIndexOf(T element) {
         Node current = head;
@@ -333,3 +356,4 @@ public class LinkedList<T> implements ListInterface<T>, Iterable<T> {
         }
     }
 }
+*/

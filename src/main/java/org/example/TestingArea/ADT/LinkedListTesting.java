@@ -1,3 +1,4 @@
+/*
 package org.example.TestingArea.ADT;
 
 import Libraries.LinkedList;
@@ -8,7 +9,9 @@ public class LinkedListTesting {
         scenario10();
     }
 
-    /** test contains 'string' function and size function*/
+    */
+/** test contains 'string' function and size function*//*
+
     static void scenario1(){
         LinkedList<String> strings = new LinkedList<>();
 
@@ -21,7 +24,9 @@ public class LinkedListTesting {
         System.out.println(strings.contains("M"));
     }
 
-    /** test contains 'class' function and indexOf function */
+    */
+/** test contains 'class' function and indexOf function *//*
+
     static void scenario2(){
         LinkedList<testingLinkedListClass> list = new LinkedList<>();
 
@@ -37,7 +42,9 @@ public class LinkedListTesting {
         System.out.println("Testing contains t2: " + list.contains(t2) + " index pos: " + list.indexOf(t2));
     }
 
-    /** test get function*/
+    */
+/** test get function*//*
+
     static void scenario3(){
         LinkedList<String> strings = new LinkedList<>();
 
@@ -54,7 +61,9 @@ public class LinkedListTesting {
         //System.out.println(strings.get(-1));
     }
 
-    /** test remove and clear function*/
+    */
+/** test remove and clear function*//*
+
     static void scenario4(){
         LinkedList<testingLinkedListClass> list = new LinkedList<>();
 
@@ -97,7 +106,9 @@ public class LinkedListTesting {
         System.out.println("name (after set): " + list.get(0).name);
     }
 
-    /** testing foreach loop*/
+    */
+/** testing foreach loop*//*
+
     static void scenario6(){
         LinkedList<String> list = new LinkedList<>();
 
@@ -109,7 +120,9 @@ public class LinkedListTesting {
         }
     }
 
-    /** testing lastIndexOf function */
+    */
+/** testing lastIndexOf function *//*
+
     static void scenario7(){
         LinkedList<testingLinkedListClass> list = new LinkedList<>();
 
@@ -132,7 +145,9 @@ public class LinkedListTesting {
         System.out.println("last index of t3 pos: " + list.lastIndexOf(t3));
     }
 
-    /** testing add(int index, T element)*/
+    */
+/** testing add(int index, T element)*//*
+
     static void scenario8(){
         LinkedList<String> list = new LinkedList<>();
 
@@ -151,7 +166,9 @@ public class LinkedListTesting {
         list.display();
     }
 
-    /** testing add(int index, T element)*/
+    */
+/** testing add(int index, T element)*//*
+
     static void scenario9(){
         LinkedList<String> list = new LinkedList<>();
 
@@ -171,7 +188,9 @@ public class LinkedListTesting {
         list.display();
     }
 
-    /** testing addFirst then addLast */
+    */
+/** testing addFirst then addLast *//*
+
     static void scenario10(){
         LinkedList<String> list = new LinkedList<>();
 
@@ -198,3 +217,4 @@ class testingLinkedListClass{
         System.out.println(number + " " + name);
     }
 }
+*/
