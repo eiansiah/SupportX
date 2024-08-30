@@ -21,7 +21,7 @@ public class Message {
     }
 
     public static void displayInvalidInputMessage(String reason) {
-        System.out.println(Color.RED + "\nInvalid input. " + reason + Color.RESET);
+        System.out.println(Color.RED + "\nInvalid Input. " + reason + Color.RESET);
     }
 
     public static void displayDataNotFoundMessage(String reason) {
