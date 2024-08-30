@@ -1,5 +1,7 @@
-package Main;
+package Control;
 
+
+import Boundary.VolunteerUI;
 import Entity.Volunteer;
 import FileHandling.VolunteerFileHandler;
 import Libraries.ArrayList;
@@ -9,22 +11,20 @@ import Main.Event.Event;
 import Main.Event.EventHandler;
 import Main.Event.EventStatus;
 import Main.Event.EventVolunteer;
-
+import Utilities.Message;
 import java.util.Scanner;
 
-public class VolunteerManagement {
-
+public class VolunteerFunctions {
+    
     private static final Scanner scanner = new Scanner(System.in);
     private static final String FILE_NAME = "volunteers.txt";
     private static final VolunteerFileHandler fileHandler = new VolunteerFileHandler();
     private static ArrayList<Volunteer> volunteers = new ArrayList<>();
+    
+        public void runVolunteerSystem() {
 
-    public static void main(String[] args) {
-        volunteers = fileHandler.readData(FILE_NAME);
-        handle();
-    }
-
-    private static void handle() {
+        fileHandler.checkAndCreateFile("volunteer.txt");
+        
         while (true) {
             try {
                 System.out.println(Color.BLUE + "\nVolunteer Management System" + Color.RESET);
@@ -92,10 +92,10 @@ public class VolunteerManagement {
                     case 11:
                         return;
                     default:
-                        System.out.println(Color.RED + "Invalid choice. Please try again." + Color.RESET);
+                        Message.displayInvalidInputMessage("Invalid choice. Please try again.");
                 }
             } catch (Exception e) {
-                System.out.println(Color.RED + "An error occurred. Please try again!!!" + Color.RESET);
+                Message.displayInvalidInputMessage("An error occurred. Please try again!!!");
                 scanner.nextLine();
             }
         }
@@ -104,7 +104,7 @@ public class VolunteerManagement {
     private static void assignVolunteer() {
         ArrayList<Event> upcomingEvents = EventHandler.searchAllEventByEventStatus(EventStatus.UPCOMING);
 
-        //Display
+        //Display!!
         if (upcomingEvents == null || upcomingEvents.isEmpty()) {
             System.out.println("No upcoming event. ");
             return;
@@ -122,7 +122,7 @@ public class VolunteerManagement {
             Event event = EventHandler.searchEventByEventID(eventID);
 
             if (event == null) {
-                System.out.println(Color.RED + "Invalid event ID. Please try again." + Color.RESET);
+                Message.displayInvalidInputMessage("Invalid event ID. Please try again.");
             } else {
                 eventChosen = event;
                 break;
@@ -148,7 +148,7 @@ public class VolunteerManagement {
             }
 
             if (!idExist) {
-                System.out.println(Color.RED + "Volunteer ID not exist. Please try again." + Color.RESET);
+                Message.displayInvalidInputMessage("Volunteer ID not exist. Please try again.");
                 continue;
             }
 
@@ -160,7 +160,7 @@ public class VolunteerManagement {
 
                     if (!(eventChosen.endDateTime().isBefore(event.startDateTime()) || eventChosen.startDateTime().isAfter(event.endDateTime()))) {
                         // Schedule crash
-                        System.out.println(Color.RED + "The event selected crashed with volunteer schedule " + event.eventID() + ". Please try again." + Color.RESET);
+                        Message.displayInvalidInputMessage("The event selected crashed with volunteer schedule " + event.eventID() + ". Please try again.");
                         crashed = true;
                         break;
                     }
@@ -216,10 +216,10 @@ public class VolunteerManagement {
                     System.out.println("---------------------------");
                 }
             } else {
-                System.out.println(Color.YELLOW + "No events found for this volunteer." + Color.RESET);
+                Message.displayInvalidInputMessage("No events found for this volunteer.");
             }
         } else {
-            System.out.println(Color.YELLOW + "Volunteer does not exist." + Color.RESET);
+            Message.displayInvalidInputMessage("Volunteer does not exist.");
         }
 
     }
@@ -239,9 +239,9 @@ public class VolunteerManagement {
             System.out.print("Enter your name: ");
             name = scanner.nextLine();
             if (!isValidInput(name)) {
-                System.out.println(Color.RED + "Sorry! Empty field! Please enter a valid name." + Color.RESET);
+                Message.displayInvalidInputMessage("Sorry! Empty field! Please enter a valid name.");
             } else if (!name.matches("[a-zA-Z\\s-]+")) {
-                System.out.println(Color.RED + "Sorry! Invalid name. Please enter a valid name containing only letters." + Color.RESET);
+                Message.displayInvalidInputMessage("Sorry! Invalid name. Please enter a valid name containing only letters.");
             } else {
                 volunteer.setName(name);
                 break;
@@ -258,10 +258,10 @@ public class VolunteerManagement {
                     volunteer.setAge(ageInput);
                     break;
                 } else {
-                    System.out.println(Color.RED + "Age must be a positive number. Please try again." + Color.RESET);
+                    Message.displayInvalidInputMessage("Age must be a positive number. Please try again.");
                 }
             } catch (NumberFormatException e) {
-                System.out.println(Color.RED + "Invalid input for age. Please enter a valid number." + Color.RESET);
+                Message.displayInvalidInputMessage("Invalid input for age. Please enter a valid number.");
             }
         }
 
@@ -270,7 +270,7 @@ public class VolunteerManagement {
             System.out.print("Enter gender (Male, Female, Other): ");
             gender = scanner.nextLine().trim();
             if (!(gender.equalsIgnoreCase("Male") || gender.equalsIgnoreCase("Female") || gender.equalsIgnoreCase("Other"))) {
-                System.out.println(Color.RED + "Invalid gender. Please enter 'Male', 'Female', or 'Other'.");
+                Message.displayInvalidInputMessage("Invalid gender. Please enter 'Male', 'Female', or 'Other'.");
             } else {
                 volunteer.setGender(gender);
                 break;
@@ -282,7 +282,7 @@ public class VolunteerManagement {
             System.out.print("Enter contact number: ");
             phone = scanner.nextLine().trim();
             if (!isValidContactNumber(phone)) {
-                System.out.println(Color.RED + "Invalid contact number. Please try again." + Color.RESET);
+                Message.displayInvalidInputMessage("Invalid contact number. Please try again.");
             } else {
                 volunteer.setPhone(phone);
                 break;
@@ -294,9 +294,9 @@ public class VolunteerManagement {
             System.out.print("Enter your email: ");
             email = scanner.nextLine().trim();
             if (!isValidInput(email)) {
-                System.out.println(Color.RED + "Empty field! Please enter valid data." + Color.RESET);
+                Message.displayInvalidInputMessage("Empty field! Please enter valid data.");
             } else if (!isValidEmail(email)) {
-                System.out.println(Color.RED + "Invalid email format. Please try again." + Color.RESET);
+                Message.displayInvalidInputMessage("Invalid email format. Please try again.");
             } else {
                 volunteer.setEmail(email);
                 break;
