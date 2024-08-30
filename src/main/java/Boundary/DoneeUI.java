@@ -4,6 +4,7 @@ import Entity.Donee;
 
 import Libraries.ArrayList;
 import Libraries.Color;
+import Libraries.GeneralFunction;
 
 import java.time.LocalDate;
 import java.util.Scanner;
@@ -261,5 +262,51 @@ public class DoneeUI {
         System.out.println("\n**High Urgency Donee List**\n");
         System.out.printf("%-10s %-25s %-15s %-15s %-20s %n", "Donee ID", "Donee Name", "Donee Phone", "Donee Urgency", "Registered Date");
         System.out.println(String.format("%0" + 85 + "d", 0).replace("0", "-"));
+    }
+
+    public static void reportDoneeUrgencyUI(int highUrgencyCount, int mediumUrgencyCount, int lowUrgencyCount){
+        System.out.println("\n**Summary of Number of Donees by Donee Urgency**");
+        GeneralFunction.repeatPrint("-", 48);
+
+        System.out.printf("\n%-16s %-16s %-16s%n", centerString("High", 16), centerString("Moderate", 16), centerString("Low", 16));
+        System.out.printf("%-16s %-16s %-16s%n", centerString(String.valueOf(highUrgencyCount), 16), centerString(String.valueOf(mediumUrgencyCount), 16), centerString(String.valueOf(lowUrgencyCount), 16));
+
+        GeneralFunction.repeatPrint("-", 48);
+        System.out.print("\n");
+    }
+
+    public static void reportDoneeTypeUI(int individualCount, int organizationCount, int familyCount){
+        System.out.println("\n**Summary of Number of Donees by Donee Type**");
+        GeneralFunction.repeatPrint("-", 48);
+
+        System.out.printf("\n%-16s %-16s %-16s%n", centerString("Individual", 16), centerString("Organization", 16), centerString("Family", 16));
+        System.out.printf("%-16s %-16s %-16s%n", centerString(String.valueOf(individualCount), 16), centerString(String.valueOf(organizationCount), 16), centerString(String.valueOf(familyCount), 16));
+
+        GeneralFunction.repeatPrint("-", 48);
+        System.out.print("\n");
+    }
+
+    public static void reportItemCategoryUI(int foodCount, int beverageCount, int clothingCount, int personalCount, int deviceCount, int medicineCount, int moneyCount){
+        System.out.println("\n**Summary of Number of Donees by Item Category Required**");
+        GeneralFunction.repeatPrint("-", 87);
+
+        System.out.printf("\n%-8s %-10s %-10s %-15s %-16s %-10s %-13s %n",
+                "Food", "Beverage", "Clothing", "Personal Care", "Medical Device", "Medicine", "Monetary Aid");
+
+        // Print the counts centered under each label
+        System.out.printf("%-8s %-10s %-10s %-15s %-16s %-10s %-13s %n", centerString(String.valueOf(foodCount), 8), centerString(String.valueOf(beverageCount), 10), centerString(String.valueOf(clothingCount), 10), centerString(String.valueOf(personalCount), 15), centerString(String.valueOf(deviceCount), 16), centerString(String.valueOf(medicineCount), 10), centerString(String.valueOf(moneyCount), 13));
+
+        GeneralFunction.repeatPrint("-", 87);
+        System.out.print("\n");
+    }
+
+    private static String centerString(String text, int width) {
+        int padding = (width - text.length()) / 2;
+        String format = "%" + padding + "s%s%" + padding + "s";
+        return String.format(format, "", text, "");
+    }
+
+    public static void printEmptyLine(){
+        System.out.print("\n");
     }
 }
