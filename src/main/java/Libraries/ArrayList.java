@@ -24,10 +24,10 @@ public class ArrayList<T> implements ListInterface<T>, Iterable<T>{
      */
     public void add(T newElement) {
         if (size == elementData.length) {
-            ensureCapacity(); // increase current capacity of list, make it
-            // double.
+            ensureCapacity(); // increase current capacity of list, make it double.
         }
-        elementData[size++] = newElement;
+        elementData[size] = newElement;
+        size++;
     }
 
     /**
@@ -44,9 +44,13 @@ public class ArrayList<T> implements ListInterface<T>, Iterable<T>{
             // double.
         }
 
-        for (int i = size; i > index; i--) {
+        /*for (int i = size; i > index; i--) {
             elementData[i] = elementData[i - 1];
-        }
+        }*/
+
+        System.arraycopy(elementData, index,
+                elementData, index + 1,
+                size - index);
 
         elementData[index] = newElement;
         size++;
@@ -155,7 +159,7 @@ public class ArrayList<T> implements ListInterface<T>, Iterable<T>{
     private void ensureCapacity() {
         int newIncreasedCapacity = elementData.length * 2;
 
-        Debug.printDebugMsgln("Expand array from " + elementData.length + " to " + newIncreasedCapacity);
+        //Debug.printDebugMsgln("Expand array from " + elementData.length + " to " + newIncreasedCapacity);
 
         elementData = Arrays.copyOf(elementData, newIncreasedCapacity);
     }
