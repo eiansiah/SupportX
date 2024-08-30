@@ -7,6 +7,7 @@ package Entity;
 import java.time.LocalDateTime;
 //import adt
 import Libraries.ArrayList;
+import Libraries.ListInterface;
 
 /**
  *
@@ -15,21 +16,21 @@ import Libraries.ArrayList;
 public class DonationRecord {
     private int recordID;
     private Donor donor;
-    private ArrayList<DonationItem> item;
-    private ArrayList<Integer> qty;
-    private ArrayList<Double> amount;
+    private ListInterface<DonationItem> item;
+    private ListInterface<Integer> qty;
+    private ListInterface<Double> amount;
     private LocalDateTime donationDateTime;
     private static int nextRecordID;
 
     public DonationRecord() {
         recordID = nextRecordID;
-        item = new ArrayList<DonationItem>();
-        qty = new ArrayList<Integer>();
-        amount=new ArrayList<Double>();
+        item = new ArrayList<>();
+        qty = new ArrayList<>();
+        amount=new ArrayList<>();
         donationDateTime = LocalDateTime.now();
     }
 
-    public DonationRecord(int recordID, Donor donor, ArrayList<DonationItem> item, ArrayList<Integer> qty, ArrayList<Double> amount, LocalDateTime donationDateTime) {
+    public DonationRecord(int recordID, Donor donor, ListInterface<DonationItem> item, ListInterface<Integer> qty, ListInterface<Double> amount, LocalDateTime donationDateTime) {
         this.recordID = recordID;
         this.donor = donor;
         this.item = item;
@@ -54,27 +55,27 @@ public class DonationRecord {
         this.donor = donor;
     }
 
-    public ArrayList<DonationItem> getItem() {
+    public ListInterface<DonationItem> getItem() {
         return item;
     }
 
-    public void setItem(ArrayList<DonationItem> item) {
+    public void setItem(ListInterface<DonationItem> item) {
         this.item = item;
     }
 
-    public ArrayList<Integer> getQty() {
+    public ListInterface<Integer> getQty() {
         return qty;
     }
 
-    public void setQty(ArrayList<Integer> qty) {
+    public void setQty(ListInterface<Integer> qty) {
         this.qty = qty;
     }
 
-    public ArrayList<Double> getAmount() {
+    public ListInterface<Double> getAmount() {
         return amount;
     }
 
-    public void setAmount(ArrayList<Double> amount) {
+    public void setAmount(ListInterface<Double> amount) {
         this.amount = amount;
     }
 
