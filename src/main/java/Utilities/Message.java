@@ -15,6 +15,10 @@ public class Message {
     public static void displayInvalidChoiceMessage(String reason) {
         System.out.println(Color.RED + "Invalid choice. " + reason + Color.RESET);
     }
+    
+    public static void displayInvalidOptionMessage(String reason) {
+        System.out.println(Color.RED + "Invalid option. " + reason + Color.RESET);
+    }
 
     public static void displayInvalidInputMessage(String reason) {
         System.out.println(Color.RED + "\nInvalid input. " + reason + Color.RESET);
@@ -30,6 +34,10 @@ public class Message {
 
     public static void displayInvalidChoiceMessage() {
         System.out.println(Color.RED + "\nInvalid choice. " + Color.RESET);
+    }
+    
+     public static void displayInvalidOptionMessage() {
+        System.out.println(Color.RED + "\nInvalid option. " + Color.RESET);
     }
 
     public static void displayInvalidInputMessage() {
