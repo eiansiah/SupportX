@@ -11,10 +11,11 @@ public class Message {
     public static void displayGeneralMessage(String msg) {
         System.out.print(Color.BRIGHT_YELLOW + msg + Color.RESET);
     }
-    
+
     public static void displaySuccessMessage(String msg) {
-        System.out.print(Color.GREEN + msg + Color.RESET);
+        System.out.println(Color.GREEN + msg + Color.RESET);
     }
+
 
     public static void displayInvalidChoiceMessage(String reason) {
         System.out.println(Color.RED + "Invalid choice. " + reason + Color.RESET);
