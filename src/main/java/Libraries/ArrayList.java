@@ -8,7 +8,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 
-public class ArrayList<T> implements List<T>, Iterable<T>{
+public class ArrayList<T> implements ListInterface<T>, Iterable<T>{
 
     // Define INITIAL_CAPACITY, size of elements of custom ArrayList
     private static final int INITIAL_CAPACITY = 16;
@@ -20,7 +20,7 @@ public class ArrayList<T> implements List<T>, Iterable<T>{
     }
 
     /**
-     * Method adds elements to List.
+     * Method adds elements to ListInterface.
      */
     public void add(T newElement) {
         if (size == elementData.length) {
@@ -221,9 +221,7 @@ public class ArrayList<T> implements List<T>, Iterable<T>{
         int n = size();
         for (int i = 0; i < n - 1; i++) {
             for (int j = 0; j < n - i - 1; j++) {
-                // Use the comparator to compare two elements
                 if (comparator.compare(get(j), get(j + 1)) > 0) {
-                    // Swap list[j] and list[j+1]
                     T temp = get(j);
                     set(j, get(j + 1));
                     set(j + 1, temp);

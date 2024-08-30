@@ -3,7 +3,7 @@ package Libraries;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class LinkedList<T> implements List<T>, Iterable<T> {
+public class LinkedList<T> implements ListInterface<T>, Iterable<T> {
     private Node head;
     private Node tail;
 
