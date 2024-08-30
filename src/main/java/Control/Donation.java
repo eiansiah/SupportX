@@ -5,6 +5,7 @@
 package Control;
 //import entity
 
+import Boundary.DonationUI;
 import Entity.DonationItem;
 import Entity.DonationRecord;
 import Entity.Food;
@@ -17,6 +18,7 @@ import Entity.Money;
 import Entity.Donor;
 //import other subsystem function
 import Control.DonorFunctions;
+import FileHandling.DonationFileHandler;
 
 //import basic library
 //file
@@ -35,7 +37,11 @@ import java.util.Comparator;
 
 //import adt
 import Libraries.ArrayList;
+import Libraries.GeneralFunction;
+import Libraries.ListInterface;
 import static Main.Event.EventHandler.searchEventByEventID;
+import Utilities.Message;
+import java.util.Iterator;
 //will be removed for boundary
 import java.util.Scanner;
 
@@ -49,510 +55,18 @@ public class Donation {
     }
 
     private DonorFunctions donorHandling = new DonorFunctions();
-
-    //Load Files
-    //Load Donation Record File
-    public void loadIntoDR(ArrayList<DonationRecord> recordList) {
-        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        int recordID;
-        Donor donor;
-        ArrayList<DonationItem> itemList = new ArrayList<DonationItem>();
-        loadIntoAll(itemList);
-        ArrayList<DonationItem> recordItemList;
-        ArrayList<Integer> qty;
-        ArrayList<Double> amt;
-        LocalDateTime donationDateTime;
-        int nextRecordID = 1;
-        try {
-            File myObj = new File("DonationRecord.txt");
-            myObj.createNewFile();
-            DonationRecord.setNextRecordID(1);
-
-            try {
-                Scanner readerFile = new Scanner(myObj);
-                int index = 0;
-                while (readerFile.hasNextLine()) {
-                    recordItemList = new ArrayList<DonationItem>();
-                    qty = new ArrayList<Integer>();
-                    amt = new ArrayList<Double>();
-                    String[] dataInLine = readerFile.nextLine().split("#");
-                    recordID = Integer.parseInt(dataInLine[0]);
-                    String _donorID = dataInLine[1];
-                    String[] item2 = dataInLine[2].split(",");
-                    String[] qty2 = dataInLine[3].split(",");
-                    String[] amt2 = dataInLine[4].split(",");
-                    donationDateTime = LocalDateTime.parse(dataInLine[5], dateFormat);
-                    for (String qty3 : qty2) {
-                        qty.add(Integer.valueOf(qty3));
-                    }
-                    for (String amt3 : amt2) {
-                        amt.add(Double.valueOf(amt3));
-                    }
-                    for (String code : item2) {
-                        for (DonationItem item : itemList) {
-                            if (item.getItemCode().equals(code)) {
-                                recordItemList.add(item);
-                            }
-                        }
-                    }
-                    donor = donorHandling.checkIfDonorExist(_donorID);
-                    if (donor == null) {
-                        donor = new Donor();
-                        donor.setId("-");
-                        donor.setName("Deleted Account");
-                    }
-                    //Get Donor Object
-                    DonationRecord record = new DonationRecord(recordID, donor, recordItemList, qty, amt, donationDateTime);
-                    recordList.add(record);
-                    DonationRecord.setNextRecordID(recordID + 1);
-                }
-
-                readerFile.close();
-            } catch (FileNotFoundException e) {
-                System.out.println("An read file error occurred.");
-                e.printStackTrace();
-            }
-
-        } catch (IOException e) {
-            System.out.println("An create file error occurred.");
-        }
-    }
-
-    public void loadBackDRFile(ArrayList<DonationRecord> recordList) {
-        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        try {
-            FileWriter writeFile = new FileWriter("DonationRecord.txt");
-            for (DonationRecord record : recordList) {
-                String line = record.getRecordID() + "#" + record.getDonor().getId() + "#";
-                for (int i = 0; i < record.getItem().size(); i++) {
-                    if (i != record.getItem().size() - 1) {
-                        line += record.getItem().get(i).getItemCode() + ",";
-                    } else {
-                        line += record.getItem().get(i).getItemCode() + "#";
-                    }
-                }
-                for (int i = 0; i < record.getQty().size(); i++) {
-                    if (i != record.getQty().size() - 1) {
-                        line += record.getQty().get(i) + ",";
-                    } else {
-                        line += record.getQty().get(i) + "#";
-                    }
-                }
-                for (int i = 0; i < record.getAmount().size(); i++) {
-                    if (i != record.getAmount().size() - 1) {
-                        line += record.getAmount().get(i) + ",";
-                    } else {
-                        line += record.getAmount().get(i) + "#";
-                    }
-                }
-                line += record.getDonationDateTime().format(dateFormat);
-                writeFile.write(line + "\n");
-
-            }
-            writeFile.close();
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-    }
-
-    //All
-    public void loadIntoAll(ArrayList<DonationItem> itemList) {
-        loadIntoFood(itemList);
-        loadIntoBeverage(itemList);
-        loadIntoClothing(itemList);
-        loadIntoMedicalDevice(itemList);
-        loadIntoMedicine(itemList);
-        loadIntoPersonalCare(itemList);
-        loadIntoMoney(itemList);
-    }
-
-    //Food
-    public void loadIntoFood(ArrayList<DonationItem> itemList) {
-        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        double _netWeight;
-        LocalDate _expiryDate;
-        int _qty;
-        String _foodType, _venueCode, _itemCode, _itemName;
-        try {
-            File myObj = new File("Food.txt");
-            myObj.createNewFile();
-
-            try {
-                Scanner readerFile = new Scanner(myObj);
-
-                while (readerFile.hasNextLine()) {
-                    String[] dataInLine = readerFile.nextLine().split("#");
-                    _itemCode = dataInLine[0];
-                    _itemName = dataInLine[1];
-                    _qty = Integer.parseInt(dataInLine[2]);
-                    _netWeight = Double.parseDouble(dataInLine[3]);
-                    _expiryDate = LocalDate.parse(dataInLine[4], dateFormat);
-                    _foodType = dataInLine[5];
-                    _venueCode = dataInLine[6];
-                    Food item = new Food(_netWeight, _expiryDate, _foodType, _venueCode, _itemCode, _itemName, _qty);
-                    itemList.add(item);
-                }
-
-                readerFile.close();
-            } catch (FileNotFoundException e) {
-                System.out.println("An read file error occurred.");
-                e.printStackTrace();
-            }
-
-        } catch (IOException e) {
-            System.out.println("An create file error occurred.");
-        }
-    }
-
-    public void loadBackFoodFile(ArrayList<DonationItem> itemList) {
-        try {
-            FileWriter writeFile = new FileWriter("Food.txt");
-            for (DonationItem item : itemList) {
-                if (item instanceof Food) {
-                    writeFile.write(item.getItemCode() + "#" + item.getItemName() + "#" + item.getQuantity()
-                            + "#" + ((Food) item).getNetWeight() + "#" + ((Food) item).getExpiryDate() + "#"
-                            + ((Food) item).getFoodType() + "#" + ((Food) item).getVenueCode() + "\n");
-                }
-            }
-            writeFile.close();
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-    }
-
-    //Beverage
-    public void loadIntoBeverage(ArrayList<DonationItem> itemList) {
-        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        double _netVolume;
-        LocalDate _expiryDate;
-        int _qty;
-        String _venueCode, _itemCode, _itemName;
-        try {
-            File myObj = new File("Beverage.txt");
-            myObj.createNewFile();
-
-            try {
-                Scanner readerFile = new Scanner(myObj);
-
-                while (readerFile.hasNextLine()) {
-                    String[] dataInLine = readerFile.nextLine().split("#");
-                    _itemCode = dataInLine[0];
-                    _itemName = dataInLine[1];
-                    _qty = Integer.parseInt(dataInLine[2]);
-                    _netVolume = Double.parseDouble(dataInLine[3]);
-                    _expiryDate = LocalDate.parse(dataInLine[4], dateFormat);
-                    _venueCode = dataInLine[5];
-                    Beverage item = new Beverage(_netVolume, _expiryDate, _venueCode, _itemCode, _itemName, _qty);
-                    itemList.add(item);
-                }
-
-                readerFile.close();
-            } catch (FileNotFoundException e) {
-                System.out.println("An read file error occurred.");
-                e.printStackTrace();
-            }
-
-        } catch (IOException e) {
-            System.out.println("An create file error occurred.");
-        }
-    }
-
-    public void loadBackBeverageFile(ArrayList<DonationItem> itemList) {
-        try {
-            FileWriter writeFile = new FileWriter("Beverage.txt");
-            for (DonationItem item : itemList) {
-                if (item instanceof Beverage) {
-                    writeFile.write(item.getItemCode() + "#" + item.getItemName() + "#" + item.getQuantity()
-                            + "#" + ((Beverage) item).getNetVolume() + "#" + ((Beverage) item).getExpiryDate()
-                            + "#" + ((Beverage) item).getVenueCode() + "\n");
-                }
-            }
-            writeFile.close();
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-    }
-
-    //Clothing
-    public void loadIntoClothing(ArrayList<DonationItem> itemList) {
-        int _qty;
-        String _size, _clothingCategory, _gender, _age, _venueCode, _itemCode, _itemName;
-        try {
-            File myObj = new File("Clothing.txt");
-            myObj.createNewFile();
-
-            try {
-                Scanner readerFile = new Scanner(myObj);
-
-                while (readerFile.hasNextLine()) {
-                    String[] dataInLine = readerFile.nextLine().split("#");
-                    _itemCode = dataInLine[0];
-                    _itemName = dataInLine[1];
-                    _qty = Integer.parseInt(dataInLine[2]);
-                    _size = dataInLine[3];
-                    _clothingCategory = dataInLine[4];
-                    _gender = dataInLine[5];
-                    _age = dataInLine[6];
-                    _venueCode = dataInLine[7];
-                    Clothing item = new Clothing(_size, _clothingCategory, _gender, _age, _venueCode, _itemCode, _itemName, _qty);
-                    itemList.add(item);
-                }
-
-                readerFile.close();
-            } catch (FileNotFoundException e) {
-                System.out.println("An read file error occurred.");
-                e.printStackTrace();
-            }
-
-        } catch (IOException e) {
-            System.out.println("An create file error occurred.");
-        }
-    }
-
-    public void loadBackClothingFile(ArrayList<DonationItem> itemList) {
-        try {
-            FileWriter writeFile = new FileWriter("Clothing.txt");
-            for (DonationItem item : itemList) {
-                if (item instanceof Clothing) {
-                    writeFile.write(item.getItemCode() + "#" + item.getItemName() + "#" + item.getQuantity()
-                            + "#" + ((Clothing) item).getSize() + "#" + ((Clothing) item).getClothingCategory()
-                            + "#" + ((Clothing) item).getGender() + "#" + ((Clothing) item).getAge() + "#"
-                            + ((Clothing) item).getVenueCode() + "\n");
-                }
-            }
-            writeFile.close();
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-    }
-
-    //Personal Care
-    public void loadIntoPersonalCare(ArrayList<DonationItem> itemList) {
-        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        double _netWeight;
-        LocalDate _expiryDate;
-        int _qty;
-        String _gender, _age, _personalCareCategory, _venueCode, _itemCode, _itemName;
-        try {
-            File myObj = new File("PersonalCare.txt");
-            myObj.createNewFile();
-
-            try {
-                Scanner readerFile = new Scanner(myObj);
-
-                while (readerFile.hasNextLine()) {
-                    String[] dataInLine = readerFile.nextLine().split("#");
-                    _itemCode = dataInLine[0];
-                    _itemName = dataInLine[1];
-                    _qty = Integer.parseInt(dataInLine[2]);
-                    _netWeight = Double.parseDouble(dataInLine[3]);
-                    _expiryDate = LocalDate.parse(dataInLine[4], dateFormat);
-                    _gender = dataInLine[5];
-                    _age = dataInLine[6];
-                    _personalCareCategory = dataInLine[7];
-                    _venueCode = dataInLine[8];
-                    PersonalCare item = new PersonalCare(_netWeight, _expiryDate, _gender, _age, _personalCareCategory, _venueCode, _itemCode, _itemName, _qty);
-                    itemList.add(item);
-                }
-
-                readerFile.close();
-            } catch (FileNotFoundException e) {
-                System.out.println("An read file error occurred.");
-                e.printStackTrace();
-            }
-
-        } catch (IOException e) {
-            System.out.println("An create file error occurred.");
-        }
-    }
-
-    public void loadBackPersonalCareFile(ArrayList<DonationItem> itemList) {
-        try {
-            FileWriter writeFile = new FileWriter("PersonalCare.txt");
-            for (DonationItem item : itemList) {
-                if (item instanceof PersonalCare) {
-                    writeFile.write(item.getItemCode() + "#" + item.getItemName() + "#" + item.getQuantity() + "#"
-                            + ((PersonalCare) item).getNetWeight() + "#" + ((PersonalCare) item).getExpiryDate() + "#"
-                            + ((PersonalCare) item).getGender() + "#" + ((PersonalCare) item).getAge() + "#"
-                            + ((PersonalCare) item).getPersonalCareCategory() + "#" + ((PersonalCare) item).getVenueCode() + "\n");
-                }
-            }
-            writeFile.close();
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-    }
-
-    //Medical Device
-    public void loadIntoMedicalDevice(ArrayList<DonationItem> itemList) {
-        int _qty;
-        String _venueCode, _description, _itemCode, _itemName;
-        try {
-            File myObj = new File("MedicalDevice.txt");
-            myObj.createNewFile();
-
-            try {
-                Scanner readerFile = new Scanner(myObj);
-
-                while (readerFile.hasNextLine()) {
-                    String[] dataInLine = readerFile.nextLine().split("#");
-                    _itemCode = dataInLine[0];
-                    _itemName = dataInLine[1];
-                    _qty = Integer.parseInt(dataInLine[2]);
-                    _venueCode = dataInLine[3];
-                    _description = dataInLine[4];
-                    MedicalDevice item = new MedicalDevice(_venueCode, _description, _itemCode, _itemName, _qty);
-                    itemList.add(item);
-                }
-
-                readerFile.close();
-            } catch (FileNotFoundException e) {
-                System.out.println("An read file error occurred.");
-                e.printStackTrace();
-            }
-
-        } catch (IOException e) {
-            System.out.println("An create file error occurred.");
-        }
-    }
-
-    public void loadBackMedicalDeviceFile(ArrayList<DonationItem> itemList) {
-        try {
-            FileWriter writeFile = new FileWriter("MedicalDevice.txt");
-            for (DonationItem item : itemList) {
-                if (item instanceof MedicalDevice) {
-                    writeFile.write(item.getItemCode() + "#" + item.getItemName() + "#" + item.getQuantity() + "#"
-                            + ((MedicalDevice) item).getVenueCode() + "#" + ((MedicalDevice) item).getDescription() + "\n");
-                }
-            }
-            writeFile.close();
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-    }
-
-    //Medicine
-    public void loadIntoMedicine(ArrayList<DonationItem> itemList) {
-        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        double _netWeight;
-        LocalDate _expiryDate;
-        int _qty;
-        String _gender, _age, _venueCode, _dosageForm, _description, _itemCode, _itemName;
-        try {
-            File myObj = new File("Medicine.txt");
-            myObj.createNewFile();
-
-            try {
-                Scanner readerFile = new Scanner(myObj);
-
-                while (readerFile.hasNextLine()) {
-                    String[] dataInLine = readerFile.nextLine().split("#");
-                    _itemCode = dataInLine[0];
-                    _itemName = dataInLine[1];
-                    _qty = Integer.parseInt(dataInLine[2]);
-                    _netWeight = Double.parseDouble(dataInLine[3]);
-                    _expiryDate = LocalDate.parse(dataInLine[4], dateFormat);
-                    _gender = dataInLine[5];
-                    _age = dataInLine[6];
-                    _venueCode = dataInLine[7];
-                    _dosageForm = dataInLine[8];
-                    _description = dataInLine[9];
-                    Medicine item = new Medicine(_netWeight, _expiryDate, _gender, _age, _venueCode, _dosageForm, _description, _itemCode, _itemName, _qty);
-                    itemList.add(item);
-                }
-
-                readerFile.close();
-            } catch (FileNotFoundException e) {
-                System.out.println("An read file error occurred.");
-                e.printStackTrace();
-            }
-
-        } catch (IOException e) {
-            System.out.println("An create file error occurred.");
-        }
-    }
-
-    public void loadBackMedicineFile(ArrayList<DonationItem> itemList) {
-        try {
-            FileWriter writeFile = new FileWriter("Medicine.txt");
-            for (DonationItem item : itemList) {
-                if (item instanceof Medicine) {
-                    writeFile.write(item.getItemCode() + "#" + item.getItemName() + "#" + item.getQuantity() + "#"
-                            + ((Medicine) item).getNetWeight() + "#" + ((Medicine) item).getExpiryDate() + "#"
-                            + ((Medicine) item).getGender() + "#" + ((Medicine) item).getAge() + "#" + ((Medicine) item).getVenueCode()
-                            + "#" + ((Medicine) item).getDosageForm() + "#" + ((Medicine) item).getDescription() + "\n");
-                }
-            }
-            writeFile.close();
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-    }
-
-    //Money
-    public void loadIntoMoney(ArrayList<DonationItem> itemList) {
-        int _qty;
-        String _source, _itemCode, _itemName;
-        double _amount;
-        try {
-            File myObj = new File("Money.txt");
-            myObj.createNewFile();
-
-            try {
-                Scanner readerFile = new Scanner(myObj);
-
-                while (readerFile.hasNextLine()) {
-                    String[] dataInLine = readerFile.nextLine().split("#");
-                    _itemCode = dataInLine[0];
-                    _itemName = dataInLine[1];
-                    _qty = Integer.parseInt(dataInLine[2]);
-                    _source = dataInLine[3];
-                    _amount = Double.parseDouble(dataInLine[4]);
-                    Money item = new Money(_amount, _source, _itemCode, _itemName, _qty);
-                    itemList.add(item);
-                }
-
-                readerFile.close();
-            } catch (FileNotFoundException e) {
-                System.out.println("An read file error occurred.");
-                e.printStackTrace();
-            }
-
-        } catch (IOException e) {
-            System.out.println("An create file error occurred.");
-        }
-    }
-
-    public void loadBackMoneyFile(ArrayList<DonationItem> itemList) {
-        try {
-            FileWriter writeFile = new FileWriter("Money.txt");
-            for (DonationItem item : itemList) {
-                if (item instanceof Money) {
-                    writeFile.write(item.getItemCode() + "#" + item.getItemName() + "#" + item.getQuantity() + "#"
-                            + ((Money) item).getSource() + "#" + ((Money) item).getAmount() + "\n");
-                }
-            }
-            writeFile.close();
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-    }
+    private DonationFileHandler fileHandler = new DonationFileHandler();
+    private Message msgHandling = new Message();
+    private DonationUI donationUI = new DonationUI();
+    private GeneralFunction generalFunc=new GeneralFunction();
 
     //Donation Home Page
     public void donationHome() {
 
         int option;
         while (true) {
-            displayMenuDonationHome();
-            option = checkMenuDonationHomeOption();
+            donationUI.displayMenuDonationHome();
+            option = checkMenuWithOp(9);
             if (option == 9) {
                 break;
             } else if (option == 8) {
@@ -577,102 +91,12 @@ public class Donation {
         //Move back into file
     }
 
-    //Display Donation Action Menu - Boundary
-    public void displayMenuDonationHome() {
-        System.out.println("\nDonation");
-        System.out.println("1. Add Donation");
-        System.out.println("2. Remove Donation");
-        System.out.println("3. Search Donation");
-        System.out.println("4. Amend Donation Details");
-        System.out.println("5. Track Donation");
-        System.out.println("6. Donation-Donor List");
-        System.out.println("7. Full Donation List");
-        System.out.println("8. Summary Report");
-        System.out.println("9. Back to Support X Home");
-    }
-
-    //Display Donation Category - Boundary
-    public void displayDonationCategory() {
-        System.out.println("Donation Category");
-        System.out.println("1. Food");
-        System.out.println("2. Beverage");
-        System.out.println("3. Clothing");
-        System.out.println("4. Personal Care");
-        System.out.println("5. Medical Device");
-        System.out.println("6. Medicine");
-        System.out.println("7. Money");
-        System.out.println("8. Back to Donation");
-    }
-
-    //Check Donation Action Menu Option
-    public int checkMenuDonationHomeOption() {
-        Scanner scanner = new Scanner(System.in);
-        int option;
-        while (true) {
-            try {
-                System.out.print("\nPlease select an option (1-9): ");
-                option = Integer.parseInt(scanner.nextLine());
-                if (option >= 1 && option <= 9) {
-                    break;
-                } else {
-                    System.out.println("Sorry! Invalid Option. Please enter a valid option (1-9).");
-                }
-            } catch (Exception ex) {
-                System.out.println("Sorry! Invalid Option. Please enter a valid option (1-9).");
-            }
-        }
-        return option;
-    }
-
-    //Check Donation Category Choice
-    public int checkDonationCategoryOption() {
-        Scanner scanner = new Scanner(System.in);
-        int option;
-        while (true) {
-            try {
-                System.out.print("\nPlease select an option (1-8): ");
-                option = Integer.parseInt(scanner.nextLine());
-                if (option >= 1 && option <= 8) {
-                    break;
-                } else {
-                    System.out.println("Sorry! Invalid Option. Please enter a valid option (1-8).");
-                }
-            } catch (Exception ex) {
-                System.out.println("Sorry! Invalid Option. Please enter a valid option (1-8).");
-            }
-        }
-        return option;
-    }
-
-    //Display Instruction for addDonation
-    public void displayAddDonationInstruction() {
-        System.out.println("\nDonor For This Donation");
-        System.out.println("**Note that a donation can have one or many items.");
-        System.out.println("**Leaving this page to go back Donation Page will end this session for this donation for this donor.\n");
-    }
-
-    public void displayVenueCode() {
-        System.out.println("\nVenue Code");
-        try {
-            File myObj = new File("Venue.txt");
-            Scanner readerFile = new Scanner(myObj);
-            while (readerFile.hasNextLine()) {
-                String[] venueList = readerFile.nextLine().split("#");
-                System.out.printf("%-10s %-20s\n", venueList[0], venueList[1]);
-            }
-            readerFile.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-    }
-
-    public void addItemToRecord(ArrayList<DonationItem> recordItem, ArrayList<Integer> recordQty, DonationItem item, int qty) {
+    public void addItemToRecord(ListInterface<DonationItem> recordItem, ListInterface<Integer> recordQty, DonationItem item, int qty) {
         recordItem.add(item);
         recordQty.add(qty);
     }
 
-    public void addItemToRecord(ArrayList<DonationItem> recordItem, ArrayList<Double> recordAmt, DonationItem item, double amt) {
+    public void addItemToRecord(ListInterface<DonationItem> recordItem, ListInterface<Double> recordAmt, DonationItem item, double amt) {
         recordItem.add(item);
         recordAmt.add(amt);
     }
@@ -682,21 +106,21 @@ public class Donation {
         int option;
         String reply;
         boolean continueDonationAdd = true;
-        displayAddDonationInstruction();
+        donationUI.displayAddDonationInstruction();
         Donor donor = getDonorIDforDonation();
-        ArrayList<DonationRecord> dRecordLIST = new ArrayList<DonationRecord>();
+        ListInterface<DonationRecord> dRecordLIST = new ArrayList<>();
         if (donor != null) {
             DonationRecord donationRecord = new DonationRecord();
             donationRecord.setDonor(donor);
             while (true) {
-                System.out.println("\nAdd Donation");
-                displayDonationCategory();
-                option = checkDonationCategoryOption();
+                donationUI.displayAddPageHeader();
+                donationUI.displayDonationCategory();
+                option = checkMenuWithOp(8);
                 if (option == 8) {
                     if (!donationRecord.getItem().isEmpty()) {
                         //add record
                         dRecordLIST.add(donationRecord);
-                        loadBackDRFile(dRecordLIST);
+                        fileHandler.loadBackDRFile(dRecordLIST);
                         DonationRecord.setNextRecordID(DonationRecord.getNextRecordID() + 1);
                     }
                     break;
@@ -717,26 +141,24 @@ public class Donation {
                 }
                 while (true) {
                     try {
-                        Scanner scanner = new Scanner(System.in);
-                        System.out.print("\nDo you wish to add other donation? (Y/N): ");
-                        reply = scanner.nextLine();
+                        reply = donationUI.inputAskConAdd();
                         if (reply.equalsIgnoreCase("N") || reply.equalsIgnoreCase("Y")) {
                             if (reply.equalsIgnoreCase("N")) {
                                 continueDonationAdd = false;
                             }
                             break;
                         } else {
-                            System.out.println("Sorry! Invalid Input. Please enter Y or N.");
+                            msgHandling.displayInvalidInputMessage("Please enter Y or N.");
                         }
                     } catch (Exception ex) {
-                        System.out.println("Sorry! Invalid Input. Please enter Y or N.");
+                        msgHandling.displayInvalidInputMessage("Please enter Y or N.");
                     }
                 }
                 if (!continueDonationAdd) {
                     if (!donationRecord.getItem().isEmpty()) {
                         //add record
                         dRecordLIST.add(donationRecord);
-                        loadBackDRFile(dRecordLIST);
+                        fileHandler.loadBackDRFile(dRecordLIST);
                         DonationRecord.setNextRecordID(DonationRecord.getNextRecordID() + 1);
                     }
                     break;
@@ -746,14 +168,14 @@ public class Donation {
     }
 
     //Add Food
-    public boolean addFood(ArrayList<DonationItem> recordItem, ArrayList<Integer> recordQty) {
-        ArrayList<DonationItem> foodList = new ArrayList<DonationItem>();
-        loadIntoFood(foodList);
-        displayInstructionAddFood();
+    public boolean addFood(ListInterface<DonationItem> recordItem, ListInterface<Integer> recordQty) {
+        ListInterface<DonationItem> foodList = new ArrayList<>();
+        fileHandler.loadIntoFood(foodList);
+        donationUI.displayInstructionAddFood();
 
         //Choose to add amount or new item
         //Add New Item
-        Scanner scanner = new Scanner(System.in);
+        
         String _name, _foodType, _venueCode, _temp, _code;
         LocalDate _expiryDate;
         int _qty;
@@ -805,11 +227,12 @@ public class Donation {
         if (exist) {
             while (true) {
                 try {
-                    System.out.print("Detected this item existed before. Do you wish to add the quantity? (Y/N): ");
-                    _temp = scanner.nextLine();
+                    _temp =  donationUI.inputDetectedSame();
                     if (_temp.equalsIgnoreCase("N") || _temp.equalsIgnoreCase("Y")) {
                         if (_temp.equalsIgnoreCase("Y")) {
-                            for (DonationItem item : foodList) {
+                            Iterator<DonationItem> iterator = foodList.iterator();
+                            while (iterator.hasNext()) {
+                                DonationItem item = iterator.next();
                                 if (item.getItemName().equals(_name) && ((Food) item).getExpiryDate().equals(_expiryDate)
                                         && ((Food) item).getNetWeight() == _netWeight && ((Food) item).getFoodType().equals(_foodType)
                                         && ((Food) item).getVenueCode().equals(_venueCode)) {
@@ -819,23 +242,23 @@ public class Donation {
                                 }
                             }
                             System.out.println("Food quantity added successfully.");
-                            loadBackFoodFile(foodList);
+                            fileHandler.loadBackFoodFile(foodList);
                             return true;
                         } else {
                             return false;
                         }
                     } else {
-                        System.out.println("Sorry! Invalid Input. Please enter Y or N.");
+                        msgHandling.displayInvalidInputMessage("Please enter Y or N.");
                     }
                 } catch (Exception ex) {
-                    System.out.println("Sorry! Invalid Input. Please enter Y or N.");
+                    msgHandling.displayInvalidInputMessage("Please enter Y or N.");
                 }
             }
         } else {
             _code = generateItemCode("Food", foodList);
             Food newItem = new Food(_netWeight, _expiryDate, _foodType, _venueCode, _code, _name, _qty);
             foodList.add(newItem);
-            loadBackFoodFile(foodList);
+            fileHandler.loadBackFoodFile(foodList);
             addItemToRecord(recordItem, recordQty, newItem, _qty);
             System.out.println("New Food registered and added successfully.");
             return true;
@@ -843,71 +266,30 @@ public class Donation {
 
     }
 
-    //Display Add Food Instruction - Boundary
-    public void displayInstructionAddFood() {
-        System.out.println("\nAdd Food\n");
-        displayFoodType();
-        displayVenueCode();
-        System.out.println("\nInstruction: Please enter the field accordingly. \nEnter 'X' to back to the previous page.\n");
-    }
-
-    //Display Food Type Category - Boundary
-    public void displayFoodType() {
-        System.out.println("Food Category:\n1. Fruit\n2. Vegetable\n3. Protein\n4. Whole Grain\n5. Baby Food\n6. Dairy\n7. Fat\n8. Seasoning");
-    }
-
-    //Input Name - Boundary
-    public String inputName() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter Item Name: ");
-        return scanner.nextLine();
-    }
-
     //Validate Name - Control
     public String getNvalidateName() {
         String _name;
         while (true) {
-            _name = inputName();
+            _name = donationUI.inputName();
             if (_name.isEmpty()) {
-                System.out.println("Sorry! Invalid Item Name. Please do not leave the field empty.");
+                msgHandling.displayGeneralErrorMsg("Invalid Item Name. Please do not leave the field empty.");
             } else {
                 return _name;
             }
         }
     }
 
-    //Input Description - Boundary
-    public String inputDescription() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter Description: ");
-        return scanner.nextLine();
-    }
-
     //Validate Description - Control
     public String getNvalidateDescription() {
         String _description;
         while (true) {
-            _description = inputName();
+            _description = donationUI.inputName();
             if (_description.isEmpty()) {
-                System.out.println("Sorry! Invalid Description. Please do not leave the field empty.");
+                msgHandling.displayGeneralErrorMsg("Invalid Description. Please do not leave the field empty.");
             } else {
                 return _description;
             }
         }
-    }
-
-    //Input Food Net Weight - Boundary
-    public String inputFoodNetWeight() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter Food Net Weight (kilogram): ");
-        return scanner.nextLine();
-    }
-
-    //Input Beverage Net Volume - Boundary
-    public String inputBeverageNetVolume() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter Beverage Net Volume (mililitre): ");
-        return scanner.nextLine();
     }
 
     //Validate Net Volume - Control
@@ -916,11 +298,11 @@ public class Donation {
         double _netVolume;
         while (true) {
             try {
-                _temp = inputBeverageNetVolume();
+                _temp = donationUI.inputBeverageNetVolume();
                 if (!(_temp.equalsIgnoreCase("X"))) {
                     _netVolume = Double.parseDouble(_temp);
                     if (_netVolume <= 0.0) {
-                        System.out.println("Sorry! Invalid Beverage Net Volume. Please enter a net volume that is more than zero.");
+                        msgHandling.displayGeneralErrorMsg("Invalid Beverage Net Volume. Please enter a net volume that is more than zero.");
                     } else {
                         return _netVolume;
                     }
@@ -928,16 +310,9 @@ public class Donation {
                     return 0;
                 }
             } catch (Exception ex) {
-                System.out.println("Sorry! Invalid Beverage Net Volume. Please enter a valid net volume.");
+                msgHandling.displayGeneralErrorMsg("Invalid Beverage Net Volume. Please enter a valid net volume.");
             }
         }
-    }
-
-    //Input Net Weight - Boundary
-    public String inputNetWeight() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter Net Weight (gram): ");
-        return scanner.nextLine();
     }
 
     //Validate Net Weight - Control
@@ -947,14 +322,14 @@ public class Donation {
         while (true) {
             try {
                 if (donationCat.equals("Food")) {
-                    _temp = inputFoodNetWeight();
+                    _temp = donationUI.inputFoodNetWeight();
                 } else {
-                    _temp = inputNetWeight();
+                    _temp = donationUI.inputNetWeight();
                 }
                 if (!(_temp.equalsIgnoreCase("X"))) {
                     _netWeight = Double.parseDouble(_temp);
                     if (_netWeight <= 0.0 && _netWeight == -999) {
-                        System.out.println("Sorry! Invalid Net Weight. Please enter a net weight that is more than zero.");
+                        msgHandling.displayGeneralErrorMsg("Invalid Net Weight. Please enter a net weight that is more than zero.");
                     } else {
                         return _netWeight;
                     }
@@ -962,16 +337,9 @@ public class Donation {
                     return 0;
                 }
             } catch (Exception ex) {
-                System.out.println("Sorry! Invalid Net Weight. Please enter a valid net weight.");
+                msgHandling.displayGeneralErrorMsg("Invalid Net Weight. Please enter a valid net weight.");
             }
         }
-    }
-
-    //Input Expiry Date - Boundary
-    public String inputExpiryDate() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter Expiry Date (yyyy-mm-dd): ");
-        return scanner.nextLine();
     }
 
     //Validate Expiry Date - Boundary
@@ -981,14 +349,14 @@ public class Donation {
         LocalDate _expiryDate;
         while (true) {
             try {
-                _temp = inputExpiryDate();
+                _temp = donationUI.inputExpiryDate();
                 if (!(_temp.equalsIgnoreCase("X"))) {
                     if (_temp.equals("-")) {
                         return LocalDate.parse("2000-12-31", dateFormat);
                     } else {
                         _expiryDate = LocalDate.parse(_temp, dateFormat);
                         if (!(_expiryDate.isAfter(LocalDate.now()))) {
-                            System.out.println("Sorry! Invalid Expiry Date. Please enter a date that is after today.");
+                            msgHandling.displayGeneralErrorMsg("Invalid Expiry Date. Please enter a date that is after today.");
                         } else {
                             return _expiryDate;
                         }
@@ -997,17 +365,10 @@ public class Donation {
                     return LocalDate.parse("2000-12-30", dateFormat);
                 }
             } catch (Exception ex) {
-                System.out.println("Sorry! Invalid Expiry Date. Please enter a valid expiry date in the form of (yyyy-mm-dd).");
+                msgHandling.displayGeneralErrorMsg("Invalid Expiry Date. Please enter a valid expiry date in the form of (yyyy-mm-dd).");
             }
 
         }
-    }
-
-    //Input Food Type - Boundary
-    public String inputFoodType() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter Food Type (1-8): ");
-        return scanner.nextLine();
     }
 
     //Validate Food Type - Control
@@ -1016,11 +377,11 @@ public class Donation {
         int _tempOption;
         while (true) {
             try {
-                _temp = inputFoodType();
+                _temp = donationUI.inputFoodType();
                 if (!(_temp.equalsIgnoreCase("X"))) {
                     _tempOption = Integer.parseInt(_temp);
                     if (!(_tempOption >= 1 && _tempOption <= 8)) {
-                        System.out.println("Sorry! Invalid Food Type Option. Please enter a valid option (1-8).");
+                        msgHandling.displayGeneralErrorMsg("Invalid Food Type Option. Please enter a valid option (1-8).");
                     } else {
                         break;
                     }
@@ -1028,7 +389,7 @@ public class Donation {
                     return "";
                 }
             } catch (Exception ex) {
-                System.out.println("Sorry! Invalid Food Type Option. Please enter a valid option (1-8).");
+                msgHandling.displayGeneralErrorMsg("Invalid Food Type Option. Please enter a valid option (1-8).");
             }
         }
         switch (_tempOption) {
@@ -1059,24 +420,17 @@ public class Donation {
         return _foodType;
     }
 
-    //Input Clothing Category - Boundary
-    public String inputClothingCategory() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter Clothing Category (1-9): ");
-        return scanner.nextLine();
-    }
-
     //Validate Clothing category - Control
     public String getNvalidateClothingCategory() {
         int _tempOption;
         String _temp, _clothCategory;
         while (true) {
             try {
-                _temp = inputClothingCategory();
+                _temp = donationUI.inputClothingCategory();
                 if (!(_temp.equalsIgnoreCase("X"))) {
                     _tempOption = Integer.parseInt(_temp);
                     if (!(_tempOption >= 1 && _tempOption <= 9)) {
-                        System.out.println("Sorry! Invalid Clothing Category Option. Please enter a valid option (1-8).");
+                        msgHandling.displayGeneralErrorMsg("Invalid Clothing Category Option. Please enter a valid option (1-8).");
                     } else {
                         break;
                     }
@@ -1084,7 +438,7 @@ public class Donation {
                     return "";
                 }
             } catch (Exception ex) {
-                System.out.println("Sorry! Invalid Clothing Category Option. Please enter a valid option (1-8).");
+                msgHandling.displayGeneralErrorMsg("Invalid Clothing Category Option. Please enter a valid option (1-8).");
             }
         }
         switch (_tempOption) {
@@ -1118,24 +472,17 @@ public class Donation {
         return _clothCategory;
     }
 
-    //Input Gender - Boundary
-    public String inputGender() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter Gender (1-3): ");
-        return scanner.nextLine();
-    }
-
     //Validate Gender - Control
     public String getNvalidateGender() {
         String _temp, _gender;
         int _tempOption;
         while (true) {
             try {
-                _temp = inputGender();
+                _temp = donationUI.inputGender();
                 if (!(_temp.equalsIgnoreCase("X"))) {
                     _tempOption = Integer.parseInt(_temp);
                     if (!(_tempOption >= 1 && _tempOption <= 3)) {
-                        System.out.println("Sorry! Invalid Gender Option. Please enter a valid option (1-3).");
+                        msgHandling.displayGeneralErrorMsg("Invalid Gender Option. Please enter a valid option (1-3).");
                     } else {
                         break;
                     }
@@ -1143,7 +490,7 @@ public class Donation {
                     return "";
                 }
             } catch (Exception ex) {
-                System.out.println("Sorry! Invalid Gender Option. Please enter a valid option (1-3).");
+                msgHandling.displayGeneralErrorMsg("Invalid Gender Option. Please enter a valid option (1-3).");
             }
         }
         switch (_tempOption) {
@@ -1159,24 +506,17 @@ public class Donation {
         return _gender;
     }
 
-    //Input Age - Boundary
-    public String inputAge() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter Age Group(1-6): ");
-        return scanner.nextLine();
-    }
-
     //Validate Age - Control
     public String getNvalidateAge() {
         String _temp, _age;
         int _tempOption;
         while (true) {
             try {
-                _temp = inputAge();
+                _temp = donationUI.inputAge();
                 if (!(_temp.equalsIgnoreCase("X"))) {
                     _tempOption = Integer.parseInt(_temp);
                     if (!(_tempOption >= 1 && _tempOption <= 6)) {
-                        System.out.println("Sorry! Invalid Age Group Option. Please enter a valid option (1-8).");
+                        msgHandling.displayGeneralErrorMsg("Invalid Age Group Option. Please enter a valid option (1-8).");
                     } else {
                         break;
                     }
@@ -1184,7 +524,7 @@ public class Donation {
                     return "";
                 }
             } catch (Exception ex) {
-                System.out.println("Sorry! Invalid Age Group Option. Please enter a valid option (1-8).");
+                msgHandling.displayGeneralErrorMsg("Invalid Age Group Option. Please enter a valid option (1-8).");
             }
         }
         switch (_tempOption) {
@@ -1209,27 +549,20 @@ public class Donation {
         return _age;
     }
 
-    //Input Size - Boundary
-    public String inputSize() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter Clothing Size: ");
-        return scanner.nextLine();
-    }
-
     //Validate Size - Control
     public String getNvalidateSize(String _clothCategory, String _age, String _gender) {
         String _size;
         if (!_clothCategory.equals("Accessories") || (!_age.equals("Infants")) || (!_age.equals("Toddlers"))) {
             while (true) {
                 try {
-                    _size = inputSize();
+                    _size = donationUI.inputSize();
                     if (_size.isEmpty()) {
-                        System.out.println("Sorry! Invalid Clothing Size. Please do not leave the field empty.");
+                        msgHandling.displayGeneralErrorMsg("Invalid Clothing Size. Please do not leave the field empty.");
                     } else {
                         if (!_clothCategory.equals("Footwear")) {
                             if ((!_size.equals("XS")) && (!_size.equals("S")) && (!_size.equals("M"))
                                     && (!_size.equals("L")) && (!_size.equals("XL")) && (!_size.equals("XXL")) && (!_size.equals("XXXL"))) {
-                                System.out.println("Sorry! Invalid Clothing Size for " + _clothCategory + ". Please enter a valid size.");
+                                msgHandling.displayGeneralErrorMsg("Invalid Clothing Size for " + _clothCategory + ". Please enter a valid size.");
                             } else {
                                 break;
                             }
@@ -1240,34 +573,34 @@ public class Donation {
                                         || (Integer.parseInt(_size) >= 1 && Integer.parseInt(_size) >= 6)) {
                                     break;
                                 } else {
-                                    System.out.println("Sorry! Invalid Clothing Size for " + _age + " " + _clothCategory + ". Please enter a valid size.");
+                                    msgHandling.displayGeneralErrorMsg("Invalid Clothing Size for " + _age + " " + _clothCategory + ". Please enter a valid size.");
                                 }
                             } else if (_age.equals("Teens")) {
                                 if (Integer.parseInt(_size) >= 6 && Integer.parseInt(_size) >= 8) {
                                     break;
                                 } else {
-                                    System.out.println("Sorry! Invalid Clothing Size for " + _age + " " + _clothCategory + ". Please enter a valid size.");
+                                    msgHandling.displayGeneralErrorMsg("Invalid Clothing Size for " + _age + " " + _clothCategory + ". Please enter a valid size.");
                                 }
                             } else {
                                 if (_gender.equals("Men")) {
                                     if (Integer.parseInt(_size) >= 5 && Integer.parseInt(_size) >= 14) {
                                         break;
                                     } else {
-                                        System.out.println("Sorry! Invalid Clothing Size for " + _gender + " " + _age + " "
+                                        msgHandling.displayGeneralErrorMsg("Invalid Clothing Size for " + _gender + " " + _age + " "
                                                 + _clothCategory + ". Please enter a valid size.");
                                     }
                                 } else if (_gender.equals("Women")) {
                                     if (Integer.parseInt(_size) >= 2 && Integer.parseInt(_size) >= 10) {
                                         break;
                                     } else {
-                                        System.out.println("Sorry! Invalid Clothing Size for " + _gender + " " + _age + " "
+                                        msgHandling.displayGeneralErrorMsg("Invalid Clothing Size for " + _gender + " " + _age + " "
                                                 + _clothCategory + ". Please enter a valid size.");
                                     }
                                 } else {
                                     if (Integer.parseInt(_size) >= 2 && Integer.parseInt(_size) >= 14) {
                                         break;
                                     } else {
-                                        System.out.println("Sorry! Invalid Clothing Size for " + _gender + " " + _age + " "
+                                        msgHandling.displayGeneralErrorMsg("Invalid Clothing Size for " + _gender + " " + _age + " "
                                                 + _clothCategory + ". Please enter a valid size.");
                                     }
                                 }
@@ -1279,7 +612,7 @@ public class Donation {
                         }
                     }
                 } catch (Exception ex) {
-                    System.out.println("Sorry! Invalid Clothing Size. Please enter a valid clothing size.");
+                    msgHandling.displayGeneralErrorMsg("Invalid Clothing Size. Please enter a valid clothing size.");
                 }
             }
         } else {
@@ -1289,24 +622,17 @@ public class Donation {
         return _size;
     }
 
-    //Input Personal Care Category - Boundary
-    public String inputPCCat() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter Personal Care Category (1-5): ");
-        return scanner.nextLine();
-    }
-
     //Validate Personal Care Category - Control
     public String getNvalidatePCCat() {
         String _temp, _pcCategory;
         int _tempOption;
         while (true) {
             try {
-                _temp = inputPCCat();
+                _temp = donationUI.inputPCCat();
                 if (!(_temp.equalsIgnoreCase("X"))) {
                     _tempOption = Integer.parseInt(_temp);
                     if (!(_tempOption >= 1 && _tempOption <= 9)) {
-                        System.out.println("Sorry! Invalid Personal Care Category Option. Please enter a valid option (1-8).");
+                        msgHandling.displayGeneralErrorMsg("Invalid Personal Care Category Option. Please enter a valid option (1-8).");
                     } else {
                         break;
                     }
@@ -1314,7 +640,7 @@ public class Donation {
                     return "";
                 }
             } catch (Exception ex) {
-                System.out.println("Sorry! Invalid Personal Care Category Option. Please enter a valid option (1-8).");
+                msgHandling.displayGeneralErrorMsg("Invalid Personal Care Category Option. Please enter a valid option (1-8).");
             }
         }
         switch (_tempOption) {
@@ -1336,24 +662,17 @@ public class Donation {
         return _pcCategory;
     }
 
-    //Input
-    public String inputDosageForm() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter Dosage Form (1-5): ");
-        return scanner.nextLine();
-    }
-
     //Validate
     public String getNvalidateDosageForm() {
         String _temp, _dosageForm;
         int _tempOption;
         while (true) {
             try {
-                _temp = inputDosageForm();
+                _temp = donationUI.inputDosageForm();
                 if (!(_temp.equalsIgnoreCase("X"))) {
                     _tempOption = Integer.parseInt(_temp);
                     if (!(_tempOption >= 1 && _tempOption <= 9)) {
-                        System.out.println("Sorry! Invalid Dosage Form Option. Please enter a valid option (1-8).");
+                        msgHandling.displayGeneralErrorMsg("Invalid Dosage Form Option. Please enter a valid option (1-8).");
                     } else {
                         break;
                     }
@@ -1361,7 +680,7 @@ public class Donation {
                     return "";
                 }
             } catch (Exception ex) {
-                System.out.println("Sorry! Invalid Dosage Form Option. Please enter a valid option (1-8).");
+                msgHandling.displayGeneralErrorMsg("Invalid Dosage Form Option. Please enter a valid option (1-8).");
             }
         }
         switch (_tempOption) {
@@ -1383,24 +702,17 @@ public class Donation {
         return _dosageForm;
     }
 
-    //Input Quantity - Boundary
-    public String inputQty() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter Quantity: ");
-        return scanner.nextLine();
-    }
-
     //Validate Quantity - Control
     public int getNvalidateQuantity() {
         String _temp;
         int _qty;
         while (true) {
             try {
-                _temp = inputQty();
+                _temp = donationUI.inputQty();
                 if (!(_temp.equalsIgnoreCase("X"))) {
                     _qty = Integer.parseInt(_temp);
                     if (_qty <= 0) {
-                        System.out.println("Sorry! Invalid Quantity. Please enter a quantity that is more than zero.");
+                        msgHandling.displayGeneralErrorMsg("Invalid Quantity. Please enter a quantity that is more than zero.");
                     } else {
                         return _qty;
                     }
@@ -1408,16 +720,9 @@ public class Donation {
                     return 0;
                 }
             } catch (Exception ex) {
-                System.out.println("Sorry! Invalid Quantity. Please enter a valid quantity.");
+                msgHandling.displayGeneralErrorMsg("Invalid Quantity. Please enter a valid quantity.");
             }
         }
-    }
-
-    //Input
-    public String inputAmt() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter Amount : RM ");
-        return scanner.nextLine();
     }
 
     //Validate
@@ -1426,11 +731,11 @@ public class Donation {
         double _amount;
         while (true) {
             try {
-                _temp = inputAmt();
+                _temp = donationUI.inputAmt();
                 if (!(_temp.equalsIgnoreCase("X"))) {
                     _amount = Double.parseDouble(_temp);
                     if (_amount <= 0.0) {
-                        System.out.println("Sorry! Invalid Money Amount. Please enter an amount that is more than zero.");
+                        msgHandling.displayGeneralErrorMsg("Invalid Money Amount. Please enter an amount that is more than zero.");
                     } else {
                         return _amount;
                     }
@@ -1438,33 +743,19 @@ public class Donation {
                     return 0;
                 }
             } catch (Exception ex) {
-                System.out.println("Sorry! Invalid Money Amount. Please enter a valid amount.");
+                msgHandling.displayGeneralErrorMsg("Invalid Money Amount. Please enter a valid amount.");
             }
         }
-    }
-
-    //Input Venue Code - Boundary
-    public String inputVenueCode() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter Venue Code: ");
-        return scanner.nextLine();
-    }
-
-    //Input Source - Boundary
-    public String inputSource() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter Source: ");
-        return scanner.nextLine();
     }
 
     //Validate Source - Control
     public String getNvalidateSource() {
         String _source;
         while (true) {
-            _source = inputSource();
+            _source = donationUI.inputSource();
             if (!(_source.equalsIgnoreCase("X"))) {
                 if (!checkVenueCode(_source) && !checkEventCode(_source) && !_source.equals("E001")) {
-                    System.out.println("Sorry! Invalid Source. Please enter a source.");
+                    msgHandling.displayGeneralErrorMsg("Invalid Source. Please enter a source.");
                 } else {
                     return _source;
                 }
@@ -1478,10 +769,10 @@ public class Donation {
     public String getNvalidateVenueCode() {
         String _venueCode;
         while (true) {
-            _venueCode = inputVenueCode();
+            _venueCode = donationUI.inputVenueCode();
             if (!(_venueCode.equalsIgnoreCase("X"))) {
                 if (!checkVenueCode(_venueCode)) {
-                    System.out.println("Sorry! Invalid Venue Code. Please enter a venue code.");
+                    msgHandling.displayGeneralErrorMsg("Invalid Venue Code. Please enter a venue code.");
                 } else {
                     return _venueCode;
                 }
@@ -1520,10 +811,12 @@ public class Donation {
     }
 
     //Check Food Exist - Control
-    public boolean checkExistBeforeFood(ArrayList<DonationItem> foodList, String _name, LocalDate _expiryDate, double _netWeight,
+    public boolean checkExistBeforeFood(ListInterface<DonationItem> foodList, String _name, LocalDate _expiryDate, double _netWeight,
             String _foodType, String _venueCode) {
         boolean exist = false;
-        for (DonationItem item : foodList) {
+        Iterator<DonationItem> iterator = foodList.iterator();
+        while (iterator.hasNext()) {
+            DonationItem item = iterator.next();
             if (item.getItemName().equals(_name) && ((Food) item).getExpiryDate().equals(_expiryDate)
                     && ((Food) item).getNetWeight() == _netWeight && ((Food) item).getFoodType().equals(_foodType)
                     && ((Food) item).getVenueCode().equals(_venueCode)) {
@@ -1535,9 +828,11 @@ public class Donation {
     }
 
     //Check Beverage Exist - Control
-    public boolean checkExistBeforeBeverage(ArrayList<DonationItem> beverageList, String _name, LocalDate _expiryDate, double _netVolume, String _venueCode) {
+    public boolean checkExistBeforeBeverage(ListInterface<DonationItem> beverageList, String _name, LocalDate _expiryDate, double _netVolume, String _venueCode) {
         boolean exist = false;
-        for (DonationItem item : beverageList) {
+        Iterator<DonationItem> iterator = beverageList.iterator();
+        while (iterator.hasNext()) {
+            DonationItem item = iterator.next();
             if (item.getItemName().equals(_name) && ((Beverage) item).getExpiryDate().equals(_expiryDate)
                     && ((Beverage) item).getNetVolume() == _netVolume && ((Beverage) item).getVenueCode().equals(_venueCode)) {
                 exist = true;
@@ -1548,10 +843,12 @@ public class Donation {
     }
 
     //Check Clothing Exist - Control
-    public boolean checkExistBeforeClothing(ArrayList<DonationItem> clothingList, String _name, String _size,
+    public boolean checkExistBeforeClothing(ListInterface<DonationItem> clothingList, String _name, String _size,
             String _clothCategory, String _age, String _gender, String _venueCode) {
         boolean exist = false;
-        for (DonationItem item : clothingList) {
+        Iterator<DonationItem> iterator = clothingList.iterator();
+        while (iterator.hasNext()) {
+            DonationItem item = iterator.next();
             if (item.getItemName().equals(_name) && ((Clothing) item).getSize().equals(_size) && ((Clothing) item).getClothingCategory().equals(_clothCategory)
                     && ((Clothing) item).getAge().equals(_age) && ((Clothing) item).getGender().equals(_gender)
                     && ((Clothing) item).getVenueCode().equals(_venueCode)) {
@@ -1563,10 +860,12 @@ public class Donation {
     }
 
     //Check Personal Care Exist - Control
-    public boolean checkExistBeforePersonalCare(ArrayList<DonationItem> personalCareList, String _name,
+    public boolean checkExistBeforePersonalCare(ListInterface<DonationItem> personalCareList, String _name,
             LocalDate _expiryDate, double _netWeight, String _pcCategory, String _age, String _gender, String _venueCode) {
         boolean exist = false;
-        for (DonationItem item : personalCareList) {
+        Iterator<DonationItem> iterator = personalCareList.iterator();
+        while (iterator.hasNext()) {
+            DonationItem item = iterator.next();
             if (item.getItemName().equals(_name) && ((PersonalCare) item).getExpiryDate().equals(_expiryDate)
                     && ((PersonalCare) item).getNetWeight() == (_netWeight) && ((PersonalCare) item).getPersonalCareCategory().equals(_pcCategory)
                     && ((PersonalCare) item).getAge().equals(_age) && ((PersonalCare) item).getGender().equals(_gender)
@@ -1579,9 +878,11 @@ public class Donation {
     }
 
     //Check Medical Device Exist - Control
-    public boolean checkExistBeforeMedicalDevice(ArrayList<DonationItem> medicalDeviceList, String _name, String _venueCode) {
+    public boolean checkExistBeforeMedicalDevice(ListInterface<DonationItem> medicalDeviceList, String _name, String _venueCode) {
         boolean exist = false;
-        for (DonationItem item : medicalDeviceList) {
+        Iterator<DonationItem> iterator = medicalDeviceList.iterator();
+        while (iterator.hasNext()) {
+            DonationItem item = iterator.next();
             if (item.getItemName().equals(_name) && ((MedicalDevice) item).getVenueCode().equals(_venueCode)) {
                 exist = true;
                 break;
@@ -1591,11 +892,12 @@ public class Donation {
     }
 
     //Check Medicine Exist - Control
-    public boolean checkExistBeforeMedicine(ArrayList<DonationItem> medicineList, String _name, LocalDate _expiryDate,
+    public boolean checkExistBeforeMedicine(ListInterface<DonationItem> medicineList, String _name, LocalDate _expiryDate,
             double _netWeight, String _dosageForm, String _age, String _gender, String _venueCode) {
         boolean exist = false;
-        for (DonationItem item : medicineList) {
-
+        Iterator<DonationItem> iterator = medicineList.iterator();
+        while (iterator.hasNext()) {
+            DonationItem item = iterator.next();
             if (item.getItemName().equals(_name) && ((Medicine) item).getExpiryDate().equals(_expiryDate)
                     && ((Medicine) item).getNetWeight() == (_netWeight) && ((Medicine) item).getDosageForm().equals(_dosageForm)
                     && ((Medicine) item).getAge().equals(_age) && ((Medicine) item).getGender().equals(_gender)
@@ -1609,9 +911,11 @@ public class Donation {
     }
 
     //Check Money Exist - Control
-    public boolean checkExistBeforeMoney(ArrayList<DonationItem> moneyList, String _source) {
+    public boolean checkExistBeforeMoney(ListInterface<DonationItem> moneyList, String _source) {
         boolean exist = false;
-        for (DonationItem item : moneyList) {
+        Iterator<DonationItem> iterator = moneyList.iterator();
+        while (iterator.hasNext()) {
+            DonationItem item = iterator.next();
             if (((Money) item).getSource().equals(_source)) {
                 exist = true;
                 break;
@@ -1621,7 +925,7 @@ public class Donation {
     }
 
     //Generate Item Code
-    public String generateItemCode(String itemCat, ArrayList<DonationItem> itemList) {
+    public String generateItemCode(String itemCat, ListInterface<DonationItem> itemList) {
         String code = "";
         String backCode = fillZeroCode(generateRandNumber(itemList));
         if (itemCat.equals("Food")) {
@@ -1643,14 +947,16 @@ public class Donation {
         return code;
     }
 
-    public int generateRandNumber(ArrayList<DonationItem> itemList) {
+    public int generateRandNumber(ListInterface<DonationItem> itemList) {
         int code;
         boolean repeated = false;
         do {
             repeated = false;
             code = 1 + (int) (Math.random() * (999));
             if (!itemList.isEmpty()) {
-                for (DonationItem item : itemList) {
+                Iterator<DonationItem> iterator = itemList.iterator();
+                while (iterator.hasNext()) {
+                    DonationItem item = iterator.next();
                     if (Integer.parseInt(item.getItemCode().substring(2, 5)) == code) {
                         repeated = true;
                     }
@@ -1674,22 +980,15 @@ public class Donation {
         }
     }
 
-    //Display Add Beverage Instruction - Boundary
-    public void displayInstructionAddBeverage() {
-        System.out.println("\nAdd Beverage");
-        displayVenueCode();
-        System.out.println("\nInstruction: Please enter the field accordingly. \nEnter 'X' to back to the previous page.\n");
-    }
-
     //Add Beverage
-    public boolean addBeverage(ArrayList<DonationItem> recordItem, ArrayList<Integer> recordQty) {
-        ArrayList<DonationItem> beverageList = new ArrayList<DonationItem>();
-        loadIntoBeverage(beverageList);
-        displayInstructionAddBeverage();
+    public boolean addBeverage(ListInterface<DonationItem> recordItem, ListInterface<Integer> recordQty) {
+        ListInterface<DonationItem> beverageList = new ArrayList<>();
+        fileHandler.loadIntoBeverage(beverageList);
+        donationUI.displayInstructionAddBeverage();
 
         //Choose to add amount or new item
         //Add New Item
-        Scanner scanner = new Scanner(System.in);
+        
         String _name, _venueCode, _temp, _code;
         LocalDate _expiryDate;
         int _qty;
@@ -1731,11 +1030,12 @@ public class Donation {
         if (exist) {
             while (true) {
                 try {
-                    System.out.print("Detected this item existed before. Do you wish to add the quantity? (Y/N): ");
-                    _temp = scanner.nextLine();
+                    _temp =  donationUI.inputDetectedSame();
                     if (_temp.equalsIgnoreCase("N") || _temp.equalsIgnoreCase("Y")) {
                         if (_temp.equalsIgnoreCase("Y")) {
-                            for (DonationItem item : beverageList) {
+                            Iterator<DonationItem> iterator = beverageList.iterator();
+                            while (iterator.hasNext()) {
+                                DonationItem item = iterator.next();
                                 if (item.getItemName().equals(_name) && ((Beverage) item).getExpiryDate().equals(_expiryDate)
                                         && ((Beverage) item).getNetVolume() == _netVolume && ((Beverage) item).getVenueCode().equals(_venueCode)) {
                                     item.setQuantity(item.getQuantity() + _qty);
@@ -1744,74 +1044,39 @@ public class Donation {
                                 }
                             }
                             System.out.println("Beverage quantity added successfully.");
-                            loadBackBeverageFile(beverageList);
+                            fileHandler.loadBackBeverageFile(beverageList);
                             return true;
                         } else {
                             return false;
                         }
                     } else {
-                        System.out.println("Sorry! Invalid Input. Please enter Y or N.");
+                        msgHandling.displayInvalidInputMessage("Please enter Y or N.");
                     }
                 } catch (Exception ex) {
-                    System.out.println("Sorry! Invalid Input. Please enter Y or N.");
+                    msgHandling.displayInvalidInputMessage("Please enter Y or N.");
                 }
             }
         } else {
             _code = generateItemCode("Beverage", beverageList);
             Beverage newItem = new Beverage(_netVolume, _expiryDate, _venueCode, _code, _name, _qty);
             beverageList.add(newItem);
-            loadBackBeverageFile(beverageList);
+            fileHandler.loadBackBeverageFile(beverageList);
             addItemToRecord(recordItem, recordQty, newItem, _qty);
-            System.out.println("New Beverage registered and added successfully.");
+            msgHandling.displaySuccessMessage("New Beverage registered and added successfully.");
             return true;
         }
 
     }
 
-    //Display Add Clothing Instruction - Boundary
-    public void displayInstructionAddClothing() {
-        System.out.println("\nAdd Clothing\n");
-        displayClothingCategory();
-        displayGender();
-        displayAge();
-        displaySize();
-        displayVenueCode();
-        System.out.println("Instruction: Please enter the field accordingly. \nEnter 'X' to back to the previous page.\n");
-    }
-
-    //Display Clothing Category - Boundary
-    public void displayClothingCategory() {
-        System.out.println("Clothing Category:\n1. Tops\n2. Bottoms\n3. Outerwear\n4. Dress\n5. Innerwear");
-        System.out.println("6. Sportswear\n7. Footwear\n8. Accessories\n9. Sleepwear\n");
-    }
-
-    //Display Gender - Boundary
-    public void displayGender() {
-        System.out.println("Gender:\n1. Men\n2. Women\n3. Neutral\n");
-    }
-
-    //Display Age- Boundary
-    public void displayAge() {
-        System.out.println("Age Group:\n1. Infants\n2. Toddlers\n3. Kids\n4. Teens\n5. Adults\n6. Seniors\n");
-    }
-
-    //Display Size-Boundary
-    public void displaySize() {
-        System.out.print("Size: XS / S / M / L / XL / XXL / XXXL\n**This size is only available for Tops,");
-        System.out.println("Bottoms, Outerwear, Dress, Innerwear, Sportswear, Sleepwear\n**This sizes are only applicable for Kids, Teens, Adults and Seniors");
-        System.out.println("\nFootwear Size:\n1. Kids 10-13.5 1-6\n2. Teens 6-8\n3. Adults & Seniors - Men 6-14\n4. Adults & Seniors - Women 2-10");
-        System.out.println("5. Adults & Seniors - Neutral 2-14\n");
-    }
-
     //Add Clothing
-    public boolean addClothing(ArrayList<DonationItem> recordItem, ArrayList<Integer> recordQty) {
-        ArrayList<DonationItem> clothingList = new ArrayList<DonationItem>();
-        loadIntoClothing(clothingList);
-        displayInstructionAddClothing();
+    public boolean addClothing(ListInterface<DonationItem> recordItem, ListInterface<Integer> recordQty) {
+        ListInterface<DonationItem> clothingList = new ArrayList<>();
+        fileHandler.loadIntoClothing(clothingList);
+        donationUI.displayInstructionAddClothing();
 
         //Choose to add amount or new item
         //Add New Item
-        Scanner scanner = new Scanner(System.in);
+        
         String _name, _venueCode, _temp, _code, _clothCategory, _size, _gender, _age;
         int _qty;
 
@@ -1865,11 +1130,12 @@ public class Donation {
         if (exist) {
             while (true) {
                 try {
-                    System.out.print("Detected this item existed before. Do you wish to add the quantity? (Y/N): ");
-                    _temp = scanner.nextLine();
+                    _temp =  donationUI.inputDetectedSame();
                     if (_temp.equalsIgnoreCase("N") || _temp.equalsIgnoreCase("Y")) {
                         if (_temp.equalsIgnoreCase("Y")) {
-                            for (DonationItem item : clothingList) {
+                            Iterator<DonationItem> iterator = clothingList.iterator();
+                            while (iterator.hasNext()) {
+                                DonationItem item = iterator.next();
                                 if (item.getItemName().equals(_name) && ((Clothing) item).getSize().equals(_size)
                                         && ((Clothing) item).getClothingCategory().equals(_clothCategory)
                                         && ((Clothing) item).getAge().equals(_age) && ((Clothing) item).getGender().equals(_gender)
@@ -1879,57 +1145,39 @@ public class Donation {
                                     break;
                                 }
                             }
-                            System.out.println("Clothing quantity added successfully.");
-                            loadBackClothingFile(clothingList);
+                            msgHandling.displaySuccessMessage("Clothing quantity added successfully.");
+                            fileHandler.loadBackClothingFile(clothingList);
                             return true;
                         } else {
                             return false;
                         }
                     } else {
-                        System.out.println("Sorry! Invalid Input. Please enter Y or N.");
+                        msgHandling.displayInvalidInputMessage("Please enter Y or N.");
                     }
                 } catch (Exception ex) {
-                    System.out.println("Sorry! Invalid Input. Please enter Y or N.");
+                    msgHandling.displayInvalidInputMessage("Please enter Y or N.");
                 }
             }
         } else {
             _code = generateItemCode("Clothing", clothingList);
             Clothing newItem = new Clothing(_size, _clothCategory, _gender, _age, _venueCode, _code, _name, _qty);
             clothingList.add(newItem);
-            loadBackClothingFile(clothingList);
+            fileHandler.loadBackClothingFile(clothingList);
             addItemToRecord(recordItem, recordQty, newItem, _qty);
-            System.out.println("New Clothing registered and added successfully.");
+            msgHandling.displaySuccessMessage("New Clothing registered and added successfully.");
             return true;
         }
     }
 
-    //Display Add PersonalCare Instruction - Boundary
-    public void displayInstructionAddPersonalCare() {
-        System.out.println("\nAdd Personal Care\n");
-        displayPCCat();
-        displayGender();
-        displayAge();
-        displayVenueCode();
-        System.out.println("Instruction: Please enter the field accordingly. \nEnter '-' for expiry date if the product does not have an expiry date.");
-        System.out.println("Enter '-999' for netweight if the product does not have a net weight.\nEnter 'X' to back to the previous page.\n");
-    }
-
-    //Display Personal care category - Boundary
-    public void displayPCCat() {
-        System.out.println("Personal Care Category:\n1. Skin care (Moisturizers, Cleansers, Toners)\n2. Hair Care (Shampoo, Conditioners, Hair Masks)");
-        System.out.println("3. Body Care (Body Wash, Soap, Body Scrubs)\n4. Oral Care (Toothpaste, Toothbrush, Mouthwash)");
-        System.out.println("5. Personal Hygiene (Sanitary Pads, Nail Clippers, Cotton Swabs)\n");
-    }
-
     //Add Personal Care
-    public boolean addPersonalCare(ArrayList<DonationItem> recordItem, ArrayList<Integer> recordQty) {
-        ArrayList<DonationItem> personalCareList = new ArrayList<DonationItem>();
-        loadIntoPersonalCare(personalCareList);
-        displayInstructionAddPersonalCare();
+    public boolean addPersonalCare(ListInterface<DonationItem> recordItem, ListInterface<Integer> recordQty) {
+        ListInterface<DonationItem> personalCareList = new ArrayList<>();
+        fileHandler.loadIntoPersonalCare(personalCareList);
+        donationUI.displayInstructionAddPersonalCare();
 
         //Choose to add amount or new item
         //Add New Item
-        Scanner scanner = new Scanner(System.in);
+        
         String _name, _venueCode, _pcCategory, _gender, _age, _temp, _code;
         int _qty;
         LocalDate _expiryDate;
@@ -1993,11 +1241,12 @@ public class Donation {
         if (exist) {
             while (true) {
                 try {
-                    System.out.print("Detected this item existed before. Do you wish to add the quantity? (Y/N): ");
-                    _temp = scanner.nextLine();
+                    _temp = donationUI.inputDetectedSame();
                     if (_temp.equalsIgnoreCase("N") || _temp.equalsIgnoreCase("Y")) {
                         if (_temp.equalsIgnoreCase("Y")) {
-                            for (DonationItem item : personalCareList) {
+                            Iterator<DonationItem> iterator = personalCareList.iterator();
+                            while (iterator.hasNext()) {
+                                DonationItem item = iterator.next();
                                 if (item.getItemName().equals(_name) && ((PersonalCare) item).getExpiryDate().equals(_expiryDate)
                                         && ((PersonalCare) item).getNetWeight() == (_netWeight)
                                         && ((PersonalCare) item).getPersonalCareCategory().equals(_pcCategory)
@@ -2008,53 +1257,39 @@ public class Donation {
                                     break;
                                 }
                             }
-                            System.out.println("Personal Care quantity added successfully.");
-                            loadBackPersonalCareFile(personalCareList);
+                            msgHandling.displaySuccessMessage("Personal Care quantity added successfully.");
+                            fileHandler.loadBackPersonalCareFile(personalCareList);
                             return true;
                         } else {
                             return false;
                         }
                     } else {
-                        System.out.println("Sorry! Invalid Input. Please enter Y or N.");
+                        msgHandling.displayInvalidInputMessage("Please enter Y or N.");
                     }
                 } catch (Exception ex) {
-                    System.out.println("Sorry! Invalid Input. Please enter Y or N.");
+                    msgHandling.displayInvalidInputMessage("Please enter Y or N.");
                 }
             }
         } else {
             _code = generateItemCode("Personal Care", personalCareList);
             PersonalCare newItem = new PersonalCare(_netWeight, _expiryDate, _gender, _age, _pcCategory, _venueCode, _code, _name, _qty);
             personalCareList.add(newItem);
-            loadBackPersonalCareFile(personalCareList);
+            fileHandler.loadBackPersonalCareFile(personalCareList);
             addItemToRecord(recordItem, recordQty, newItem, _qty);
-            System.out.println("New Personal Care registered and added successfully.");
+            msgHandling.displaySuccessMessage("New Personal Care registered and added successfully.");
             return true;
         }
     }
 
-    //Display Add Medical Device Instruction - Boundary
-    public void displayInstructionAddMedicalDevice() {
-        System.out.println("\nAdd Medical Device\n");
-        displayVenueCode();
-        System.out.println("Instruction: Please enter the field accordingly. \nEnter 'X' to back to the previous page.\n");
-    }
-
-    public static String inputActionToDescription() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Do you wanna \n1. Append Description \n2. Keep original version\n3. Keep the current version");
-        System.out.print("\nX. Stop this Addition of Donation\nPick an option(1-3, X): ");
-        return scanner.nextLine();
-    }
-
     //Add Medical Device
-    public boolean addMedicalDevice(ArrayList<DonationItem> recordItem, ArrayList<Integer> recordQty) {
-        ArrayList<DonationItem> medicalDeviceList = new ArrayList<DonationItem>();
-        loadIntoMedicalDevice(medicalDeviceList);
-        displayInstructionAddMedicalDevice();
+    public boolean addMedicalDevice(ListInterface<DonationItem> recordItem, ListInterface<Integer> recordQty) {
+        ListInterface<DonationItem> medicalDeviceList = new ArrayList<>();
+        fileHandler.loadIntoMedicalDevice(medicalDeviceList);
+        donationUI.displayInstructionAddMedicalDevice();
 
         //Choose to add amount or new item
         //Add New Item
-        Scanner scanner = new Scanner(System.in);
+        
         String _name, _venueCode, _description, _temp, _code;
         int _qty;
 
@@ -2093,14 +1328,15 @@ public class Donation {
             boolean loopErrorCheck = true;
             while (loopErrorCheck) {
                 try {
-                    System.out.print("Detected this item existed before. Do you wish to add the quantity? (Y/N): ");
-                    _temp = scanner.nextLine();
+                    _temp =  donationUI.inputDetectedSame();
                     if (_temp.equalsIgnoreCase("N") || _temp.equalsIgnoreCase("Y")) {
                         if (_temp.equalsIgnoreCase("Y")) {
                             while (true) {
-                                _temp = inputActionToDescription();
+                                _temp = donationUI.inputActionToDescription();
                                 if (_temp.equals("1") || _temp.equals("2") || _temp.equals("3")) {
-                                    for (DonationItem item : medicalDeviceList) {
+                                    Iterator<DonationItem> iterator = medicalDeviceList.iterator();
+                                    while (iterator.hasNext()) {
+                                        DonationItem item = iterator.next();
                                         if (item.getItemName().equals(_name) && ((MedicalDevice) item).getVenueCode().equals(_venueCode)) {
                                             if (_temp.equals("1")) {
                                                 _description = ((MedicalDevice) item).getDescription() + _description;
@@ -2114,14 +1350,14 @@ public class Donation {
                                             break;
                                         }
                                     }
-                                    System.out.println("Medical Device quantity added successfully.");
-                                    loadBackMedicalDeviceFile(medicalDeviceList);
+                                    msgHandling.displaySuccessMessage("Medical Device quantity added successfully.");
+                                    fileHandler.loadBackMedicalDeviceFile(medicalDeviceList);
                                     return true;
                                 } else if (_temp.equalsIgnoreCase("X")) {
                                     loopErrorCheck = false;
                                     return false;
                                 } else {
-                                    System.out.println("Sorry! Invalid Input. Please enter Y or N.");
+                                    msgHandling.displayInvalidInputMessage("Please enter Y or N.");
                                 }
                             }
 
@@ -2130,48 +1366,35 @@ public class Donation {
                             return false;
                         }
                     } else {
-                        System.out.println("Sorry! Invalid Input. Please enter Y or N.");
+                        msgHandling.displayInvalidInputMessage("Please enter Y or N.");
                     }
                 } catch (Exception ex) {
-                    System.out.println("Sorry! Invalid Input. Please enter Y or N.");
+                    msgHandling.displayInvalidInputMessage("Please enter Y or N.");
                 }
             }
         } else {
             _code = generateItemCode("Medical Device", medicalDeviceList);
             MedicalDevice newItem = new MedicalDevice(_venueCode, _description, _code, _name, _qty);
             medicalDeviceList.add(newItem);
-            loadBackMedicalDeviceFile(medicalDeviceList);
+            fileHandler.loadBackMedicalDeviceFile(medicalDeviceList);
             addItemToRecord(recordItem, recordQty, newItem, _qty);
-            System.out.println("New Medical Device registered and added successfully.");
+            msgHandling.displaySuccessMessage("New Medical Device registered and added successfully.");
             return true;
         }
         return false;
 
     }
 
-    //Display Add Medical Device Instruction - Boundary
-    public void displayInstructionAddMedicine() {
-        System.out.println("\nAdd Medicine\n");
-        displayDSForm();
-        displayGender();
-        displayAge();
-        displayVenueCode();
-        System.out.println("Instruction: Please enter the field accordingly. \nEnter 'X' to back to the previous page.\n");
-    }
-
-    //Display Dosage Form - Boundary
-    public void displayDSForm() {
-        System.out.println("Dosage Form:\n1. Solid\n2. Liquid\n3. Semi-Solid(Cream, Gel, Paste, ...)\n4. Inhalation\n5. Injectable\n");
-    }
+   
 
     //Add Medicine
-    public boolean addMedicine(ArrayList<DonationItem> recordItem, ArrayList<Integer> recordQty) {
-        ArrayList<DonationItem> medicineList = new ArrayList<DonationItem>();
-        loadIntoMedicine(medicineList);
-        displayInstructionAddMedicine();
+    public boolean addMedicine(ListInterface<DonationItem> recordItem, ListInterface<Integer> recordQty) {
+        ListInterface<DonationItem> medicineList = new ArrayList<>();
+        fileHandler.loadIntoMedicine(medicineList);
+        donationUI.displayInstructionAddMedicine();
         //Choose to add amount or new item
         //Add New Item
-        Scanner scanner = new Scanner(System.in);
+        
         String _name, _venueCode, _dosageForm, _gender, _description, _age, _temp, _code;
         int _qty;
         LocalDate _expiryDate;
@@ -2242,14 +1465,15 @@ public class Donation {
             boolean loopErrorCheck = true;
             while (loopErrorCheck) {
                 try {
-                    System.out.print("Detected this item existed before. Do you wish to add the quantity? (Y/N): ");
-                    _temp = scanner.nextLine();
+                    _temp =  donationUI.inputDetectedSame();
                     if (_temp.equalsIgnoreCase("N") || _temp.equalsIgnoreCase("Y")) {
                         if (_temp.equalsIgnoreCase("Y")) {
                             while (true) {
-                                _temp = inputActionToDescription();
+                                _temp = donationUI.inputActionToDescription();
                                 if (_temp.equals("1") || _temp.equals("2") || _temp.equals("3")) {
-                                    for (DonationItem item : medicineList) {
+                                    Iterator<DonationItem> iterator = medicineList.iterator();
+                                    while (iterator.hasNext()) {
+                                        DonationItem item = iterator.next();
                                         if (item.getItemName().equals(_name) && ((Medicine) item).getExpiryDate().equals(_expiryDate)
                                                 && ((Medicine) item).getNetWeight() == (_netWeight)
                                                 && ((Medicine) item).getDosageForm().equals(_dosageForm)
@@ -2267,14 +1491,14 @@ public class Donation {
                                             break;
                                         }
                                     }
-                                    System.out.println("Medicine quantity added successfully.");
-                                    loadBackMedicineFile(medicineList);
+                                    msgHandling.displaySuccessMessage("Medicine quantity added successfully.");
+                                    fileHandler.loadBackMedicineFile(medicineList);
                                     return true;
                                 } else if (_temp.equalsIgnoreCase("X")) {
                                     loopErrorCheck = false;
                                     return false;
                                 } else {
-                                    System.out.println("Sorry! Invalid Input. Please enter 1, 2, 3 or X.");
+                                    msgHandling.displayInvalidInputMessage("Please enter 1, 2, 3 or X.");
                                 }
                             }
 
@@ -2282,44 +1506,30 @@ public class Donation {
                             return false;
                         }
                     } else {
-                        System.out.println("Sorry! Invalid Input. Please enter Y or N2.");
+                        msgHandling.displayInvalidInputMessage("Please enter Y or N.");
                     }
                 } catch (Exception ex) {
-                    System.out.println("Sorry! Invalid Input. Please enter Y or N." + ex);
+                    msgHandling.displayInvalidInputMessage("Please enter Y or N." + ex);
                 }
             }
         } else {
             _code = generateItemCode("Medicine", medicineList);
             Medicine newItem = new Medicine(_netWeight, _expiryDate, _gender, _age, _venueCode, _dosageForm, _description, _code, _name, _qty);
             medicineList.add(newItem);
-            loadBackMedicineFile(medicineList);
+            fileHandler.loadBackMedicineFile(medicineList);
             addItemToRecord(recordItem, recordQty, newItem, _qty);
-            System.out.println("New Medicine registered and added successfully.");
+            msgHandling.displaySuccessMessage("New Medicine registered and added successfully.");
             return true;
         }
         return false;
     }
 
-    //Display Source - Boundary
-    public void displaySource() {
-        System.out.println("Source: \nEnter 'E001' if the source is from e-banking.\nEnter venue code if the source is from a collection location. ");
-        System.out.println("Enter event code if the source if from an event.\n");
-    }
-
-    //Display Add Money Instruction - Boundary
-    public void displayInstructionAddMoney() {
-        System.out.println("\nAdd Money\n");
-        displayVenueCode();
-        displaySource();
-        System.out.println("Instruction: Please enter the field accordingly. \nEnter 'X' to back to the previous page.\n");
-    }
-
     //Add Money
-    public boolean addMoney(ArrayList<DonationItem> recordItem, ArrayList<Double> recordAmt) {
-        ArrayList<DonationItem> moneyList = new ArrayList<DonationItem>();
-        loadIntoMoney(moneyList);
-        Scanner scanner = new Scanner(System.in);
-        displayInstructionAddMoney();
+    public boolean addMoney(ListInterface<DonationItem> recordItem, ListInterface<Double> recordAmt) {
+        ListInterface<DonationItem> moneyList = new ArrayList<>();
+        fileHandler.loadIntoMoney(moneyList);
+        
+        donationUI.displayInstructionAddMoney();
         String _temp, _name = "Funds", _source, _code;
         double _amount;
         //Money Amount
@@ -2343,11 +1553,12 @@ public class Donation {
         if (exist) {
             while (true) {
                 try {
-                    System.out.print("Detected this item existed before. Do you wish to add the quantity? (Y/N): ");
-                    _temp = scanner.nextLine();
+                    _temp =  donationUI.inputDetectedSameAmt();
                     if (_temp.equalsIgnoreCase("N") || _temp.equalsIgnoreCase("Y")) {
                         if (_temp.equalsIgnoreCase("Y")) {
-                            for (DonationItem item : moneyList) {
+                            Iterator<DonationItem> iterator = moneyList.iterator();
+                            while (iterator.hasNext()) {
+                                DonationItem item = iterator.next();
                                 if (((Money) item).getSource().equals(_source)) {
                                     _amount = ((Money) item).getAmount() + _amount;
                                     ((Money) item).setAmount(_amount);
@@ -2355,17 +1566,17 @@ public class Donation {
                                     break;
                                 }
                             }
-                            System.out.println("Money Amount added successfully.");
-                            loadBackMoneyFile(moneyList);
+                            msgHandling.displaySuccessMessage("Money Amount added successfully.");
+                            fileHandler.loadBackMoneyFile(moneyList);
                             return true;
                         } else {
                             return false;
                         }
                     } else {
-                        System.out.println("Sorry! Invalid Input. Please enter Y or N.");
+                        msgHandling.displayInvalidInputMessage("Please enter Y or N.");
                     }
                 } catch (Exception ex) {
-                    System.out.println("Sorry! Invalid Input. Please enter Y or N.");
+                    msgHandling.displayInvalidInputMessage("Please enter Y or N.");
                 }
             }
         } else {
@@ -2373,8 +1584,8 @@ public class Donation {
             Money newItem = new Money(_amount, _source, _code, _name, 1);
             moneyList.add(newItem);
             addItemToRecord(recordItem, recordAmt, newItem, _amount);
-            loadBackMoneyFile(moneyList);
-            System.out.println("New Money Item registered and added successfully.");
+            fileHandler.loadBackMoneyFile(moneyList);
+            msgHandling.displaySuccessMessage("New Money Item registered and added successfully.");
             return true;
         }
     }
@@ -2382,11 +1593,10 @@ public class Donation {
     //Get donor name
     public Donor getDonorIDforDonation() {
         String reply = "";
-        Scanner scanner = new Scanner(System.in);
+        
         while (true) {
             try {
-                System.out.print("Enter Donor ID: ");
-                reply = scanner.nextLine();
+                reply = donationUI.inputDonorID();
                 if (reply.equalsIgnoreCase("X")) {
                     return null;
                     //Implement validate donor code
@@ -2394,63 +1604,55 @@ public class Donation {
                     if (donorHandling.checkIfDonorExist(reply) != null) {
                         return donorHandling.checkIfDonorExist(reply);
                     } else {
-                        System.out.println("Sorry! Invalid Donor ID. Please enter a valid Donor ID.");
+                        msgHandling.displayGeneralErrorMsg("Invalid Donor ID. Please enter a valid Donor ID.");
                     }
                 }
             } catch (Exception ex) {
-                System.out.println("Sorry! Invalid Donor ID. Please enter a valid Donor ID.");
+                msgHandling.displayGeneralErrorMsg("Invalid Donor ID. Please enter a valid Donor ID.");
             }
         }
     }
 
-    //get item code
-    public String inputItemCodeRemove() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("\nEnter the item code to be removed or 'X' to back to previous page: ");
-        return scanner.nextLine();
-    }
-
-    //get item code
-    public String inputItemCodeEdit() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("\nEnter the item code to be amended or 'X' to back to previous page: ");
-        return scanner.nextLine();
-    }
-
     //Remove Donation
     public void removeDonation() {
-        ArrayList<DonationItem> itemlist = new ArrayList<DonationItem>();
-        ArrayList<DonationRecord> recordlist = new ArrayList<DonationRecord>();
-        ArrayList<DonationRecord> recordlist2 = new ArrayList<DonationRecord>();
+        ListInterface<DonationItem> itemlist = new ArrayList<>();
+        ListInterface<DonationRecord> recordlist = new ArrayList<>();
+        ListInterface<DonationRecord> recordlist2 = new ArrayList<>();
         int option;
         String reply;
         boolean continueDonationAdd = true;
         while (true) {
-            System.out.println("\n\nRemove Donation");
-            displayDonationCategory();
-            option = checkDonationCategoryOption();
+            donationUI.displayRemoveDonationHeader();
+            donationUI.displayDonationCategory();
+            option = checkMenuWithOp(8);
             if (option == 8) {
                 break;
             } else {
-                itemlist = new ArrayList<DonationItem>();
+                itemlist = new ArrayList<>();
                 displayBasedOnCatOption(option, itemlist);
-                loadIntoDR(recordlist);
-                loadIntoDR(recordlist2);
+                fileHandler.loadIntoDR(recordlist);
+                fileHandler.loadIntoDR(recordlist2);
                 //ask to remove which
                 if (!itemlist.isEmpty()) {
                     String _temp;
                     boolean removed = false;
                     while (removed == false) {
-                        _temp = inputItemCodeRemove();
+                        _temp = donationUI.inputItemCodeRemove();
                         if (_temp.equalsIgnoreCase("X")) {
                             break;
                         } else {
-                            for (DonationItem item : itemlist) {
+                            Iterator<DonationItem> iterator = itemlist.iterator();
+                            while (iterator.hasNext()) {
+                                DonationItem item = iterator.next();
                                 if (item.getItemCode().equals(_temp)) {
                                     itemlist.remove(item);
-                                    System.out.println("Item removed successfully!");
-                                    for (DonationRecord record : recordlist2) {
-                                        for (DonationItem recordItem : record.getItem()) {
+                                    msgHandling.displaySuccessMessage("Item removed successfully!");
+                                    Iterator<DonationRecord> iterator3 = recordlist2.iterator();
+                                    while (iterator3.hasNext()) {
+                                        DonationRecord record = iterator3.next();
+                                        Iterator<DonationItem> iterator2 = record.getItem().iterator();
+                                        while (iterator2.hasNext()) {
+                                            DonationItem recordItem = iterator2.next();
                                             if (recordItem.getItemCode().equals(_temp)) {
                                                 record.getItem().remove(item);
                                                 if (record.getItem().isEmpty()) {
@@ -2459,53 +1661,51 @@ public class Donation {
                                             }
                                         }
                                     }
-                                    loadBackDRFile(recordlist);
-                                    System.out.println("Records associated removed successfully!");
+                                    fileHandler.loadBackDRFile(recordlist);
+                                    msgHandling.displaySuccessMessage("Records associated removed successfully!");
                                     removed = true;
                                     if (option == 7) {
-                                        loadBackMoneyFile(itemlist);
+                                        fileHandler.loadBackMoneyFile(itemlist);
                                     } else if (option == 6) {
-                                        loadBackMedicineFile(itemlist);
+                                        fileHandler.loadBackMedicineFile(itemlist);
                                     } else if (option == 5) {
-                                        loadBackMedicalDeviceFile(itemlist);
+                                        fileHandler.loadBackMedicalDeviceFile(itemlist);
                                     } else if (option == 4) {
-                                        loadBackPersonalCareFile(itemlist);
+                                        fileHandler.loadBackPersonalCareFile(itemlist);
                                     } else if (option == 3) {
-                                        loadBackClothingFile(itemlist);
+                                        fileHandler.loadBackClothingFile(itemlist);
                                     } else if (option == 2) {
-                                        loadBackBeverageFile(itemlist);
+                                        fileHandler.loadBackBeverageFile(itemlist);
                                     } else {
-                                        loadBackFoodFile(itemlist);
+                                        fileHandler.loadBackFoodFile(itemlist);
                                     }
                                     break;
                                 }
                             }
                             if (removed == false) {
-                                System.out.println("Sorry! Invalid Item Code. Please enter a valid item code." + _temp);
+                                msgHandling.displayGeneralErrorMsg("Invalid Item Code. Please enter a valid item code." + _temp);
                             }
                         }
                     }
                 } else {
-                    enterContinue();
+                    generalFunc.enterToContinue();
                     break;
                 }
             }
 
             while (true) {
                 try {
-                    Scanner scanner = new Scanner(System.in);
-                    System.out.print("\nDo you wish to remove other donation? (Y/N): ");
-                    reply = scanner.nextLine();
+                    reply = donationUI.inputAskConRemove();
                     if (reply.equalsIgnoreCase("N") || reply.equalsIgnoreCase("Y")) {
                         if (reply.equalsIgnoreCase("N")) {
                             continueDonationAdd = false;
                         }
                         break;
                     } else {
-                        System.out.println("Sorry! Invalid Input. Please enter Y or N.");
+                        msgHandling.displayInvalidInputMessage("Please enter Y or N.");
                     }
                 } catch (Exception ex) {
-                    System.out.println("Sorry! Invalid Input. Please enter Y or N.");
+                    msgHandling.displayInvalidInputMessage("Please enter Y or N.");
                 }
             }
             if (!continueDonationAdd) {
@@ -2515,11 +1715,13 @@ public class Donation {
     }
 
     //Display Donation - Boundary
-    public void displayAllDonation(ArrayList<DonationItem> fullList) {
+    public void displayAllDonation(ListInterface<DonationItem> fullList) {
         System.out.println("\nFull Donation List");
         if (!fullList.isEmpty()) {
             System.out.printf("%-10s %-30s %-20s %-30s\n", "Item Code", "Item Name", "Quantity/Amount", "Venue Code/ Event Code");
-            for (DonationItem item : fullList) {
+            Iterator<DonationItem> iterator = fullList.iterator();
+            while (iterator.hasNext()) {
+                DonationItem item = iterator.next();
                 if (item instanceof Money) {
                     System.out.printf("%-10s %-30s %-20s %-30s\n", item.getItemCode(), item.getItemName(), ((Money) item).getAmount(), ((Money) item).getSource());
                 } else {
@@ -2540,34 +1742,40 @@ public class Donation {
                 }
             }
         } else {
-            displayEmptyList();
+            donationUI.displayEmptyList();
         }
     }
 
     //Display Food - Boundary
-    public void displayFood(ArrayList<DonationItem> foodList) {
+    public void displayFood(ListInterface<DonationItem> foodList) {
         System.out.printf("%-10s %-20s %-20s %-20s %-20s %-15s %-15s\n", "Item Code", "Item Name", "Net Weight (kg)", "Expiry Date", "Food Type",
                 "Quantity", "Venue Code");
-        for (DonationItem item : foodList) {
+        Iterator<DonationItem> iterator = foodList.iterator();
+        while (iterator.hasNext()) {
+            DonationItem item = iterator.next();
             System.out.printf("%-10s %-20s %-20s %-20s %-20s %-15s %-15s\n", item.getItemCode(), item.getItemName(), ((Food) item).getNetWeight(),
                     ((Food) item).getExpiryDate(), ((Food) item).getFoodType(), item.getQuantity(), ((Food) item).getVenueCode());
         }
     }
 
     //Display Beverage - Boundary
-    public void displayBeverage(ArrayList<DonationItem> beverageList) {
+    public void displayBeverage(ListInterface<DonationItem> beverageList) {
         System.out.printf("%-10s %-20s %-20s %-20s %-15s %-15s\n", "Item Code", "Item Name", "Net Volume (ml)", "Expiry Date", "Quantity", "Venue Code");
-        for (DonationItem item : beverageList) {
+        Iterator<DonationItem> iterator = beverageList.iterator();
+        while (iterator.hasNext()) {
+            DonationItem item = iterator.next();
             System.out.printf("%-10s %-20s %-20s %-20s %-15s %-15s\n", item.getItemCode(), item.getItemName(), ((Beverage) item).getNetVolume(),
                     ((Beverage) item).getExpiryDate(), item.getQuantity(), ((Beverage) item).getVenueCode());
         }
     }
 
     //Display Clothing - Boundary
-    public void displayClothing(ArrayList<DonationItem> clothingList) {
+    public void displayClothing(ListInterface<DonationItem> clothingList) {
         System.out.printf("%-10s %-20s %-20s %-20s %-20s %-20s %-15s %-15s\n", "Item Code", "Item Name", "Clothing Category",
                 "Gender", "Age Group", "Size", "Quantity", "Venue Code");
-        for (DonationItem item : clothingList) {
+        Iterator<DonationItem> iterator = clothingList.iterator();
+        while (iterator.hasNext()) {
+            DonationItem item = iterator.next();
             System.out.printf("%-10s %-20s %-20s %-20s %-20s %-20s %-15s %-15s\n", item.getItemCode(), item.getItemName(),
                     ((Clothing) item).getClothingCategory(), ((Clothing) item).getGender(), ((Clothing) item).getAge(),
                     ((Clothing) item).getSize(), item.getQuantity(), ((Clothing) item).getVenueCode());
@@ -2575,20 +1783,24 @@ public class Donation {
     }
 
     //Display Medical Device - Boundary
-    public void displayMedicalDevice(ArrayList<DonationItem> medicalDeviceList) {
+    public void displayMedicalDevice(ListInterface<DonationItem> medicalDeviceList) {
         System.out.printf("%-10s %-20s %-15s %-15s %-50s\n", "Item Code", "Item Name", "Quantity", "Venue Code", "Description");
-        for (DonationItem item : medicalDeviceList) {
+        Iterator<DonationItem> iterator = medicalDeviceList.iterator();
+        while (iterator.hasNext()) {
+            DonationItem item = iterator.next();
             System.out.printf("%-10s %-20s %-15s %-15s %-50s\n", item.getItemCode(), item.getItemName(), item.getQuantity(),
                     ((MedicalDevice) item).getVenueCode(), ((MedicalDevice) item).getDescription());
         }
     }
 
     //Display Personal Care - Boundary
-    public void displayPersonalCare(ArrayList<DonationItem> personalCareList) {
+    public void displayPersonalCare(ListInterface<DonationItem> personalCareList) {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         System.out.printf("%-10s %-20s %-25s %-10s %-15s %-20s %-15s %-15s %-15s\n", "Item Code", "Item Name", "Personal Care Category",
                 "Gender", "Age Group", "Net Weight (g)", "Expiry date", "Quantity", "Venue Code");
-        for (DonationItem item : personalCareList) {
+        Iterator<DonationItem> iterator = personalCareList.iterator();
+        while (iterator.hasNext()) {
+            DonationItem item = iterator.next();
             if (((PersonalCare) item).getNetWeight() == -999) {
                 System.out.printf("%-10s %-20s %-25s %-10s %-15s %-20s %-15s %-15s %-15s\n", item.getItemCode(), item.getItemName(),
                         ((PersonalCare) item).getPersonalCareCategory(), ((PersonalCare) item).getGender(), ((PersonalCare) item).getAge(),
@@ -2611,110 +1823,111 @@ public class Donation {
     }
 
     //Display Money - Boundary
-    public void displayMoney(ArrayList<DonationItem> moneyList) {
+    public void displayMoney(ListInterface<DonationItem> moneyList) {
         System.out.printf("%-10s %-20s %-20s %-30s\n", "Item Code", "Item Name", "Amount (RM)", "Source");
-        for (DonationItem item : moneyList) {
+        Iterator<DonationItem> iterator = moneyList.iterator();
+        while (iterator.hasNext()) {
+            DonationItem item = iterator.next();
             System.out.printf("%-10s %-20s %-20s %-30s\n", item.getItemCode(), item.getItemName(), ((Money) item).getAmount(), ((Money) item).getSource());
         }
     }
 
     //Display Medicine - Boundary
-    public void displayMedicine(ArrayList<DonationItem> medicineList) {
+    public void displayMedicine(ListInterface<DonationItem> medicineList) {
         System.out.printf("%-10s %-20s %-15s %-15s %-15s %-20s %-20s %-15s %-15s %-50s\n", "Item Code", "Item Name", "Dosage Form",
                 "Gender", "Age Group", "Net Weight (g)", "Expiry date", "Quantity", "Venue Code", "Description");
-        for (DonationItem item : medicineList) {
+        Iterator<DonationItem> iterator = medicineList.iterator();
+        while (iterator.hasNext()) {
+            DonationItem item = iterator.next();
             System.out.printf("%-10s %-20s %-15s %-15s %-15s %-20s %-20s %-15s %-15s %-50s\n", item.getItemCode(), item.getItemName(),
                     ((Medicine) item).getDosageForm(), ((Medicine) item).getGender(), ((Medicine) item).getAge(), ((Medicine) item).getNetWeight(),
                     ((Medicine) item).getExpiryDate(), item.getQuantity(), ((Medicine) item).getVenueCode(), ((Medicine) item).getDescription());
         }
     }
 
-    //Display Empty File - Boundary
-    public void displayEmptyList() {
-        System.out.println("There is nothing in the list yet!");
-    }
-
-    //Display Based On Option - Boundary
-    public void displayBasedOnCatOption(int option, ArrayList<DonationItem> itemlist) {
+    //Display Based On Option
+    public void displayBasedOnCatOption(int option, ListInterface<DonationItem> itemlist) {
         if (option == 7) {
-            System.out.println("\nMoney List");
-            loadIntoMoney(itemlist);
+            donationUI.displayMoneyListHeader();
+            fileHandler.loadIntoMoney(itemlist);
             if (!itemlist.isEmpty()) {
                 displayMoney(itemlist);
             } else {
-                displayEmptyList();
+                donationUI.displayEmptyList();
             }
         } else if (option == 6) {
-            System.out.println("\nMedicine List");
-            loadIntoMedicine(itemlist);
+            donationUI.displayMedicineListHeader();
+            fileHandler.loadIntoMedicine(itemlist);
             if (!itemlist.isEmpty()) {
                 displayMedicine(itemlist);
             } else {
-                displayEmptyList();
+                donationUI.displayEmptyList();
             }
         } else if (option == 5) {
-            System.out.println("\nMedical Device List");
-            loadIntoMedicalDevice(itemlist);
+            donationUI.displayMedicalDeviceListHeader();
+            fileHandler.loadIntoMedicalDevice(itemlist);
             if (!itemlist.isEmpty()) {
                 displayMedicalDevice(itemlist);
             } else {
-                displayEmptyList();
+                donationUI.displayEmptyList();
             }
         } else if (option == 4) {
-            System.out.println("\nPersonal Care List");
-            loadIntoPersonalCare(itemlist);
+            donationUI.displayPersonalCareListHeader();
+            fileHandler.loadIntoPersonalCare(itemlist);
             if (!itemlist.isEmpty()) {
                 displayPersonalCare(itemlist);
             } else {
-                displayEmptyList();
+                donationUI.displayEmptyList();
             }
         } else if (option == 3) {
-            System.out.println("\nClothing List");
-            loadIntoClothing(itemlist);
+            donationUI.displayClothingListHeader();
+            fileHandler.loadIntoClothing(itemlist);
             if (!itemlist.isEmpty()) {
                 displayClothing(itemlist);
             } else {
-                displayEmptyList();
+                donationUI.displayEmptyList();
             }
         } else if (option == 2) {
-            System.out.println("\nBeverage List");
-            loadIntoBeverage(itemlist);
+            donationUI.displayBeverageListHeader();
+            fileHandler.loadIntoBeverage(itemlist);
             if (!itemlist.isEmpty()) {
                 displayBeverage(itemlist);
             } else {
-                displayEmptyList();
+                donationUI.displayEmptyList();
             }
         } else {
-            System.out.println("\nFood List");
-            loadIntoFood(itemlist);
+            donationUI.displayFoodListHeader();
+            fileHandler.loadIntoFood(itemlist);
             if (!itemlist.isEmpty()) {
                 displayFood(itemlist);
             } else {
-                displayEmptyList();
+                donationUI.displayEmptyList();
             }
         }
     }
 
     //Search Donation
     public void searchDonation() {
-        ArrayList<DonationItem> fullList = new ArrayList<DonationItem>();
-        loadIntoAll(fullList);
+        ListInterface<DonationItem> fullList = new ArrayList<>();
+        fileHandler.loadIntoAll(fullList);
         displayAllDonation(fullList);
-        ArrayList<DonationRecord> fullRecord = new ArrayList<DonationRecord>();
-        loadIntoDR(fullRecord);
+        ListInterface<DonationRecord> fullRecord = new ArrayList<>();
+        fileHandler.loadIntoDR(fullRecord);
         DonationItem searchResultsItem = null;
-        ArrayList<DonationRecord> searchResultsRecord = new ArrayList<DonationRecord>();
+        ListInterface<DonationRecord> searchResultsRecord = new ArrayList<>();
         String code;
         while (true) {
-            code = inputSearchItemCode();
+            code = donationUI.inputSearchItemCode();
             if (code.isEmpty()) {
-                System.out.println("Invalid input. Please do not leave the field blank.");
+                msgHandling.displayInvalidInputMessage("Please do not leave the field blank.");
             } else {
                 if (code.equals("X")) {
                     break;
                 } else {
                     boolean valid = false;
-                    for (DonationItem item : fullList) {
+                    Iterator<DonationItem> iterator = fullList.iterator();
+                    while (iterator.hasNext()) {
+                        DonationItem item = iterator.next();
                         if (item.getItemCode().equals(code)) {
                             valid = true;
                         }
@@ -2722,13 +1935,15 @@ public class Donation {
                     if (valid == true) {
                         break;
                     } else {
-                        System.out.println("No results found.");
+                        msgHandling.displayGeneralErrorMsg("No results found.");
                     }
                 }
             }
         }
         if (!code.equals("X")) {
-            for (DonationItem item : fullList) {
+            Iterator<DonationItem> iterator = fullList.iterator();
+            while (iterator.hasNext()) {
+                DonationItem item = iterator.next();
                 if (item.getItemCode().equals(code)) {
                     searchResultsItem = item;
                 }
@@ -2750,96 +1965,65 @@ public class Donation {
             } else {
                 lineToDisplay = ((Money) searchResultsItem).toString();
             }
-            System.out.println("Results Found: ");
-            displaySingleItem(lineToDisplay);
-            //display search results record
-            displayDonationRecordAssociated(searchResultsRecord);
-            enterContinue();
+            displaySearchResults(lineToDisplay, searchResultsRecord);
+            generalFunc.enterToContinue();
         }
     }
 
-    //Display Single Item
-    public void displaySingleItem(String lineToDisplay) {
-        System.out.println(lineToDisplay);
+    public void displaySearchResults(String lineToDisplay, ListInterface<DonationRecord> searchResultsRecord) {
+        donationUI.displaySearchResultsHeaderIfFound();
+        donationUI.displaySingleItem(lineToDisplay);
+        //display search results record
+        displayDonationRecordAssociated(searchResultsRecord);
     }
 
     //Display Donation Record
-    public void displayDonationRecordAssociated(ArrayList<DonationRecord> dRecordList) {
-        System.out.println("Donation Record Associated");
+    public void displayDonationRecordAssociated(ListInterface<DonationRecord> dRecordList) {
+        donationUI.displayDonationRecordHeader();
         if (dRecordList.isEmpty()) {
-            displayEmptyList();
+            donationUI.displayEmptyList();
         } else {
-            System.out.printf("%-25s %-10s %-20s %-10s %-20s %-10s %-20s\n", "Donation Record ID", "Donor ID", "Donor Name", "Item Code",
-                    "Item Name", "Quantity", "Date Time");
-            for (DonationRecord record : dRecordList) {
-                displaySingleRecordWithDonorID(record);
-            }
+            displayDonationRecordAssociatedNotEmpty(dRecordList);
+        }
+    }
+
+    public void displayDonationRecordAssociatedNotEmpty(ListInterface<DonationRecord> dRecordList) {
+        donationUI.displayDonationRecordTableHeader();
+        Iterator<DonationRecord> iterator = dRecordList.iterator();
+        while (iterator.hasNext()) {
+            DonationRecord record = iterator.next();
+            displaySingleRecordWithDonorID(record);
         }
     }
 
     public void displaySingleRecordWithDonorID(DonationRecord record) {
-        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         int qtyIndex = 0;
         int amtIndex = 0;
         if (record.getItem().get(0) instanceof Money) {
-            System.out.printf("%-25s %-10s %-20s %-10s %-20s %-10s %-20s\n", record.getRecordID(), record.getDonor().getId(),
-                    record.getDonor().getName(), record.getItem().get(0).getItemCode(), record.getItem().get(0).getItemName(),
-                    record.getAmount().get(amtIndex), record.getDonationDateTime().format(dateFormat));
+            donationUI.displaySingleRecordWithDonorIDMoney(record, amtIndex);
             amtIndex++;
         } else {
-            System.out.printf("%-25s %-10s %-20s %-10s %-20s %-10s %-20s\n", record.getRecordID(), record.getDonor().getId(),
-                    record.getDonor().getName(), record.getItem().get(0).getItemCode(), record.getItem().get(0).getItemName(),
-                    record.getQty().get(qtyIndex), record.getDonationDateTime().format(dateFormat));
+            donationUI.displaySingleRecordWithDonorIDNotMoney(record, qtyIndex);
             qtyIndex++;
         }
         if (record.getItem().size() > 1) {
             for (int i = 1; i < record.getItem().size(); i++) {
                 if (record.getItem().get(i) instanceof Money) {
-                    System.out.printf("%-25s %-10s %-20s %-10s %-20s %-10s %-20s\n", "", "", "", record.getItem().get(i).getItemCode(),
-                            record.getItem().get(i).getItemName(), record.getAmount().get(amtIndex), "");
+                    donationUI.displaySingleRecordWithDonorIDMoney(record, i, amtIndex);
                     amtIndex++;
                 } else {
-                    System.out.printf("%-25s %-10s %-20s %-10s %-20s %-10s %-20s\n", "", "", "", record.getItem().get(i).getItemCode(),
-                            record.getItem().get(i).getItemName(), record.getQty().get(qtyIndex), "");
+                    donationUI.displaySingleRecordWithDonorIDNotMoney(record, i, qtyIndex);
                     qtyIndex++;
                 }
             }
         }
     }
 
-    public void displaySingleRecordWithoutDonorID(DonationRecord record) {
-        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        int qtyIndex = 0;
-        int amtIndex = 0;
-        if (record.getItem().get(0) instanceof Money) {
-            System.out.printf("%-25s %-10s %-20s %-10s %-20s\n", record.getRecordID(), record.getItem().get(0).getItemCode(),
-                    record.getItem().get(0).getItemName(), record.getAmount().get(amtIndex), record.getDonationDateTime().format(dateFormat));
-            amtIndex++;
-        } else {
-            System.out.printf("%-25s %-10s %-20s %-10s %-20s\n", record.getRecordID(), record.getItem().get(0).getItemCode(),
-                    record.getItem().get(0).getItemName(), record.getQty().get(qtyIndex), record.getDonationDateTime().format(dateFormat));
-            qtyIndex++;
-        }
-        if (record.getItem().size() > 1) {
-            for (int i = 1; i < record.getItem().size(); i++) {
-                if (record.getItem().get(i) instanceof Money) {
-                    System.out.printf("%-25s %-10s %-20s %-10s %-20s\n", "", record.getItem().get(i).getItemCode(),
-                            record.getItem().get(i).getItemName(), record.getAmount().get(amtIndex), "");
-                    amtIndex++;
-                } else {
-                    System.out.printf("%-25s %-10s %-20s %-10s %-20s\n", "", record.getItem().get(i).getItemCode(),
-                            record.getItem().get(i).getItemName(), record.getQty().get(qtyIndex), "");
-                    qtyIndex++;
-                }
-            }
-        }
-    }
-
-    public void displaySingleDonorRecords(ArrayList<DonationRecord> dRecordList, Donor donor) {
-        System.out.println("\nDonor ID: " + donor.getId());
-        System.out.println("Donor Name: " + donor.getName());
-        System.out.printf("%-25s %-10s %-20s %-10s %-20s\n", "Donation Record ID", "Item Code", "Item Name", "Quantity", "Date Time");
-        for (DonationRecord record : dRecordList) {
+    public void displaySingleDonorRecords(ListInterface<DonationRecord> dRecordList, Donor donor) {
+        donationUI.displaySingleDonorRecordsHeader(donor);
+        Iterator<DonationRecord> iterator = dRecordList.iterator();
+        while (iterator.hasNext()) {
+            DonationRecord record = iterator.next();
             if (record.getDonor().getId().equals(donor.getId())) {
                 displaySingleRecordWithoutDonorID(record);
             }
@@ -2847,11 +2031,46 @@ public class Donation {
 
     }
 
-    //Input search item code
-    public String inputSearchItemCode() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter Item Code to be searched (or X to return to Donation Page): ");
-        return scanner.nextLine();
+    public void displaySingleRecordWithoutDonorID(DonationRecord record) {
+        int qtyIndex = 0;
+        int amtIndex = 0;
+        if (record.getItem().get(0) instanceof Money) {
+            donationUI.displaySingleRecordWithoutDonorIDMoney(record, amtIndex);
+            amtIndex++;
+        } else {
+            donationUI.displaySingleRecordWithoutDonorIDNotMoney(record, qtyIndex);
+            qtyIndex++;
+        }
+        if (record.getItem().size() > 1) {
+            for (int i = 1; i < record.getItem().size(); i++) {
+                if (record.getItem().get(i) instanceof Money) {
+                    donationUI.displaySingleRecordWithoutDonorIDMoney(record, i, amtIndex);
+                    amtIndex++;
+                } else {
+                    donationUI.displaySingleRecordWithoutDonorIDNotMoney(record, i, qtyIndex);
+                    qtyIndex++;
+                }
+            }
+        }
+    }
+    //Display Amend Option
+
+    public void displayAmendOption(int option) {
+        if (option == 7) {
+            donationUI.displayAmendMoneyOption();
+        } else if (option == 6) {
+            donationUI.displayAmendMedicineOption();
+        } else if (option == 5) {
+            donationUI.displayAmendMedicalDeviceOption();
+        } else if (option == 4) {
+            donationUI.displayAmendPersonalCareOption();
+        } else if (option == 3) {
+            donationUI.displayAmendClothingOption();
+        } else if (option == 2) {
+            donationUI.displayAmendBeverageOption();
+        } else {
+            donationUI.displayAmendFoodOption();
+        }
     }
 
     //Amend Donation
@@ -2860,13 +2079,13 @@ public class Donation {
         String reply;
         boolean continueDonationAdd = true;
         while (true) {
-            System.out.println("\n\nAmend Donation");
-            displayDonationCategory();
-            option = checkDonationCategoryOption();
+            donationUI.displayAmendDetailsHeader();
+            donationUI.displayDonationCategory();
+            option = checkMenuWithOp(8);
             if (option == 8) {
                 break;
             } else {
-                ArrayList<DonationItem> itemlist = new ArrayList<DonationItem>();
+                ListInterface<DonationItem> itemlist = new ArrayList<>();
                 displayBasedOnCatOption(option, itemlist);
                 //ask to edit which
                 if (!itemlist.isEmpty()) {
@@ -2874,19 +2093,21 @@ public class Donation {
                     int amdOption;
                     boolean amend = false;
                     while (amend == false) {
-                        _temp = inputItemCodeEdit();
+                        _temp = donationUI.inputItemCodeEdit();
                         if (_temp.equalsIgnoreCase("X")) {
                             break;
                         } else {
-                            for (DonationItem item : itemlist) {
+                            Iterator<DonationItem> iterator = itemlist.iterator();
+                            while (iterator.hasNext()) {
+                                DonationItem item = iterator.next();
                                 if (item.getItemCode().equals(_temp)) {
                                     //if it exists, ask to amend which info
                                     //display amend option
                                     displayAmendOption(option);
                                     amdOption = checkAmendOption(option);
-                                    if ((option == 7 && amdOption == 3) || (option == 6 && amdOption == 10) || (option == 5 && amdOption == 5) ||
-                                            (option == 4 && amdOption == 9) || (option == 3 && amdOption == 8) || (option == 2 && amdOption == 6) ||
-                                            (option == 1 && amdOption == 7)) {
+                                    if ((option == 7 && amdOption == 3) || (option == 6 && amdOption == 10) || (option == 5 && amdOption == 5)
+                                            || (option == 4 && amdOption == 9) || (option == 3 && amdOption == 8) || (option == 2 && amdOption == 6)
+                                            || (option == 1 && amdOption == 7)) {
                                         amend = true;
                                         break;
                                     } else {
@@ -2894,19 +2115,19 @@ public class Donation {
                                             amend = true;
                                             //amend finished, load back
                                             if (option == 7) {
-                                                loadBackMoneyFile(itemlist);
+                                                fileHandler.loadBackMoneyFile(itemlist);
                                             } else if (option == 6) {
-                                                loadBackMedicineFile(itemlist);
+                                                fileHandler.loadBackMedicineFile(itemlist);
                                             } else if (option == 5) {
-                                                loadBackMedicalDeviceFile(itemlist);
+                                                fileHandler.loadBackMedicalDeviceFile(itemlist);
                                             } else if (option == 4) {
-                                                loadBackPersonalCareFile(itemlist);
+                                                fileHandler.loadBackPersonalCareFile(itemlist);
                                             } else if (option == 3) {
-                                                loadBackClothingFile(itemlist);
+                                                fileHandler.loadBackClothingFile(itemlist);
                                             } else if (option == 2) {
-                                                loadBackBeverageFile(itemlist);
+                                                fileHandler.loadBackBeverageFile(itemlist);
                                             } else {
-                                                loadBackFoodFile(itemlist);
+                                                fileHandler.loadBackFoodFile(itemlist);
                                             }
                                             break;
                                         } else {
@@ -2917,30 +2138,28 @@ public class Donation {
                                 }
                             }
                             if (amend == false) {
-                                System.out.println("Sorry! Invalid Item Code. Please enter a valid item code." + _temp);
+                                msgHandling.displayGeneralErrorMsg("Invalid Item Code. Please enter a valid item code." + _temp);
                             }
                         }
                     }
                 } else {
-                    enterContinue();
+                    generalFunc.enterToContinue();
                     break;
                 }
             }
             while (true) {
                 try {
-                    Scanner scanner = new Scanner(System.in);
-                    System.out.print("\nDo you wish to amend other donation? (Y/N): ");
-                    reply = scanner.nextLine();
+                    reply = donationUI.inputAskConAmend();
                     if (reply.equalsIgnoreCase("N") || reply.equalsIgnoreCase("Y")) {
                         if (reply.equalsIgnoreCase("N")) {
                             continueDonationAdd = false;
                         }
                         break;
                     } else {
-                        System.out.println("Sorry! Invalid Input. Please enter Y or N.");
+                        msgHandling.displayInvalidInputMessage("Please enter Y or N.");
                     }
                 } catch (Exception ex) {
-                    System.out.println("Sorry! Invalid Input. Please enter Y or N.");
+                    msgHandling.displayInvalidInputMessage("Please enter Y or N.");
                 }
             }
             if (!continueDonationAdd) {
@@ -2950,11 +2169,15 @@ public class Donation {
     }
 
     //search for existing record
-    public void searchRecord(String code, ArrayList<DonationRecord> searchResultsRecord) {
-        ArrayList<DonationRecord> fullRecord = new ArrayList<DonationRecord>();
-        loadIntoDR(fullRecord);
-        for (DonationRecord record : fullRecord) {
-            for (DonationItem item2 : record.getItem()) {
+    public void searchRecord(String code, ListInterface<DonationRecord> searchResultsRecord) {
+        ListInterface<DonationRecord> fullRecord = new ArrayList<>();
+        fileHandler.loadIntoDR(fullRecord);
+        Iterator<DonationRecord> iterator = fullRecord.iterator();
+        while (iterator.hasNext()) {
+            DonationRecord record = iterator.next();
+            Iterator<DonationItem> iterator2 = record.getItem().iterator();
+            while (iterator2.hasNext()) {
+                DonationItem item2 = iterator2.next();
                 if (item2.getItemCode().equals(code)) {
                     searchResultsRecord.add(record);
                     break;
@@ -2964,7 +2187,7 @@ public class Donation {
     }
 
     //Amend Item
-    public boolean amendDetails(String itemCode, int option, int amdOption, ArrayList<DonationItem> itemlist) {
+    public boolean amendDetails(String itemCode, int option, int amdOption, ListInterface<DonationItem> itemlist) {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String _temp;
         int _temp2;
@@ -2977,7 +2200,9 @@ public class Donation {
                 return false;
             } else {
                 boolean exist;
-                for (DonationItem item : itemlist) {
+                Iterator<DonationItem> iterator = itemlist.iterator();
+                while (iterator.hasNext()) {
+                    DonationItem item = iterator.next();
                     if (item.getItemCode().equals(itemCode)) {
                         switch (option) {
                             case 1:
@@ -3007,10 +2232,10 @@ public class Donation {
                                 break;
                         }
                         if (exist) {
-                            System.out.println("Modification Failed! The same record exists.");
+                            msgHandling.displayGeneralErrorMsg("Modification Failed! The same record exists.");
                             return false;
                         } else {
-                            System.out.println("Modification Successful!");
+                            msgHandling.displaySuccessMessage("Modification Successful!");
                             item.setItemName(_temp);
                             return true;
                         }
@@ -3019,23 +2244,21 @@ public class Donation {
             }
             //Quantity
         } else if (amdOption == 2 && option >= 1 && option <= 6) {
-            ArrayList<DonationRecord> searchResultsRecord = new ArrayList<DonationRecord>();
-            ArrayList<DonationRecord> recordlist = new ArrayList<DonationRecord>();
-            ArrayList<DonationRecord> recordlist2 = new ArrayList<DonationRecord>();
-            loadIntoDR(recordlist);
-            loadIntoDR(recordlist2);
+            ListInterface<DonationRecord> searchResultsRecord = new ArrayList<>();
+            ListInterface<DonationRecord> recordlist = new ArrayList<>();
+            ListInterface<DonationRecord> recordlist2 = new ArrayList<>();
+            fileHandler.loadIntoDR(recordlist);
+            fileHandler.loadIntoDR(recordlist2);
             searchRecord(itemCode, searchResultsRecord);
             displayDonationRecordAssociated(searchResultsRecord);
-            System.out.println("Action:\n1. Remove from a record\n2. Amend a record quantity\nX. Stop this modification.");
+            donationUI.displayAmendQtyRecord();
             while (true) {
-                Scanner scanner = new Scanner(System.in);
-                System.out.print("Your choice (1-2, X): ");
-                _temp = scanner.nextLine();
+                _temp = donationUI.inputChoice();
                 if (_temp.equalsIgnoreCase("X")) {
                     return false;
                 } else {
                     if (!_temp.equals("1") && !_temp.equals("2")) {
-                        System.out.println("Sorry! Invalid Option. Please enter a valid option (1-2, X).");
+                        msgHandling.displayInvalidOptionMessage("Please enter a valid option (1-2, X).");
                     } else {
                         break;
                     }
@@ -3045,15 +2268,19 @@ public class Donation {
                 boolean removed = false;
                 _temp2 = 0;
                 while (removed == false) {
-                    _temp = inputRecordIDRemove();
+                    _temp = donationUI.inputRecordIDRemove();
                     if (_temp.equalsIgnoreCase("X")) {
                         return false;
                     } else {
                         //remove record
                         int qtyIndex = 0;
-                        for (DonationRecord record : searchResultsRecord) {
+                        Iterator<DonationRecord> iterator = searchResultsRecord.iterator();
+                        while (iterator.hasNext()) {
+                            DonationRecord record = iterator.next();
                             if (String.valueOf(record.getRecordID()).equals(_temp)) {
-                                for (DonationItem item : record.getItem()) {
+                                Iterator<DonationItem> iterator2 = record.getItem().iterator();
+                                while (iterator2.hasNext()) {
+                                    DonationItem item = iterator2.next();
                                     if (item.getItemCode().equals(itemCode)) {
                                         _temp2 = record.getQty().get(qtyIndex);
                                     }
@@ -3067,49 +2294,55 @@ public class Donation {
                             }
                         }
                         //reduce quantity, if 0 then remove item
-                        for (DonationItem item : itemlist) {
+                        Iterator<DonationItem> iterator2 = itemlist.iterator();
+                        while (iterator2.hasNext()) {
+                            DonationItem item = iterator2.next();
                             if (item.getItemCode().equals(itemCode)) {
                                 item.setQuantity(item.getQuantity() - _temp2);
                                 if (item.getQuantity() == 0) {
                                     itemlist.remove(item);
                                 }
-                                loadBackDRFile(recordlist);
+                                fileHandler.loadBackDRFile(recordlist);
                                 if (option == 7) {
-                                    loadBackMoneyFile(itemlist);
+                                    fileHandler.loadBackMoneyFile(itemlist);
                                 } else if (option == 6) {
-                                    loadBackMedicineFile(itemlist);
+                                    fileHandler.loadBackMedicineFile(itemlist);
                                 } else if (option == 5) {
-                                    loadBackMedicalDeviceFile(itemlist);
+                                    fileHandler.loadBackMedicalDeviceFile(itemlist);
                                 } else if (option == 4) {
-                                    loadBackPersonalCareFile(itemlist);
+                                    fileHandler.loadBackPersonalCareFile(itemlist);
                                 } else if (option == 3) {
-                                    loadBackClothingFile(itemlist);
+                                    fileHandler.loadBackClothingFile(itemlist);
                                 } else if (option == 2) {
-                                    loadBackBeverageFile(itemlist);
+                                    fileHandler.loadBackBeverageFile(itemlist);
                                 } else {
-                                    loadBackFoodFile(itemlist);
+                                    fileHandler.loadBackFoodFile(itemlist);
                                 }
                                 break;
                             }
                         }
                         if (removed == false) {
-                            System.out.println("Sorry! Invalid Record ID. Please enter a valid record ID.");
+                            msgHandling.displayGeneralErrorMsg("Invalid Record ID. Please enter a valid record ID.");
                         } else {
-                            System.out.println("Modification Successful!");
+                            msgHandling.displaySuccessMessage("Modification Successful!");
                         }
                     }
                 }
             } else {
                 while (true) {
-                    _temp = inputRecordIDAmend();
+                    _temp = donationUI.inputRecordIDAmend();
                     if (_temp.equalsIgnoreCase("X")) {
                         return false;
                     } else {
                         //remove record
                         int qtyIndex = 0;
-                        for (DonationRecord record : searchResultsRecord) {
+                        Iterator<DonationRecord> iterator = searchResultsRecord.iterator();
+                        while (iterator.hasNext()) {
+                            DonationRecord record = iterator.next();
                             if (String.valueOf(record.getRecordID()).equals(_temp)) {
-                                for (DonationItem item2 : record.getItem()) {
+                                Iterator<DonationItem> iterator2 = record.getItem().iterator();
+                                while (iterator2.hasNext()) {
+                                    DonationItem item2 = iterator2.next();
                                     if (item2.getItemCode().equals(itemCode)) {
                                         _temp2 = getNvalidateQuantity();
                                         if (_temp2 == 0) {
@@ -3117,27 +2350,29 @@ public class Donation {
                                         } else {
                                             //System.out.println("Modification Successful!");
                                             int changes = _temp2 - record.getQty().get(qtyIndex);
-                                            for (DonationItem item : itemlist) {
+                                            Iterator<DonationItem> iterator3 = itemlist.iterator();
+                                            while (iterator3.hasNext()) {
+                                                DonationItem item = iterator3.next();
                                                 if (item.getItemCode().equals(itemCode)) {
                                                     item.setQuantity(item.getQuantity() + changes);
                                                     if (item.getQuantity() == 0) {
                                                         itemlist.remove(item);
                                                     }
-                                                    loadBackDRFile(recordlist);
+                                                    fileHandler.loadBackDRFile(recordlist);
                                                     if (option == 6) {
-                                                        loadBackMedicineFile(itemlist);
+                                                        fileHandler.loadBackMedicineFile(itemlist);
                                                     } else if (option == 5) {
-                                                        loadBackMedicalDeviceFile(itemlist);
+                                                        fileHandler.loadBackMedicalDeviceFile(itemlist);
                                                     } else if (option == 4) {
-                                                        loadBackPersonalCareFile(itemlist);
+                                                        fileHandler.loadBackPersonalCareFile(itemlist);
                                                     } else if (option == 3) {
-                                                        loadBackClothingFile(itemlist);
+                                                        fileHandler.loadBackClothingFile(itemlist);
                                                     } else if (option == 2) {
-                                                        loadBackBeverageFile(itemlist);
+                                                        fileHandler.loadBackBeverageFile(itemlist);
                                                     } else {
-                                                        loadBackFoodFile(itemlist);
+                                                        fileHandler.loadBackFoodFile(itemlist);
                                                     }
-                                                    System.out.println("Modification Successful!");
+                                                    msgHandling.displaySuccessMessage("Modification Successful!");
                                                     break;
                                                 }
                                             }
@@ -3150,7 +2385,7 @@ public class Donation {
                                 }
                             }
                         }
-                        System.out.println("Sorry! Invalid Record ID. Please enter a valid record ID.");
+                        msgHandling.displayGeneralErrorMsg("Invalid Record ID. Please enter a valid record ID.");
                     }
                 }
             }
@@ -3170,7 +2405,9 @@ public class Donation {
                 return false;
             } else {
                 boolean exist;
-                for (DonationItem item : itemlist) {
+                Iterator<DonationItem> iterator = itemlist.iterator();
+                while (iterator.hasNext()) {
+                    DonationItem item = iterator.next();
                     if (item.getItemCode().equals(itemCode)) {
                         switch (option) {
                             case 1:
@@ -3193,10 +2430,10 @@ public class Donation {
                                 break;
                         }
                         if (exist) {
-                            System.out.println("Modification Failed! The same record exists.");
+                            msgHandling.displayGeneralErrorMsg("Modification Failed! The same record exists.");
                             return false;
                         } else {
-                            System.out.println("Modification Successful!");
+                            msgHandling.displaySuccessMessage("Modification Successful!");
                             switch (option) {
                                 case 1:
                                     ((Food) item).setNetWeight(_temp3);
@@ -3222,9 +2459,11 @@ public class Donation {
             if (_temp.equalsIgnoreCase("X")) {
                 return false;
             } else {
-                for (DonationItem item : itemlist) {
+                Iterator<DonationItem> iterator = itemlist.iterator();
+                while (iterator.hasNext()) {
+                    DonationItem item = iterator.next();
                     if (item.getItemCode().equals(itemCode)) {
-                        System.out.println("Modification Successful!");
+                        msgHandling.displaySuccessMessage("Modification Successful!");
                         if (option == 5) {
                             ((MedicalDevice) item).setDescription(_temp);
                         } else {
@@ -3241,7 +2480,9 @@ public class Donation {
                 return false;
             } else {
                 boolean exist;
-                for (DonationItem item : itemlist) {
+                Iterator<DonationItem> iterator = itemlist.iterator();
+                while (iterator.hasNext()) {
+                    DonationItem item = iterator.next();
                     if (item.getItemCode().equals(itemCode)) {
                         switch (option) {
                             case 1:
@@ -3264,10 +2505,10 @@ public class Donation {
                                 break;
                         }
                         if (exist) {
-                            System.out.println("Modification Failed! The same record exists.");
+                            msgHandling.displayGeneralErrorMsg("Modification Failed! The same record exists.");
                             return false;
                         } else {
-                            System.out.println("Modification Successful!");
+                            msgHandling.displaySuccessMessage("Modification Successful!");
                             switch (option) {
                                 case 1:
                                     ((Food) item).setExpiryDate(_temp4);
@@ -3289,13 +2530,15 @@ public class Donation {
             }
             //Age
         } else if ((amdOption == 6 && (option == 4 || option == 6)) || (amdOption == 5 && option == 3)) {
-            displayAge();
+            donationUI.displayAge();
             _temp = getNvalidateAge();
             if (_temp.equals("")) {
                 return false;
             } else {
                 boolean exist;
-                for (DonationItem item : itemlist) {
+                Iterator<DonationItem> iterator = itemlist.iterator();
+                while (iterator.hasNext()) {
+                    DonationItem item = iterator.next();
                     if (item.getItemCode().equals(itemCode)) {
                         switch (option) {
                             case 3:
@@ -3314,10 +2557,10 @@ public class Donation {
                                 break;
                         }
                         if (exist) {
-                            System.out.println("Modification Failed! The same record exists.");
+                            msgHandling.displayGeneralErrorMsg("Modification Failed! The same record exists.");
                             return false;
                         } else {
-                            System.out.println("Modification Successful!");
+                            msgHandling.displaySuccessMessage("Modification Successful!");
                             switch (option) {
                                 case 3:
                                     ((Clothing) item).setAge(_temp);
@@ -3336,35 +2579,37 @@ public class Donation {
             }
             //Gender
         } else if ((amdOption == 5 && (option == 4 || option == 6)) || (amdOption == 4 && option == 3)) {
-            displayGender();
+            donationUI.displayGender();
             _temp = getNvalidateGender();
             if (_temp.equals("")) {
                 return false;
             } else {
                 boolean exist;
-                for (DonationItem item : itemlist) {
+                Iterator<DonationItem> iterator = itemlist.iterator();
+                while (iterator.hasNext()) {
+                    DonationItem item = iterator.next();
                     if (item.getItemCode().equals(itemCode)) {
                         switch (option) {
                             case 3:
-                                exist = checkExistBeforeClothing(itemlist, item.getItemName(), ((Clothing) item).getSize(), 
+                                exist = checkExistBeforeClothing(itemlist, item.getItemName(), ((Clothing) item).getSize(),
                                         ((Clothing) item).getClothingCategory(), ((Clothing) item).getAge(), _temp, ((Clothing) item).getVenueCode());
                                 break;
                             case 4:
-                                exist = checkExistBeforePersonalCare(itemlist, item.getItemName(), ((PersonalCare) item).getExpiryDate(), 
-                                        ((PersonalCare) item).getNetWeight(), ((PersonalCare) item).getPersonalCareCategory(), 
+                                exist = checkExistBeforePersonalCare(itemlist, item.getItemName(), ((PersonalCare) item).getExpiryDate(),
+                                        ((PersonalCare) item).getNetWeight(), ((PersonalCare) item).getPersonalCareCategory(),
                                         ((PersonalCare) item).getAge(), _temp, ((PersonalCare) item).getVenueCode());
                                 break;
                             default:
-                                exist = checkExistBeforeMedicine(itemlist, item.getItemName(), ((Medicine) item).getExpiryDate(), 
+                                exist = checkExistBeforeMedicine(itemlist, item.getItemName(), ((Medicine) item).getExpiryDate(),
                                         ((Medicine) item).getNetWeight(), ((Medicine) item).getDosageForm(), ((Medicine) item).getAge(),
                                         _temp, ((Medicine) item).getVenueCode());
                                 break;
                         }
                         if (exist) {
-                            System.out.println("Modification Failed! The same record exists.");
+                            msgHandling.displayGeneralErrorMsg("Modification Failed! The same record exists.");
                             return false;
                         } else {
-                            System.out.println("Modification Successful!");
+                            msgHandling.displaySuccessMessage("Modification Successful!");
                             switch (option) {
                                 case 3:
                                     ((Clothing) item).setGender(_temp);
@@ -3382,15 +2627,17 @@ public class Donation {
                 }
             }
             //Venue Code
-        } else if ((amdOption == 7 && (option == 3 || option == 6)) || (amdOption == 6 && option == 1) || (amdOption == 5 && option == 2) 
+        } else if ((amdOption == 7 && (option == 3 || option == 6)) || (amdOption == 6 && option == 1) || (amdOption == 5 && option == 2)
                 || (amdOption == 8 && option == 4) || (amdOption == 3 && option == 5)) {
-            displayVenueCode();
+            donationUI.displayVenueCode();
             _temp = getNvalidateVenueCode();
             if (_temp.equals("")) {
                 return false;
             } else {
                 boolean exist;
-                for (DonationItem item : itemlist) {
+                Iterator<DonationItem> iterator = itemlist.iterator();
+                while (iterator.hasNext()) {
+                    DonationItem item = iterator.next();
                     if (item.getItemCode().equals(itemCode)) {
                         switch (option) {
                             case 1:
@@ -3402,28 +2649,28 @@ public class Donation {
                                         _temp);
                                 break;
                             case 3:
-                                exist = checkExistBeforeClothing(itemlist, item.getItemName(), ((Clothing) item).getSize(), ((Clothing) item).getClothingCategory(), 
+                                exist = checkExistBeforeClothing(itemlist, item.getItemName(), ((Clothing) item).getSize(), ((Clothing) item).getClothingCategory(),
                                         ((Clothing) item).getAge(), ((Clothing) item).getGender(), _temp);
                                 break;
                             case 4:
-                                exist = checkExistBeforePersonalCare(itemlist, item.getItemName(), ((PersonalCare) item).getExpiryDate(), 
-                                        ((PersonalCare) item).getNetWeight(), ((PersonalCare) item).getPersonalCareCategory(), ((PersonalCare) item).getAge(), 
+                                exist = checkExistBeforePersonalCare(itemlist, item.getItemName(), ((PersonalCare) item).getExpiryDate(),
+                                        ((PersonalCare) item).getNetWeight(), ((PersonalCare) item).getPersonalCareCategory(), ((PersonalCare) item).getAge(),
                                         ((PersonalCare) item).getGender(), _temp);
                                 break;
                             case 5:
                                 exist = checkExistBeforeMedicalDevice(itemlist, item.getItemName(), _temp);
                                 break;
                             default:
-                                exist = checkExistBeforeMedicine(itemlist, item.getItemName(), ((Medicine) item).getExpiryDate(), 
-                                        ((Medicine) item).getNetWeight(), ((Medicine) item).getDosageForm(), ((Medicine) item).getAge(), 
+                                exist = checkExistBeforeMedicine(itemlist, item.getItemName(), ((Medicine) item).getExpiryDate(),
+                                        ((Medicine) item).getNetWeight(), ((Medicine) item).getDosageForm(), ((Medicine) item).getAge(),
                                         ((Medicine) item).getGender(), _temp);
                                 break;
                         }
                         if (exist) {
-                            System.out.println("Modification Failed! The same record exists.");
+                            msgHandling.displayGeneralErrorMsg("Modification Failed! The same record exists.");
                             return false;
                         } else {
-                            System.out.println("Modification Successful!");
+                            msgHandling.displaySuccessMessage("Modification Successful!");
                             switch (option) {
                                 case 1:
                                     ((Food) item).setVenueCode(_temp);
@@ -3451,21 +2698,23 @@ public class Donation {
             }
             //Food Type
         } else if (amdOption == 5 && option == 1) {
-            displayFoodType();
+            donationUI.displayFoodType();
             _temp = getNvalidateFoodType();
             if (_temp.equals("")) {
                 return false;
             } else {
                 boolean exist;
-                for (DonationItem item : itemlist) {
+                Iterator<DonationItem> iterator = itemlist.iterator();
+                while (iterator.hasNext()) {
+                    DonationItem item = iterator.next();
                     if (item.getItemCode().equals(itemCode)) {
-                        exist = checkExistBeforeFood(itemlist, item.getItemName(), ((Food) item).getExpiryDate(), 
+                        exist = checkExistBeforeFood(itemlist, item.getItemName(), ((Food) item).getExpiryDate(),
                                 ((Food) item).getNetWeight(), _temp, ((Food) item).getVenueCode());
                         if (exist) {
-                            System.out.println("Modification Failed! The same record exists.");
+                            msgHandling.displayGeneralErrorMsg("Modification Failed! The same record exists.");
                             return false;
                         } else {
-                            System.out.println("Modification Successful!");
+                            msgHandling.displaySuccessMessage("Modification Successful!");
                             ((Food) item).setFoodType(_temp);
                             return true;
                         }
@@ -3474,22 +2723,24 @@ public class Donation {
             }
             //Clothing category
         } else if (amdOption == 3 && option == 3) {
-            displayClothingCategory();
+            donationUI.displayClothingCategory();
             _temp = getNvalidateClothingCategory();
             if (_temp.equals("")) {
                 return false;
             } else {
                 boolean exist;
-                for (DonationItem item : itemlist) {
+                Iterator<DonationItem> iterator = itemlist.iterator();
+                while (iterator.hasNext()) {
+                    DonationItem item = iterator.next();
                     if (item.getItemCode().equals(itemCode)) {
-                        exist = checkExistBeforeClothing(itemlist, item.getItemName(), 
+                        exist = checkExistBeforeClothing(itemlist, item.getItemName(),
                                 ((Clothing) item).getSize(), _temp, ((Clothing) item).getAge(), ((Clothing) item).getGender(),
                                 ((Clothing) item).getVenueCode());
                         if (exist) {
-                            System.out.println("Modification Failed! The same record exists.");
+                            msgHandling.displayGeneralErrorMsg("Modification Failed! The same record exists.");
                             return false;
                         } else {
-                            System.out.println("Modification Successful!");
+                            msgHandling.displaySuccessMessage("Modification Successful!");
                             ((Clothing) item).setClothingCategory(_temp);
                             return true;
                         }
@@ -3498,22 +2749,24 @@ public class Donation {
             }
             //Personal Care Category
         } else if (amdOption == 7 && option == 4) {
-            displayPCCat();
+            donationUI.displayPCCat();
             _temp = getNvalidatePCCat();
             if (_temp.equals("")) {
                 return false;
             } else {
                 boolean exist;
-                for (DonationItem item : itemlist) {
+                Iterator<DonationItem> iterator = itemlist.iterator();
+                while (iterator.hasNext()) {
+                    DonationItem item = iterator.next();
                     if (item.getItemCode().equals(itemCode)) {
                         exist = checkExistBeforePersonalCare(itemlist, item.getItemName(), ((PersonalCare) item).getExpiryDate(),
                                 ((PersonalCare) item).getNetWeight(), _temp, ((PersonalCare) item).getAge(), ((PersonalCare) item).getGender(),
                                 ((PersonalCare) item).getVenueCode());
                         if (exist) {
-                            System.out.println("Modification Failed! The same record exists.");
+                            msgHandling.displayGeneralErrorMsg("Modification Failed! The same record exists.");
                             return false;
                         } else {
-                            System.out.println("Modification Successful!");
+                            msgHandling.displaySuccessMessage("Modification Successful!");
                             ((PersonalCare) item).setPersonalCareCategory(_temp);
                             return true;
                         }
@@ -3522,21 +2775,23 @@ public class Donation {
             }
             //Dosage Form
         } else if (amdOption == 8 && option == 6) {
-            displayDSForm();
+            donationUI.displayDSForm();
             _temp = getNvalidateDosageForm();
             if (_temp.equals("")) {
                 return false;
             } else {
                 boolean exist;
-                for (DonationItem item : itemlist) {
+                Iterator<DonationItem> iterator = itemlist.iterator();
+                while (iterator.hasNext()) {
+                    DonationItem item = iterator.next();
                     if (item.getItemCode().equals(itemCode)) {
                         exist = checkExistBeforeMedicine(itemlist, item.getItemName(), ((Medicine) item).getExpiryDate(), ((Medicine) item).getNetWeight(),
                                 _temp, ((Medicine) item).getAge(), ((Medicine) item).getGender(), ((Medicine) item).getVenueCode());
                         if (exist) {
-                            System.out.println("Modification Failed! The same record exists.");
+                            msgHandling.displayGeneralErrorMsg("Modification Failed! The same record exists.");
                             return false;
                         } else {
-                            System.out.println("Modification Successful!");
+                            msgHandling.displaySuccessMessage("Modification Successful!");
                             ((Medicine) item).setDosageForm(_temp);
                             return true;
                         }
@@ -3545,9 +2800,11 @@ public class Donation {
             }
             //Size
         } else if (amdOption == 6 && option == 3) {
-            displaySize();
+            donationUI.displaySize();
             String _clothCat = "", _age = "", _gender = "";
-            for (DonationItem item2 : itemlist) {
+            Iterator<DonationItem> iterator = itemlist.iterator();
+            while (iterator.hasNext()) {
+                DonationItem item2 = iterator.next();
                 if (item2.getItemCode().equals(itemCode)) {
                     _clothCat = ((Clothing) item2).getClothingCategory();
                     _age = ((Clothing) item2).getAge();
@@ -3559,15 +2816,17 @@ public class Donation {
                 return false;
             } else {
                 boolean exist;
-                for (DonationItem item : itemlist) {
+                Iterator<DonationItem> iterator2 = itemlist.iterator();
+                while (iterator2.hasNext()) {
+                    DonationItem item = iterator.next();
                     if (item.getItemCode().equals(itemCode)) {
                         exist = checkExistBeforeClothing(itemlist, item.getItemName(), _temp, ((Clothing) item).getClothingCategory(),
                                 ((Clothing) item).getAge(), ((Clothing) item).getGender(), ((Clothing) item).getVenueCode());
                         if (exist) {
-                            System.out.println("Modification Failed! The same record exists.");
+                            msgHandling.displayGeneralErrorMsg("Modification Failed! The same record exists.");
                             return false;
                         } else {
-                            System.out.println("Modification Successful!");
+                            msgHandling.displaySuccessMessage("Modification Successful!");
                             ((Clothing) item).setSize(_temp);
                             return true;
                         }
@@ -3576,23 +2835,21 @@ public class Donation {
             }
             //amount
         } else if (amdOption == 1 && option == 7) {
-            ArrayList<DonationRecord> searchResultsRecord = new ArrayList<DonationRecord>();
-            ArrayList<DonationRecord> recordlist = new ArrayList<DonationRecord>();
-            ArrayList<DonationRecord> recordlist2 = new ArrayList<DonationRecord>();
-            loadIntoDR(recordlist);
-            loadIntoDR(recordlist2);
+            ListInterface<DonationRecord> searchResultsRecord = new ArrayList<>();
+            ListInterface<DonationRecord> recordlist = new ArrayList<>();
+            ListInterface<DonationRecord> recordlist2 = new ArrayList<>();
+            fileHandler.loadIntoDR(recordlist);
+            fileHandler.loadIntoDR(recordlist2);
             searchRecord(itemCode, searchResultsRecord);
             displayDonationRecordAssociated(searchResultsRecord);
-            System.out.println("Action:\n1. Remove from a record\n2. Amend a record quantity\nX. Stop this modification.");
+            donationUI.displayAmendOptionAmt();
             while (true) {
-                Scanner scanner = new Scanner(System.in);
-                System.out.print("Your choice (1-2, X): ");
-                _temp = scanner.nextLine();
+                _temp = donationUI.inputChoice();
                 if (_temp.equalsIgnoreCase("X")) {
                     return false;
                 } else {
                     if (!_temp.equals("1") && !_temp.equals("2")) {
-                        System.out.println("Sorry! Invalid Option. Please enter a valid option (1-2, X).");
+                        msgHandling.displayInvalidOptionMessage("Please enter a valid option (1-2, X).");
                     } else {
                         break;
                     }
@@ -3602,15 +2859,19 @@ public class Donation {
                 boolean removed = false;
                 _temp3 = 0;
                 while (removed == false) {
-                    _temp = inputRecordIDRemove();
+                    _temp = donationUI.inputRecordIDRemove();
                     if (_temp.equalsIgnoreCase("X")) {
                         return false;
                     } else {
                         //remove record
                         int amtIndex = 0;
-                        for (DonationRecord record : searchResultsRecord) {
+                        Iterator<DonationRecord> iterator3 = searchResultsRecord.iterator();
+                        while (iterator3.hasNext()) {
+                            DonationRecord record = iterator3.next();
                             if (String.valueOf(record.getRecordID()).equals(_temp)) {
-                                for (DonationItem item : record.getItem()) {
+                                Iterator<DonationItem> iterator = record.getItem().iterator();
+                                while (iterator.hasNext()) {
+                                    DonationItem item = iterator.next();
                                     if (item.getItemCode().equals(itemCode)) {
                                         _temp3 = record.getAmount().get(amtIndex);
                                     }
@@ -3624,50 +2885,58 @@ public class Donation {
                             }
                         }
                         //reduce quantity, if 0 then remove item
-                        for (DonationItem item : itemlist) {
+                        Iterator<DonationItem> iterator = itemlist.iterator();
+                        while (iterator.hasNext()) {
+                            DonationItem item = iterator.next();
                             if (item.getItemCode().equals(itemCode)) {
                                 ((Money) item).setAmount(((Money) item).getAmount() - _temp3);
                                 if (((Money) item).getAmount() == 0) {
                                     itemlist.remove(item);
                                 }
-                                loadBackDRFile(recordlist);
-                                loadBackMoneyFile(itemlist);
+                                fileHandler.loadBackDRFile(recordlist);
+                                fileHandler.loadBackMoneyFile(itemlist);
                                 break;
                             }
                         }
                         if (removed == false) {
-                            System.out.println("Sorry! Invalid Record ID. Please enter a valid record ID.");
+                            msgHandling.displayGeneralErrorMsg("Invalid Record ID. Please enter a valid record ID.");
                         } else {
-                            System.out.println("Modification Successful!");
+                            msgHandling.displaySuccessMessage("Modification Successful!");
                         }
                     }
                 }
             } else {
                 while (true) {
-                    _temp = inputRecordIDAmend();
+                    _temp = donationUI.inputRecordIDAmend();
                     if (_temp.equalsIgnoreCase("X")) {
                         return false;
                     } else {
                         //remove record
                         int amtIndex = 0;
-                        for (DonationRecord record : searchResultsRecord) {
+                        Iterator<DonationRecord> iterator3 = searchResultsRecord.iterator();
+                        while (iterator3.hasNext()) {
+                            DonationRecord record = iterator3.next();
                             if (String.valueOf(record.getRecordID()).equals(_temp)) {
-                                for (DonationItem item2 : record.getItem()) {
+                                Iterator<DonationItem> iterator2 = record.getItem().iterator();
+                                while (iterator2.hasNext()) {
+                                    DonationItem item2 = iterator2.next();
                                     if (item2.getItemCode().equals(itemCode)) {
                                         _temp3 = getNvalidateAmt();
                                         if (_temp3 == 0) {
                                             return false;
                                         } else {
-                                            System.out.println("Modification Successful!");
+                                            msgHandling.displaySuccessMessage("Modification Successful!");
                                             double changes = _temp3 - record.getAmount().get(amtIndex);
-                                            for (DonationItem item : itemlist) {
+                                            Iterator<DonationItem> iterator = itemlist.iterator();
+                                            while (iterator.hasNext()) {
+                                                DonationItem item = iterator.next();
                                                 if (item.getItemCode().equals(itemCode)) {
                                                     ((Money) item).setAmount(((Money) item).getAmount() + changes);
                                                     if (((Money) item).getAmount() == 0) {
                                                         itemlist.remove(item);
                                                     }
-                                                    loadBackDRFile(recordlist);
-                                                    loadBackMoneyFile(itemlist);
+                                                    fileHandler.loadBackDRFile(recordlist);
+                                                    fileHandler.loadBackMoneyFile(itemlist);
 
                                                     break;
                                                 }
@@ -3681,27 +2950,30 @@ public class Donation {
                                 }
                             }
                         }
-                        System.out.println("Sorry! Invalid Record ID. Please enter a valid record ID.");
+                        msgHandling.displayGeneralErrorMsg("Invalid Record ID. Please enter a valid record ID.");
                     }
                 }
             }
 
             //source
         } else {
-            displaySource();
+            donationUI.displayVenueCode();
+            donationUI.displaySource();
             _temp = getNvalidateSource();
             if (_temp.equals("")) {
                 return false;
             } else {
                 boolean exist;
-                for (DonationItem item : itemlist) {
+                Iterator<DonationItem> iterator = itemlist.iterator();
+                while (iterator.hasNext()) {
+                    DonationItem item = iterator.next();
                     if (item.getItemCode().equals(itemCode)) {
                         exist = checkExistBeforeMoney(itemlist, _temp);
                         if (exist) {
-                            System.out.println("Modification Failed! The same record exists.");
+                            msgHandling.displayGeneralErrorMsg("Modification Failed! The same record exists.");
                             return false;
                         } else {
-                            System.out.println("Modification Successful!");
+                            msgHandling.displaySuccessMessage("Modification Successful!");
                             ((Money) item).setSource(_temp);
                             return true;
                         }
@@ -3712,278 +2984,40 @@ public class Donation {
         }
         return false;
     }
-    //get item code
-
-    public String inputRecordIDRemove() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("\nEnter the record ID to be removed or 'X' to back to previous page: ");
-        return scanner.nextLine();
-    }
-
-    public String inputRecordIDAmend() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("\nEnter the record ID to be amended or 'X' to back to previous page: ");
-        return scanner.nextLine();
-    }
-
-    //Display Amend Option - Boundary
-    public void displayAmendOption(int option) {
-        if (option == 7) {
-            displayAmendMoneyOption();
-        } else if (option == 6) {
-            displayAmendMedicineOption();
-        } else if (option == 5) {
-            displayAmendMedicalDeviceOption();
-        } else if (option == 4) {
-            displayAmendPersonalCareOption();
-        } else if (option == 3) {
-            displayAmendClothingOption();
-        } else if (option == 2) {
-            displayAmendBeverageOption();
-        } else {
-            displayAmendFoodOption();
-        }
-    }
 
     //Check Amend Option
     public int checkAmendOption(int option) {
         int amdOption;
         if (option == 7) {
-            amdOption = checkAmendMoneyOption();
+            amdOption = checkMenuWithOp(3);
         } else if (option == 6) {
-            amdOption = checkAmendMedicineOption();
+            amdOption = checkMenuWithOp(10);
         } else if (option == 5) {
-            amdOption = checkAmendMedicalDeviceOption();
+            amdOption = checkMenuWithOp(5);
         } else if (option == 4) {
-            amdOption = checkAmendPersonalCareOption();
+            amdOption = checkMenuWithOp(9);
         } else if (option == 3) {
-            amdOption = checkAmendClothingOption();
+            amdOption = checkMenuWithOp(8);
         } else if (option == 2) {
-            amdOption = checkAmendBeverageOption();
+            amdOption = checkMenuWithOp(6);
         } else {
-            amdOption = checkAmendFoodOption();
+            amdOption = checkMenuWithOp(8);
         }
         return amdOption;
     }
 
-    //Amend Food Option Menu - Boundary
-    public void displayAmendFoodOption() {
-        System.out.println("\nAmend Food Option");
-        System.out.println("1. Item Name");
-        System.out.println("2. Quantity");
-        System.out.println("3. Net Weight");
-        System.out.println("4. Expiry Date");
-        System.out.println("5. Food Type");
-        System.out.println("6. Venue Code");
-        System.out.println("7. Back to Previous Page");
-    }
-
-    //Amend Beverage Option Menu - Boundary
-    public void displayAmendBeverageOption() {
-        System.out.println("\nAmend Beverage Option");
-        System.out.println("1. Item Name");
-        System.out.println("2. Quantity");
-        System.out.println("3. Net Volume");
-        System.out.println("4. Expiry Date");
-        System.out.println("5. Venue Code");
-        System.out.println("6. Back to Previous Page");
-    }
-
-    //Amend Clothing Option Menu - Boundary
-    public void displayAmendClothingOption() {
-        System.out.println("\nAmend Clothing Option");
-        System.out.println("1. Item Name");
-        System.out.println("2. Quantity");
-        System.out.println("3. Clothing Category");
-        System.out.println("4. Gender");
-        System.out.println("5. Age");
-        System.out.println("6. Size");
-        System.out.println("7. Venue Code");
-        System.out.println("8. Back to Previous Page");
-    }
-
-    //Amend Personal Care Option Menu - Boundary
-    public void displayAmendPersonalCareOption() {
-        System.out.println("\nAmend Personal Care Option");
-        System.out.println("1. Item Name");
-        System.out.println("2. Quantity");
-        System.out.println("3. Net Weight");
-        System.out.println("4. Expiry Date");
-        System.out.println("5. Gender");
-        System.out.println("6. Age");
-        System.out.println("7. Personal Care Category");
-        System.out.println("8. Venue Code");
-        System.out.println("9. Back to Previous Page");
-    }
-
-    //Amend Medical Device Option Menu - Boundary
-    public void displayAmendMedicalDeviceOption() {
-        System.out.println("\nAmend Medical Device Option");
-        System.out.println("1. Item Name");
-        System.out.println("2. Quantity");
-        System.out.println("3. Venue Code");
-        System.out.println("4. Description");
-        System.out.println("5. Back to Previous Page");
-    }
-
-    //Amend Medicine Option Menu - Boundary
-    public void displayAmendMedicineOption() {
-        System.out.println("\nAmend Medicine Option");
-        System.out.println("1. Item Name");
-        System.out.println("2. Quantity");
-        System.out.println("3. Net Weight");
-        System.out.println("4. Expiry Date");
-        System.out.println("5. Gender");
-        System.out.println("6. Age");
-        System.out.println("7. Venue Code");
-        System.out.println("8. Dosage Form");
-        System.out.println("9. Description");
-        System.out.println("10. Back to Previous Page");
-    }
-
-    //Amend Money Option Menu - Boundary
-    public void displayAmendMoneyOption() {
-        System.out.println("\nAmend Money Option");
-        System.out.println("1. Amount");
-        System.out.println("2. Source");
-        System.out.println("3. Back to Previous Page");
-    }
-
-    //Check Amend Food Option Menu
-    public int checkAmendFoodOption() {
-        Scanner scanner = new Scanner(System.in);
+    public int checkMenuWithOp(int n) {
         int option;
         while (true) {
             try {
-                System.out.print("\nPlease select an option (1-7): ");
-                option = Integer.parseInt(scanner.nextLine());
-                if (option >= 1 && option <= 7) {
+                option = Integer.parseInt(donationUI.inputOption(n));
+                if (option >= 1 && option <= n) {
                     break;
                 } else {
-                    System.out.println("Sorry! Invalid Option. Please enter a valid option (1-8).");
+                    msgHandling.displayInvalidOptionMessage("Please enter a valid option (1-" + n + ").");
                 }
             } catch (Exception ex) {
-                System.out.println("Sorry! Invalid Option. Please enter a valid option (1-8).");
-            }
-        }
-        return option;
-    }
-
-    //Check Amend Beverage Option Menu
-    public int checkAmendBeverageOption() {
-        Scanner scanner = new Scanner(System.in);
-        int option;
-        while (true) {
-            try {
-                System.out.print("\nPlease select an option (1-6): ");
-                option = Integer.parseInt(scanner.nextLine());
-                if (option >= 1 && option <= 6) {
-                    break;
-                } else {
-                    System.out.println("Sorry! Invalid Option. Please enter a valid option (1-8).");
-                }
-            } catch (Exception ex) {
-                System.out.println("Sorry! Invalid Option. Please enter a valid option (1-8).");
-            }
-        }
-        return option;
-    }
-
-    //Check Amend Clothing Option Menu
-    public int checkAmendClothingOption() {
-        Scanner scanner = new Scanner(System.in);
-        int option;
-        while (true) {
-            try {
-                System.out.print("\nPlease select an option (1-8): ");
-                option = Integer.parseInt(scanner.nextLine());
-                if (option >= 1 && option <= 8) {
-                    break;
-                } else {
-                    System.out.println("Sorry! Invalid Option. Please enter a valid option (1-8).");
-                }
-            } catch (Exception ex) {
-                System.out.println("Sorry! Invalid Option. Please enter a valid option (1-8).");
-            }
-        }
-        return option;
-    }
-
-    //Check Amend Personal Care Option Menu
-    public int checkAmendPersonalCareOption() {
-        Scanner scanner = new Scanner(System.in);
-        int option;
-        while (true) {
-            try {
-                System.out.print("\nPlease select an option (1-9): ");
-                option = Integer.parseInt(scanner.nextLine());
-                if (option >= 1 && option <= 9) {
-                    break;
-                } else {
-                    System.out.println("Sorry! Invalid Option. Please enter a valid option (1-8).");
-                }
-            } catch (Exception ex) {
-                System.out.println("Sorry! Invalid Option. Please enter a valid option (1-8).");
-            }
-        }
-        return option;
-    }
-
-    //Check Amend Medical Device Option Menu
-    public int checkAmendMedicalDeviceOption() {
-        Scanner scanner = new Scanner(System.in);
-        int option;
-        while (true) {
-            try {
-                System.out.print("\nPlease select an option (1-5): ");
-                option = Integer.parseInt(scanner.nextLine());
-                if (option >= 1 && option <= 5) {
-                    break;
-                } else {
-                    System.out.println("Sorry! Invalid Option. Please enter a valid option (1-8).");
-                }
-            } catch (Exception ex) {
-                System.out.println("Sorry! Invalid Option. Please enter a valid option (1-8).");
-            }
-        }
-        return option;
-    }
-
-    //Check Amend Medicine Option Menu
-    public int checkAmendMedicineOption() {
-        Scanner scanner = new Scanner(System.in);
-        int option;
-        while (true) {
-            try {
-                System.out.print("\nPlease select an option (1-10): ");
-                option = Integer.parseInt(scanner.nextLine());
-                if (option >= 1 && option <= 10) {
-                    break;
-                } else {
-                    System.out.println("Sorry! Invalid Option. Please enter a valid option (1-8).");
-                }
-            } catch (Exception ex) {
-                System.out.println("Sorry! Invalid Option. Please enter a valid option (1-8).");
-            }
-        }
-        return option;
-    }
-
-    //Check Amend Money Option Menu
-    public int checkAmendMoneyOption() {
-        Scanner scanner = new Scanner(System.in);
-        int option;
-        while (true) {
-            try {
-                System.out.print("\nPlease select an option (1-3): ");
-                option = Integer.parseInt(scanner.nextLine());
-                if (option >= 1 && option <= 3) {
-                    break;
-                } else {
-                    System.out.println("Sorry! Invalid Option. Please enter a valid option (1-8).");
-                }
-            } catch (Exception ex) {
-                System.out.println("Sorry! Invalid Option. Please enter a valid option (1-8).");
+                msgHandling.displayInvalidOptionMessage("Please enter a valid option (1-" + n + ").");
             }
         }
         return option;
@@ -3992,38 +3026,44 @@ public class Donation {
     //Display Track Donation  - Boundary
     public void displayTrackDonation() {
         System.out.println("\nTrack Donation by Category");
-        ArrayList<DonationItem> itemlist = new ArrayList<DonationItem>();
+        ListInterface<DonationItem> itemlist = new ArrayList<>();
         for (int i = 1; i <= 7; i++) {
             displayBasedOnCatOption(i, itemlist);
-            itemlist = new ArrayList<DonationItem>();
+            itemlist = new ArrayList<>();
         }
     }
 
     //Track Donation
     public void trackDonation() {
         displayTrackDonation();
-        enterContinue();
+        generalFunc.enterToContinue();
     }
 
     //Donation-Donor List with Filter & Sorting
     public void donationDonor() {
-        ArrayList<DonationRecord> fullRecord = new ArrayList<DonationRecord>();
-        ArrayList<DonationRecord> fullRecord2 = new ArrayList<DonationRecord>();
-        ArrayList<DonationRecord> checkedList = new ArrayList<DonationRecord>();
-        loadIntoDR(fullRecord);
-        loadIntoDR(fullRecord2);
+        ListInterface<DonationRecord> fullRecord = new ArrayList<>();
+        ListInterface<DonationRecord> fullRecord2 = new ArrayList<>();
+        ListInterface<DonationRecord> checkedList = new ArrayList<>();
+        fileHandler.loadIntoDR(fullRecord);
+        fileHandler.loadIntoDR(fullRecord2);
         System.out.println("\nDonation by Different Donor");
         if (fullRecord.isEmpty()) {
-            displayEmptyList();
+            donationUI.displayEmptyList();
         } else {
-            for (DonationRecord record : fullRecord) {
-                checkedList = new ArrayList<DonationRecord>();
-                for (DonationRecord record2 : fullRecord2) {
+            Iterator<DonationRecord> iterator = fullRecord.iterator();
+            while (iterator.hasNext()) {
+                DonationRecord record = iterator.next();
+                checkedList = new ArrayList<>();
+                Iterator<DonationRecord> iterator2 = fullRecord2.iterator();
+                while (iterator2.hasNext()) {
+                    DonationRecord record2 = iterator2.next();
                     if (record.getDonor().getId().equals(record2.getDonor().getId())) {
                         checkedList.add(record);
                     }
                 }
-                for (DonationRecord record3 : fullRecord) {
+                Iterator<DonationRecord> iterator3 = fullRecord.iterator();
+                while (iterator3.hasNext()) {
+                    DonationRecord record3 = iterator3.next();
                     if (record.getDonor().getId().equals(record3.getDonor().getId())) {
                         fullRecord2.remove(record3);
                     }
@@ -4032,30 +3072,23 @@ public class Donation {
                 displaySingleDonorRecords(checkedList, record.getDonor());
             }
         }
-        enterContinue();
-    }
-
-    //Enter to Continue - Boundary
-    public void enterContinue() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter to back to Donation Page...");
-        scanner.nextLine();
+        generalFunc.enterToContinue();
     }
 
     //Full Donation List with Filter & Sorting
     public void fullDonation() {
-        ArrayList<DonationItem> itemlist = new ArrayList<DonationItem>();
-        ArrayList<DonationItem> fullList = new ArrayList<DonationItem>();
-        loadIntoAll(fullList);
+        ListInterface<DonationItem> itemlist = new ArrayList<>();
+        ListInterface<DonationItem> fullList = new ArrayList<>();
+        fileHandler.loadIntoAll(fullList);
         displayAllDonation(fullList);
         int filter = 0, sort = 0, option = 0;
         if (fullList.isEmpty()) {
-            enterContinue();
+            generalFunc.enterToContinue();
         } else {
             while (true) {
                 if (filter == 0 && sort == 0) {
-                    displayFullDonationActionMenu();
-                    option = checkActionMenuWith7Op();
+                    donationUI.displayFullDonationActionMenu();
+                    option = checkMenuWithOp(7);
                     //implement what happen
                     if (option == 7) {
                         break;
@@ -4073,8 +3106,8 @@ public class Donation {
                         sort = 4;
                     }
                 } else if ((filter == 1 || filter == 2) && sort == 0) {
-                    displayFullDonationActionMenuAftFilter();
-                    option = checkActionMenuWith6Op();
+                    donationUI.displayFullDonationActionMenuAftFilter();
+                    option = checkMenuWithOp(6);
                     if (option == 1) {
                         filter = 0;
                     } else if (option == 2) {
@@ -4090,8 +3123,8 @@ public class Donation {
                     }
                 } else {
                     if (filter == 0 && (sort >= 1 || sort <= 4)) {
-                        displayFullDonationActionMenuAftSort();
-                        option = checkActionMenuWith4Op();
+                        donationUI.displayFullDonationActionMenuAftSort();
+                        option = checkMenuWithOp(4);
                         if (option == 1) {
                             filter = 1;
                         } else if (option == 2) {
@@ -4100,8 +3133,8 @@ public class Donation {
                             sort = 0;
                         }
                     } else {
-                        displayFullDonationActionMenuAftFilterAftSort();
-                        option = checkActionMenuWith4Op();
+                        donationUI.displayFullDonationActionMenuAftFilterAftSort();
+                        option = checkMenuWithOp(4);
                         if (option == 1) {
                             filter = 0;
                         } else if (option == 2) {
@@ -4116,25 +3149,25 @@ public class Donation {
                     }
                 }
                 if (filter == 1) {
-                    itemlist = new ArrayList<DonationItem>();
+                    itemlist = new ArrayList<>();
                     int fcOption;
-                    displayDonationCategory();
-                    fcOption = checkDonationCategoryOption();
+                    donationUI.displayDonationCategory();
+                    fcOption = checkMenuWithOp(8);
                     if (fcOption != 8) {
                         displayBasedOnCatOptionSort(fcOption, itemlist, sort);
                     } else {
                         break;
                     }
                 } else if (filter == 0) {
-                    fullList = new ArrayList<DonationItem>();
-                    loadIntoAll(fullList);
+                    fullList = new ArrayList<>();
+                    fileHandler.loadIntoAll(fullList);
                     sortBeforeDisplay(fullList, sort);
                     displayAllDonation(fullList);
                 } else {
                     //let user filter by quantity
                     int fqOption;
-                    displayFilterQtyOp();
-                    fqOption = checkActionMenuWith4Op();
+                    donationUI.displayFilterQtyOp();
+                    fqOption = checkMenuWithOp(4);
                     if (fqOption != 4) {
                         filterByQuantity(fullList, sort, fqOption);
                         displayAllDonation(fullList);
@@ -4146,7 +3179,7 @@ public class Donation {
         }
     }
 
-    public void sortBeforeDisplay(ArrayList<DonationItem> itemlist, int sort) {
+    public void sortBeforeDisplay(ListInterface<DonationItem> itemlist, int sort) {
         if (sort == 1) {
             itemlist.sort(Comparator.comparing(DonationItem::getItemCode));
         }
@@ -4157,14 +3190,20 @@ public class Donation {
         }
         if (sort == 3) {
             itemlist.sort(Comparator.comparing(DonationItem::getQuantity));
-            ArrayList<DonationItem> itemlist2 = new ArrayList<DonationItem>();
-            for (DonationItem item : itemlist) {
+            ListInterface<DonationItem> itemlist2 = new ArrayList<>();
+            Iterator<DonationItem> iterator = itemlist.iterator();
+            while (iterator.hasNext()) {
+                DonationItem item = iterator.next();
                 itemlist2.add(item);
             }
-            for (DonationItem item : itemlist2) {
+            Iterator<DonationItem> iterator2 = itemlist2.iterator();
+            while (iterator2.hasNext()) {
+                DonationItem item = iterator2.next();
                 if (item instanceof Money) {
                     int index = 0;
-                    for (DonationItem item2 : itemlist2) {
+                    Iterator<DonationItem> iterator3 = itemlist2.iterator();
+                    while (iterator3.hasNext()) {
+                        DonationItem item2 = iterator3.next();
                         if (!(item2 instanceof Money)) {
                             if (Double.parseDouble(String.valueOf(item2.getQuantity())) > ((Money) item).getAmount()) {
                                 itemlist.remove(item);
@@ -4194,14 +3233,20 @@ public class Donation {
                 return ic2.compareTo(ic1);
             }));
 
-            ArrayList<DonationItem> itemlist2 = new ArrayList<DonationItem>();
-            for (DonationItem item : itemlist) {
+            ListInterface<DonationItem> itemlist2 = new ArrayList<>();
+            Iterator<DonationItem> iterator = itemlist.iterator();
+            while (iterator.hasNext()) {
+                DonationItem item = iterator.next();
                 itemlist2.add(item);
             }
-            for (DonationItem item : itemlist2) {
+            Iterator<DonationItem> iterator2 = itemlist2.iterator();
+            while (iterator2.hasNext()) {
+                DonationItem item = iterator2.next();
                 if (item instanceof Money) {
                     int index = 0;
-                    for (DonationItem item2 : itemlist2) {
+                    Iterator<DonationItem> iterator3 = itemlist2.iterator();
+                    while (iterator3.hasNext()) {
+                        DonationItem item2 = iterator3.next();
                         if (!(item2 instanceof Money)) {
                             if (Double.parseDouble(String.valueOf(item2.getQuantity())) < ((Money) item).getAmount()) {
                                 itemlist.remove(item);
@@ -4227,109 +3272,71 @@ public class Donation {
     }
 //Display Based On Option - Boundary
 
-    public void displayBasedOnCatOptionSort(int option, ArrayList<DonationItem> itemlist, int sort) {
+    public void displayBasedOnCatOptionSort(int option, ListInterface<DonationItem> itemlist, int sort) {
         if (option == 7) {
-            System.out.println("\nMoney List");
-            loadIntoMoney(itemlist);
+            donationUI.displayMoneyListHeader();
+            fileHandler.loadIntoMoney(itemlist);
             sortBeforeDisplay(itemlist, sort);
             if (!itemlist.isEmpty()) {
                 displayMoney(itemlist);
             } else {
-                displayEmptyList();
+                donationUI.displayEmptyList();
             }
         } else if (option == 6) {
-            System.out.println("\nMedicine List");
-            loadIntoMedicine(itemlist);
+            donationUI.displayMedicineListHeader();
+            fileHandler.loadIntoMedicine(itemlist);
             sortBeforeDisplay(itemlist, sort);
             if (!itemlist.isEmpty()) {
                 displayMedicine(itemlist);
             } else {
-                displayEmptyList();
+                donationUI.displayEmptyList();
             }
         } else if (option == 5) {
-            System.out.println("\nMedical Device List");
-            loadIntoMedicalDevice(itemlist);
+            donationUI.displayMedicalDeviceListHeader();
+            fileHandler.loadIntoMedicalDevice(itemlist);
             sortBeforeDisplay(itemlist, sort);
             if (!itemlist.isEmpty()) {
                 displayMedicalDevice(itemlist);
             } else {
-                displayEmptyList();
+                donationUI.displayEmptyList();
             }
         } else if (option == 4) {
-            System.out.println("\nPersonal Care List");
-            loadIntoPersonalCare(itemlist);
+            donationUI.displayPersonalCareListHeader();
+            fileHandler.loadIntoPersonalCare(itemlist);
             sortBeforeDisplay(itemlist, sort);
             if (!itemlist.isEmpty()) {
                 displayPersonalCare(itemlist);
             } else {
-                displayEmptyList();
+                donationUI.displayEmptyList();
             }
         } else if (option == 3) {
-            System.out.println("\nClothing List");
-            loadIntoClothing(itemlist);
+            donationUI.displayClothingListHeader();
+            fileHandler.loadIntoClothing(itemlist);
             sortBeforeDisplay(itemlist, sort);
             if (!itemlist.isEmpty()) {
                 displayClothing(itemlist);
             } else {
-                displayEmptyList();
+                donationUI.displayEmptyList();
             }
         } else if (option == 2) {
-            System.out.println("\nBeverage List");
-            loadIntoBeverage(itemlist);
+            donationUI.displayBeverageListHeader();
+            fileHandler.loadIntoBeverage(itemlist);
             sortBeforeDisplay(itemlist, sort);
             if (!itemlist.isEmpty()) {
                 displayBeverage(itemlist);
             } else {
-                displayEmptyList();
+                donationUI.displayEmptyList();
             }
         } else {
-            System.out.println("\nFood List");
-            loadIntoFood(itemlist);
+            donationUI.displayFoodListHeader();
+            fileHandler.loadIntoFood(itemlist);
             sortBeforeDisplay(itemlist, sort);
             if (!itemlist.isEmpty()) {
                 displayFood(itemlist);
             } else {
-                displayEmptyList();
+                donationUI.displayEmptyList();
             }
         }
-    }
-
-    public void displayFullDonationActionMenuAftFilter() {
-        System.out.println("\nAction:");
-        System.out.println("1. Cancel Filter");
-        System.out.println("2. Sort by Item Code in Ascending Order");
-        System.out.println("3. Sort by Item Code in Descending Order");
-        System.out.println("4. Sort by Quantity in Ascending Order");
-        System.out.println("5. Sort by Quantity in Descending Order");
-        System.out.println("6. Back to Support X Home");
-    }
-
-    public void displayFullDonationActionMenuAftFilterAftSort() {
-        System.out.println("\nAction:");
-        System.out.println("1. Cancel Filter");
-        System.out.println("2. Cancel Sort");
-        System.out.println("3. Cancel Sort and Filter");
-        System.out.println("4. Back to Support X Home");
-    }
-
-    public void displayFilterQtyOp() {
-        System.out.println("\nFilter Action:");
-        System.out.println("1. Larger Than a");
-        System.out.println("2. Between Range (Inclusive) a<=Quantity<=b");
-        System.out.println("3. Smaller Than a");
-        System.out.println("4. Back to Support X Home");
-    }
-
-    public String inputNumA() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter a: ");
-        return scanner.nextLine();
-    }
-
-    public String inputNumB() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter b: ");
-        return scanner.nextLine();
     }
 
     public boolean checkNumA(String num) {
@@ -4337,11 +3344,11 @@ public class Donation {
             if (Integer.parseInt(num) > 0) {
                 return true;
             } else {
-                System.out.println("Invalid Number Entered! Number must be more than 0. ");
+                msgHandling.displayGeneralErrorMsg("Invalid Number Entered! Number must be more than 0. ");
                 return false;
             }
         } catch (Exception ex) {
-            System.out.println("Invalid Number Entered! Number must be integer. ");
+            msgHandling.displayGeneralErrorMsg("Invalid Number Entered! Number must be integer. ");
             return false;
         }
     }
@@ -4351,24 +3358,26 @@ public class Donation {
             if (Integer.parseInt(num) > 0 && Integer.parseInt(num) <= a) {
                 return true;
             } else {
-                System.out.println("Invalid Number Entered! Number must be more than 0. ");
+                msgHandling.displayGeneralErrorMsg("Invalid Number Entered! Number must be more than 0. ");
                 return false;
             }
         } catch (Exception ex) {
-            System.out.println("Invalid Number Entered! Number must be integer. ");
+            msgHandling.displayGeneralErrorMsg("Invalid Number Entered! Number must be integer. ");
             return false;
         }
     }
 
-    public void filterByQuantity(ArrayList<DonationItem> itemlist, int sort, int fq) {
-        ArrayList<DonationItem> itemlist2 = new ArrayList<DonationItem>();
-        for (DonationItem item : itemlist) {
+    public void filterByQuantity(ListInterface<DonationItem> itemlist, int sort, int fq) {
+        ListInterface<DonationItem> itemlist2 = new ArrayList<>();
+        Iterator<DonationItem> iterator = itemlist.iterator();
+        while (iterator.hasNext()) {
+            DonationItem item = iterator.next();
             itemlist2.add(item);
         }
         int a = 0, b = 0;
         String _temp;
         while (true) {
-            _temp = inputNumA();
+            _temp = donationUI.inputNumA();
             if (checkNumA(_temp)) {
                 a = Integer.parseInt(_temp);
                 break;
@@ -4376,14 +3385,16 @@ public class Donation {
         }
         if (fq == 2) {
             while (true) {
-                _temp = inputNumB();
+                _temp = donationUI.inputNumB();
                 if (checkNumB(_temp, a)) {
                     b = Integer.parseInt(_temp);
                     break;
                 }
             }
         }
-        for (DonationItem item : itemlist2) {
+        Iterator<DonationItem> iterator2 = itemlist2.iterator();
+        while (iterator2.hasNext()) {
+            DonationItem item = iterator2.next();
             if (fq == 1) {
                 if (item.getQuantity() <= a) {
                     itemlist.remove(item);
@@ -4402,102 +3413,18 @@ public class Donation {
 
     }
 
-    public void displayFullDonationActionMenuAftSort() {
-        System.out.println("\nAction:");
-        System.out.println("1. Filter by Category");
-        System.out.println("2. Filter by Quantity");
-        System.out.println("3. Cancel Sort");
-        System.out.println("4. Back to Support X Home");
-    }
-
-    public void displayFullDonationActionMenu() {
-        System.out.println("\nAction:");
-        System.out.println("1. Filter by Category");
-        System.out.println("2. Filter by Quantity");
-        System.out.println("3. Sort by Item Code in Ascending Order");
-        System.out.println("4. Sort by Item Code in Descending Order");
-        System.out.println("5. Sort by Quantity in Ascending Order");
-        System.out.println("6. Sort by Quantity in Descending Order");
-        System.out.println("7. Back to Support X Home");
-    }
-
-    public int checkActionMenuWith6Op() {
-        Scanner scanner = new Scanner(System.in);
-        int option;
-        while (true) {
-            try {
-                System.out.print("\nPlease select an option (1-6): ");
-                option = Integer.parseInt(scanner.nextLine());
-                if (option >= 1 && option <= 6) {
-                    break;
-                } else {
-                    System.out.println("Sorry! Invalid Option. Please enter a valid option (1-6).");
-                }
-            } catch (Exception ex) {
-                System.out.println("Sorry! Invalid Option. Please enter a valid option (1-6).");
-            }
-        }
-        return option;
-    }
-
-    public int checkActionMenuWith7Op() {
-        Scanner scanner = new Scanner(System.in);
-        int option;
-        while (true) {
-            try {
-                System.out.print("\nPlease select an option (1-7): ");
-                option = Integer.parseInt(scanner.nextLine());
-                if (option >= 1 && option <= 7) {
-                    break;
-                } else {
-                    System.out.println("Sorry! Invalid Option. Please enter a valid option (1-7).");
-                }
-            } catch (Exception ex) {
-                System.out.println("Sorry! Invalid Option. Please enter a valid option (1-7).");
-            }
-        }
-        return option;
-    }
-
-    public int checkActionMenuWith4Op() {
-        Scanner scanner = new Scanner(System.in);
-        int option;
-        while (true) {
-            try {
-                System.out.print("\nPlease select an option (1-4): ");
-                option = Integer.parseInt(scanner.nextLine());
-                if (option >= 1 && option <= 4) {
-                    break;
-                } else {
-                    System.out.println("Sorry! Invalid Option. Please enter a valid option (1-4).");
-                }
-            } catch (Exception ex) {
-                System.out.println("Sorry! Invalid Option. Please enter a valid option (1-4).");
-            }
-        }
-        return option;
-    }
-
     //Summary Report
     public void donationReport() {
-        displaySummaryReportChoices();
-        int option = checkActionMenuWith3Op();
+        donationUI.displaySummaryReportChoices();
+        int option = checkMenuWithOp(3);
         if (option == 1) {
             displayReport1();
-            enterContinue();
+            generalFunc.enterToContinue();
         }
         if (option == 2) {
             displayReport2();
-            enterContinue();
+            generalFunc.enterToContinue();
         }
-    }
-
-    //Display Report Choice - Boundary
-    public void displaySummaryReportChoices() {
-        System.out.println("\nView Summary Report");
-        System.out.println("1. Report of Expired Items by Category as of " + LocalDate.now());
-        System.out.println("2. Top 3 Most Donated Non-Money Item Category Report as of " + LocalDate.now());
-        System.out.println("3. Back to Donation Page");
     }
 
     //Report 1 - Report of Expired Items by Category as of today
@@ -4505,265 +3432,75 @@ public class Donation {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         //display expired item by category
         //display Topic
-        displayReport1Header();
+        donationUI.displayReport1Header();
         //food
-        ArrayList<DonationItem> foodList = new ArrayList<DonationItem>();
-        loadIntoFood(foodList);
+        ListInterface<DonationItem> foodList = new ArrayList<>();
+        fileHandler.loadIntoFood(foodList);
         //beverage
-        ArrayList<DonationItem> beverageList = new ArrayList<DonationItem>();
-        loadIntoBeverage(beverageList);
+        ListInterface<DonationItem> beverageList = new ArrayList<>();
+        fileHandler.loadIntoBeverage(beverageList);
         //personal care
-        ArrayList<DonationItem> pcList = new ArrayList<DonationItem>();
-        loadIntoPersonalCare(pcList);
+        ListInterface<DonationItem> pcList = new ArrayList<>();
+        fileHandler.loadIntoPersonalCare(pcList);
         //medicine
-        ArrayList<DonationItem> medList = new ArrayList<DonationItem>();
-        loadIntoMedicine(medList);
-        ArrayList<DonationItem> expiredItemList1 = new ArrayList<DonationItem>();
-        ArrayList<DonationItem> expiredItemList2 = new ArrayList<DonationItem>();
-        ArrayList<DonationItem> expiredItemList3 = new ArrayList<DonationItem>();
-        ArrayList<DonationItem> expiredItemList4 = new ArrayList<DonationItem>();
+        ListInterface<DonationItem> medList = new ArrayList<>();
+        fileHandler.loadIntoMedicine(medList);
+        ListInterface<DonationItem> expiredItemList1 = new ArrayList<>();
+        ListInterface<DonationItem> expiredItemList2 = new ArrayList<>();
+        ListInterface<DonationItem> expiredItemList3 = new ArrayList<>();
+        ListInterface<DonationItem> expiredItemList4 = new ArrayList<>();
 
-        for (DonationItem food : foodList) {
+        Iterator<DonationItem> iterator = foodList.iterator();
+        while (iterator.hasNext()) {
+            DonationItem food = iterator.next();
             if ((((Food) food).getExpiryDate().isBefore(LocalDate.now()))) {
                 expiredItemList1.add(food);
             }
         }
-        for (DonationItem bg : beverageList) {
+        Iterator<DonationItem> iterator2 = beverageList.iterator();
+        while (iterator2.hasNext()) {
+            DonationItem bg = iterator2.next();
             if ((((Beverage) bg).getExpiryDate().isBefore(LocalDate.now()))) {
                 expiredItemList2.add(bg);
             }
         }
-        for (DonationItem pc : pcList) {
-            if ((((PersonalCare) pc).getExpiryDate().isBefore(LocalDate.now())) 
+        Iterator<DonationItem> iterator3 = pcList.iterator();
+        while (iterator3.hasNext()) {
+            DonationItem pc = iterator3.next();
+            if ((((PersonalCare) pc).getExpiryDate().isBefore(LocalDate.now()))
                     && !(((PersonalCare) pc).getExpiryDate().equals(LocalDate.parse("2000-12-31", dateFormat)))) {
                 expiredItemList3.add(pc);
             }
         }
-        for (DonationItem med : medList) {
+        Iterator<DonationItem> iterator4 = medList.iterator();
+        while (iterator4.hasNext()) {
+            DonationItem med = iterator4.next();
             if ((((Medicine) med).getExpiryDate().isBefore(LocalDate.now()))) {
                 expiredItemList4.add(med);
             }
         }
         if (!expiredItemList1.isEmpty()) {
-            displayReport1Food(expiredItemList1);
+            donationUI.displayReport1Food(expiredItemList1);
         }
         if (!expiredItemList2.isEmpty()) {
-            displayReport1Bg(expiredItemList2);
+            donationUI.displayReport1Bg(expiredItemList2);
         }
         if (!expiredItemList3.isEmpty()) {
-            displayReport1Pc(expiredItemList3);
+            donationUI.displayReport1Pc(expiredItemList3);
         }
         if (!expiredItemList4.isEmpty()) {
-            displayReport1Med(expiredItemList4);
+            donationUI.displayReport1Med(expiredItemList4);
         }
         if (expiredItemList1.isEmpty() && expiredItemList2.isEmpty() && expiredItemList3.isEmpty() && expiredItemList4.isEmpty()) {
-            displayReport1Ntg();
+            donationUI.displayReport1Ntg();
         }
 
-    }
-
-    public void displayReport1Ntg() {
-        System.out.println("No item expired as of " + LocalDate.now());
-        System.out.print("\n");
-    }
-
-    public void displayReport1Food(ArrayList<DonationItem> expiredItemList) {
-        int total = 0;
-        System.out.println("Food");
-        for (int i = 0; i < 68; i++) {
-            System.out.print("_");
-        }
-        System.out.print("\n");
-        System.out.printf("|%-10s |%-20s |%-20s |%-10s|\n", "Item Code", "Item Name", "Expiry Date", "Quantity");
-        System.out.print("|");
-        for (int i = 0; i < 11; i++) {
-            System.out.print("-");
-        }
-        System.out.print("|");
-        for (int i = 0; i < 21; i++) {
-            System.out.print("-");
-        }
-        System.out.print("|");
-        for (int i = 0; i < 21; i++) {
-            System.out.print("-");
-        }
-        System.out.print("|");
-        for (int i = 0; i < 10; i++) {
-            System.out.print("-");
-        }
-        System.out.print("|\n");
-        for (DonationItem food : expiredItemList) {
-            System.out.printf("|%-10s |%-20s |%-20s |%-10s|\n", food.getItemCode(), food.getItemName(), ((Food) food).getExpiryDate(), food.getQuantity());
-            total += food.getQuantity();
-        }
-        System.out.printf("|%-10s_|%-20s_|%-20s_|%-10s|\n", "__________", "____________________", "____________________", "__________");
-        System.out.printf(" %-10s  %-20s |%-20s |%-10s|\n", "", "", "Total Quantity: ", total);
-        for (int i = 0; i < 34; i++) {
-            System.out.print(" ");
-        }
-        System.out.print("|");
-        for (int i = 0; i < 21; i++) {
-            System.out.print("_");
-        }
-        System.out.print("|");
-        for (int i = 0; i < 10; i++) {
-            System.out.print("_");
-        }
-        System.out.print("|\n");
-        System.out.print("\n");
-    }
-
-    public void displayReport1Bg(ArrayList<DonationItem> expiredItemList) {
-        int total = 0;
-        System.out.println("Beverage");
-        for (int i = 0; i < 68; i++) {
-            System.out.print("_");
-        }
-        System.out.print("\n");
-        System.out.printf("|%-10s |%-20s |%-20s |%-10s|\n", "Item Code", "Item Name", "Expiry Date", "Quantity");
-        System.out.print("|");
-        for (int i = 0; i < 11; i++) {
-            System.out.print("-");
-        }
-        System.out.print("|");
-        for (int i = 0; i < 21; i++) {
-            System.out.print("-");
-        }
-        System.out.print("|");
-        for (int i = 0; i < 21; i++) {
-            System.out.print("-");
-        }
-        System.out.print("|");
-        for (int i = 0; i < 10; i++) {
-            System.out.print("-");
-        }
-        System.out.print("|\n");
-        for (DonationItem bg : expiredItemList) {
-            System.out.printf("|%-10s |%-20s |%-20s |%-10s|\n", bg.getItemCode(), bg.getItemName(), ((Beverage) bg).getExpiryDate(), bg.getQuantity());
-            total += bg.getQuantity();
-        }
-        System.out.printf("|%-10s_|%-20s_|%-20s_|%-10s|\n", "__________", "____________________", "____________________", "__________");
-        System.out.printf(" %-10s  %-20s |%-20s |%-10s|\n", "", "", "Total Quantity: ", total);
-        for (int i = 0; i < 34; i++) {
-            System.out.print(" ");
-        }
-        System.out.print("|");
-        for (int i = 0; i < 21; i++) {
-            System.out.print("_");
-        }
-        System.out.print("|");
-        for (int i = 0; i < 10; i++) {
-            System.out.print("_");
-        }
-        System.out.print("|\n");
-        System.out.print("\n");
-    }
-
-    public void displayReport1Pc(ArrayList<DonationItem> expiredItemList) {
-        int total = 0;
-        System.out.println("Personal Care");
-        for (int i = 0; i < 68; i++) {
-            System.out.print("_");
-        }
-        System.out.print("\n");
-        System.out.printf("|%-10s |%-20s |%-20s |%-10s|\n", "Item Code", "Item Name", "Expiry Date", "Quantity");
-        System.out.print("|");
-        for (int i = 0; i < 11; i++) {
-            System.out.print("-");
-        }
-        System.out.print("|");
-        for (int i = 0; i < 21; i++) {
-            System.out.print("-");
-        }
-        System.out.print("|");
-        for (int i = 0; i < 21; i++) {
-            System.out.print("-");
-        }
-        System.out.print("|");
-        for (int i = 0; i < 10; i++) {
-            System.out.print("-");
-        }
-        System.out.print("|\n");
-        for (DonationItem pc : expiredItemList) {
-            System.out.printf("|%-10s |%-20s |%-20s |%-10s|\n", pc.getItemCode(), pc.getItemName(), ((PersonalCare) pc).getExpiryDate(), pc.getQuantity());
-            total += pc.getQuantity();
-        }
-        System.out.printf("|%-10s_|%-20s_|%-20s_|%-10s|\n", "__________", "____________________", "____________________", "__________");
-        System.out.printf(" %-10s  %-20s |%-20s |%-10s|\n", "", "", "Total Quantity: ", total);
-        for (int i = 0; i < 34; i++) {
-            System.out.print(" ");
-        }
-        System.out.print("|");
-        for (int i = 0; i < 21; i++) {
-            System.out.print("_");
-        }
-        System.out.print("|");
-        for (int i = 0; i < 10; i++) {
-            System.out.print("_");
-        }
-        System.out.print("|\n");
-        System.out.print("\n");
-    }
-
-    public void displayReport1Med(ArrayList<DonationItem> expiredItemList) {
-        int total = 0;
-        System.out.println("Medicine");
-        for (int i = 0; i < 68; i++) {
-            System.out.print("_");
-        }
-        System.out.print("\n");
-        System.out.printf("|%-10s |%-20s |%-20s |%-10s|\n", "Item Code", "Item Name", "Expiry Date", "Quantity");
-        System.out.print("|");
-        for (int i = 0; i < 11; i++) {
-            System.out.print("-");
-        }
-        System.out.print("|");
-        for (int i = 0; i < 21; i++) {
-            System.out.print("-");
-        }
-        System.out.print("|");
-        for (int i = 0; i < 21; i++) {
-            System.out.print("-");
-        }
-        System.out.print("|");
-        for (int i = 0; i < 10; i++) {
-            System.out.print("-");
-        }
-        System.out.print("|\n");
-        for (DonationItem med : expiredItemList) {
-            System.out.printf("|%-10s |%-20s |%-20s |%-10s|\n", med.getItemCode(), med.getItemName(), ((Medicine) med).getExpiryDate(), med.getQuantity());
-            total += med.getQuantity();
-        }
-        System.out.printf("|%-10s_|%-20s_|%-20s_|%-10s|\n", "__________", "____________________", "____________________", "__________");
-        System.out.printf(" %-10s  %-20s |%-20s |%-10s|\n", "", "", "Total Quantity: ", total);
-        for (int i = 0; i < 34; i++) {
-            System.out.print(" ");
-        }
-        System.out.print("|");
-        for (int i = 0; i < 21; i++) {
-            System.out.print("_");
-        }
-        System.out.print("|");
-        for (int i = 0; i < 10; i++) {
-            System.out.print("_");
-        }
-        System.out.print("|\n");
-        System.out.print("\n");
-    }
-
-    public void displayReport1Header() {
-        System.out.print("\n");
-        for (int i = 0; i < 8; i++) {
-            System.out.print(" ");
-        }
-        System.out.println("Report of Expired Items by Category as of " + LocalDate.now());
-        System.out.print("\n");
     }
 
     //Report 2 - Top 3 Most Donated Non-Money Item Category Report in 2024
     public void displayReport2() {
-        ArrayList<DonationItem> fullList = new ArrayList<DonationItem>();
-        loadIntoAll(fullList);
+        ListInterface<DonationItem> fullList = new ArrayList<>();
+        fileHandler.loadIntoAll(fullList);
         int total[] = new int[6];
         int max[] = {-1, -1, -1};
         int maxIndex[] = {-1, -1, -1};
@@ -4773,7 +3510,9 @@ public class Donation {
         total[3] = 0;
         total[4] = 0;
         total[5] = 0;
-        for (DonationItem item : fullList) {
+        Iterator<DonationItem> iterator = fullList.iterator();
+        while (iterator.hasNext()) {
+            DonationItem item = iterator.next();
             if (item instanceof Food) {
                 total[0] += item.getQuantity();
             }
@@ -4811,20 +3550,8 @@ public class Donation {
                 maxIndex[2] = i;
             }
         }
-        displayReport2Header();
+        donationUI.displayReport2Header();
         displayReport2Content(max, maxIndex);
-    }
-
-    public void displayReport2Header() {
-        System.out.print("\n");
-        for (int i = 0; i < 11; i++) {
-            System.out.print(" ");
-        }
-        System.out.println("Top 3 Most Donated Non-Money Item Category Report");
-        for (int i = 0; i < 27; i++) {
-            System.out.print(" ");
-        }
-        System.out.println("as of " + LocalDate.now());
     }
 
     public void displayReport2Content(int max[], int maxIndex[]) {
@@ -4884,24 +3611,5 @@ public class Donation {
         }
         System.out.print("|");
         System.out.print("\n\n");
-    }
-
-    public int checkActionMenuWith3Op() {
-        Scanner scanner = new Scanner(System.in);
-        int option;
-        while (true) {
-            try {
-                System.out.print("\nPlease select an option (1-3): ");
-                option = Integer.parseInt(scanner.nextLine());
-                if (option >= 1 && option <= 3) {
-                    break;
-                } else {
-                    System.out.println("Sorry! Invalid Option. Please enter a valid option (1-3).");
-                }
-            } catch (Exception ex) {
-                System.out.println("Sorry! Invalid Option. Please enter a valid option (1-3).");
-            }
-        }
-        return option;
     }
 }
