@@ -1,6 +1,7 @@
 package Libraries;
 
 import java.util.Comparator;
+import java.util.Iterator;
 
 public interface ListInterface<T>{
     void add(T element);
@@ -17,6 +18,7 @@ public interface ListInterface<T>{
     int lastIndexOf(T element);
     boolean isEmpty();
     void sort(Comparator<? super T> comparator);
+    Iterator<T> iterator();
 
 
     //TODO: sorting, removeall?
