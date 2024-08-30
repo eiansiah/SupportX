@@ -5,7 +5,7 @@ import Libraries.Color;
 public class Message {
 
     public static void displayGeneralErrorMsg(String errorMsg) {
-        System.out.println(Color.RED + " " + errorMsg + " " + Color.RESET);
+        System.out.println(Color.RED + errorMsg + Color.RESET);
     }
 
     public static void displayGeneralMessage(String msg) {
