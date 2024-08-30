@@ -6,6 +6,7 @@ import FileHandling.VolunteerFileHandler;
 import Libraries.ArrayList;
 import Libraries.Color;
 import Libraries.Hashmap;
+import Libraries.ListInterface;
 import Main.Event.Event;
 import Main.Event.EventHandler;
 import Main.Event.EventStatus;
@@ -18,7 +19,7 @@ public class VolunteerManagement {
     private static final Scanner scanner = new Scanner(System.in);
     private static final String FILE_NAME = "volunteers.txt";
     private static final VolunteerFileHandler fileHandler = new VolunteerFileHandler();
-    private static ArrayList<Volunteer> volunteers = new ArrayList<>();
+    private static ListInterface<Volunteer> volunteers = new ArrayList<>();
 
     public static void main(String[] args) {
         volunteers = fileHandler.readData(FILE_NAME);
@@ -103,7 +104,7 @@ public class VolunteerManagement {
     }
 
     private static void assignVolunteer() {
-        ArrayList<Event> upcomingEvents = EventHandler.searchAllEventByEventStatus(EventStatus.UPCOMING);
+        ListInterface<Event> upcomingEvents = EventHandler.searchAllEventByEventStatus(EventStatus.UPCOMING);
 
         //Display
         if (upcomingEvents == null || upcomingEvents.isEmpty()) {
@@ -111,7 +112,9 @@ public class VolunteerManagement {
             return;
         }
 
-        for (Event event : upcomingEvents) {
+        for (int i = 0; i < upcomingEvents.size(); i++) {
+            Event event = upcomingEvents.get(i);
+
             System.out.println(event.eventID() + " " + event.startDateTime() + " " + event.endDateTime() + " " + event.venue());
         }
 
@@ -131,7 +134,8 @@ public class VolunteerManagement {
         }
 
         //Display
-        for (Volunteer volunteer : volunteers) {
+        for (int i = 0; i < volunteers.size(); i++) {
+            Volunteer volunteer = volunteers.get(i);
             System.out.println(volunteer.toString());
         }
 
@@ -141,7 +145,10 @@ public class VolunteerManagement {
             volunteerID = scanner.nextLine().trim();
 
             boolean idExist = false;
-            for (Volunteer volunteer : volunteers) {
+
+            for (int i = 0; i < volunteers.size(); i++) {
+                Volunteer volunteer = volunteers.get(i);
+
                 if (volunteer.getId().equals(volunteerID)) {
                     idExist = true;
                     break;
@@ -153,10 +160,12 @@ public class VolunteerManagement {
                 continue;
             }
 
-            ArrayList<EventVolunteer> whatEventVolunteerJoined = EventHandler.getEventVolunteerJoined(volunteerID);
+            ListInterface <EventVolunteer> whatEventVolunteerJoined = EventHandler.getEventVolunteerJoined(volunteerID);
             boolean crashed = false;
             if (whatEventVolunteerJoined != null) {
-                for (EventVolunteer eventVolunteer : whatEventVolunteerJoined) {
+                for (int i = 0; i < whatEventVolunteerJoined.size(); i++) {
+                    EventVolunteer eventVolunteer = whatEventVolunteerJoined.get(i);
+
                     Event event = EventHandler.searchEventByEventID(eventVolunteer.eventID());
 
                     if (!(eventChosen.endDateTime().isBefore(event.startDateTime()) || eventChosen.startDateTime().isAfter(event.endDateTime()))) {
@@ -184,7 +193,10 @@ public class VolunteerManagement {
         String volunteerID = scanner.nextLine().trim();
 
         Volunteer volunteerToSearch = null;
-        for (Volunteer volunteer : volunteers) {
+
+        for (int i = 0; i < volunteers.size(); i++) {
+            Volunteer volunteer = volunteers.get(i);
+
             if (volunteer.getId().equals(volunteerID)) {
                 volunteerToSearch = volunteer;
                 break;
@@ -199,18 +211,22 @@ public class VolunteerManagement {
             System.out.println("Availability: " + volunteerToSearch.getAvailability());
 
             // Retrieve events associated with this volunteer
-            ArrayList<EventVolunteer> eventVolunteers = EventHandler.getEventVolunteerJoined(volunteerID);
+            ListInterface<EventVolunteer> eventVolunteers = EventHandler.getEventVolunteerJoined(volunteerID);
 
-            ArrayList<Event> events = new ArrayList<>();
+            ListInterface<Event> events = new ArrayList<>();
 
-            for (EventVolunteer eventVolunteer : eventVolunteers) {
+            for (int i = 0; i < eventVolunteers.size(); i++) {
+                EventVolunteer eventVolunteer = eventVolunteers.get(i);
                 events.add(EventHandler.searchEventByEventID(eventVolunteer.eventID()));
             }
 
             if (eventVolunteers != null && !eventVolunteers.isEmpty()) {
                 System.out.println("\nEvents Joined by Volunteer");
                 System.out.println("---------------------------");
-                for (Event event : events) {
+
+                for (int i = 0; i < events.size(); i++) {
+                    Event event = events.get(i);
+
                     System.out.println("Event ID: " + event.eventID());
                     System.out.println("Event Name: " + event.description());
                     System.out.println("Date Joined: " + event.startDateTime());
@@ -331,7 +347,10 @@ public class VolunteerManagement {
         }
 
         System.out.println("List of Volunteers:");
-        for (Volunteer volunteer : volunteers) {
+
+        for (int i = 0; i < volunteers.size(); i++) {
+            Volunteer volunteer = volunteers.get(i);
+
             System.out.println(volunteer.getId() + " " + volunteer.getName());
         }
 
@@ -340,7 +359,10 @@ public class VolunteerManagement {
             String volunteerID = scanner.nextLine().trim();
 
             Volunteer volunteerToRemove = null;
-            for (Volunteer volunteer : volunteers) {
+
+            for (int i = 0; i < volunteers.size(); i++) {
+                Volunteer volunteer = volunteers.get(i);
+
                 if (volunteer.getId().equals(volunteerID)) {
                     volunteerToRemove = volunteer;
                     break;
@@ -349,7 +371,7 @@ public class VolunteerManagement {
 
             if (volunteerToRemove != null) {
                 volunteers.remove(volunteerToRemove);
-                fileHandler.updateMultipleData(FILE_NAME, volunteers);
+                fileHandler.updateMultipleData(FILE_NAME, (ArrayList<Volunteer>) volunteers);
 
                 EventHandler.removeVolunteerFromAllVolunteerEvent(volunteerToRemove.getId());
 
@@ -371,7 +393,9 @@ public class VolunteerManagement {
         }
 
         System.out.println("List of Volunteers:");
-        for (Volunteer volunteer : volunteers) {
+        for (int i = 0; i < volunteers.size(); i++) {
+            Volunteer volunteer = volunteers.get(i);
+
             System.out.println(volunteer.getId() + " " + volunteer.getName());
         }
 
@@ -380,7 +404,9 @@ public class VolunteerManagement {
             String volunteerID = scanner.nextLine().trim();
 
             Volunteer volunteerToModify = null;
-            for (Volunteer volunteer : volunteers) {
+            for (int i = 0; i < volunteers.size(); i++) {
+                Volunteer volunteer = volunteers.get(i);
+
                 if (volunteer.getId().equals(volunteerID)) {
                     volunteerToModify = volunteer;
                     break;
@@ -544,7 +570,10 @@ public class VolunteerManagement {
         String volunteerID = scanner.nextLine().trim();
 
         Volunteer volunteerToSearch = null;
-        for (Volunteer volunteer : volunteers) {
+
+        for (int i = 0; i < volunteers.size(); i++) {
+            Volunteer volunteer = volunteers.get(i);
+
             if (volunteer.getId().equals(volunteerID)) {
                 volunteerToSearch = volunteer;
                 break;
@@ -578,18 +607,25 @@ public class VolunteerManagement {
         System.out.printf("%-15s %-20s %-15s %-30s %-20s %-30s %-30s%n", "Volunteer ID", "Volunteer Name", "Event ID", "Event Description", "Event Venue", "Event Start Date & Time", "Event End Date & Time");
         System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------");
 
-        for (Volunteer volunteer : volunteers) {
-            // Get the list of events the volunteer has participated in
-            ArrayList<EventVolunteer> eventVolunteers = EventHandler.getEventVolunteerJoined(volunteer.getId());
-            ArrayList<Event> events = new ArrayList<>();
+        for (int j = 0; j < volunteers.size(); j++) {
 
-            for (EventVolunteer eventVolunteer : eventVolunteers) {
+            Volunteer volunteer = volunteers.get(j);
+            // Get the list of events the volunteer has participated in
+            ListInterface<EventVolunteer> eventVolunteers = EventHandler.getEventVolunteerJoined(volunteer.getId());
+            ListInterface<Event> events = new ArrayList<>();
+
+            for (int i = 0; i < eventVolunteers.size(); i++) {
+                EventVolunteer eventVolunteer = eventVolunteers.get(i);
+
                 events.add(EventHandler.searchEventByEventID(eventVolunteer.eventID()));
             }
 
             // If the volunteer has participated in events, list them
             if (eventVolunteers != null && !eventVolunteers.isEmpty()) {
-                for (Event event : events) {
+
+                for (int i = 0; i < events.size(); i++) {
+                    Event event = events.get(i);
+
                     System.out.printf("%-15s %-20s %-15s %-30s %-20s %-30s %-30s%n",
                             volunteer.getId(),
                             volunteer.getName(),
@@ -627,8 +663,11 @@ public class VolunteerManagement {
         Hashmap<String, Integer> volunteerEventCountMap = new Hashmap<>();
 
         //Count the number of events each volunteer has participated in
-        for (Volunteer volunteer : volunteers) {
-            ArrayList<EventVolunteer> eventVolunteers = EventHandler.getEventVolunteerJoined(volunteer.getId());
+
+        for (int i = 0; i < volunteers.size(); i++) {
+            Volunteer volunteer = volunteers.get(i);
+
+            ListInterface<EventVolunteer> eventVolunteers = EventHandler.getEventVolunteerJoined(volunteer.getId());
             volunteerEventCountMap.put(volunteer.getId(), eventVolunteers.size());
         }
 
@@ -641,21 +680,27 @@ public class VolunteerManagement {
 
         // Display details for the top 3 volunteers
         int count = 0;
-        for (Volunteer volunteer : volunteers) {
+        for (int j = 0; j < volunteers.size(); j++) {
+            Volunteer volunteer = volunteers.get(j);
+
             if (count >= 3) {
                 break; // Only display the top 3
             }
             // Retrieve the events joined by the volunteer
-            ArrayList<EventVolunteer> eventVolunteers = EventHandler.getEventVolunteerJoined(volunteer.getId());
-            ArrayList<Event> events = new ArrayList<>();
+            ListInterface<EventVolunteer> eventVolunteers = EventHandler.getEventVolunteerJoined(volunteer.getId());
+            ListInterface<Event> events = new ArrayList<>();
 
             // Retrieve the event details for each event the volunteer joined
-            for (EventVolunteer eventVolunteer : eventVolunteers) {
+            for (int i = 0; i < eventVolunteers.size(); i++) {
+                EventVolunteer eventVolunteer = eventVolunteers.get(i);
+
                 events.add(EventHandler.searchEventByEventID(eventVolunteer.eventID()));
             }
 
             // List the events participated by the volunteer
-            for (Event event : events) {
+            for (int i = 0; i < events.size(); i++) {
+                Event event = events.get(i);
+
                 System.out.printf("%-15s %-20s %-15s %-30s %-20s %-30s %-30s%n",
                         volunteer.getId(),
                         volunteer.getName(),
@@ -668,6 +713,7 @@ public class VolunteerManagement {
 
             count++;
         }
+
 
         System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------");
 
@@ -690,7 +736,9 @@ public class VolunteerManagement {
         System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------");
 
         // Iterate over each volunteer to generate the report
-        for (Volunteer volunteer : volunteers) {
+        for (int i = 0; i < volunteers.size(); i++) {
+            Volunteer volunteer = volunteers.get(i);
+
             // Increment gender counters based on volunteer's gender
             if (volunteer.getGender().equalsIgnoreCase("Male")) {
                 maleCount++;
@@ -699,7 +747,7 @@ public class VolunteerManagement {
             }
 
             // Get the list of events the volunteer has participated in
-            ArrayList<EventVolunteer> eventVolunteers = EventHandler.getEventVolunteerJoined(volunteer.getId());
+            ListInterface<EventVolunteer> eventVolunteers = EventHandler.getEventVolunteerJoined(volunteer.getId());
 
             // Display the volunteer's participation details
             if (eventVolunteers != null && !eventVolunteers.isEmpty()) {
@@ -708,7 +756,7 @@ public class VolunteerManagement {
                         volunteer.getId(),
                         volunteer.getName(),
                         volunteer.getGender(),
-                        listEventIDs(eventVolunteers), // Helper method to list event IDs
+                        listEventIDs((ArrayList<EventVolunteer>) eventVolunteers), // Helper method to list event IDs
                         eventVolunteers.size()); // Total number of events participated
             } else {
                 // If no events participated, display '0'
@@ -721,6 +769,7 @@ public class VolunteerManagement {
             }
         }
 
+
         // Display the total number of male and female volunteers
         System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------");
         System.out.println("Total Male Volunteers: " + maleCount);
@@ -729,11 +778,15 @@ public class VolunteerManagement {
     }
 
     // Helper method to list event IDs participated by a volunteer
-    private static String listEventIDs(ArrayList<EventVolunteer> eventVolunteers) {
+    private static String listEventIDs(ListInterface<EventVolunteer> eventVolunteers) {
         StringBuilder eventIDs = new StringBuilder();
-        for (EventVolunteer ev : eventVolunteers) {
+
+        for (int i = 0; i < eventVolunteers.size(); i++) {
+            EventVolunteer ev = eventVolunteers.get(i);
+
             eventIDs.append(ev.eventID()).append(", ");
         }
+
         // Remove trailing comma and space
         if (eventIDs.length() > 0) {
             eventIDs.setLength(eventIDs.length() - 2);
@@ -749,7 +802,10 @@ public class VolunteerManagement {
 
         System.out.println("List of Volunteers");
         System.out.println("-------------------");
-        for (Volunteer volunteer : volunteers) {
+
+        for (int i = 0; i < volunteers.size(); i++) {
+            Volunteer volunteer = volunteers.get(i);
+
             System.out.println(volunteer.getId() + " " + volunteer.getName());
         }
     }
@@ -791,13 +847,17 @@ public class VolunteerManagement {
 
         boolean found = false;
         System.out.println("Volunteers between " + minAge + " and " + maxAge + " years old:");
-        for (Volunteer volunteer : volunteers) {
+
+        for (int i = 0; i < volunteers.size(); i++) {
+            Volunteer volunteer = volunteers.get(i);
+
             int age = Integer.parseInt(volunteer.getAge());
             if (age >= minAge && age <= maxAge) {
                 System.out.println(volunteer.getId() + " " + volunteer.getName());
                 found = true;
             }
         }
+
         if (!found) {
             System.out.println(Color.YELLOW + "No volunteers found within the specified age range." + Color.RESET);
         }
@@ -814,12 +874,16 @@ public class VolunteerManagement {
 
         boolean found = false;
         System.out.println("Volunteers with gender " + gender + ":");
-        for (Volunteer volunteer : volunteers) {
+
+        for (int i = 0; i < volunteers.size(); i++) {
+            Volunteer volunteer = volunteers.get(i);
+
             if (volunteer.getGender().equalsIgnoreCase(gender)) {
                 System.out.println(volunteer.getId() + " " + volunteer.getName());
                 found = true;
             }
         }
+
         if (!found) {
             System.out.println(Color.YELLOW + "No volunteers found with the specified gender." + Color.RESET);
         }
@@ -836,12 +900,16 @@ public class VolunteerManagement {
 
         boolean found = false;
         System.out.println("Volunteers available on " + availability + ":");
-        for (Volunteer volunteer : volunteers) {
+
+        for (int i = 0; i < volunteers.size(); i++) {
+            Volunteer volunteer = volunteers.get(i);
+
             if (volunteer.getAvailability().equalsIgnoreCase(availability)) {
                 System.out.println(volunteer.getId() + " " + volunteer.getName());
                 found = true;
             }
         }
+
         if (!found) {
             System.out.println(Color.YELLOW + "No volunteers found with the specified availability." + Color.RESET);
         }
