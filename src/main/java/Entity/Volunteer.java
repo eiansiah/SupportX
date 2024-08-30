@@ -1,5 +1,6 @@
-package Main;
+package Entity;
 
+import Main.Applicants;
 import java.io.Serializable;
 
 public class Volunteer extends Applicants implements Serializable {

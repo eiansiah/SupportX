@@ -2,7 +2,7 @@ package FileHandling;
 
 import Libraries.ArrayList;
 import Libraries.Color;
-import Main.Volunteer;
+import Entity.Volunteer;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

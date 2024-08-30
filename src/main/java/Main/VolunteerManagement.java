@@ -1,5 +1,6 @@
 package Main;
 
+import Entity.Volunteer;
 import FileHandling.VolunteerFileHandler;
 import Libraries.ArrayList;
 import Libraries.Color;
@@ -682,7 +683,6 @@ public class VolunteerManagement {
         int femaleCount = 0;
 
         // Header for the summary report
-        System.out.print(" ");
         System.out.println("Summary Report: Volunteers and Their Events Participation");
         System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------");
         System.out.printf("%-15s %-20s %-10s %-25s %-15s%n", "Volunteer ID", "Volunteer Name", "Gender", "Events Participated", "Total Events");
