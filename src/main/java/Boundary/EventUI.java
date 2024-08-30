@@ -3,6 +3,7 @@ package Boundary;
 import Libraries.ArrayList;
 import Libraries.Color;
 import Libraries.GeneralFunction;
+import Libraries.ListInterface;
 import Main.Event.Event;
 import Main.Event.EventHandler;
 import Main.Event.EventStatus;
@@ -119,13 +120,15 @@ public class EventUI {
         System.out.println(Color.YELLOW + "2. Time of the event are not allow to modify to avoid crashed schedule" + Color.RESET);
     }
 
-    public static void listAllEvent(ArrayList<String> eventVolunteers){
+    public static void listAllEvent(ListInterface<String> eventVolunteers){
         System.out.print("|");
         GeneralFunction.repeatPrint("-", 9);
         System.out.println("|");
         System.out.printf("| %5s   |\n", "ID");
 
-        for(String eventVolunteerID : eventVolunteers){
+        for (int i = 0; i < eventVolunteers.size(); i++) {
+            String eventVolunteerID = eventVolunteers.get(i);
+
             System.out.println("| " + eventVolunteerID + " |");
         }
 
@@ -134,9 +137,12 @@ public class EventUI {
         System.out.println("|");
     }
 
-    public static void listVolunteerJoinedEvent(ArrayList<EventVolunteer> eventsJoined){
+    public static void listVolunteerJoinedEvent(ListInterface<EventVolunteer> eventsJoined){
         GeneralFunction.printTitle("Event Joined", 42, "-", "|");
-        for(EventVolunteer eventVolunteer: eventsJoined){
+
+        for (int i = 0; i < eventsJoined.size(); i++) {
+            EventVolunteer eventVolunteer = eventsJoined.get(i);
+
             Event event = EventHandler.searchEventByEventID(eventVolunteer.eventID());
 
             System.out.printf("| %6s %20s %10s |\n", event.eventID(), event.eventName(), event.eventStatus());
@@ -182,11 +188,13 @@ public class EventUI {
         System.out.println("|");
     }
 
-    public static void EventDisplay(ArrayList<Event> events, String title, int width){
+    public static void EventDisplay(ListInterface<Event> events, String title, int width){
         GeneralFunction.printTitle(title, width, "-", "|");
         System.out.printf("| %6s %20s %16s %16s %25s %10s |\n", "ID", "Event Name", "Start Date Time", "End Date Time", "Venue","Status");
 
-        for(Event event: events){
+        for (int i = 0; i < events.size(); i++) {
+            Event event = events.get(i);
+
             System.out.print("|");
             DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             System.out.printf(" %6s %20s %16s %16s %25s %10s ", event.eventID(), event.eventName(), event.startDateTime().format(df), event.endDateTime().format(df), event.venue(), event.eventStatus());

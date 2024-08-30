@@ -5,6 +5,7 @@ import FileHandling.UniversalFileHandler;
 import Libraries.ArrayList;
 import Libraries.Color;
 import Libraries.GeneralFunction;
+import Libraries.ListInterface;
 import Utilities.Search;
 
 import java.time.LocalDateTime;
@@ -146,7 +147,7 @@ public class EventHandler {
                 break;
             }
 
-            ArrayList<Event> events = EventHandler.searchAllEventByEventName(eventName);
+            ListInterface<Event> events = EventHandler.searchAllEventByEventName(eventName);
 
             if(events == null || events.isEmpty()){
                 displayGeneralErrorMsg("Event name does not exist. Please try again.");
@@ -160,7 +161,7 @@ public class EventHandler {
     private static void amendEventDetails(){
         amendEventDetailsUI();
 
-        ArrayList<Event> events = EventHandler.searchAllEventByEventStatus(EventStatus.UPCOMING);
+        ListInterface<Event> events = EventHandler.searchAllEventByEventStatus(EventStatus.UPCOMING);
 
         if(events == null){
             displayGeneralErrorMsg("No upcoming event to modify.");
@@ -176,7 +177,9 @@ public class EventHandler {
             while(true) {
                 eventID = getEventInputUI("Enter event ID: ");
 
-                for (Event event : events) {
+                for (int i = 0; i < events.size(); i++) {
+                    Event event = events.get(i);
+
                     if (event.eventID().equals(eventID)) {
                         break root;
                     }
@@ -199,17 +202,17 @@ public class EventHandler {
     private static void listAllEvent(){
         GeneralFunction.clearScreen();
 
-        ArrayList<Event> allEvents = EventHandler.getAllEvent();
+        ListInterface<Event> allEvents = EventHandler.getAllEvent();
 
         EventDisplay(allEvents, "All events", 102);
 
         GeneralFunction.enterToContinue();
     }
 
-    private static ArrayList <EventVolunteer> listAllEventForVolunteer(){
+    private static ListInterface<EventVolunteer> listAllEventForVolunteer(){
         GeneralFunction.clearScreen();
 
-        ArrayList<String> eventVolunteers = EventHandler.getAllEventVolunteerID();
+        ListInterface<String> eventVolunteers = EventHandler.getAllEventVolunteerID();
 
         if(eventVolunteers.isEmpty()){
             displayGeneralErrorMsg("Don't have any volunteer joining any event. ");
@@ -236,7 +239,7 @@ public class EventHandler {
             break;
         }
 
-        ArrayList <EventVolunteer> eventsJoined = EventHandler.getEventVolunteerJoined(volunteerID);
+        ListInterface <EventVolunteer> eventsJoined = EventHandler.getEventVolunteerJoined(volunteerID);
 
         if(eventsJoined == null){
             displayGeneralErrorMsg("Volunteer doesn't join any event");
@@ -251,7 +254,7 @@ public class EventHandler {
     }
 
     private static void removeEventFromVolunteerUI(){
-        ArrayList <EventVolunteer> eventsJoined = listAllEventForVolunteer();
+        ListInterface<EventVolunteer> eventsJoined = listAllEventForVolunteer();
 
         if(eventsJoined == null){
             GeneralFunction.enterToContinue();
@@ -266,7 +269,9 @@ public class EventHandler {
                 continue;
             }
 
-            for (EventVolunteer eventVolunteer: eventsJoined){
+            for (int i = 0; i < eventsJoined.size(); i++) {
+                EventVolunteer eventVolunteer = eventsJoined.get(i);
+
                 if(eventVolunteer.eventID().equals(eventID)){
                     EventHandler.removeVolunteerFromVolunteerEvent(eventID, eventVolunteer.VolunteerID());
                     displaySuccessMessage("Remove successfully");
@@ -281,12 +286,14 @@ public class EventHandler {
     }
 
     private static void generateReport(){
-        ArrayList<Event> allEvent = EventHandler.getAllEvent();
-        ArrayList<Event> ongoingEvent = new ArrayList<>();
-        ArrayList<Event> upcomingEvent = new ArrayList<>();
-        ArrayList<Event> completeEvent = new ArrayList<>();
+        ListInterface<Event> allEvent = EventHandler.getAllEvent();
+        ListInterface<Event> ongoingEvent = new ArrayList<>();
+        ListInterface<Event> upcomingEvent = new ArrayList<>();
+        ListInterface<Event> completeEvent = new ArrayList<>();
 
-        for(Event event : allEvent){
+        for (int i = 0; i < allEvent.size(); i++) {
+            Event event = allEvent.get(i);
+
             if(event.eventStatus() == EventStatus.UPCOMING){
                 upcomingEvent.add(event);
             } else if (event.eventStatus() == EventStatus.ONGOING){
@@ -422,15 +429,17 @@ public class EventHandler {
         UniversalFileHandler.removeData(eventVolunteerFilePath, Search.searchAllMatchesString(eventVolunteerFilePath, event.eventID(), Event.separator, 0));
     }
 
-    public static ArrayList<EventVolunteer> searchEventVolunteerByEventID(String eventID){
-        ArrayList<String> eventVolunteerStrings = Search.searchAllMatchesString(eventVolunteerFilePath, eventID, Event.separator, 0);
-        ArrayList<EventVolunteer> eventVolunteers = new ArrayList<>();
+    public static ListInterface<EventVolunteer> searchEventVolunteerByEventID(String eventID){
+        ListInterface<String> eventVolunteerStrings = Search.searchAllMatchesString(eventVolunteerFilePath, eventID, Event.separator, 0);
+        ListInterface<EventVolunteer> eventVolunteers = new ArrayList<>();
 
         if(eventVolunteerStrings == null) {
             return null;
         }
 
-        for (String eventVolunteerString : eventVolunteerStrings) {
+        for (int i = 0; i < eventVolunteerStrings.size(); i++) {
+            String eventVolunteerString = eventVolunteerStrings.get(i);
+
             EventVolunteer eventVolunteer = new EventVolunteer(eventVolunteerString);
             eventVolunteers.add(eventVolunteer);
         }
@@ -448,15 +457,17 @@ public class EventHandler {
         return new Event(eventString);
     }
 
-    public static ArrayList<Event> searchAllEventByEventName(String eventName){
-        ArrayList<String> eventListString = Search.searchAllMatchesString(eventFilePath, eventName, Event.separator, 1);
-        ArrayList<Event> events = new ArrayList<>();
+    public static ListInterface<Event> searchAllEventByEventName(String eventName){
+        ListInterface<String> eventListString = Search.searchAllMatchesString(eventFilePath, eventName, Event.separator, 1);
+        ListInterface<Event> events = new ArrayList<>();
 
         if(eventListString == null) {
             return null;
         }
 
-        for(String eventString : eventListString) {
+        for (int i = 0; i < eventListString.size(); i++) {
+            String eventString = eventListString.get(i);
+
             Event event = new Event(eventString);
             events.add(event);
         }
@@ -464,15 +475,17 @@ public class EventHandler {
         return events;
     }
 
-    public static ArrayList<Event> searchAllEventByEventStatus(EventStatus eventStatus){
-        ArrayList<String> eventListString = Search.searchAllMatchesString(eventFilePath, eventStatus.toString(), Event.separator, 6);
-        ArrayList<Event> events = new ArrayList<>();
+    public static ListInterface<Event> searchAllEventByEventStatus(EventStatus eventStatus){
+        ListInterface<String> eventListString = Search.searchAllMatchesString(eventFilePath, eventStatus.toString(), Event.separator, 6);
+        ListInterface<Event> events = new ArrayList<>();
 
         if(eventListString == null) {
             return null;
         }
 
-        for(String eventString : eventListString) {
+        for (int i = 0; i < eventListString.size(); i++) {
+            String eventString = eventListString.get(i);
+
             Event event = new Event(eventString);
             events.add(event);
         }
@@ -480,11 +493,13 @@ public class EventHandler {
         return events;
     }
 
-    public static ArrayList<Event> getAllEvent(){
-        ArrayList<String> eventsString = UniversalFileHandler.readData(eventFilePath);
-        ArrayList<Event> events = new ArrayList<>();
+    public static ListInterface<Event> getAllEvent(){
+        ListInterface<String> eventsString = UniversalFileHandler.readData(eventFilePath);
+        ListInterface<Event> events = new ArrayList<>();
 
-        for(String eventString : eventsString) {
+        for (int i = 0; i < eventsString.size(); i++) {
+            String eventString = eventsString.get(i);
+
             Event event = new Event(eventString);
             events.add(event);
         }
@@ -492,16 +507,19 @@ public class EventHandler {
         return events;
     }
 
-    public static ArrayList<String> getAllEventVolunteerID(){
-        ArrayList<String> eventVolunteersString = UniversalFileHandler.readData(eventVolunteerFilePath);
-        ArrayList<String> eventVolunteerIDs = new ArrayList<>();
+    public static ListInterface<String> getAllEventVolunteerID(){
+        ListInterface<String> eventVolunteersString = UniversalFileHandler.readData(eventVolunteerFilePath);
+        ListInterface<String> eventVolunteerIDs = new ArrayList<>();
 
-        for(String eventVolunteerString : eventVolunteersString) {
+        for (int i = 0; i < eventVolunteersString.size(); i++) {
+            String eventVolunteerString = eventVolunteersString.get(i);
             String volunteerID = eventVolunteerString.split(Event.separator)[1];
 
             boolean exists = false;
 
-            for(String _volunteerID : eventVolunteerIDs){
+            for (int j = 0; j < eventVolunteerIDs.size(); j++) {
+                String _volunteerID = eventVolunteerIDs.get(j);
+
                 if(_volunteerID.equals(volunteerID)) {
                     exists = true;
                     break;
@@ -535,15 +553,17 @@ public class EventHandler {
         }
     }
 
-    public static ArrayList<EventVolunteer> getEventVolunteerJoined(String volunteerID){
-        ArrayList<String> eventVolunteerListString = Search.searchAllMatchesString(eventVolunteerFilePath, volunteerID, Event.separator, 1);
-        ArrayList<EventVolunteer> eventVolunteers = new ArrayList<>();
+    public static ListInterface<EventVolunteer> getEventVolunteerJoined(String volunteerID){
+        ListInterface<String> eventVolunteerListString = Search.searchAllMatchesString(eventVolunteerFilePath, volunteerID, Event.separator, 1);
+        ListInterface<EventVolunteer> eventVolunteers = new ArrayList<>();
 
         if(eventVolunteerListString == null) {
             return null;
         }
 
-        for(String eventVolunteerString : eventVolunteerListString) {
+        for (int i = 0; i < eventVolunteerListString.size(); i++) {
+            String eventVolunteerString = eventVolunteerListString.get(i);
+
             EventVolunteer event = new EventVolunteer(eventVolunteerString);
             eventVolunteers.add(event);
         }
@@ -556,10 +576,12 @@ public class EventHandler {
     }
 
     public static void removeVolunteerFromAllVolunteerEvent(String volunteerID){
-        ArrayList<EventVolunteer> eventVolunteers = getEventVolunteerJoined(volunteerID);
+        ListInterface<EventVolunteer> eventVolunteers = getEventVolunteerJoined(volunteerID);
 
         if(eventVolunteers != null) {
-            for(EventVolunteer eventVolunteer : eventVolunteers) {
+            for (int i = 0; i < eventVolunteers.size(); i++) {
+                EventVolunteer eventVolunteer = eventVolunteers.get(i);
+
                 String old = eventVolunteer.toString();
                 //eventVolunteer.setVolunteerStatus(VolunteerStatus.REMOVED);
                 UniversalFileHandler.modifyData(eventVolunteerFilePath, old, eventVolunteer.toString());
@@ -568,10 +590,12 @@ public class EventHandler {
     }
 
     public static void removeVolunteerFromVolunteerEvent(String eventID, String volunteerID){
-        ArrayList<EventVolunteer> eventVolunteers = getEventVolunteerJoined(volunteerID);
+        ListInterface<EventVolunteer> eventVolunteers = getEventVolunteerJoined(volunteerID);
 
         if(eventVolunteers != null) {
-            for(EventVolunteer eventVolunteer : eventVolunteers) {
+            for (int i = 0; i < eventVolunteers.size(); i++) {
+                EventVolunteer eventVolunteer = eventVolunteers.get(i);
+
                 if(eventVolunteer.eventID().equals(eventID)) {
                     String old = eventVolunteer.toString();
                     //eventVolunteer.setVolunteerStatus(VolunteerStatus.REMOVED);
@@ -583,9 +607,11 @@ public class EventHandler {
     }
 
     public static void updateEventStatus(){
-        ArrayList<Event> allEvents = getAllEvent();
+        ListInterface<Event> allEvents = getAllEvent();
 
-        for(Event event : allEvents) {
+        for (int i = 0; i < allEvents.size(); i++) {
+            Event event = allEvents.get(i);
+
             if(event.endDateTime().isBefore(LocalDateTime.now()) && event.eventStatus() != EventStatus.COMPLETED){
                 modifyEvent(event.eventID(), event.eventName(), event.venue(), event.description(), EventStatus.COMPLETED);
             } else if (event.endDateTime().isAfter(LocalDateTime.now()) && event.startDateTime().isBefore(LocalDateTime.now()) && event.eventStatus() != EventStatus.ONGOING) {
