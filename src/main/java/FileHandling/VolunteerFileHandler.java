@@ -1,6 +1,7 @@
 package FileHandling;
 
 import Libraries.ArrayList;
+import Libraries.ListInterface;
 import Libraries.Color;
 import Entity.Volunteer;
 
@@ -39,8 +40,8 @@ public class VolunteerFileHandler implements FileHandlingInterface<Volunteer> {
     }
 
     @Override
-    public ArrayList<Volunteer> readData(String filename) {
-        ArrayList<Volunteer> volunteers = new ArrayList<>();
+    public ListInterface<Volunteer> readData(String filename) {
+        ListInterface<Volunteer> volunteers = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -68,10 +69,11 @@ public class VolunteerFileHandler implements FileHandlingInterface<Volunteer> {
 
     @Override
     public void updateData(String filename, Volunteer updatedVolunteer) {
-        ArrayList<Volunteer> volunteers = readData(filename);
+        ListInterface<Volunteer> volunteers = readData(filename);
 
         boolean updated = false;
-        for (Volunteer volunteer : volunteers) {
+        for (int i = 0; i < volunteers.size(); i++) {
+            Volunteer volunteer = volunteers.get(i);
             if (volunteer.getId().equals(updatedVolunteer.getId())) {
                 volunteer.setName(updatedVolunteer.getName());
                 volunteer.setAge(updatedVolunteer.getAge());
@@ -93,9 +95,10 @@ public class VolunteerFileHandler implements FileHandlingInterface<Volunteer> {
     }
 
     @Override
-    public void updateMultipleData(String filename, ArrayList<Volunteer> volunteers) {
+    public void updateMultipleData(String filename, ListInterface<Volunteer> volunteers) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
-            for (Volunteer volunteer : volunteers) {
+            for (int i = 0; i < volunteers.size(); i++) {
+                Volunteer volunteer = volunteers.get(i);
                 writer.write(volunteer.toString() + "\n");
             }
             System.out.println(Color.GREEN + "All volunteer details updated successfully." + Color.RESET);
@@ -126,11 +129,12 @@ public class VolunteerFileHandler implements FileHandlingInterface<Volunteer> {
 
     @Override
     public void deleteData(String filename, String volunteerId) {
-        ArrayList<Volunteer> volunteers = readData(filename);
-        ArrayList<Volunteer> updatedVolunteers = new ArrayList<>();
+        ListInterface<Volunteer> volunteers = readData(filename);
+        ListInterface<Volunteer> updatedVolunteers = new ArrayList<>();
 
         boolean deleted = false;
-        for (Volunteer volunteer : volunteers) {
+        for (int i = 0; i < volunteers.size(); i++) {
+            Volunteer volunteer = volunteers.get(i);
             if (!volunteer.getId().equals(volunteerId)) {
                 updatedVolunteers.add(volunteer);
             } else {
