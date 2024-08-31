@@ -366,7 +366,7 @@ public class VolunteerUI {
     public static void filterByAgeUI(int minAge, int maxAge) {
         System.out.println("");
         System.out.println("Volunteers between " + minAge + " and " + maxAge + " years old");
-        System.out.println("-------------------------------------");
+        System.out.println("--------------------------------------");
     }
 
     public static void filterVolunteerUI(Volunteer volunteer) {
