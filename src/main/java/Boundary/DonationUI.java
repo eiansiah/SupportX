@@ -14,6 +14,7 @@ import Entity.MedicalDevice;
 import Entity.Medicine;
 import Entity.Money;
 import Entity.PersonalCare;
+import Libraries.GeneralFunction;
 import Libraries.ListInterface;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -30,6 +31,7 @@ public class DonationUI {
 
     //--------------------------------------------------------------Input-------------------------------------------------------------------------
     Scanner scanner = new Scanner(System.in);
+    private GeneralFunction generalFunc = new GeneralFunction();
 
     //get item code
     public String inputRecordIDRemove() {
@@ -53,60 +55,60 @@ public class DonationUI {
         return scanner.nextLine();
     }
 
-    //Input Name - Boundary
+    //Input Name 
     public String inputName() {
         System.out.print("Enter Item Name: ");
         return scanner.nextLine();
     }
 
-    //Input Description - Boundary
+    //Input Description 
     public String inputDescription() {
         System.out.print("Enter Description: ");
         return scanner.nextLine();
     }
 
-    //Input Food Net Weight - Boundary
+    //Input Food Net Weight 
     public String inputFoodNetWeight() {
         System.out.print("Enter Food Net Weight (kilogram): ");
         return scanner.nextLine();
     }
 
-    //Input Beverage Net Volume - Boundary
+    //Input Beverage Net Volume 
     public String inputBeverageNetVolume() {
         System.out.print("Enter Beverage Net Volume (mililitre): ");
         return scanner.nextLine();
     }
 
-    //Input Net Weight - Boundary
+    //Input Net Weight 
     public String inputNetWeight() {
         System.out.print("Enter Net Weight (gram): ");
         return scanner.nextLine();
     }
 
-    //Input Expiry Date - Boundary
+    //Input Expiry Date 
     public String inputExpiryDate() {
         System.out.print("Enter Expiry Date (yyyy-mm-dd): ");
         return scanner.nextLine();
     }
 
-    //Input Food Type - Boundary
+    //Input Food Type 
     public String inputFoodType() {
         System.out.print("Enter Food Type (1-8): ");
         return scanner.nextLine();
     }
 
-    //Input Clothing Category - Boundary
+    //Input Clothing Category 
     public String inputClothingCategory() {
         System.out.print("Enter Clothing Category (1-9): ");
         return scanner.nextLine();
     }
 
-    //Input Gender - Boundary
+    //Input Gender 
     public String inputGender() {
         System.out.print("Enter Gender (1-3): ");
         return scanner.nextLine();
     }
-    //Input Age - Boundary
+    //Input Age 
 
     public String inputAge() {
         System.out.print("Enter Age Group(1-6): ");
@@ -120,16 +122,16 @@ public class DonationUI {
     }
 
     public String inputNumA() {
-        System.out.println("Enter a: ");
+        System.out.print("Enter a: ");
         return scanner.nextLine();
     }
 
     public String inputNumB() {
-        System.out.println("Enter b: ");
+        System.out.print("Enter b: ");
         return scanner.nextLine();
     }
 
-    //Input Personal Care Category - Boundary
+    //Input Personal Care Category 
     public String inputPCCat() {
         System.out.print("Enter Personal Care Category (1-5): ");
         return scanner.nextLine();
@@ -140,7 +142,7 @@ public class DonationUI {
         System.out.print("Enter Dosage Form (1-5): ");
         return scanner.nextLine();
     }
-    //Input Quantity - Boundary
+    //Input Quantity 
 
     public String inputQty() {
         System.out.print("Enter Quantity: ");
@@ -153,13 +155,13 @@ public class DonationUI {
         return scanner.nextLine();
     }
 
-    //Input Venue Code - Boundary
+    //Input Venue Code 
     public String inputVenueCode() {
         System.out.print("Enter Venue Code: ");
         return scanner.nextLine();
     }
 
-    //Input Source - Boundary
+    //Input Source 
     public String inputSource() {
         System.out.print("Enter Source: ");
         return scanner.nextLine();
@@ -171,7 +173,7 @@ public class DonationUI {
         return scanner.nextLine();
     }
 
-    //Input Size - Boundary
+    //Input Size 
     public String inputSize() {
         System.out.print("Enter Clothing Size: ");
         return scanner.nextLine();
@@ -220,9 +222,10 @@ public class DonationUI {
     }
     //--------------------------------------------------------------Output-------------------------------------------------------------------------
 
-    //Display Donation Action Menu - Boundary
+    //Display Donation Action Menu 
     public void displayMenuDonationHome() {
-        System.out.println("\nDonation");
+        System.out.print("\n");
+        generalFunc.printTitle("Donation", 51, "-", "|");
         System.out.println("1. Add Donation");
         System.out.println("2. Remove Donation");
         System.out.println("3. Search Donation");
@@ -234,7 +237,7 @@ public class DonationUI {
         System.out.println("9. Back to Support X Home");
     }
 
-    //Display Donation Category - Boundary
+    //Display Donation Category 
     public void displayDonationCategory() {
         System.out.println("Donation Category");
         System.out.println("1. Food");
@@ -246,34 +249,50 @@ public class DonationUI {
         System.out.println("7. Money");
         System.out.println("8. Back to Donation");
     }
-    //Display Food - Boundary
+    //Display Food 
 
     public void displayFood(ListInterface<DonationItem> foodList) {
+        generalFunc.repeatPrint("-",126);
+        System.out.print("\n");
         System.out.printf("%-10s %-20s %-20s %-20s %-20s %-15s %-15s\n", "Item Code", "Item Name", "Net Weight (kg)", "Expiry Date", "Food Type",
                 "Quantity", "Venue Code");
+        generalFunc.repeatPrint("-",126);
+        System.out.print("\n");
         Iterator<DonationItem> iterator = foodList.iterator();
         while (iterator.hasNext()) {
             DonationItem item = iterator.next();
             System.out.printf("%-10s %-20s %-20s %-20s %-20s %-15s %-15s\n", item.getItemCode(), item.getItemName(), ((Food) item).getNetWeight(),
                     ((Food) item).getExpiryDate(), ((Food) item).getFoodType(), item.getQuantity(), ((Food) item).getVenueCode());
         }
+        generalFunc.repeatPrint("-",126);
+        System.out.print("\n");
     }
 
-    //Display Beverage - Boundary
+    //Display Beverage 
     public void displayBeverage(ListInterface<DonationItem> beverageList) {
+        generalFunc.repeatPrint("-",105);
+        System.out.print("\n");
         System.out.printf("%-10s %-20s %-20s %-20s %-15s %-15s\n", "Item Code", "Item Name", "Net Volume (ml)", "Expiry Date", "Quantity", "Venue Code");
+        generalFunc.repeatPrint("-",105);
+        System.out.print("\n");
         Iterator<DonationItem> iterator = beverageList.iterator();
         while (iterator.hasNext()) {
             DonationItem item = iterator.next();
             System.out.printf("%-10s %-20s %-20s %-20s %-15s %-15s\n", item.getItemCode(), item.getItemName(), ((Beverage) item).getNetVolume(),
                     ((Beverage) item).getExpiryDate(), item.getQuantity(), ((Beverage) item).getVenueCode());
         }
+        generalFunc.repeatPrint("-",105);
+        System.out.print("\n");
     }
 
-    //Display Clothing - Boundary
+    //Display Clothing 
     public void displayClothing(ListInterface<DonationItem> clothingList) {
+        generalFunc.repeatPrint("-",147);
+        System.out.print("\n");
         System.out.printf("%-10s %-20s %-20s %-20s %-20s %-20s %-15s %-15s\n", "Item Code", "Item Name", "Clothing Category",
                 "Gender", "Age Group", "Size", "Quantity", "Venue Code");
+        generalFunc.repeatPrint("-",147);
+        System.out.print("\n");
         Iterator<DonationItem> iterator = clothingList.iterator();
         while (iterator.hasNext()) {
             DonationItem item = iterator.next();
@@ -281,24 +300,36 @@ public class DonationUI {
                     ((Clothing) item).getClothingCategory(), ((Clothing) item).getGender(), ((Clothing) item).getAge(),
                     ((Clothing) item).getSize(), item.getQuantity(), ((Clothing) item).getVenueCode());
         }
+        generalFunc.repeatPrint("-",147);
+        System.out.print("\n");
     }
 
-    //Display Medical Device - Boundary
+    //Display Medical Device 
     public void displayMedicalDevice(ListInterface<DonationItem> medicalDeviceList) {
+        generalFunc.repeatPrint("-",114);
+        System.out.print("\n");
         System.out.printf("%-10s %-20s %-15s %-15s %-50s\n", "Item Code", "Item Name", "Quantity", "Venue Code", "Description");
+        generalFunc.repeatPrint("-",114);
+        System.out.print("\n");
         Iterator<DonationItem> iterator = medicalDeviceList.iterator();
         while (iterator.hasNext()) {
             DonationItem item = iterator.next();
             System.out.printf("%-10s %-20s %-15s %-15s %-50s\n", item.getItemCode(), item.getItemName(), item.getQuantity(),
                     ((MedicalDevice) item).getVenueCode(), ((MedicalDevice) item).getDescription());
         }
+        generalFunc.repeatPrint("-",114);
+        System.out.print("\n");
     }
 
-    //Display Personal Care - Boundary
+    //Display Personal Care 
     public void displayPersonalCare(ListInterface<DonationItem> personalCareList) {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        generalFunc.repeatPrint("-",153);
+        System.out.print("\n");
         System.out.printf("%-10s %-20s %-25s %-10s %-15s %-20s %-15s %-15s %-15s\n", "Item Code", "Item Name", "Personal Care Category",
                 "Gender", "Age Group", "Net Weight (g)", "Expiry date", "Quantity", "Venue Code");
+        generalFunc.repeatPrint("-",153);
+        System.out.print("\n");
         Iterator<DonationItem> iterator = personalCareList.iterator();
         while (iterator.hasNext()) {
             DonationItem item = iterator.next();
@@ -321,22 +352,34 @@ public class DonationUI {
                         ((PersonalCare) item).getVenueCode());
             }
         }
+        generalFunc.repeatPrint("-",153);
+        System.out.print("\n");
     }
 
-    //Display Money - Boundary
+    //Display Money 
     public void displayMoney(ListInterface<DonationItem> moneyList) {
+        generalFunc.repeatPrint("-",83);
+        System.out.print("\n");
         System.out.printf("%-10s %-20s %-20s %-30s\n", "Item Code", "Item Name", "Amount (RM)", "Source");
+        generalFunc.repeatPrint("-",83);
+        System.out.print("\n");
         Iterator<DonationItem> iterator = moneyList.iterator();
         while (iterator.hasNext()) {
             DonationItem item = iterator.next();
             System.out.printf("%-10s %-20s %-20s %-30s\n", item.getItemCode(), item.getItemName(), ((Money) item).getAmount(), ((Money) item).getSource());
         }
+        generalFunc.repeatPrint("-",83);
+        System.out.print("\n");
     }
 
-    //Display Medicine - Boundary
+    //Display Medicine 
     public void displayMedicine(ListInterface<DonationItem> medicineList) {
+        generalFunc.repeatPrint("-",204);
+        System.out.print("\n");
         System.out.printf("%-10s %-20s %-15s %-15s %-15s %-20s %-20s %-15s %-15s %-50s\n", "Item Code", "Item Name", "Dosage Form",
                 "Gender", "Age Group", "Net Weight (g)", "Expiry date", "Quantity", "Venue Code", "Description");
+        generalFunc.repeatPrint("-",204);
+        System.out.print("\n");
         Iterator<DonationItem> iterator = medicineList.iterator();
         while (iterator.hasNext()) {
             DonationItem item = iterator.next();
@@ -344,6 +387,8 @@ public class DonationUI {
                     ((Medicine) item).getDosageForm(), ((Medicine) item).getGender(), ((Medicine) item).getAge(), ((Medicine) item).getNetWeight(),
                     ((Medicine) item).getExpiryDate(), item.getQuantity(), ((Medicine) item).getVenueCode(), ((Medicine) item).getDescription());
         }
+        generalFunc.repeatPrint("-",204);
+        System.out.print("\n");
     }
 
     public void displayEmptySize() {
@@ -351,103 +396,116 @@ public class DonationUI {
     }
 
     public void displayAddPageHeader() {
-        System.out.println("\nAdd Donation");
+        System.out.print("\n");
+        generalFunc.printTitle("Add Donation", 51, "-", "|");
     }
 
     //Display Instruction for addDonation
     public void displayAddDonationInstruction() {
-        System.out.println("\nDonor For This Donation");
+        System.out.print("\n");
+        generalFunc.printTitle("Donor For This Donation", 51, "-", "|");
         System.out.println("**Note that a donation can have one or many items.");
         System.out.println("**Leaving this page to go back Donation Page will end this session for this donation for this donor.\n");
     }
 
     public void displayRemoveDonationHeader() {
-        System.out.println("\n\nRemove Donation");
+        System.out.print("\n");
+        generalFunc.printTitle("Remove Donation", 51, "-", "|");
     }
-    //Display Add Beverage Instruction - Boundary
+
+    public void displaySearchDonationHeader() {
+        System.out.print("\n");
+        generalFunc.printTitle("Search Donation", 51, "-", "|");
+    }
+    //Display Add Beverage Instruction 
 
     public void displayInstructionAddBeverage() {
-        System.out.println("\nAdd Beverage");
+        System.out.print("\n");
+        generalFunc.printTitle("Add Beverage", 51, "-", "|");
         displayVenueCode();
         System.out.println("\nInstruction: Please enter the field accordingly. \nEnter 'X' to back to the previous page.\n");
     }
 
-    //Display Add Clothing Instruction - Boundary
+    //Display Add Clothing Instruction 
     public void displayInstructionAddClothing() {
-        System.out.println("\nAdd Clothing\n");
+        System.out.print("\n");
+        generalFunc.printTitle("Add Clothing", 51, "-", "|");
         displayClothingCategory();
         displayGender();
         displayAge();
         displaySize();
         displayVenueCode();
-        System.out.println("Instruction: Please enter the field accordingly. \nEnter 'X' to back to the previous page.\n");
+        System.out.println("\nInstruction: Please enter the field accordingly. \nEnter 'X' to back to the previous page.\n");
     }
-    //Display Clothing Category - Boundary
+    //Display Clothing Category 
 
     public void displayClothingCategory() {
         System.out.println("Clothing Category:\n1. Tops\n2. Bottoms\n3. Outerwear\n4. Dress\n5. Innerwear");
         System.out.println("6. Sportswear\n7. Footwear\n8. Accessories\n9. Sleepwear\n");
     }
 
-    //Display Gender - Boundary
+    //Display Gender 
     public void displayGender() {
         System.out.println("Gender:\n1. Men\n2. Women\n3. Neutral\n");
     }
 
-    //Display Age- Boundary
+    //Display Age
     public void displayAge() {
         System.out.println("Age Group:\n1. Infants\n2. Toddlers\n3. Kids\n4. Teens\n5. Adults\n6. Seniors\n");
     }
 
-    //Display Add PersonalCare Instruction - Boundary
+    //Display Add PersonalCare Instruction 
     public void displayInstructionAddPersonalCare() {
-        System.out.println("\nAdd Personal Care\n");
+        System.out.print("\n");
+        generalFunc.printTitle("Add Personal Care", 51, "-", "|");
         displayPCCat();
         displayGender();
         displayAge();
         displayVenueCode();
-        System.out.println("Instruction: Please enter the field accordingly. \nEnter '-' for expiry date if the product does not have an expiry date.");
+        System.out.println("\nInstruction: Please enter the field accordingly. \nEnter '-' for expiry date if the product does not have an expiry date.");
         System.out.println("Enter '-999' for netweight if the product does not have a net weight.\nEnter 'X' to back to the previous page.\n");
     }
 
-    //Display Personal care category - Boundary
+    //Display Personal care category 
     public void displayPCCat() {
         System.out.println("Personal Care Category:\n1. Skin care (Moisturizers, Cleansers, Toners)\n2. Hair Care (Shampoo, Conditioners, Hair Masks)");
         System.out.println("3. Body Care (Body Wash, Soap, Body Scrubs)\n4. Oral Care (Toothpaste, Toothbrush, Mouthwash)");
         System.out.println("5. Personal Hygiene (Sanitary Pads, Nail Clippers, Cotton Swabs)\n");
     }
-    //Display Add Medical Device Instruction - Boundary
+    //Display Add Medical Device Instruction 
 
     public void displayInstructionAddMedicine() {
-        System.out.println("\nAdd Medicine\n");
+        System.out.print("\n");
+        generalFunc.printTitle("Add Medicine", 51, "-", "|");
         displayDSForm();
         displayGender();
         displayAge();
         displayVenueCode();
-        System.out.println("Instruction: Please enter the field accordingly. \nEnter 'X' to back to the previous page.\n");
+        System.out.println("\nInstruction: Please enter the field accordingly. \nEnter 'X' to back to the previous page.\n");
     }
 
-    //Display Dosage Form - Boundary
+    //Display Dosage Form 
     public void displayDSForm() {
         System.out.println("Dosage Form:\n1. Solid\n2. Liquid\n3. Semi-Solid(Cream, Gel, Paste, ...)\n4. Inhalation\n5. Injectable\n");
     }
-    //Display Source - Boundary
+    //Display Source 
 
     public void displaySource() {
-        System.out.println("Source: \nEnter 'E001' if the source is from e-banking.\nEnter venue code if the source is from a collection location. ");
+        System.out.println("\nSource: \nEnter 'E001' if the source is from e-banking.\nEnter venue code if the source is from a collection location. ");
         System.out.println("Enter event code if the source if from an event.\n");
     }
 
-    //Display Add Money Instruction - Boundary
+    //Display Add Money Instruction 
     public void displayInstructionAddMoney() {
-        System.out.println("\nAdd Money\n");
+        System.out.print("\n");
+        generalFunc.printTitle("Add Money", 51, "-", "|");
         displayVenueCode();
         displaySource();
-        System.out.println("Instruction: Please enter the field accordingly. \nEnter 'X' to back to the previous page.\n");
+        System.out.println("\nInstruction: Please enter the field accordingly. \nEnter 'X' to back to the previous page.\n");
     }
 
     public void displayVenueCode() {
-        System.out.println("\nVenue Code");
+        System.out.println("Venue Code:");
         try {
             File myObj = new File("Venue.txt");
             Scanner readerFile = new Scanner(myObj);
@@ -461,16 +519,18 @@ public class DonationUI {
             e.printStackTrace();
         }
     }
-    //Display Add Medical Device Instruction - Boundary
+    //Display Add Medical Device Instruction 
 
     public void displayInstructionAddMedicalDevice() {
-        System.out.println("\nAdd Medical Device\n");
+        System.out.print("\n");
+        generalFunc.printTitle("Add Medical Device", 51, "-", "|");
         displayVenueCode();
-        System.out.println("Instruction: Please enter the field accordingly. \nEnter 'X' to back to the previous page.\n");
+        System.out.println("\nInstruction: Please enter the field accordingly. \nEnter 'X' to back to the previous page.\n");
     }
 
     public void displayAmendDetailsHeader() {
-        System.out.println("\n\nAmend Donation");
+        System.out.print("\n");
+        generalFunc.printTitle("Amend Donation", 51, "-", "|");
     }
 
     public void displayAmendQtyRecord() {
@@ -480,23 +540,25 @@ public class DonationUI {
     public void displayAmendOptionAmt() {
         System.out.println("Action:\n1. Remove from a record\n2. Amend a record amount\nX. Stop this modification.");
     }
-//Display Add Food Instruction - Boundary
+//Display Add Food Instruction 
 
     public void displayInstructionAddFood() {
-        System.out.println("\nAdd Food\n");
+        System.out.print("\n");
+        generalFunc.printTitle("Add Food", 51, "-", "|");
         displayFoodType();
         displayVenueCode();
         System.out.println("\nInstruction: Please enter the field accordingly. \nEnter 'X' to back to the previous page.\n");
     }
 
-    //Display Food Type Category - Boundary
+    //Display Food Type Category 
     public void displayFoodType() {
-        System.out.println("Food Category:\n1. Fruit\n2. Vegetable\n3. Protein\n4. Whole Grain\n5. Baby Food\n6. Dairy\n7. Fat\n8. Seasoning");
+        System.out.println("Food Category:\n1. Fruit\n2. Vegetable\n3. Protein\n4. Whole Grain\n5. Baby Food\n6. Dairy\n7. Fat\n8. Seasoning\n");
     }
 
-    //Amend Food Option Menu - Boundary
+    //Amend Food Option Menu 
     public void displayAmendFoodOption() {
-        System.out.println("\nAmend Food Option");
+        System.out.print("\n");
+        generalFunc.printTitle("Amend Food Option", 51, "-", "|");
         System.out.println("1. Item Name");
         System.out.println("2. Quantity");
         System.out.println("3. Net Weight");
@@ -506,9 +568,10 @@ public class DonationUI {
         System.out.println("7. Back to Previous Page");
     }
 
-    //Amend Beverage Option Menu - Boundary
+    //Amend Beverage Option Menu 
     public void displayAmendBeverageOption() {
-        System.out.println("\nAmend Beverage Option");
+        System.out.print("\n");
+        generalFunc.printTitle("Amend Beverage Option", 51, "-", "|");
         System.out.println("1. Item Name");
         System.out.println("2. Quantity");
         System.out.println("3. Net Volume");
@@ -517,9 +580,10 @@ public class DonationUI {
         System.out.println("6. Back to Previous Page");
     }
 
-    //Amend Clothing Option Menu - Boundary
+    //Amend Clothing Option Menu 
     public void displayAmendClothingOption() {
-        System.out.println("\nAmend Clothing Option");
+        System.out.print("\n");
+        generalFunc.printTitle("Amend Clothing Option", 51, "-", "|");
         System.out.println("1. Item Name");
         System.out.println("2. Quantity");
         System.out.println("3. Clothing Category");
@@ -530,9 +594,10 @@ public class DonationUI {
         System.out.println("8. Back to Previous Page");
     }
 
-    //Amend Personal Care Option Menu - Boundary
+    //Amend Personal Care Option Menu 
     public void displayAmendPersonalCareOption() {
-        System.out.println("\nAmend Personal Care Option");
+        System.out.print("\n");
+        generalFunc.printTitle("Amend Personal Care Option", 51, "-", "|");
         System.out.println("1. Item Name");
         System.out.println("2. Quantity");
         System.out.println("3. Net Weight");
@@ -544,9 +609,10 @@ public class DonationUI {
         System.out.println("9. Back to Previous Page");
     }
 
-    //Amend Medical Device Option Menu - Boundary
+    //Amend Medical Device Option Menu 
     public void displayAmendMedicalDeviceOption() {
-        System.out.println("\nAmend Medical Device Option");
+        System.out.print("\n");
+        generalFunc.printTitle("Amend Medical Device Option", 51, "-", "|");
         System.out.println("1. Item Name");
         System.out.println("2. Quantity");
         System.out.println("3. Venue Code");
@@ -554,9 +620,10 @@ public class DonationUI {
         System.out.println("5. Back to Previous Page");
     }
 
-    //Amend Medicine Option Menu - Boundary
+    //Amend Medicine Option Menu 
     public void displayAmendMedicineOption() {
-        System.out.println("\nAmend Medicine Option");
+        System.out.print("\n");
+        generalFunc.printTitle("Amend Medicine Option", 51, "-", "|");
         System.out.println("1. Item Name");
         System.out.println("2. Quantity");
         System.out.println("3. Net Weight");
@@ -569,9 +636,10 @@ public class DonationUI {
         System.out.println("10. Back to Previous Page");
     }
 
-    //Amend Money Option Menu - Boundary
+    //Amend Money Option Menu 
     public void displayAmendMoneyOption() {
-        System.out.println("\nAmend Money Option");
+        System.out.print("\n");
+        generalFunc.printTitle("Amend Money Option", 51, "-", "|");
         System.out.println("1. Amount");
         System.out.println("2. Source");
         System.out.println("3. Back to Previous Page");
@@ -587,11 +655,13 @@ public class DonationUI {
     }
 
     public void displayTrackDonationHeader() {
-        System.out.println("\nTrack Donation by Category");
+        System.out.print("\n");
+        generalFunc.printTitle("Track Donation By Category", 51, "-", "|");
     }
 
     public void displayDonationDonorHeader() {
-        System.out.println("\nDonation by Different Donor");
+        System.out.print("\n");
+        generalFunc.printTitle("Donation by Different Donor", 51, "-", "|");
     }
 
     public void displayDonationRecordHeader() {
@@ -621,9 +691,15 @@ public class DonationUI {
     }
 
     public void displaySingleDonorRecordsHeader(Donor donor) {
-        System.out.println("\nDonor ID: " + donor.getId());
+        generalFunc.repeatPrint("-",89);
+        System.out.print("\n");
+        System.out.println("Donor ID: " + donor.getId());
         System.out.println("Donor Name: " + donor.getName());
+        generalFunc.repeatPrint("-",89);
+        System.out.print("\n");
         System.out.printf("%-25s %-10s %-20s %-10s %-20s\n", "Donation Record ID", "Item Code", "Item Name", "Quantity", "Date Time");
+        generalFunc.repeatPrint("-",89);
+        System.out.print("\n");
     }
 
     public void displaySingleRecordWithDonorIDMoney(DonationRecord record, int i, int amtIndex) {
@@ -652,8 +728,12 @@ public class DonationUI {
     }
 
     public void displayDonationRecordTableHeader() {
+        generalFunc.repeatPrint("-",121);
+        System.out.print("\n");
         System.out.printf("%-25s %-10s %-20s %-10s %-20s %-10s %-20s\n", "Donation Record ID", "Donor ID", "Donor Name", "Item Code",
                 "Item Name", "Quantity", "Date Time");
+        generalFunc.repeatPrint("-",121);
+        System.out.print("\n");
     }
 
     //Display Empty File
@@ -743,11 +823,16 @@ public class DonationUI {
     }
 
     public void displayFullDonationListHeader() {
-        System.out.println("\nFull Donation List");
+        System.out.print("\n");
+        generalFunc.printTitle("Full Donation List", 51, "-", "|");
     }
 
     public void displayFullDonationListTableHeader() {
+        generalFunc.repeatPrint("-",93);
+        System.out.print("\n");
         System.out.printf("%-10s %-30s %-20s %-30s\n", "Item Code", "Item Name", "Quantity/Amount", "Venue Code/ Event Code");
+        generalFunc.repeatPrint("-",93);
+        System.out.print("\n");
     }
 
     public void displayFullDonationItemMoney(DonationItem item) {
@@ -783,9 +868,10 @@ public class DonationUI {
     }
 
     //Report
-    //Display Report Choice - Boundary
+    //Display Report Choice 
     public void displaySummaryReportChoices() {
-        System.out.println("\nView Summary Report");
+        System.out.print("\n");
+        generalFunc.printTitle("View Summary Report", 51, "-", "|");
         System.out.println("1. Report of Expired Items by Category as of " + LocalDate.now());
         System.out.println("2. Top 3 Most Donated Non-Money Item Category Report as of " + LocalDate.now());
         System.out.println("3. Back to Donation Page");
