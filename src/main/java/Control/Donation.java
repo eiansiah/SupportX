@@ -1728,7 +1728,7 @@ public class Donation {
             }
             generalFunc.repeatPrint("-", 93);
             //generalFunc.printEmptyEmptyLine();
-            System.out.println("\n");
+            generalFunc.printEmptyLine();
         } else {
             donationUI.displayEmptyList();
         }
@@ -1908,7 +1908,7 @@ public class Donation {
             }
         }
         generalFunc.repeatPrint("-", 121);
-        System.out.print("\n");
+        generalFunc.printEmptyLine();
     }
 
     public void displaySingleDonorRecords(ListInterface<DonationRecord> dRecordList, Donor donor) {
@@ -1919,7 +1919,7 @@ public class Donation {
             displaySingleRecordWithoutDonorID(record);
         }
         generalFunc.repeatPrint("-", 89);
-        System.out.print("\n");
+        generalFunc.printEmptyLine();
     }
 
     public void displaySingleRecordWithoutDonorID(DonationRecord record) {
