@@ -24,13 +24,8 @@ import static Utilities.Message.*;
 
 public class EventHandler {
 
-    public static void main(String[] args) {
-        updateEventStatus();
-        subsystemMenu();
-    }
-
     //region UI Handler
-    private static void subsystemMenu(){
+    public static void subsystemMenu(){
         root: {
             while(true) {
                 subsystemMenuDisplay();
