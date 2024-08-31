@@ -1,0 +1,7 @@
+DNE00001,Bye,siah@siah,0123456789,Kuala,Individual,Monetary Aid,Moderate,2024-08-25
+DNE00003,Niubi,niubi@cao.com,0163336666,Kuala Selangor,Individual,Medical Device,Moderate,2024-08-25
+DNE00004,Siah,eiansiah@eiansiah,0115487963,Kuala Lumpur,Organization,Beverage,High,2024-08-26
+DNE00007,JayChou,jaychou@jaychou,01139668745,;,Organization,Personal Care,High,2024-08-28
+DNE00008,Niubi,niubi@niubi.com,0123299876,Kuala Selangor,Organization,Medical Device,Moderate,2024-08-28
+DNE00009,Qian,qianyiin@qianyiin.com,0125478965,Selangor,Family,Medicine,Moderate,2024-08-28
+DNE00010,Siah,eiansiah@eiansiah,01139661574,Kuala Langat,Organization,Clothing,Moderate,2024-08-31

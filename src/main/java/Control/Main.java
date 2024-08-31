@@ -41,7 +41,7 @@ public class Main {
 
                     break;
                 case 2:
-
+                    DoneeFunctions.doneeHandler();
                     break;
                 case 3:
 
