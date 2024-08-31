@@ -3,6 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Control;
+/*
+ *  author: Ko Jie Qi
+ *  ID: 2307589
+ * */
 //import entity
 
 import Boundary.DonationUI;
@@ -20,16 +24,8 @@ import Entity.Donor;
 import Control.DonorFunctions;
 import FileHandling.DonationFileHandler;
 
-//import basic library
-//file
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-
 //date
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 //for sort
@@ -42,8 +38,6 @@ import Libraries.ListInterface;
 import static Main.Event.EventHandler.searchEventByEventID;
 import Utilities.Message;
 import java.util.Iterator;
-//will be removed for boundary
-import java.util.Scanner;
 
 /**
  *
