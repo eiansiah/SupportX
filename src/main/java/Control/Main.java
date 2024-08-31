@@ -1,8 +1,10 @@
 package Control;
 
+import Boundary.DonorUI;
 import Boundary.MainUI;
 import Libraries.GeneralFunction;
 import Main.Event.EventHandler;
+import Control.DonorFunctions;
 import static Utilities.Message.*;
 
 public class Main {
@@ -38,7 +40,7 @@ public class Main {
 
             switch (action) {
                 case 1:
-
+                    DonorFunctions.runDonorSystem();
                     break;
                 case 2:
 
