@@ -267,7 +267,9 @@ public class Donation {
             _name = donationUI.inputName();
             if (_name.isEmpty()) {
                 msgHandling.displayGeneralErrorMsg("Invalid Item Name. Please do not leave the field empty.");
-            } else {
+            } else if(_name.contains("#")){
+                msgHandling.displayGeneralErrorMsg("Invalid Item Name. Please do not consist of # in the item name.");
+            }else {
                 return _name;
             }
         }
@@ -280,7 +282,9 @@ public class Donation {
             _description = donationUI.inputDescription();
             if (_description.isEmpty()) {
                 msgHandling.displayGeneralErrorMsg("Invalid Description. Please do not leave the field empty.");
-            } else {
+            } else if(_description.contains("#")){
+                msgHandling.displayGeneralErrorMsg("Invalid Item Name. Please do not consist of # in the item name.");
+            }else {
                 return _description;
             }
         }
