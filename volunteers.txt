@@ -1,2 +1,5 @@
 VL00105,eddie sim hor kang,20,male,01727627622,edd@ded.com,weekends
-VL00106,lily,21,female,01355575577,qq@ss.com,weekends
+VL00106,koko,20,female,01355575577,qq@ss.com,weekends
+VL00107,qianyiin,19,female,0127772873,tt@yy.com,weekends
+VL00108,saw,20,male,0192972872,ss@ww.com,weekdays
+VL00109,zz,21,male,01982982723,ee@ii.aa,weekends
