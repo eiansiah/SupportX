@@ -1,14 +1,20 @@
 package Control;
 
+/*
+ *  author: Siah E-Ian
+ *  ID: 2307610
+ * */
+
 import Entity.Donee;
-import Libraries.ArrayList;
+import Libraries.ListInterface;
 import Libraries.PriorityQueue;
 
 import java.util.Comparator;
+import java.util.Iterator;
 
 public class DoneeSorter {
     // Bubble Sort by ID in Descending or Ascending Order
-    public static void sortReverseID(ArrayList<Donee> object) {
+    public static void sortReverseID(ListInterface<Donee> object) {
         // The flag to heck whether the list is currently in descending order.
         boolean isDescending = true;
 
@@ -51,7 +57,7 @@ public class DoneeSorter {
         }
     }
 
-    public static void sortByPriority(ArrayList<Donee> object) {
+    public static void sortByPriority(ListInterface<Donee> object) {
         // Define the comparator based on the donee's string priority
         Comparator<Donee> doneePriorityComparator = new Comparator<Donee>() {
             @Override
@@ -78,7 +84,14 @@ public class DoneeSorter {
         PriorityQueue<Donee> priorityQueue = new PriorityQueue<>(doneePriorityComparator);
 
         // Enqueue all donees into the priority queue
-        for (Donee donee : object) {
+//        for (Donee donee : object) {
+//            priorityQueue.enqueue(donee);
+//        }
+
+        Iterator<Donee> doneeIterator = object.iterator();
+
+        while (doneeIterator.hasNext()) {
+            Donee donee = doneeIterator.next();
             priorityQueue.enqueue(donee);
         }
 

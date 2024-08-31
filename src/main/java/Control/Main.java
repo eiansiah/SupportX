@@ -43,7 +43,7 @@ public class Main {
                     DonorFunctions.runDonorSystem();
                     break;
                 case 2:
-
+                    DoneeFunctions.doneeHandler();
                     break;
                 case 3:
 

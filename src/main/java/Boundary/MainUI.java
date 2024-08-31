@@ -24,8 +24,7 @@ public class MainUI {
     //Art source: https://www.messletters.com/en/text-art/
     // https://emojicombos.com/cat
     public static void randomPicture() {
-        //int random = new Random().nextInt(2);
-        int random = 1;
+        int random = new Random().nextInt(2);
 
         if (random == 0) {
             System.out.println("" +

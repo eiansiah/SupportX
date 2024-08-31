@@ -10,6 +10,7 @@ import java.io.IOException;
 import Libraries.Color;
 import Entity.Donor;
 import Libraries.ArrayList;
+import Libraries.ListInterface;
 
 public class DonorFileHandler implements FileHandlingInterface<Donor>{
     
@@ -43,8 +44,8 @@ public class DonorFileHandler implements FileHandlingInterface<Donor>{
 
         // Read Donor record in the Donor.txt file
         @Override
-        public ArrayList<Donor> readData(String filename) {
-            ArrayList<Donor> donors = new ArrayList<>();
+        public ListInterface<Donor> readData(String filename) {
+            ListInterface<Donor> donors = new ArrayList<>();
             try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
@@ -67,9 +68,11 @@ public class DonorFileHandler implements FileHandlingInterface<Donor>{
         // Update DonorSystem.Donor record in the DonorSystem.Donor.txt file
         @Override
         public void updateData(String filename, Donor selectedDonor) {
-            ArrayList<Donor> donors = readData(filename);
+            ListInterface<Donor> donors = readData(filename);
 
-            for (Donor donor : donors) {
+            for (int i = 0; i < donors.size(); i++) {
+                Donor donor = donors.get(i);
+
                 if (donor.getId().equals(selectedDonor.getId())) {
                     donor.setName(selectedDonor.getName());
                     donor.setEmail(selectedDonor.getEmail());
@@ -82,13 +85,15 @@ public class DonorFileHandler implements FileHandlingInterface<Donor>{
             updateMultipleData(filename, donors);
         }
 
-        // Rewrite all Contents into Donor.txt file after modifying Donor array list
+    // Rewrite all Contents into Donor.txt file after modifying Donor array list
         @Override
-        public void updateMultipleData(String filename, ArrayList<Donor> donors) {
+        public void updateMultipleData(String filename, ListInterface<Donor> donors) {
            try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
-                for (Donor donor : donors) {
-                    writer.write(donor.toString() + "\n");
-                }
+               for (int i = 0; i < donors.size(); i++) {
+                   Donor donor = donors.get(i);
+
+                   writer.write(donor.toString() + "\n");
+               }
             } catch (IOException e) {
                 System.err.println("Error writing to file: " + e.getMessage());
             }
@@ -97,7 +102,7 @@ public class DonorFileHandler implements FileHandlingInterface<Donor>{
         // Update all Contents from Donor.txt file after deleting selected Donor from array list
         @Override
         public void deleteData(String filename, String donorID){
-            ArrayList<Donor> donors = readData(filename);
+            ListInterface<Donor> donors = readData(filename);
 
             // Find the donor with the given ID and remove it
             for (int i = 0; i < donors.size(); i++) {

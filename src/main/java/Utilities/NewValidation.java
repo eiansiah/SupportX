@@ -1,6 +1,10 @@
 package Utilities;
 
-import java.util.Scanner;
+/*
+ *  author: Siah E-Ian, Sim Hor Kang
+ *  ID: 2307610, 2307611
+ * */
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,7 +23,7 @@ public class NewValidation {
     }
 
     public static boolean validatePhone(String phone) {
-        Pattern phoneFormat = Pattern.compile("^(\\d{10,11})$");
+        Pattern phoneFormat = Pattern.compile("^01([0-9]{8,9})$");
             Matcher matcher = phoneFormat.matcher(phone);
         return matcher.matches() && !phone.isEmpty();
     }

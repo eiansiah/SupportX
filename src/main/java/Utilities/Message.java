@@ -73,6 +73,10 @@ public class Message {
         System.out.println(Color.RED + "\nInvalid " + item + " format entered. Please try again." + Color.RESET);
     }
 
+    public static void displayGeneralYellowMessage(String item){
+        System.out.println(Color.YELLOW + item + Color.RESET);
+    }
+
     public static void displayRemoveCancelMessage(){
         System.out.println(Color.YELLOW + "Deletion cancelled." + Color.RESET);
     }

@@ -5,10 +5,12 @@
 package Boundary;
 
 import Entity.Beverage;
+import Entity.Clothing;
 import Entity.DonationItem;
 import Entity.DonationRecord;
 import Entity.Donor;
 import Entity.Food;
+import Entity.MedicalDevice;
 import Entity.Medicine;
 import Entity.Money;
 import Entity.PersonalCare;
@@ -243,6 +245,109 @@ public class DonationUI {
         System.out.println("6. Medicine");
         System.out.println("7. Money");
         System.out.println("8. Back to Donation");
+    }
+    //Display Food - Boundary
+
+    public void displayFood(ListInterface<DonationItem> foodList) {
+        System.out.printf("%-10s %-20s %-20s %-20s %-20s %-15s %-15s\n", "Item Code", "Item Name", "Net Weight (kg)", "Expiry Date", "Food Type",
+                "Quantity", "Venue Code");
+        Iterator<DonationItem> iterator = foodList.iterator();
+        while (iterator.hasNext()) {
+            DonationItem item = iterator.next();
+            System.out.printf("%-10s %-20s %-20s %-20s %-20s %-15s %-15s\n", item.getItemCode(), item.getItemName(), ((Food) item).getNetWeight(),
+                    ((Food) item).getExpiryDate(), ((Food) item).getFoodType(), item.getQuantity(), ((Food) item).getVenueCode());
+        }
+    }
+
+    //Display Beverage - Boundary
+    public void displayBeverage(ListInterface<DonationItem> beverageList) {
+        System.out.printf("%-10s %-20s %-20s %-20s %-15s %-15s\n", "Item Code", "Item Name", "Net Volume (ml)", "Expiry Date", "Quantity", "Venue Code");
+        Iterator<DonationItem> iterator = beverageList.iterator();
+        while (iterator.hasNext()) {
+            DonationItem item = iterator.next();
+            System.out.printf("%-10s %-20s %-20s %-20s %-15s %-15s\n", item.getItemCode(), item.getItemName(), ((Beverage) item).getNetVolume(),
+                    ((Beverage) item).getExpiryDate(), item.getQuantity(), ((Beverage) item).getVenueCode());
+        }
+    }
+
+    //Display Clothing - Boundary
+    public void displayClothing(ListInterface<DonationItem> clothingList) {
+        System.out.printf("%-10s %-20s %-20s %-20s %-20s %-20s %-15s %-15s\n", "Item Code", "Item Name", "Clothing Category",
+                "Gender", "Age Group", "Size", "Quantity", "Venue Code");
+        Iterator<DonationItem> iterator = clothingList.iterator();
+        while (iterator.hasNext()) {
+            DonationItem item = iterator.next();
+            System.out.printf("%-10s %-20s %-20s %-20s %-20s %-20s %-15s %-15s\n", item.getItemCode(), item.getItemName(),
+                    ((Clothing) item).getClothingCategory(), ((Clothing) item).getGender(), ((Clothing) item).getAge(),
+                    ((Clothing) item).getSize(), item.getQuantity(), ((Clothing) item).getVenueCode());
+        }
+    }
+
+    //Display Medical Device - Boundary
+    public void displayMedicalDevice(ListInterface<DonationItem> medicalDeviceList) {
+        System.out.printf("%-10s %-20s %-15s %-15s %-50s\n", "Item Code", "Item Name", "Quantity", "Venue Code", "Description");
+        Iterator<DonationItem> iterator = medicalDeviceList.iterator();
+        while (iterator.hasNext()) {
+            DonationItem item = iterator.next();
+            System.out.printf("%-10s %-20s %-15s %-15s %-50s\n", item.getItemCode(), item.getItemName(), item.getQuantity(),
+                    ((MedicalDevice) item).getVenueCode(), ((MedicalDevice) item).getDescription());
+        }
+    }
+
+    //Display Personal Care - Boundary
+    public void displayPersonalCare(ListInterface<DonationItem> personalCareList) {
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        System.out.printf("%-10s %-20s %-25s %-10s %-15s %-20s %-15s %-15s %-15s\n", "Item Code", "Item Name", "Personal Care Category",
+                "Gender", "Age Group", "Net Weight (g)", "Expiry date", "Quantity", "Venue Code");
+        Iterator<DonationItem> iterator = personalCareList.iterator();
+        while (iterator.hasNext()) {
+            DonationItem item = iterator.next();
+            if (((PersonalCare) item).getNetWeight() == -999) {
+                System.out.printf("%-10s %-20s %-25s %-10s %-15s %-20s %-15s %-15s %-15s\n", item.getItemCode(), item.getItemName(),
+                        ((PersonalCare) item).getPersonalCareCategory(), ((PersonalCare) item).getGender(), ((PersonalCare) item).getAge(),
+                        "-", ((PersonalCare) item).getExpiryDate().format(dateFormat), item.getQuantity(), ((PersonalCare) item).getVenueCode());
+            } else if (((PersonalCare) item).getNetWeight() == -999 && ((PersonalCare) item).getExpiryDate().format(dateFormat).equals("2000-12-31")) {
+                System.out.printf("%-10s %-20s %-25s %-10s %-15s %-20s %-15s %-15s %-15s\n", item.getItemCode(), item.getItemName(),
+                        ((PersonalCare) item).getPersonalCareCategory(), ((PersonalCare) item).getGender(), ((PersonalCare) item).getAge(),
+                        "-", "-", item.getQuantity(), ((PersonalCare) item).getVenueCode());
+            } else if (((PersonalCare) item).getExpiryDate().format(dateFormat).equals("2000-12-31")) {
+                System.out.printf("%-10s %-20s %-25s %-10s %-15s %-20s %-15s %-15s %-15s\n", item.getItemCode(), item.getItemName(),
+                        ((PersonalCare) item).getPersonalCareCategory(), ((PersonalCare) item).getGender(), ((PersonalCare) item).getAge(),
+                        ((PersonalCare) item).getNetWeight(), "-", item.getQuantity(), ((PersonalCare) item).getVenueCode());
+            } else {
+                System.out.printf("%-10s %-20s %-25s %-10s %-15s %-20s %-15s %-15s %-15s\n", item.getItemCode(), item.getItemName(),
+                        ((PersonalCare) item).getPersonalCareCategory(), ((PersonalCare) item).getGender(), ((PersonalCare) item).getAge(),
+                        ((PersonalCare) item).getNetWeight(), ((PersonalCare) item).getExpiryDate().format(dateFormat), item.getQuantity(),
+                        ((PersonalCare) item).getVenueCode());
+            }
+        }
+    }
+
+    //Display Money - Boundary
+    public void displayMoney(ListInterface<DonationItem> moneyList) {
+        System.out.printf("%-10s %-20s %-20s %-30s\n", "Item Code", "Item Name", "Amount (RM)", "Source");
+        Iterator<DonationItem> iterator = moneyList.iterator();
+        while (iterator.hasNext()) {
+            DonationItem item = iterator.next();
+            System.out.printf("%-10s %-20s %-20s %-30s\n", item.getItemCode(), item.getItemName(), ((Money) item).getAmount(), ((Money) item).getSource());
+        }
+    }
+
+    //Display Medicine - Boundary
+    public void displayMedicine(ListInterface<DonationItem> medicineList) {
+        System.out.printf("%-10s %-20s %-15s %-15s %-15s %-20s %-20s %-15s %-15s %-50s\n", "Item Code", "Item Name", "Dosage Form",
+                "Gender", "Age Group", "Net Weight (g)", "Expiry date", "Quantity", "Venue Code", "Description");
+        Iterator<DonationItem> iterator = medicineList.iterator();
+        while (iterator.hasNext()) {
+            DonationItem item = iterator.next();
+            System.out.printf("%-10s %-20s %-15s %-15s %-15s %-20s %-20s %-15s %-15s %-50s\n", item.getItemCode(), item.getItemName(),
+                    ((Medicine) item).getDosageForm(), ((Medicine) item).getGender(), ((Medicine) item).getAge(), ((Medicine) item).getNetWeight(),
+                    ((Medicine) item).getExpiryDate(), item.getQuantity(), ((Medicine) item).getVenueCode(), ((Medicine) item).getDescription());
+        }
+    }
+
+    public void displayEmptySize() {
+        System.out.println("Size: -");
     }
 
     public void displayAddPageHeader() {
@@ -481,6 +586,14 @@ public class DonationUI {
         System.out.println(lineToDisplay);
     }
 
+    public void displayTrackDonationHeader() {
+        System.out.println("\nTrack Donation by Category");
+    }
+
+    public void displayDonationDonorHeader() {
+        System.out.println("\nDonation by Different Donor");
+    }
+
     public void displayDonationRecordHeader() {
         System.out.println("Donation Record Associated");
     }
@@ -627,6 +740,46 @@ public class DonationUI {
         System.out.println("2. Between Range (Inclusive) a<=Quantity<=b");
         System.out.println("3. Smaller Than a");
         System.out.println("4. Back to Support X Home");
+    }
+
+    public void displayFullDonationListHeader() {
+        System.out.println("\nFull Donation List");
+    }
+
+    public void displayFullDonationListTableHeader() {
+        System.out.printf("%-10s %-30s %-20s %-30s\n", "Item Code", "Item Name", "Quantity/Amount", "Venue Code/ Event Code");
+    }
+
+    public void displayFullDonationItemMoney(DonationItem item) {
+        System.out.printf("%-10s %-30s %-20s %-30s\n", item.getItemCode(), item.getItemName(), ((Money) item).getAmount(), ((Money) item).getSource());
+    }
+
+    public void displayFullDonationItemNotMoney(DonationItem item) {
+        System.out.printf("%-10s %-30s %-20s ", item.getItemCode(), item.getItemName(), item.getQuantity());
+    }
+
+    public void displayFullDonationItemNotMoneyFood(DonationItem item) {
+        System.out.printf("%-30s\n", ((Food) item).getVenueCode());
+    }
+
+    public void displayFullDonationItemNotMoneyBg(DonationItem item) {
+        System.out.printf("%-30s\n", ((Beverage) item).getVenueCode());
+    }
+
+    public void displayFullDonationItemNotMoneyPC(DonationItem item) {
+        System.out.printf("%-30s\n", ((PersonalCare) item).getVenueCode());
+    }
+
+    public void displayFullDonationItemNotMoneyMD(DonationItem item) {
+        System.out.printf("%-30s\n", ((MedicalDevice) item).getVenueCode());
+    }
+
+    public void displayFullDonationItemNotMoneyMed(DonationItem item) {
+        System.out.printf("%-30s\n", ((Medicine) item).getVenueCode());
+    }
+
+    public void displayFullDonationItemNotMoneyClothing(DonationItem item) {
+        System.out.printf("%-30s\n", ((Clothing) item).getVenueCode());
     }
 
     //Report
@@ -854,5 +1007,64 @@ public class DonationUI {
             System.out.print(" ");
         }
         System.out.println("as of " + LocalDate.now());
+    }
+
+    public void displayReport2Content(int max[], int maxIndex[]) {
+        for (int i = 0; i < 71; i++) {
+            System.out.print("_");
+        }
+        System.out.print("\n");
+        System.out.printf("|%-5s |%-30s |%-30s|\n", "No.", "Item Category", "Quantity");
+        System.out.print("|");
+        for (int i = 0; i < 6; i++) {
+            System.out.print("-");
+        }
+        System.out.print("|");
+        for (int i = 0; i < 31; i++) {
+            System.out.print("-");
+        }
+        System.out.print("|");
+        for (int i = 0; i < 30; i++) {
+            System.out.print("-");
+        }
+        System.out.print("|\n");
+        for (int i = 0; i < 3; i++) {
+            switch (maxIndex[i]) {
+                case -1:
+                    System.out.printf("|%-5s |%-30s |%-30s|\n", i + 1, "", 0);
+                    break;
+                case 0:
+                    System.out.printf("|%-5s |%-30s |%-30s|\n", i + 1, "Food", max[i]);
+                    break;
+                case 1:
+                    System.out.printf("|%-5s |%-30s |%-30s|\n", i + 1, "Beverage", max[i]);
+                    break;
+                case 2:
+                    System.out.printf("|%-5s |%-30s |%-30s|\n", i + 1, "Clothing", max[i]);
+                    break;
+                case 3:
+                    System.out.printf("|%-5s |%-30s |%-30s|\n", i + 1, "Personal Care", max[i]);
+                    break;
+                case 4:
+                    System.out.printf("|%-5s |%-30s |%-30s|\n", i + 1, "Medical Device", max[i]);
+                    break;
+                default:
+                    System.out.printf("|%-5s |%-30s |%-30s|\n", i + 1, "Medicine", max[i]);
+            }
+        }
+        System.out.print("|");
+        for (int i = 0; i < 6; i++) {
+            System.out.print("_");
+        }
+        System.out.print("|");
+        for (int i = 0; i < 31; i++) {
+            System.out.print("_");
+        }
+        System.out.print("|");
+        for (int i = 0; i < 30; i++) {
+            System.out.print("_");
+        }
+        System.out.print("|");
+        System.out.print("\n\n");
     }
 }

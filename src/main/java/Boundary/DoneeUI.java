@@ -1,10 +1,15 @@
 package Boundary;
 
+/*
+ *  author: Siah E-Ian
+ *  ID: 2307610
+ * */
+
 import Entity.Donee;
 
-import Libraries.ArrayList;
 import Libraries.Color;
 import Libraries.GeneralFunction;
+import Libraries.ListInterface;
 
 import java.time.LocalDate;
 import java.util.Scanner;
@@ -148,7 +153,7 @@ public class DoneeUI {
         System.out.println(Color.BRIGHT_GREEN + "\nDonee with ID " + doneeId + " has been updated successfully." + Color.RESET);
     }
 
-    public static String displayDoneeTableUI(int start, int currentPage, int end, ArrayList<Donee> donees, int totalDonees){
+    public static String displayDoneeTableUI(int start, int currentPage, int end, ListInterface<Donee> donees, int totalDonees){
         System.out.println("\n**LIST OF DONEES (Page " + (currentPage + 1) + ")**\n");
         System.out.printf("%-10s %-25s %-15s %-15s %n", "Donee ID", "Donee Name", "Donee Phone", "Donee Urgency");
         System.out.println(String.format("%0" + 65 + "d", 0).replace("0", "-"));
@@ -193,6 +198,12 @@ public class DoneeUI {
         System.out.println("2 - Sort by Ascending/Descending Order");
         System.out.print("\nSelect a sorting criterion: ");
         return scanner.nextLine().trim();
+    }
+
+    public static void displayDonationDetailsUI(String doneeID){
+        System.out.println("\nDonations received by Donee ID: " + doneeID);
+        GeneralFunction.repeatPrint("-", 100);
+        System.out.printf("\n%-20s %-20s %-20s %-20s %-20s%n", "Distribution ID", "Item Code", "Item Name", "Quantity", "Received Date");
     }
 
     public static String filterDoneeUI(){

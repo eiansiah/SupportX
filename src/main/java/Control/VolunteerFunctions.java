@@ -389,19 +389,24 @@ public class VolunteerFunctions {
                     }
                 }
             } else {
-                Message.displayDataNotFoundMessage("Volunteer does not exist. Please enter a valid ID.");
+                Message.displayInvalidInputMessage("Volunteer does not exist. Please enter a valid ID.");
             }
         }
     }
 
     private static void modifyName(Volunteer volunteer) {
+
         String name = VolunteerUI.inputModifyNameUI();
+
+        VolunteerUI.displayEmptyString();
+
         if (!name.isEmpty() && name.matches("[a-zA-Z\\s-]+")) {
             volunteer.setName(name);
             Message.displaySuccessMessage("Name changed succesfully!");
         } else if (!name.isEmpty()) {
             Message.displayGeneralErrorMsg("Invalid name. Please enter a valid name containing only letters.");
         }
+
     }
 
     private static void modifyAge(Volunteer volunteer) {
@@ -431,8 +436,10 @@ public class VolunteerFunctions {
 
     private static void modifyGender(Volunteer volunteer) {
         while (true) {
-            VolunteerUI.displayEmptyString();
             String gender = VolunteerUI.inputModifyGenderUI();
+
+            VolunteerUI.displayEmptyString();
+
             if (gender.isEmpty()) {
                 break;
             }
@@ -448,8 +455,11 @@ public class VolunteerFunctions {
 
     private static void modifyPhone(Volunteer volunteer) {
         while (true) {
-            VolunteerUI.displayEmptyString();
+
             String phone = VolunteerUI.inputModifyPhoneUI();
+
+            VolunteerUI.displayEmptyString();
+
             if (phone.isEmpty()) {
                 break;
             }
@@ -465,8 +475,11 @@ public class VolunteerFunctions {
 
     private static void modifyEmail(Volunteer volunteer) {
         while (true) {
-            VolunteerUI.displayEmptyString();
+
             String email = VolunteerUI.inputModifyEmailUI();
+
+            VolunteerUI.displayEmptyString();
+
             if (email.isEmpty()) {
                 break;
             }
@@ -482,7 +495,11 @@ public class VolunteerFunctions {
 
     private static void modifyAvailability(Volunteer volunteer) {
         while (true) {
+
             String availability = VolunteerUI.inputModifyAvailabilityUI();
+
+            VolunteerUI.displayEmptyString();
+
             if (availability.isEmpty()) {
                 break;
             }
@@ -553,7 +570,7 @@ public class VolunteerFunctions {
     }
 
     public static void viewSummaryReport() {
-
+        volunteers = fileHandler.readData("volunteers.txt");
         // Check if there are any volunteers available
         if (volunteers.isEmpty()) {
             Message.displayDataNotFoundMessage("No volunteers available.");
@@ -571,17 +588,14 @@ public class VolunteerFunctions {
             volunteerEventCountMap.put(volunteer.getId(), eventVolunteers.size());
         }
 
-        // Display the top 3 volunteers with the most events participated
-        VolunteerUI.top3VolunteersUI();
+        // Display the header
+        VolunteerUI.volunteersEventHistoryUI();
 
-        // Display details for the top 3 volunteers
+        // Display event registration details 
         int count = 0;
         for (int i = 0; i < volunteers.size(); i++) {
             Volunteer volunteer = volunteers.get(i);
 
-            if (count >= 3) {
-                break; // Only display the top 3
-            }
             // Retrieve the events joined by the volunteer
             ListInterface<EventVolunteer> eventVolunteers = EventHandler.getEventVolunteerJoined(volunteer.getId());
             ListInterface<Event> events = new ArrayList<>();
@@ -594,12 +608,12 @@ public class VolunteerFunctions {
             }
 
             // List the events participated by the volunteer
-            VolunteerUI.top3VolunteerEventsUI(volunteer, events);
+            VolunteerUI.volunteerEventsHistoryUI(volunteer, events);
 
             count++;
         }
 
-        VolunteerUI.displayTop3VolunteersEndline();
+        VolunteerUI.displayVolunteersEndline();
 
         if (volunteers.isEmpty()) {
             Message.displayDataNotFoundMessage("No volunteers available.");
@@ -638,8 +652,30 @@ public class VolunteerFunctions {
             }
         }
 
+        int totalVolunteers = volunteers.size();
         // Display the total number of male and female volunteers
-        VolunteerUI.viewSummaryReportGendersUI(maleCount, femaleCount);
+        VolunteerUI.viewSummaryReportGendersUI(maleCount, femaleCount, totalVolunteers);
+
+        // Step 4: Identify and display the top volunteer
+        Volunteer topVolunteer = null;
+        int maxEventCount = 0;
+
+        for (int i = 0; i < volunteers.size(); i++) {
+            Volunteer volunteer = volunteers.get(i);
+            int eventCount = volunteerEventCountMap.get(volunteer.getId());
+
+            if (eventCount > maxEventCount) {
+                maxEventCount = eventCount;
+                topVolunteer = volunteer;
+            }
+        }
+
+        // Display the volunteer who participated in the most events
+        if (topVolunteer != null) {
+            VolunteerUI.viewTopVolunteerUI(topVolunteer, maxEventCount);
+        } else {
+            VolunteerUI.noTopVolunteerUI();
+        }
     }
 
     // Helper method to list event IDs participated by a volunteer
