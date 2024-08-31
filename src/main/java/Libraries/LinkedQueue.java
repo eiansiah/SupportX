@@ -1,5 +1,10 @@
 package Libraries;
 
+/*
+ *  author: Saw Khoo Zi Chong
+ *  ID: 2307609
+ * */
+
 public class LinkedQueue<T> implements QueueInterface<T>{
     private Node head;
     private Node tail;
