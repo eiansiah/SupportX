@@ -283,7 +283,7 @@ public class Donation {
     public String getNvalidateDescription() {
         String _description;
         while (true) {
-            _description = donationUI.inputName();
+            _description = donationUI.inputDescription();
             if (_description.isEmpty()) {
                 msgHandling.displayGeneralErrorMsg("Invalid Description. Please do not leave the field empty.");
             } else {
@@ -784,19 +784,12 @@ public class Donation {
 
     //Check Venue Code - Control
     public boolean checkVenueCode(String _vc) {
-        try {
-            File myObj = new File("Venue.txt");
-            Scanner readerFile = new Scanner(myObj);
-            while (readerFile.hasNextLine()) {
-                String[] venueList = readerFile.nextLine().split("#");
-                if (venueList[0].equals(_vc)) {
-                    return true;
-                }
+        String [] venueList=new String[3];
+        fileHandler.loadVenueCode(venueList);
+        for(String venue:venueList){
+            if(_vc.equals(venue)){
+                return true;
             }
-            readerFile.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
         }
         return false;
     }
