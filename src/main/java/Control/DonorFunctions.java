@@ -69,7 +69,7 @@ public class DonorFunctions {
 //        }
 //    }
 
-    public void runDonorSystem() {
+    public static void runDonorSystem() {
         int choice = 0;
 
         donorFileHandler.checkAndCreateFile("donor.txt");
@@ -556,7 +556,7 @@ public class DonorFunctions {
         }
     }
 
-    public void viewDonorReport(ArrayList<Donor> donors) {
+    public static void viewDonorReport(ArrayList<Donor> donors) {
         // Initialize the queue and enqueue filter criteria
         Queue<String> filterQueue = new Queue<>();
         filterQueue.enqueue("Public");
@@ -594,9 +594,9 @@ public class DonorFunctions {
         DonorUI.pressKeyToContinue();
     }
 
-    public static void main (String[] args) {
-        DonorFunctions donorFunctions = new DonorFunctions(); //Create an arraylist
-        donorFunctions.runDonorSystem();
-
-    }
+//    public static void main (String[] args) {
+//        DonorFunctions donorFunctions = new DonorFunctions(); //Create an arraylist
+//        donorFunctions.runDonorSystem();
+//
+//    }
 }
