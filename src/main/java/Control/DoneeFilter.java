@@ -4,16 +4,17 @@ import Boundary.DoneeUI;
 
 import Entity.Donee;
 
-import Libraries.ArrayList;
 import Libraries.GeneralFunction;
 
+import Libraries.ListInterface;
 import Utilities.Message;
 
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.Scanner;
 
 public class DoneeFilter {
-    public static void filterByType(ArrayList<Donee> donees) {
+    public static void filterByType(ListInterface<Donee> donees) {
         int filterType;
 
         do {
@@ -56,27 +57,34 @@ public class DoneeFilter {
         } while (filterType != 4);
     }
 
-    public static void individualFilter(ArrayList<Donee> donees){
+    public static void individualFilter(ListInterface<Donee> donees){
         boolean found = false;
 
         DoneeUI.individualFilterUI();
-        for (Donee donee : donees) {
+        Iterator<Donee> iterator = donees.iterator();
+
+        while (iterator.hasNext()) {
+            Donee donee = iterator.next();
             if (Objects.equals(donee.getDoneeType(), "Individual")) {
                 DoneeUI.displayFilterDetailsUI(donee.getDoneeID(), donee.getName(), donee.getPhone(), donee.getDoneeType(), donee.getRegisteredDate());
                 found = true;
             }
         }
+
         if (!found) {
             Message.displayGeneralMessage("No donees found within the specified donee type.\n");
         }
         GeneralFunction.repeatPrint("-", 85);
     }
 
-    public static void organizationFilter(ArrayList<Donee> donees){
+    public static void organizationFilter(ListInterface<Donee> donees){
         boolean found = false;
 
         DoneeUI.organizationFilterUI();
-        for (Donee donee : donees) {
+        Iterator<Donee> iterator = donees.iterator();
+
+        while (iterator.hasNext()) {
+            Donee donee = iterator.next();
             if (Objects.equals(donee.getDoneeType(), "Organization")) {
                 DoneeUI.displayFilterDetailsUI(donee.getDoneeID(), donee.getName(), donee.getPhone(), donee.getDoneeType(), donee.getRegisteredDate());
                 found = true;
@@ -88,11 +96,14 @@ public class DoneeFilter {
         GeneralFunction.repeatPrint("-", 85);
     }
 
-    public static void familyFilter(ArrayList<Donee> donees){
+    public static void familyFilter(ListInterface<Donee> donees){
         boolean found = false;
 
         DoneeUI.familyFilterUI();
-        for (Donee donee : donees) {
+        Iterator<Donee> iterator = donees.iterator();
+
+        while (iterator.hasNext()) {
+            Donee donee = iterator.next();
             if (Objects.equals(donee.getDoneeType(), "Family")) {
                 DoneeUI.displayFilterDetailsUI(donee.getDoneeID(), donee.getName(), donee.getPhone(), donee.getDoneeType(), donee.getRegisteredDate());
                 found = true;
@@ -104,7 +115,7 @@ public class DoneeFilter {
         GeneralFunction.repeatPrint("-", 85);
     }
 
-    public static void filterByUrgency(ArrayList<Donee> donees){
+    public static void filterByUrgency(ListInterface<Donee> donees){
         int filterUrgency;
         Scanner scanner = new Scanner(System.in);
 
@@ -148,11 +159,14 @@ public class DoneeFilter {
         } while (filterUrgency != 4);
     }
 
-    public static void filterLowUrgency(ArrayList<Donee> donees){
+    public static void filterLowUrgency(ListInterface<Donee> donees){
         boolean found = false;
 
         DoneeUI.filterLowUrgencyUI();
-        for (Donee donee : donees) {
+        Iterator<Donee> iterator = donees.iterator();
+
+        while (iterator.hasNext()) {
+            Donee donee = iterator.next();
             if (Objects.equals(donee.getDoneeUrgency(), "Low")) {
                 DoneeUI.displayFilterDetailsUI(donee.getDoneeID(), donee.getName(), donee.getPhone(), donee.getDoneeUrgency(), donee.getRegisteredDate());
                 found = true;
@@ -164,11 +178,14 @@ public class DoneeFilter {
         GeneralFunction.repeatPrint("-", 85);
     }
 
-    public static void filterModerateUrgency(ArrayList<Donee> donees){
+    public static void filterModerateUrgency(ListInterface<Donee> donees){
         boolean found = false;
 
         DoneeUI.filterModerateUrgencyUI();
-        for (Donee donee : donees) {
+        Iterator<Donee> iterator = donees.iterator();
+
+        while (iterator.hasNext()) {
+            Donee donee = iterator.next();
             if (Objects.equals(donee.getDoneeUrgency(), "Moderate")) {
                 DoneeUI.displayFilterDetailsUI(donee.getDoneeID(), donee.getName(), donee.getPhone(), donee.getDoneeUrgency(), donee.getRegisteredDate());
                 found = true;
@@ -180,11 +197,14 @@ public class DoneeFilter {
         GeneralFunction.repeatPrint("-", 85);
     }
 
-    public static void filterHighUrgency(ArrayList<Donee> donees){
+    public static void filterHighUrgency(ListInterface<Donee> donees){
         boolean found = false;
 
         DoneeUI.filterHighUrgencyUI();
-        for (Donee donee : donees) {
+        Iterator<Donee> iterator = donees.iterator();
+
+        while (iterator.hasNext()) {
+            Donee donee = iterator.next();
             if (Objects.equals(donee.getDoneeUrgency(), "High")) {
                 DoneeUI.displayFilterDetailsUI(donee.getDoneeID(), donee.getName(), donee.getPhone(), donee.getDoneeUrgency(), donee.getRegisteredDate());
                 found = true;

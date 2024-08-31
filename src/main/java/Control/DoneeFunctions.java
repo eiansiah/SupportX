@@ -20,15 +20,19 @@ import Boundary.DoneeUI;
 
 public class DoneeFunctions {
 
-    private static ArrayList<Donee> doneeList;
+    private static ListInterface<Donee> doneeList = new ArrayList<>();
+//    private static ArrayList<Donee> doneeList;
     private static final DoneeFileHandler fileHandler = new DoneeFileHandler();
-    private static final Scanner scanner = new Scanner(System.in); //To be shifted
 
     public DoneeFunctions (){
         doneeList = readDonees();
     }
 
-    public static ArrayList<Donee> readDonees(){
+//    public static ArrayList<Donee> readDonees(){
+//        return fileHandler.readData("donee.txt");
+//    }
+
+    public static ListInterface<Donee> readDonees(){
         return fileHandler.readData("donee.txt");
     }
 
@@ -216,7 +220,7 @@ public class DoneeFunctions {
         return new Donee(doneeID, name, email, phone, address, doneeType, itemCategory, doneeUrgency, registeredDate);
     }
 
-    public static void deleteDoneeHandler(ArrayList<Donee> donees){
+    public static void deleteDoneeHandler(ListInterface<Donee> donees){
         doneeList = deleteDoneeCore(donees);
 
         fileHandler.updateMultipleData("donee.txt", doneeList);
@@ -224,7 +228,7 @@ public class DoneeFunctions {
         GeneralFunction.enterToContinue();
     }
 
-    public static ArrayList<Donee> deleteDoneeCore(ArrayList<Donee> donees) {
+    public static ListInterface<Donee> deleteDoneeCore(ListInterface<Donee> donees) {
         String doneeId;
         Donee selectedDonee = null;
 
@@ -237,11 +241,14 @@ public class DoneeFunctions {
             return donees;
         }
 
+        Iterator<Donee> doneeIterator = donees.iterator();
         // Search for the donor by ID
-        for (Donee donee : donees) {
+        while (doneeIterator.hasNext()) {
+            Donee donee = doneeIterator.next();
             if (donee.getDoneeID().equals(doneeId)) {
+                // Update the donee details
                 selectedDonee = donee;
-                break;
+                break; // Exit the loop once the donee is found and updated
             }
         }
 
@@ -274,7 +281,7 @@ public class DoneeFunctions {
         return donees;
     }
 
-    public static void modifyDoneeHandler(ArrayList<Donee> donees){
+    public static void modifyDoneeHandler(ListInterface<Donee> donees){
         doneeList = modifyDoneeCore(donees);
 
         fileHandler.updateMultipleData("donee.txt", doneeList);
@@ -282,8 +289,7 @@ public class DoneeFunctions {
         GeneralFunction.enterToContinue();
     }
 
-    public static ArrayList<Donee> modifyDoneeCore(ArrayList<Donee> donees) {
-        Scanner scanner = new Scanner(System.in);
+    public static ListInterface<Donee> modifyDoneeCore(ListInterface<Donee> donees) {
         boolean doneeFound = false;
         String doneeId;
 
@@ -292,7 +298,11 @@ public class DoneeFunctions {
             doneeId = obtainDoneeId();
         } while (doneeId.isEmpty());
 
-        for (Donee doneeSelected : donees) {
+        Iterator<Donee> doneeIterator = donees.iterator();
+
+        while (doneeIterator.hasNext()) {
+            Donee doneeSelected  = doneeIterator.next();
+
             if (doneeSelected.getDoneeID().equals(doneeId)) {
                 doneeFound = true;
                 char choice = ' ';
@@ -450,9 +460,7 @@ public class DoneeFunctions {
         return donees;
     }
 
-    public static void displayDonees(ArrayList<Donee> donees){
-        Scanner scanner = new Scanner(System.in);
-
+    public static void displayDonees(ListInterface<Donee> donees){
         int pageSize = 10;  // Number of donees to display per page
         int currentPage = 0;
         int totalDonees = donees.size();
@@ -498,10 +506,20 @@ public class DoneeFunctions {
                         } while (doneeID.isEmpty());
 
                         Donee selectedDonee = null;
-                        for (Donee donee : donees) {
+//                        for (Donee donee : donees) {
+//                            if (donee.getDoneeID().equals(doneeID)) {
+//                                selectedDonee = donee;
+//                                break;
+//                            }
+//                        }
+                        Iterator<Donee> doneeIterator = donees.iterator();
+
+                        while (doneeIterator.hasNext()) {
+                            Donee donee = doneeIterator.next();
                             if (donee.getDoneeID().equals(doneeID)) {
+                                // Update the donee details
                                 selectedDonee = donee;
-                                break;
+                                break; // Exit the loop once the donee is found and updated
                             }
                         }
 
@@ -614,7 +632,7 @@ public class DoneeFunctions {
         GeneralFunction.enterToContinue();
     }
 
-    public static void filterDonees(ArrayList<Donee> donees) {
+    public static void filterDonees(ListInterface<Donee> donees) {
         Scanner scanner = new Scanner(System.in);
         int filterChoice;
 
@@ -654,7 +672,7 @@ public class DoneeFunctions {
         GeneralFunction.enterToContinue();
     }
 
-    public static void summaryReport(ArrayList<Donee> donees){
+    public static void summaryReport(ListInterface<Donee> donees){
         int highUrgencyCount = 0;
         int mediumUrgencyCount = 0;
         int lowUrgencyCount = 0;
@@ -673,7 +691,10 @@ public class DoneeFunctions {
 
         GeneralFunction.printTitle("Donee Management Subsystem Summary Report", 87, "--", "|");
 
-        for (Donee donee : doneeList) {
+        //Donee Urgency
+        Iterator<Donee> doneeIterator = donees.iterator();
+        while (doneeIterator.hasNext()) {
+            Donee donee = doneeIterator.next();
             String urgency = donee.getDoneeUrgency();
             if ("High".equalsIgnoreCase(urgency)) {
                 highUrgencyCount++;
@@ -690,7 +711,10 @@ public class DoneeFunctions {
         GeneralFunction.repeatPrint("=", 87);
         DoneeUI.printEmptyLine();
 
-        for (Donee donee : doneeList) {
+        //Donee Type
+        doneeIterator = donees.iterator(); // Reset iterator
+        while (doneeIterator.hasNext()) {
+            Donee donee = doneeIterator.next();
             String doneeType = donee.getDoneeType();
             if ("Individual".equalsIgnoreCase(doneeType)) {
                 individualCount++;
@@ -707,7 +731,10 @@ public class DoneeFunctions {
         GeneralFunction.repeatPrint("=", 87);
         DoneeUI.printEmptyLine();
 
-        for (Donee donee : doneeList) {
+        //Donee Item Category Required
+        doneeIterator = donees.iterator(); // Reset iterator
+        while (doneeIterator.hasNext()) {
+            Donee donee = doneeIterator.next();
             String doneeCategory = donee.getItemCategoryRequired();
             if ("Food".equalsIgnoreCase(doneeCategory)) {
                 foodCount++;
@@ -734,7 +761,6 @@ public class DoneeFunctions {
 
         DoneeUI.printEmptyLine();
         GeneralFunction.enterToContinue();
-
     }
 
     public static void doneeHandler() {
