@@ -9,15 +9,18 @@ import FileHandling.DonorFileHandler;
 
 //ADT
 import Libraries.ArrayList;
+import Libraries.GeneralFunction;
 import Libraries.Hashmap;
 
 //Boundaries
 import Boundary.DonorUI;
 
 //Utilities
-import Main.Event.Event;
+import Libraries.Queue;
 import Utilities.NewValidation;
 import Utilities.Message;
+
+import java.time.LocalDate;
 
 public class DonorFunctions {
 
@@ -29,8 +32,6 @@ public class DonorFunctions {
     private static ArrayList<DonationRecord> donationRecordArrayList = new ArrayList<>();
     // HashMap to store Donor ID -> List of Donations
     private Hashmap<String, ArrayList<DonationRecord>> donorDonationsMap = new Hashmap<>();
-    // HashMap to store Donor ID -> List of Events
-    private Hashmap<String, ArrayList<Event>> donorEventsMap = new Hashmap<>();
 
     private static final DonorFileHandler donorFileHandler = new DonorFileHandler();
 
@@ -103,7 +104,7 @@ public class DonorFunctions {
                     //displayDonorDonation();
                     break;
                 case 6: //View reports
-                    //viewDonorReport();
+                    viewDonorReport(readDonors());
                     break;
                 default: //Exit
                     Message.displayExitMessage();
@@ -555,10 +556,42 @@ public class DonorFunctions {
         }
     }
 
+    public void viewDonorReport(ArrayList<Donor> donors) {
+        // Initialize the queue and enqueue filter criteria
+        Queue<String> filterQueue = new Queue<>();
+        filterQueue.enqueue("Public");
+        filterQueue.enqueue("Private");
+        filterQueue.enqueue("Government");
+        filterQueue.enqueue("Individual");
+        filterQueue.enqueue("Organization");
 
+        // Store the counts in an ArrayList
+        ArrayList<Integer> filterCounts = new ArrayList<>();
 
-    public void viewDonorReport(String donorID) {
+        // Process each filter in the queue
+        while (!filterQueue.isEmpty()) {
+            // Dequeue the next filter
+            String filter = filterQueue.dequeue();
 
+            // Apply the appropriate filter
+            if (filter.equals("Individual") || filter.equals("Organization")) {
+                donors = DonorFilter.filterByType(donors, filter);
+            } else {
+                donors = DonorFilter.filterByCategory(donors, filter);
+            }
+
+            // Save the count to the ArrayList
+            filterCounts.add(donors.size());
+
+            // Reset the filter
+            donors = DonorFilter.resetFilter(donors);
+        }
+
+        GeneralFunction.printTitle("Donor Subsystem Summary Report", 87, "--", "|");
+        GeneralFunction.printTitle("Summary Number of Donors by Different Types and Category", 87, "--", "|");
+        DonorUI.viewSummaryDonorData(filterCounts);
+        GeneralFunction.printTitle("Report generated on: " + LocalDate.now(), 87, "--", "|");
+        DonorUI.pressKeyToContinue();
     }
 
     public static void main (String[] args) {
