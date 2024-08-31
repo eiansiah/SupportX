@@ -2,11 +2,12 @@ package Control;
 
 import Libraries.ArrayList;
 import Entity.Donor;
+import Libraries.ListInterface;
 
 public class DonorSorter {
 
     // Bubble Sort by Name in Ascending Order
-    public static void sortName(ArrayList<Donor> object) {
+    public static void sortName(ListInterface<Donor> object) {
         for (int i = 0; i < object.size() - 1; i++) {
             for (int j = 0; j < object.size() - i - 1; j++) {
                 if (object.get(j).getName().compareTo(object.get(j + 1).getName()) > 0) {
@@ -20,7 +21,7 @@ public class DonorSorter {
     }
 
     // Bubble Sort by Name in Descending Order
-    public static void sortNameDescending(ArrayList<Donor> object) {
+    public static void sortNameDescending(ListInterface<Donor> object) {
         for (int i = 0; i < object.size() - 1; i++) {
             for (int j = 0; j < object.size() - i - 1; j++) {
                 if (object.get(j).getName().compareTo(object.get(j + 1).getName()) < 0) {
@@ -34,7 +35,7 @@ public class DonorSorter {
     }
 
     // Bubble Sort by ID in Descending or Ascending Order
-    public static void reverseID(ArrayList<Donor> object) {
+    public static void reverseID(ListInterface<Donor> object) {
         // The flag to heck whether the list is currently in descending order.
         boolean isDescending = true;
 

@@ -58,7 +58,7 @@ public class Donation {
     private DonationFileHandler fileHandler = new DonationFileHandler();
     private Message msgHandling = new Message();
     private DonationUI donationUI = new DonationUI();
-    private GeneralFunction generalFunc=new GeneralFunction();
+    private GeneralFunction generalFunc = new GeneralFunction();
 
     //Donation Home Page
     public void donationHome() {
@@ -109,6 +109,7 @@ public class Donation {
         donationUI.displayAddDonationInstruction();
         Donor donor = getDonorIDforDonation();
         ListInterface<DonationRecord> dRecordLIST = new ArrayList<>();
+        fileHandler.loadIntoDR(dRecordLIST);
         if (donor != null) {
             DonationRecord donationRecord = new DonationRecord();
             donationRecord.setDonor(donor);
@@ -175,7 +176,6 @@ public class Donation {
 
         //Choose to add amount or new item
         //Add New Item
-        
         String _name, _foodType, _venueCode, _temp, _code;
         LocalDate _expiryDate;
         int _qty;
@@ -227,7 +227,7 @@ public class Donation {
         if (exist) {
             while (true) {
                 try {
-                    _temp =  donationUI.inputDetectedSame();
+                    _temp = donationUI.inputDetectedSame();
                     if (_temp.equalsIgnoreCase("N") || _temp.equalsIgnoreCase("Y")) {
                         if (_temp.equalsIgnoreCase("Y")) {
                             Iterator<DonationItem> iterator = foodList.iterator();
@@ -241,7 +241,7 @@ public class Donation {
                                     break;
                                 }
                             }
-                            System.out.println("Food quantity added successfully.");
+                            msgHandling.displaySuccessMessage("Food quantity added successfully.");
                             fileHandler.loadBackFoodFile(foodList);
                             return true;
                         } else {
@@ -260,7 +260,7 @@ public class Donation {
             foodList.add(newItem);
             fileHandler.loadBackFoodFile(foodList);
             addItemToRecord(recordItem, recordQty, newItem, _qty);
-            System.out.println("New Food registered and added successfully.");
+            msgHandling.displaySuccessMessage("New Food registered and added successfully.");
             return true;
         }
 
@@ -552,7 +552,7 @@ public class Donation {
     //Validate Size - Control
     public String getNvalidateSize(String _clothCategory, String _age, String _gender) {
         String _size;
-        if (!_clothCategory.equals("Accessories") || (!_age.equals("Infants")) || (!_age.equals("Toddlers"))) {
+        if (!_clothCategory.equals("Accessories") && (!_age.equals("Infants")) && (!_age.equals("Toddlers"))) {
             while (true) {
                 try {
                     _size = donationUI.inputSize();
@@ -616,7 +616,7 @@ public class Donation {
                 }
             }
         } else {
-            System.out.println("Size: -");
+            donationUI.displayEmptySize();
             _size = "-";
         }
         return _size;
@@ -988,7 +988,6 @@ public class Donation {
 
         //Choose to add amount or new item
         //Add New Item
-        
         String _name, _venueCode, _temp, _code;
         LocalDate _expiryDate;
         int _qty;
@@ -1030,7 +1029,7 @@ public class Donation {
         if (exist) {
             while (true) {
                 try {
-                    _temp =  donationUI.inputDetectedSame();
+                    _temp = donationUI.inputDetectedSame();
                     if (_temp.equalsIgnoreCase("N") || _temp.equalsIgnoreCase("Y")) {
                         if (_temp.equalsIgnoreCase("Y")) {
                             Iterator<DonationItem> iterator = beverageList.iterator();
@@ -1043,7 +1042,7 @@ public class Donation {
                                     break;
                                 }
                             }
-                            System.out.println("Beverage quantity added successfully.");
+                            msgHandling.displaySuccessMessage("Beverage quantity added successfully.");
                             fileHandler.loadBackBeverageFile(beverageList);
                             return true;
                         } else {
@@ -1076,7 +1075,6 @@ public class Donation {
 
         //Choose to add amount or new item
         //Add New Item
-        
         String _name, _venueCode, _temp, _code, _clothCategory, _size, _gender, _age;
         int _qty;
 
@@ -1130,7 +1128,7 @@ public class Donation {
         if (exist) {
             while (true) {
                 try {
-                    _temp =  donationUI.inputDetectedSame();
+                    _temp = donationUI.inputDetectedSame();
                     if (_temp.equalsIgnoreCase("N") || _temp.equalsIgnoreCase("Y")) {
                         if (_temp.equalsIgnoreCase("Y")) {
                             Iterator<DonationItem> iterator = clothingList.iterator();
@@ -1177,7 +1175,6 @@ public class Donation {
 
         //Choose to add amount or new item
         //Add New Item
-        
         String _name, _venueCode, _pcCategory, _gender, _age, _temp, _code;
         int _qty;
         LocalDate _expiryDate;
@@ -1289,7 +1286,6 @@ public class Donation {
 
         //Choose to add amount or new item
         //Add New Item
-        
         String _name, _venueCode, _description, _temp, _code;
         int _qty;
 
@@ -1328,7 +1324,7 @@ public class Donation {
             boolean loopErrorCheck = true;
             while (loopErrorCheck) {
                 try {
-                    _temp =  donationUI.inputDetectedSame();
+                    _temp = donationUI.inputDetectedSame();
                     if (_temp.equalsIgnoreCase("N") || _temp.equalsIgnoreCase("Y")) {
                         if (_temp.equalsIgnoreCase("Y")) {
                             while (true) {
@@ -1385,8 +1381,6 @@ public class Donation {
 
     }
 
-   
-
     //Add Medicine
     public boolean addMedicine(ListInterface<DonationItem> recordItem, ListInterface<Integer> recordQty) {
         ListInterface<DonationItem> medicineList = new ArrayList<>();
@@ -1394,7 +1388,7 @@ public class Donation {
         donationUI.displayInstructionAddMedicine();
         //Choose to add amount or new item
         //Add New Item
-        
+
         String _name, _venueCode, _dosageForm, _gender, _description, _age, _temp, _code;
         int _qty;
         LocalDate _expiryDate;
@@ -1465,7 +1459,7 @@ public class Donation {
             boolean loopErrorCheck = true;
             while (loopErrorCheck) {
                 try {
-                    _temp =  donationUI.inputDetectedSame();
+                    _temp = donationUI.inputDetectedSame();
                     if (_temp.equalsIgnoreCase("N") || _temp.equalsIgnoreCase("Y")) {
                         if (_temp.equalsIgnoreCase("Y")) {
                             while (true) {
@@ -1528,7 +1522,7 @@ public class Donation {
     public boolean addMoney(ListInterface<DonationItem> recordItem, ListInterface<Double> recordAmt) {
         ListInterface<DonationItem> moneyList = new ArrayList<>();
         fileHandler.loadIntoMoney(moneyList);
-        
+
         donationUI.displayInstructionAddMoney();
         String _temp, _name = "Funds", _source, _code;
         double _amount;
@@ -1553,16 +1547,16 @@ public class Donation {
         if (exist) {
             while (true) {
                 try {
-                    _temp =  donationUI.inputDetectedSameAmt();
+                    _temp = donationUI.inputDetectedSameAmt();
                     if (_temp.equalsIgnoreCase("N") || _temp.equalsIgnoreCase("Y")) {
                         if (_temp.equalsIgnoreCase("Y")) {
                             Iterator<DonationItem> iterator = moneyList.iterator();
                             while (iterator.hasNext()) {
                                 DonationItem item = iterator.next();
                                 if (((Money) item).getSource().equals(_source)) {
+                                    addItemToRecord(recordItem, recordAmt, item, _amount);
                                     _amount = ((Money) item).getAmount() + _amount;
                                     ((Money) item).setAmount(_amount);
-                                    addItemToRecord(recordItem, recordAmt, item, _amount);
                                     break;
                                 }
                             }
@@ -1593,7 +1587,7 @@ public class Donation {
     //Get donor name
     public Donor getDonorIDforDonation() {
         String reply = "";
-        
+
         while (true) {
             try {
                 reply = donationUI.inputDonorID();
@@ -1631,7 +1625,6 @@ public class Donation {
                 itemlist = new ArrayList<>();
                 displayBasedOnCatOption(option, itemlist);
                 fileHandler.loadIntoDR(recordlist);
-                fileHandler.loadIntoDR(recordlist2);
                 //ask to remove which
                 if (!itemlist.isEmpty()) {
                     String _temp;
@@ -1647,21 +1640,21 @@ public class Donation {
                                 if (item.getItemCode().equals(_temp)) {
                                     itemlist.remove(item);
                                     msgHandling.displaySuccessMessage("Item removed successfully!");
-                                    Iterator<DonationRecord> iterator3 = recordlist2.iterator();
+                                    Iterator<DonationRecord> iterator3 = recordlist.iterator();
                                     while (iterator3.hasNext()) {
                                         DonationRecord record = iterator3.next();
                                         Iterator<DonationItem> iterator2 = record.getItem().iterator();
                                         while (iterator2.hasNext()) {
                                             DonationItem recordItem = iterator2.next();
                                             if (recordItem.getItemCode().equals(_temp)) {
-                                                record.getItem().remove(item);
-                                                if (record.getItem().isEmpty()) {
-                                                    recordlist.remove(record);
-                                                }
+                                                record.getItem().remove(recordItem);
                                             }
                                         }
+                                        if (!record.getItem().isEmpty()) {
+                                            recordlist2.add(record);
+                                        }
                                     }
-                                    fileHandler.loadBackDRFile(recordlist);
+                                    fileHandler.loadBackDRFile(recordlist2);
                                     msgHandling.displaySuccessMessage("Records associated removed successfully!");
                                     removed = true;
                                     if (option == 7) {
@@ -1714,134 +1707,35 @@ public class Donation {
         }
     }
 
-    //Display Donation - Boundary
+    //Display Donation
     public void displayAllDonation(ListInterface<DonationItem> fullList) {
-        System.out.println("\nFull Donation List");
+        donationUI.displayFullDonationListHeader();
         if (!fullList.isEmpty()) {
-            System.out.printf("%-10s %-30s %-20s %-30s\n", "Item Code", "Item Name", "Quantity/Amount", "Venue Code/ Event Code");
+            donationUI.displayFullDonationListTableHeader();
             Iterator<DonationItem> iterator = fullList.iterator();
             while (iterator.hasNext()) {
                 DonationItem item = iterator.next();
                 if (item instanceof Money) {
-                    System.out.printf("%-10s %-30s %-20s %-30s\n", item.getItemCode(), item.getItemName(), ((Money) item).getAmount(), ((Money) item).getSource());
+                    donationUI.displayFullDonationItemMoney(item);
                 } else {
-                    System.out.printf("%-10s %-30s %-20s ", item.getItemCode(), item.getItemName(), item.getQuantity());
+                    donationUI.displayFullDonationItemNotMoney(item);
                     if (item instanceof Food) {
-                        System.out.printf("%-30s\n", ((Food) item).getVenueCode());
+                        donationUI.displayFullDonationItemNotMoneyFood(item);
                     } else if (item instanceof Beverage) {
-                        System.out.printf("%-30s\n", ((Beverage) item).getVenueCode());
+                        donationUI.displayFullDonationItemNotMoneyBg(item);
                     } else if (item instanceof PersonalCare) {
-                        System.out.printf("%-30s\n", ((PersonalCare) item).getVenueCode());
+                        donationUI.displayFullDonationItemNotMoneyPC(item);
                     } else if (item instanceof Medicine) {
-                        System.out.printf("%-30s\n", ((Medicine) item).getVenueCode());
+                        donationUI.displayFullDonationItemNotMoneyMed(item);
                     } else if (item instanceof MedicalDevice) {
-                        System.out.printf("%-30s\n", ((MedicalDevice) item).getVenueCode());
+                        donationUI.displayFullDonationItemNotMoneyMD(item);
                     } else {
-                        System.out.printf("%-30s\n", ((Clothing) item).getVenueCode());
+                        donationUI.displayFullDonationItemNotMoneyClothing(item);
                     }
                 }
             }
         } else {
             donationUI.displayEmptyList();
-        }
-    }
-
-    //Display Food - Boundary
-    public void displayFood(ListInterface<DonationItem> foodList) {
-        System.out.printf("%-10s %-20s %-20s %-20s %-20s %-15s %-15s\n", "Item Code", "Item Name", "Net Weight (kg)", "Expiry Date", "Food Type",
-                "Quantity", "Venue Code");
-        Iterator<DonationItem> iterator = foodList.iterator();
-        while (iterator.hasNext()) {
-            DonationItem item = iterator.next();
-            System.out.printf("%-10s %-20s %-20s %-20s %-20s %-15s %-15s\n", item.getItemCode(), item.getItemName(), ((Food) item).getNetWeight(),
-                    ((Food) item).getExpiryDate(), ((Food) item).getFoodType(), item.getQuantity(), ((Food) item).getVenueCode());
-        }
-    }
-
-    //Display Beverage - Boundary
-    public void displayBeverage(ListInterface<DonationItem> beverageList) {
-        System.out.printf("%-10s %-20s %-20s %-20s %-15s %-15s\n", "Item Code", "Item Name", "Net Volume (ml)", "Expiry Date", "Quantity", "Venue Code");
-        Iterator<DonationItem> iterator = beverageList.iterator();
-        while (iterator.hasNext()) {
-            DonationItem item = iterator.next();
-            System.out.printf("%-10s %-20s %-20s %-20s %-15s %-15s\n", item.getItemCode(), item.getItemName(), ((Beverage) item).getNetVolume(),
-                    ((Beverage) item).getExpiryDate(), item.getQuantity(), ((Beverage) item).getVenueCode());
-        }
-    }
-
-    //Display Clothing - Boundary
-    public void displayClothing(ListInterface<DonationItem> clothingList) {
-        System.out.printf("%-10s %-20s %-20s %-20s %-20s %-20s %-15s %-15s\n", "Item Code", "Item Name", "Clothing Category",
-                "Gender", "Age Group", "Size", "Quantity", "Venue Code");
-        Iterator<DonationItem> iterator = clothingList.iterator();
-        while (iterator.hasNext()) {
-            DonationItem item = iterator.next();
-            System.out.printf("%-10s %-20s %-20s %-20s %-20s %-20s %-15s %-15s\n", item.getItemCode(), item.getItemName(),
-                    ((Clothing) item).getClothingCategory(), ((Clothing) item).getGender(), ((Clothing) item).getAge(),
-                    ((Clothing) item).getSize(), item.getQuantity(), ((Clothing) item).getVenueCode());
-        }
-    }
-
-    //Display Medical Device - Boundary
-    public void displayMedicalDevice(ListInterface<DonationItem> medicalDeviceList) {
-        System.out.printf("%-10s %-20s %-15s %-15s %-50s\n", "Item Code", "Item Name", "Quantity", "Venue Code", "Description");
-        Iterator<DonationItem> iterator = medicalDeviceList.iterator();
-        while (iterator.hasNext()) {
-            DonationItem item = iterator.next();
-            System.out.printf("%-10s %-20s %-15s %-15s %-50s\n", item.getItemCode(), item.getItemName(), item.getQuantity(),
-                    ((MedicalDevice) item).getVenueCode(), ((MedicalDevice) item).getDescription());
-        }
-    }
-
-    //Display Personal Care - Boundary
-    public void displayPersonalCare(ListInterface<DonationItem> personalCareList) {
-        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        System.out.printf("%-10s %-20s %-25s %-10s %-15s %-20s %-15s %-15s %-15s\n", "Item Code", "Item Name", "Personal Care Category",
-                "Gender", "Age Group", "Net Weight (g)", "Expiry date", "Quantity", "Venue Code");
-        Iterator<DonationItem> iterator = personalCareList.iterator();
-        while (iterator.hasNext()) {
-            DonationItem item = iterator.next();
-            if (((PersonalCare) item).getNetWeight() == -999) {
-                System.out.printf("%-10s %-20s %-25s %-10s %-15s %-20s %-15s %-15s %-15s\n", item.getItemCode(), item.getItemName(),
-                        ((PersonalCare) item).getPersonalCareCategory(), ((PersonalCare) item).getGender(), ((PersonalCare) item).getAge(),
-                        "-", ((PersonalCare) item).getExpiryDate().format(dateFormat), item.getQuantity(), ((PersonalCare) item).getVenueCode());
-            } else if (((PersonalCare) item).getNetWeight() == -999 && ((PersonalCare) item).getExpiryDate().format(dateFormat).equals("2000-12-31")) {
-                System.out.printf("%-10s %-20s %-25s %-10s %-15s %-20s %-15s %-15s %-15s\n", item.getItemCode(), item.getItemName(),
-                        ((PersonalCare) item).getPersonalCareCategory(), ((PersonalCare) item).getGender(), ((PersonalCare) item).getAge(),
-                        "-", "-", item.getQuantity(), ((PersonalCare) item).getVenueCode());
-            } else if (((PersonalCare) item).getExpiryDate().format(dateFormat).equals("2000-12-31")) {
-                System.out.printf("%-10s %-20s %-25s %-10s %-15s %-20s %-15s %-15s %-15s\n", item.getItemCode(), item.getItemName(),
-                        ((PersonalCare) item).getPersonalCareCategory(), ((PersonalCare) item).getGender(), ((PersonalCare) item).getAge(),
-                        ((PersonalCare) item).getNetWeight(), "-", item.getQuantity(), ((PersonalCare) item).getVenueCode());
-            } else {
-                System.out.printf("%-10s %-20s %-25s %-10s %-15s %-20s %-15s %-15s %-15s\n", item.getItemCode(), item.getItemName(),
-                        ((PersonalCare) item).getPersonalCareCategory(), ((PersonalCare) item).getGender(), ((PersonalCare) item).getAge(),
-                        ((PersonalCare) item).getNetWeight(), ((PersonalCare) item).getExpiryDate().format(dateFormat), item.getQuantity(),
-                        ((PersonalCare) item).getVenueCode());
-            }
-        }
-    }
-
-    //Display Money - Boundary
-    public void displayMoney(ListInterface<DonationItem> moneyList) {
-        System.out.printf("%-10s %-20s %-20s %-30s\n", "Item Code", "Item Name", "Amount (RM)", "Source");
-        Iterator<DonationItem> iterator = moneyList.iterator();
-        while (iterator.hasNext()) {
-            DonationItem item = iterator.next();
-            System.out.printf("%-10s %-20s %-20s %-30s\n", item.getItemCode(), item.getItemName(), ((Money) item).getAmount(), ((Money) item).getSource());
-        }
-    }
-
-    //Display Medicine - Boundary
-    public void displayMedicine(ListInterface<DonationItem> medicineList) {
-        System.out.printf("%-10s %-20s %-15s %-15s %-15s %-20s %-20s %-15s %-15s %-50s\n", "Item Code", "Item Name", "Dosage Form",
-                "Gender", "Age Group", "Net Weight (g)", "Expiry date", "Quantity", "Venue Code", "Description");
-        Iterator<DonationItem> iterator = medicineList.iterator();
-        while (iterator.hasNext()) {
-            DonationItem item = iterator.next();
-            System.out.printf("%-10s %-20s %-15s %-15s %-15s %-20s %-20s %-15s %-15s %-50s\n", item.getItemCode(), item.getItemName(),
-                    ((Medicine) item).getDosageForm(), ((Medicine) item).getGender(), ((Medicine) item).getAge(), ((Medicine) item).getNetWeight(),
-                    ((Medicine) item).getExpiryDate(), item.getQuantity(), ((Medicine) item).getVenueCode(), ((Medicine) item).getDescription());
         }
     }
 
@@ -1851,7 +1745,7 @@ public class Donation {
             donationUI.displayMoneyListHeader();
             fileHandler.loadIntoMoney(itemlist);
             if (!itemlist.isEmpty()) {
-                displayMoney(itemlist);
+                donationUI.displayMoney(itemlist);
             } else {
                 donationUI.displayEmptyList();
             }
@@ -1859,7 +1753,7 @@ public class Donation {
             donationUI.displayMedicineListHeader();
             fileHandler.loadIntoMedicine(itemlist);
             if (!itemlist.isEmpty()) {
-                displayMedicine(itemlist);
+                donationUI.displayMedicine(itemlist);
             } else {
                 donationUI.displayEmptyList();
             }
@@ -1867,7 +1761,7 @@ public class Donation {
             donationUI.displayMedicalDeviceListHeader();
             fileHandler.loadIntoMedicalDevice(itemlist);
             if (!itemlist.isEmpty()) {
-                displayMedicalDevice(itemlist);
+                donationUI.displayMedicalDevice(itemlist);
             } else {
                 donationUI.displayEmptyList();
             }
@@ -1875,7 +1769,7 @@ public class Donation {
             donationUI.displayPersonalCareListHeader();
             fileHandler.loadIntoPersonalCare(itemlist);
             if (!itemlist.isEmpty()) {
-                displayPersonalCare(itemlist);
+                donationUI.displayPersonalCare(itemlist);
             } else {
                 donationUI.displayEmptyList();
             }
@@ -1883,7 +1777,7 @@ public class Donation {
             donationUI.displayClothingListHeader();
             fileHandler.loadIntoClothing(itemlist);
             if (!itemlist.isEmpty()) {
-                displayClothing(itemlist);
+                donationUI.displayClothing(itemlist);
             } else {
                 donationUI.displayEmptyList();
             }
@@ -1891,7 +1785,7 @@ public class Donation {
             donationUI.displayBeverageListHeader();
             fileHandler.loadIntoBeverage(itemlist);
             if (!itemlist.isEmpty()) {
-                displayBeverage(itemlist);
+                donationUI.displayBeverage(itemlist);
             } else {
                 donationUI.displayEmptyList();
             }
@@ -1899,7 +1793,7 @@ public class Donation {
             donationUI.displayFoodListHeader();
             fileHandler.loadIntoFood(itemlist);
             if (!itemlist.isEmpty()) {
-                displayFood(itemlist);
+                donationUI.displayFood(itemlist);
             } else {
                 donationUI.displayEmptyList();
             }
@@ -2024,9 +1918,7 @@ public class Donation {
         Iterator<DonationRecord> iterator = dRecordList.iterator();
         while (iterator.hasNext()) {
             DonationRecord record = iterator.next();
-            if (record.getDonor().getId().equals(donor.getId())) {
-                displaySingleRecordWithoutDonorID(record);
-            }
+            displaySingleRecordWithoutDonorID(record);
         }
 
     }
@@ -2248,7 +2140,6 @@ public class Donation {
             ListInterface<DonationRecord> recordlist = new ArrayList<>();
             ListInterface<DonationRecord> recordlist2 = new ArrayList<>();
             fileHandler.loadIntoDR(recordlist);
-            fileHandler.loadIntoDR(recordlist2);
             searchRecord(itemCode, searchResultsRecord);
             displayDonationRecordAssociated(searchResultsRecord);
             donationUI.displayAmendQtyRecord();
@@ -2272,55 +2163,75 @@ public class Donation {
                     if (_temp.equalsIgnoreCase("X")) {
                         return false;
                     } else {
-                        //remove record
-                        int qtyIndex = 0;
+                        //Check is it valid record ID
                         Iterator<DonationRecord> iterator = searchResultsRecord.iterator();
                         while (iterator.hasNext()) {
                             DonationRecord record = iterator.next();
                             if (String.valueOf(record.getRecordID()).equals(_temp)) {
-                                Iterator<DonationItem> iterator2 = record.getItem().iterator();
-                                while (iterator2.hasNext()) {
-                                    DonationItem item = iterator2.next();
-                                    if (item.getItemCode().equals(itemCode)) {
-                                        _temp2 = record.getQty().get(qtyIndex);
-                                    }
-                                    if (!(item instanceof Money)) {
-                                        qtyIndex++;
-                                    }
-                                }
-                                recordlist.remove(record);
                                 removed = true;
                                 break;
                             }
                         }
-                        //reduce quantity, if 0 then remove item
-                        Iterator<DonationItem> iterator2 = itemlist.iterator();
-                        while (iterator2.hasNext()) {
-                            DonationItem item = iterator2.next();
-                            if (item.getItemCode().equals(itemCode)) {
-                                item.setQuantity(item.getQuantity() - _temp2);
-                                if (item.getQuantity() == 0) {
-                                    itemlist.remove(item);
-                                }
-                                fileHandler.loadBackDRFile(recordlist);
-                                if (option == 7) {
-                                    fileHandler.loadBackMoneyFile(itemlist);
-                                } else if (option == 6) {
-                                    fileHandler.loadBackMedicineFile(itemlist);
-                                } else if (option == 5) {
-                                    fileHandler.loadBackMedicalDeviceFile(itemlist);
-                                } else if (option == 4) {
-                                    fileHandler.loadBackPersonalCareFile(itemlist);
-                                } else if (option == 3) {
-                                    fileHandler.loadBackClothingFile(itemlist);
-                                } else if (option == 2) {
-                                    fileHandler.loadBackBeverageFile(itemlist);
+                        if (removed == true) {//remove record
+                            Iterator<DonationRecord> iterator3 = recordlist.iterator();
+                            DonationItem itemToBeRemoved = null;
+                            while (iterator3.hasNext()) {
+                                DonationRecord record = iterator3.next();
+                                if (String.valueOf(record.getRecordID()).equals(_temp)) {
+                                    int qtyIndex = 0;
+                                    Iterator<DonationItem> iterator2 = record.getItem().iterator();
+                                    while (iterator2.hasNext()) {
+                                        DonationItem item = iterator2.next();
+                                        if (item.getItemCode().equals(itemCode)) {
+                                            _temp2 = record.getQty().get(qtyIndex);
+                                            itemToBeRemoved = item;
+                                            break;
+                                        }
+                                        if (!(item instanceof Money)) {
+                                            qtyIndex++;
+                                        }
+                                    }
+                                    record.getItem().remove(itemToBeRemoved);
+                                    record.getQty().remove(qtyIndex);
+                                    if (!record.getItem().isEmpty()) {
+                                        DonationRecord afterAmendRecord = record;
+                                        recordlist2.add(afterAmendRecord);
+                                    }
+                                    removed = true;
                                 } else {
-                                    fileHandler.loadBackFoodFile(itemlist);
+                                    recordlist2.add(record);
                                 }
-                                break;
+                            }
+                            fileHandler.loadBackDRFile(recordlist2);
+                            //reduce quantity, if 0 then remove item
+                            Iterator<DonationItem> iterator2 = itemlist.iterator();
+                            while (iterator2.hasNext()) {
+                                DonationItem item = iterator2.next();
+                                if (item.getItemCode().equals(itemCode)) {
+                                    item.setQuantity(item.getQuantity() - _temp2);
+                                    if (item.getQuantity() == 0) {
+                                        itemlist.remove(item);
+                                    }
+                                    if (option == 7) {
+                                        fileHandler.loadBackMoneyFile(itemlist);
+                                    } else if (option == 6) {
+                                        fileHandler.loadBackMedicineFile(itemlist);
+                                    } else if (option == 5) {
+                                        fileHandler.loadBackMedicalDeviceFile(itemlist);
+                                    } else if (option == 4) {
+                                        fileHandler.loadBackPersonalCareFile(itemlist);
+                                    } else if (option == 3) {
+                                        fileHandler.loadBackClothingFile(itemlist);
+                                    } else if (option == 2) {
+                                        fileHandler.loadBackBeverageFile(itemlist);
+                                    } else {
+                                        fileHandler.loadBackFoodFile(itemlist);
+                                    }
+                                    break;
+                                }
                             }
                         }
+
                         if (removed == false) {
                             msgHandling.displayGeneralErrorMsg("Invalid Record ID. Please enter a valid record ID.");
                         } else {
@@ -2336,51 +2247,62 @@ public class Donation {
                     } else {
                         //remove record
                         int qtyIndex = 0;
+                        boolean validRecordID = false;
                         Iterator<DonationRecord> iterator = searchResultsRecord.iterator();
                         while (iterator.hasNext()) {
                             DonationRecord record = iterator.next();
                             if (String.valueOf(record.getRecordID()).equals(_temp)) {
-                                Iterator<DonationItem> iterator2 = record.getItem().iterator();
-                                while (iterator2.hasNext()) {
-                                    DonationItem item2 = iterator2.next();
-                                    if (item2.getItemCode().equals(itemCode)) {
-                                        _temp2 = getNvalidateQuantity();
-                                        if (_temp2 == 0) {
-                                            return false;
-                                        } else {
-                                            //System.out.println("Modification Successful!");
-                                            int changes = _temp2 - record.getQty().get(qtyIndex);
-                                            Iterator<DonationItem> iterator3 = itemlist.iterator();
-                                            while (iterator3.hasNext()) {
-                                                DonationItem item = iterator3.next();
-                                                if (item.getItemCode().equals(itemCode)) {
-                                                    item.setQuantity(item.getQuantity() + changes);
-                                                    if (item.getQuantity() == 0) {
-                                                        itemlist.remove(item);
+                                validRecordID = true;
+                                break;
+                            }
+                        }
+                        if (validRecordID == true) {
+                            Iterator<DonationRecord> iterator4 = recordlist.iterator();
+                            while (iterator4.hasNext()) {
+                                DonationRecord record = iterator4.next();
+                                if (String.valueOf(record.getRecordID()).equals(_temp)) {
+                                    Iterator<DonationItem> iterator2 = record.getItem().iterator();
+                                    while (iterator2.hasNext()) {
+                                        DonationItem item2 = iterator2.next();
+                                        if (item2.getItemCode().equals(itemCode)) {
+                                            _temp2 = getNvalidateQuantity();
+                                            if (_temp2 == 0) {
+                                                return false;
+                                            } else {
+                                                int changes = _temp2 - record.getQty().get(qtyIndex);
+                                                record.getQty().set(qtyIndex, record.getQty().get(qtyIndex) + changes);
+                                                fileHandler.loadBackDRFile(recordlist);
+                                                Iterator<DonationItem> iterator3 = itemlist.iterator();
+                                                while (iterator3.hasNext()) {
+                                                    DonationItem item = iterator3.next();
+                                                    if (item.getItemCode().equals(itemCode)) {
+                                                        item.setQuantity(item.getQuantity() + changes);
+                                                        if (item.getQuantity() == 0) {
+                                                            itemlist.remove(item);
+                                                        }
+                                                        if (option == 6) {
+                                                            fileHandler.loadBackMedicineFile(itemlist);
+                                                        } else if (option == 5) {
+                                                            fileHandler.loadBackMedicalDeviceFile(itemlist);
+                                                        } else if (option == 4) {
+                                                            fileHandler.loadBackPersonalCareFile(itemlist);
+                                                        } else if (option == 3) {
+                                                            fileHandler.loadBackClothingFile(itemlist);
+                                                        } else if (option == 2) {
+                                                            fileHandler.loadBackBeverageFile(itemlist);
+                                                        } else {
+                                                            fileHandler.loadBackFoodFile(itemlist);
+                                                        }
+                                                        msgHandling.displaySuccessMessage("Modification Successful!");
+                                                        break;
                                                     }
-                                                    fileHandler.loadBackDRFile(recordlist);
-                                                    if (option == 6) {
-                                                        fileHandler.loadBackMedicineFile(itemlist);
-                                                    } else if (option == 5) {
-                                                        fileHandler.loadBackMedicalDeviceFile(itemlist);
-                                                    } else if (option == 4) {
-                                                        fileHandler.loadBackPersonalCareFile(itemlist);
-                                                    } else if (option == 3) {
-                                                        fileHandler.loadBackClothingFile(itemlist);
-                                                    } else if (option == 2) {
-                                                        fileHandler.loadBackBeverageFile(itemlist);
-                                                    } else {
-                                                        fileHandler.loadBackFoodFile(itemlist);
-                                                    }
-                                                    msgHandling.displaySuccessMessage("Modification Successful!");
-                                                    break;
                                                 }
+                                                return true;
                                             }
-                                            return true;
                                         }
-                                    }
-                                    if (!(item2 instanceof Money)) {
-                                        qtyIndex++;
+                                        if (!(item2 instanceof Money)) {
+                                            qtyIndex++;
+                                        }
                                     }
                                 }
                             }
@@ -2839,7 +2761,6 @@ public class Donation {
             ListInterface<DonationRecord> recordlist = new ArrayList<>();
             ListInterface<DonationRecord> recordlist2 = new ArrayList<>();
             fileHandler.loadIntoDR(recordlist);
-            fileHandler.loadIntoDR(recordlist2);
             searchRecord(itemCode, searchResultsRecord);
             displayDonationRecordAssociated(searchResultsRecord);
             donationUI.displayAmendOptionAmt();
@@ -2863,39 +2784,60 @@ public class Donation {
                     if (_temp.equalsIgnoreCase("X")) {
                         return false;
                     } else {
-                        //remove record
-                        int amtIndex = 0;
-                        Iterator<DonationRecord> iterator3 = searchResultsRecord.iterator();
-                        while (iterator3.hasNext()) {
-                            DonationRecord record = iterator3.next();
+                        //Check is it valid record ID
+                        Iterator<DonationRecord> iterator = searchResultsRecord.iterator();
+                        while (iterator.hasNext()) {
+                            DonationRecord record = iterator.next();
                             if (String.valueOf(record.getRecordID()).equals(_temp)) {
-                                Iterator<DonationItem> iterator = record.getItem().iterator();
-                                while (iterator.hasNext()) {
-                                    DonationItem item = iterator.next();
-                                    if (item.getItemCode().equals(itemCode)) {
-                                        _temp3 = record.getAmount().get(amtIndex);
-                                    }
-                                    if (item instanceof Money) {
-                                        amtIndex++;
-                                    }
-                                }
-                                recordlist.remove(record);
                                 removed = true;
                                 break;
                             }
                         }
-                        //reduce quantity, if 0 then remove item
-                        Iterator<DonationItem> iterator = itemlist.iterator();
-                        while (iterator.hasNext()) {
-                            DonationItem item = iterator.next();
-                            if (item.getItemCode().equals(itemCode)) {
-                                ((Money) item).setAmount(((Money) item).getAmount() - _temp3);
-                                if (((Money) item).getAmount() == 0) {
-                                    itemlist.remove(item);
+                        if (removed == true) {//remove record
+                            Iterator<DonationRecord> iterator3 = recordlist.iterator();
+                            DonationItem itemToBeRemoved = null;
+                            //TODO
+                            while (iterator3.hasNext()) {
+                                DonationRecord record = iterator3.next();
+                                if (String.valueOf(record.getRecordID()).equals(_temp)) {
+                                    int amtIndex = 0;
+                                    Iterator<DonationItem> iterator2 = record.getItem().iterator();
+                                    while (iterator2.hasNext()) {
+                                        DonationItem item = iterator2.next();
+                                        if (item.getItemCode().equals(itemCode)) {
+                                            _temp3 = record.getAmount().get(amtIndex);
+                                            itemToBeRemoved = item;
+                                            break;
+                                        }
+                                        if (!(item instanceof Money)) {
+                                            amtIndex++;
+                                        }
+                                    }
+                                    record.getItem().remove(itemToBeRemoved);
+                                    record.getAmount().remove(amtIndex);
+                                    if (!record.getItem().isEmpty()) {
+                                        DonationRecord afterAmendRecord = record;
+                                        recordlist2.add(afterAmendRecord);
+                                    }
+                                    removed = true;
+                                } else {
+                                    recordlist2.add(record);
                                 }
-                                fileHandler.loadBackDRFile(recordlist);
-                                fileHandler.loadBackMoneyFile(itemlist);
-                                break;
+                            }
+                            fileHandler.loadBackDRFile(recordlist2);
+                            //reduce amount, if 0 then remove item
+
+                            Iterator<DonationItem> iterator4 = itemlist.iterator();
+                            while (iterator4.hasNext()) {
+                                DonationItem item = iterator4.next();
+                                if (item.getItemCode().equals(itemCode)) {
+                                    ((Money) item).setAmount(((Money) item).getAmount() - _temp3);
+                                    if (((Money) item).getAmount() == 0) {
+                                        itemlist.remove(item);
+                                    }
+                                    fileHandler.loadBackMoneyFile(itemlist);
+                                    break;
+                                }
                             }
                         }
                         if (removed == false) {
@@ -2913,44 +2855,56 @@ public class Donation {
                     } else {
                         //remove record
                         int amtIndex = 0;
-                        Iterator<DonationRecord> iterator3 = searchResultsRecord.iterator();
-                        while (iterator3.hasNext()) {
-                            DonationRecord record = iterator3.next();
+                        boolean validRecordID = false;
+                        Iterator<DonationRecord> iterator = searchResultsRecord.iterator();
+                        while (iterator.hasNext()) {
+                            DonationRecord record = iterator.next();
                             if (String.valueOf(record.getRecordID()).equals(_temp)) {
-                                Iterator<DonationItem> iterator2 = record.getItem().iterator();
-                                while (iterator2.hasNext()) {
-                                    DonationItem item2 = iterator2.next();
-                                    if (item2.getItemCode().equals(itemCode)) {
-                                        _temp3 = getNvalidateAmt();
-                                        if (_temp3 == 0) {
-                                            return false;
-                                        } else {
-                                            msgHandling.displaySuccessMessage("Modification Successful!");
-                                            double changes = _temp3 - record.getAmount().get(amtIndex);
-                                            Iterator<DonationItem> iterator = itemlist.iterator();
-                                            while (iterator.hasNext()) {
-                                                DonationItem item = iterator.next();
-                                                if (item.getItemCode().equals(itemCode)) {
-                                                    ((Money) item).setAmount(((Money) item).getAmount() + changes);
-                                                    if (((Money) item).getAmount() == 0) {
-                                                        itemlist.remove(item);
-                                                    }
-                                                    fileHandler.loadBackDRFile(recordlist);
-                                                    fileHandler.loadBackMoneyFile(itemlist);
+                                validRecordID = true;
+                                break;
+                            }
+                        }
+                        if (validRecordID == true) {
+                            Iterator<DonationRecord> iterator4 = recordlist.iterator();
+                            while (iterator4.hasNext()) {
+                                DonationRecord record = iterator4.next();
+                                if (String.valueOf(record.getRecordID()).equals(_temp)) {
+                                    Iterator<DonationItem> iterator2 = record.getItem().iterator();
+                                    while (iterator2.hasNext()) {
+                                        DonationItem item2 = iterator2.next();
+                                        if (item2.getItemCode().equals(itemCode)) {
+                                            _temp3 = getNvalidateAmt();
+                                            if (_temp3 == 0) {
+                                                return false;
+                                            } else {
+                                                double changes = _temp3 - record.getAmount().get(amtIndex);
+                                                record.getAmount().set(amtIndex, record.getAmount().get(amtIndex) + changes);
+                                                fileHandler.loadBackDRFile(recordlist);
+                                                Iterator<DonationItem> iterator5 = itemlist.iterator();
+                                                while (iterator5.hasNext()) {
+                                                    DonationItem item = iterator5.next();
+                                                    if (item.getItemCode().equals(itemCode)) {
+                                                        ((Money) item).setAmount(((Money) item).getAmount() + changes);
+                                                        if (((Money) item).getAmount() == 0) {
+                                                            itemlist.remove(item);
+                                                        }
+                                                        fileHandler.loadBackMoneyFile(itemlist);
 
-                                                    break;
+                                                        break;
+                                                    }
                                                 }
+                                                msgHandling.displaySuccessMessage("Modification Successful!");
+                                                return true;
                                             }
-                                            return true;
                                         }
-                                    }
-                                    if (item2 instanceof Money) {
-                                        amtIndex++;
+                                        if (item2 instanceof Money) {
+                                            amtIndex++;
+                                        }
                                     }
                                 }
                             }
+                            msgHandling.displayGeneralErrorMsg("Invalid Record ID. Please enter a valid record ID.");
                         }
-                        msgHandling.displayGeneralErrorMsg("Invalid Record ID. Please enter a valid record ID.");
                     }
                 }
             }
@@ -2984,8 +2938,8 @@ public class Donation {
         }
         return false;
     }
-
     //Check Amend Option
+
     public int checkAmendOption(int option) {
         int amdOption;
         if (option == 7) {
@@ -3023,9 +2977,9 @@ public class Donation {
         return option;
     }
 
-    //Display Track Donation  - Boundary
+    //Display Track Donation
     public void displayTrackDonation() {
-        System.out.println("\nTrack Donation by Category");
+        donationUI.displayTrackDonationHeader();
         ListInterface<DonationItem> itemlist = new ArrayList<>();
         for (int i = 1; i <= 7; i++) {
             displayBasedOnCatOption(i, itemlist);
@@ -3044,38 +2998,58 @@ public class Donation {
         ListInterface<DonationRecord> fullRecord = new ArrayList<>();
         ListInterface<DonationRecord> fullRecord2 = new ArrayList<>();
         ListInterface<DonationRecord> checkedList = new ArrayList<>();
+        ListInterface<String> usedIDList = new ArrayList<>();
         fileHandler.loadIntoDR(fullRecord);
         fileHandler.loadIntoDR(fullRecord2);
-        System.out.println("\nDonation by Different Donor");
+        donationUI.displayDonationDonorHeader();
         if (fullRecord.isEmpty()) {
             donationUI.displayEmptyList();
         } else {
             Iterator<DonationRecord> iterator = fullRecord.iterator();
             while (iterator.hasNext()) {
                 DonationRecord record = iterator.next();
-                checkedList = new ArrayList<>();
-                Iterator<DonationRecord> iterator2 = fullRecord2.iterator();
-                while (iterator2.hasNext()) {
-                    DonationRecord record2 = iterator2.next();
-                    if (record.getDonor().getId().equals(record2.getDonor().getId())) {
-                        checkedList.add(record);
+                //check if existed
+                boolean notRepeated = true;
+                Iterator<String> iterator3 = usedIDList.iterator();
+                while (iterator3.hasNext()) {
+                    String currentID = iterator3.next();
+                    if (currentID.equals(record.getDonor().getId())) {
+                        notRepeated = false;
                     }
                 }
-                Iterator<DonationRecord> iterator3 = fullRecord.iterator();
-                while (iterator3.hasNext()) {
-                    DonationRecord record3 = iterator3.next();
-                    if (record.getDonor().getId().equals(record3.getDonor().getId())) {
-                        fullRecord2.remove(record3);
+                if (notRepeated) {
+                    checkedList.clear();
+                    Iterator<DonationRecord> iterator2 = fullRecord2.iterator();
+                    while (iterator2.hasNext()) {
+                        DonationRecord record2 = iterator2.next();
+                        if (record.getDonor().getId().equals(record2.getDonor().getId())) {
+                            checkedList.add(record2);
+                            usedIDList.add(record.getDonor().getId());
+                        }
                     }
+                    displaySingleDonorRecords(checkedList, record.getDonor());
                 }
 
-                displaySingleDonorRecords(checkedList, record.getDonor());
             }
+            generalFunc.enterToContinue();
         }
-        generalFunc.enterToContinue();
     }
 
+    public ListInterface<DonationRecord> findRecordsForADonor(String donorID) {
+        ListInterface<DonationRecord> fullRecord = new ArrayList<>();
+        ListInterface<DonationRecord> checkedList = new ArrayList<>();
+        fileHandler.loadIntoDR(fullRecord);
+        Iterator<DonationRecord> iterator2 = fullRecord.iterator();
+        while (iterator2.hasNext()) {
+            DonationRecord record2 = iterator2.next();
+            if (donorID.equals(record2.getDonor().getId())) {
+                checkedList.add(record2);
+            }
+        }
+        return checkedList;
+    }
     //Full Donation List with Filter & Sorting
+
     public void fullDonation() {
         ListInterface<DonationItem> itemlist = new ArrayList<>();
         ListInterface<DonationItem> fullList = new ArrayList<>();
@@ -3278,7 +3252,7 @@ public class Donation {
             fileHandler.loadIntoMoney(itemlist);
             sortBeforeDisplay(itemlist, sort);
             if (!itemlist.isEmpty()) {
-                displayMoney(itemlist);
+                donationUI.displayMoney(itemlist);
             } else {
                 donationUI.displayEmptyList();
             }
@@ -3287,7 +3261,7 @@ public class Donation {
             fileHandler.loadIntoMedicine(itemlist);
             sortBeforeDisplay(itemlist, sort);
             if (!itemlist.isEmpty()) {
-                displayMedicine(itemlist);
+                donationUI.displayMedicine(itemlist);
             } else {
                 donationUI.displayEmptyList();
             }
@@ -3296,7 +3270,7 @@ public class Donation {
             fileHandler.loadIntoMedicalDevice(itemlist);
             sortBeforeDisplay(itemlist, sort);
             if (!itemlist.isEmpty()) {
-                displayMedicalDevice(itemlist);
+                donationUI.displayMedicalDevice(itemlist);
             } else {
                 donationUI.displayEmptyList();
             }
@@ -3305,7 +3279,7 @@ public class Donation {
             fileHandler.loadIntoPersonalCare(itemlist);
             sortBeforeDisplay(itemlist, sort);
             if (!itemlist.isEmpty()) {
-                displayPersonalCare(itemlist);
+                donationUI.displayPersonalCare(itemlist);
             } else {
                 donationUI.displayEmptyList();
             }
@@ -3314,7 +3288,7 @@ public class Donation {
             fileHandler.loadIntoClothing(itemlist);
             sortBeforeDisplay(itemlist, sort);
             if (!itemlist.isEmpty()) {
-                displayClothing(itemlist);
+                donationUI.displayClothing(itemlist);
             } else {
                 donationUI.displayEmptyList();
             }
@@ -3323,7 +3297,7 @@ public class Donation {
             fileHandler.loadIntoBeverage(itemlist);
             sortBeforeDisplay(itemlist, sort);
             if (!itemlist.isEmpty()) {
-                displayBeverage(itemlist);
+                donationUI.displayBeverage(itemlist);
             } else {
                 donationUI.displayEmptyList();
             }
@@ -3332,7 +3306,7 @@ public class Donation {
             fileHandler.loadIntoFood(itemlist);
             sortBeforeDisplay(itemlist, sort);
             if (!itemlist.isEmpty()) {
-                displayFood(itemlist);
+                donationUI.displayFood(itemlist);
             } else {
                 donationUI.displayEmptyList();
             }
@@ -3551,65 +3525,7 @@ public class Donation {
             }
         }
         donationUI.displayReport2Header();
-        displayReport2Content(max, maxIndex);
+        donationUI.displayReport2Content(max, maxIndex);
     }
 
-    public void displayReport2Content(int max[], int maxIndex[]) {
-        for (int i = 0; i < 71; i++) {
-            System.out.print("_");
-        }
-        System.out.print("\n");
-        System.out.printf("|%-5s |%-30s |%-30s|\n", "No.", "Item Category", "Quantity");
-        System.out.print("|");
-        for (int i = 0; i < 6; i++) {
-            System.out.print("-");
-        }
-        System.out.print("|");
-        for (int i = 0; i < 31; i++) {
-            System.out.print("-");
-        }
-        System.out.print("|");
-        for (int i = 0; i < 30; i++) {
-            System.out.print("-");
-        }
-        System.out.print("|\n");
-        for (int i = 0; i < 3; i++) {
-            switch (maxIndex[i]) {
-                case -1:
-                    System.out.printf("|%-5s |%-30s |%-30s|\n", i + 1, "", 0);
-                    break;
-                case 0:
-                    System.out.printf("|%-5s |%-30s |%-30s|\n", i + 1, "Food", max[i]);
-                    break;
-                case 1:
-                    System.out.printf("|%-5s |%-30s |%-30s|\n", i + 1, "Beverage", max[i]);
-                    break;
-                case 2:
-                    System.out.printf("|%-5s |%-30s |%-30s|\n", i + 1, "Clothing", max[i]);
-                    break;
-                case 3:
-                    System.out.printf("|%-5s |%-30s |%-30s|\n", i + 1, "Personal Care", max[i]);
-                    break;
-                case 4:
-                    System.out.printf("|%-5s |%-30s |%-30s|\n", i + 1, "Medical Device", max[i]);
-                    break;
-                default:
-                    System.out.printf("|%-5s |%-30s |%-30s|\n", i + 1, "Medicine", max[i]);
-            }
-        }
-        System.out.print("|");
-        for (int i = 0; i < 6; i++) {
-            System.out.print("_");
-        }
-        System.out.print("|");
-        for (int i = 0; i < 31; i++) {
-            System.out.print("_");
-        }
-        System.out.print("|");
-        for (int i = 0; i < 30; i++) {
-            System.out.print("_");
-        }
-        System.out.print("|");
-        System.out.print("\n\n");
-    }
 }

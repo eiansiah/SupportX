@@ -1,5 +1,10 @@
 package Entity;
 
+/*
+ *  author: Siah E-Ian
+ *  ID: 2307610
+ * */
+
 import Main.Applicants;
 
 import java.time.LocalDate;
@@ -14,7 +19,7 @@ public class Donee extends Applicants {
     private final LocalDate registeredDate;
 
     public Donee (){
-        this.registeredDate = LocalDate.now(); // For test purposes
+        this.registeredDate = LocalDate.now();
     }
 
     public Donee (String doneeID, String name, String email, String phone, String address, String doneeType, String itemCategoryRequired, String doneeUrgency, LocalDate registeredDate) {

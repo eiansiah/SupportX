@@ -1,16 +1,23 @@
 package Control;
 
+/*
+ *  author: Siah E-Ian
+ *  ID: 2307610
+ * */
+
 import java.time.LocalDate;
+import java.util.Iterator;
 import java.util.Scanner;
 
+import Entity.DonationDistribution;
 import Entity.Donee;
 
 import FileHandling.DoneeFileHandler;
 
 import Libraries.GeneralFunction;
 import Libraries.ArrayList;
-
 import Libraries.ListInterface;
+
 import Utilities.Message;
 import Utilities.NewValidation;
 
@@ -18,16 +25,19 @@ import Boundary.DoneeUI;
 
 public class DoneeFunctions {
 
-//    List<Donee> doneeList = new ArrayList<>();
-    private static ArrayList<Donee> doneeList;
+    private static ListInterface<Donee> doneeList = new ArrayList<>();
+//    private static ArrayList<Donee> doneeList;
     private static final DoneeFileHandler fileHandler = new DoneeFileHandler();
-    private static final Scanner scanner = new Scanner(System.in); //To be shifted
 
     public DoneeFunctions (){
         doneeList = readDonees();
     }
 
-    public static ArrayList<Donee> readDonees(){
+//    public static ArrayList<Donee> readDonees(){
+//        return fileHandler.readData("donee.txt");
+//    }
+
+    public static ListInterface<Donee> readDonees(){
         return fileHandler.readData("donee.txt");
     }
 
@@ -62,6 +72,7 @@ public class DoneeFunctions {
                     displayDonees(readDonees());
                     break;
                 case 5: //View donations for each donee
+                    viewDonationDistribution();
                     break;
                 case 6: //Filter donees by criteria
                     filterDonees(readDonees());
@@ -214,7 +225,7 @@ public class DoneeFunctions {
         return new Donee(doneeID, name, email, phone, address, doneeType, itemCategory, doneeUrgency, registeredDate);
     }
 
-    public static void deleteDoneeHandler(ArrayList<Donee> donees){
+    public static void deleteDoneeHandler(ListInterface<Donee> donees){
         doneeList = deleteDoneeCore(donees);
 
         fileHandler.updateMultipleData("donee.txt", doneeList);
@@ -222,7 +233,7 @@ public class DoneeFunctions {
         GeneralFunction.enterToContinue();
     }
 
-    public static ArrayList<Donee> deleteDoneeCore(ArrayList<Donee> donees) {
+    public static ListInterface<Donee> deleteDoneeCore(ListInterface<Donee> donees) {
         String doneeId;
         Donee selectedDonee = null;
 
@@ -235,11 +246,14 @@ public class DoneeFunctions {
             return donees;
         }
 
+        Iterator<Donee> doneeIterator = donees.iterator();
         // Search for the donor by ID
-        for (Donee donee : donees) {
+        while (doneeIterator.hasNext()) {
+            Donee donee = doneeIterator.next();
             if (donee.getDoneeID().equals(doneeId)) {
+                // Update the donee details
                 selectedDonee = donee;
-                break;
+                break; // Exit the loop once the donee is found and updated
             }
         }
 
@@ -272,7 +286,7 @@ public class DoneeFunctions {
         return donees;
     }
 
-    public static void modifyDoneeHandler(ArrayList<Donee> donees){
+    public static void modifyDoneeHandler(ListInterface<Donee> donees){
         doneeList = modifyDoneeCore(donees);
 
         fileHandler.updateMultipleData("donee.txt", doneeList);
@@ -280,8 +294,7 @@ public class DoneeFunctions {
         GeneralFunction.enterToContinue();
     }
 
-    public static ArrayList<Donee> modifyDoneeCore(ArrayList<Donee> donees) {
-        Scanner scanner = new Scanner(System.in);
+    public static ListInterface<Donee> modifyDoneeCore(ListInterface<Donee> donees) {
         boolean doneeFound = false;
         String doneeId;
 
@@ -290,7 +303,11 @@ public class DoneeFunctions {
             doneeId = obtainDoneeId();
         } while (doneeId.isEmpty());
 
-        for (Donee doneeSelected : donees) {
+        Iterator<Donee> doneeIterator = donees.iterator();
+
+        while (doneeIterator.hasNext()) {
+            Donee doneeSelected  = doneeIterator.next();
+
             if (doneeSelected.getDoneeID().equals(doneeId)) {
                 doneeFound = true;
                 char choice = ' ';
@@ -448,9 +465,7 @@ public class DoneeFunctions {
         return donees;
     }
 
-    public static void displayDonees(ArrayList<Donee> donees){
-        Scanner scanner = new Scanner(System.in);
-
+    public static void displayDonees(ListInterface<Donee> donees){
         int pageSize = 10;  // Number of donees to display per page
         int currentPage = 0;
         int totalDonees = donees.size();
@@ -496,10 +511,20 @@ public class DoneeFunctions {
                         } while (doneeID.isEmpty());
 
                         Donee selectedDonee = null;
-                        for (Donee donee : donees) {
+//                        for (Donee donee : donees) {
+//                            if (donee.getDoneeID().equals(doneeID)) {
+//                                selectedDonee = donee;
+//                                break;
+//                            }
+//                        }
+                        Iterator<Donee> doneeIterator = donees.iterator();
+
+                        while (doneeIterator.hasNext()) {
+                            Donee donee = doneeIterator.next();
                             if (donee.getDoneeID().equals(doneeID)) {
+                                // Update the donee details
                                 selectedDonee = donee;
-                                break;
+                                break; // Exit the loop once the donee is found and updated
                             }
                         }
 
@@ -558,7 +583,61 @@ public class DoneeFunctions {
         } while (done);
     }
 
-    public static void filterDonees(ArrayList<Donee> donees) {
+    public ListInterface<DonationDistribution> initializeDistribution() {
+        ListInterface<DonationDistribution> distributionList = new ArrayList<>();
+        distributionList.add(new DonationDistribution("DTR00001", "PC020", "Sunblock", 4, "DNE00001", "2024-09-01")); //Personal Care - Individual
+        distributionList.add(new DonationDistribution("DTR00002", "MY100", "Cash", 10000, "DNE00005", "2024-09-05")); //Monetary - Family
+        distributionList.add(new DonationDistribution("DTR00003", "FD006", "Cream Crackers", 5, "DNE00007", "2024-09-05")); //Food - Individual
+        distributionList.add(new DonationDistribution("DTR00004", "FD020", "Cooking Oil 5L", 5, "DNE00013", "2024-09-10")); //Food -Family
+        distributionList.add(new DonationDistribution("DTR00005", "MD042", "Cough Syrup", 100, "DNE00019", "2024-09-11")); //Medicine - Organization
+        distributionList.add(new DonationDistribution("DTR00006", "MD049", "Paracetamol", 10, "DNE00021", "2024-09-13")); //Medicine - Family
+        distributionList.add(new DonationDistribution("DTR00007", "FD030", "Maggi Noodles", 100, "DNE00024", "2024-09-18")); //Food - Organization
+        distributionList.add(new DonationDistribution("DTR00008", "BG002", "Milo Powder 1KG", 2, "DNE00030", "2024-09-20")); //Beverage - Individual
+        distributionList.add(new DonationDistribution("DTR00009", "MY121", "Cash", 13000, "DNE00031", "2024-09-26")); //Monetary - Family
+        distributionList.add(new DonationDistribution("DTR00010", "PC055", "Johnson Body Shampoo 1.5L", 5, "DNE00039", "2024-09-29")); //Personal Care - Family
+
+        return distributionList;
+    }
+
+    public void viewDonationDistribution() {
+        ListInterface<DonationDistribution> donationList = initializeDistribution();
+
+        // Get user input for the donee ID
+        DoneeUI.displayDoneeUI();
+        String doneeID = obtainDoneeId();
+
+        // Display matching donations
+        boolean found = false;
+
+        DoneeUI.displayDonationDetailsUI(doneeID);
+
+        Iterator<DonationDistribution> distributionIterator = donationList.iterator();
+
+        while (distributionIterator.hasNext()) {
+            DonationDistribution donation = distributionIterator.next();
+            if (donation.getDoneeID().equals(doneeID)) {
+                // Display the donation information
+                System.out.printf("%-20s %-20s %-20s %-20s %-20s%n",
+                        donation.getDistributionID(),
+                        donation.getItemCode(),
+                        donation.getItemName(),
+                        donation.getItemQuantity(),
+                        donation.getDistributionDate());
+                found = true;
+            }
+        }
+
+        if (!found) {
+            Message.displayDataNotFoundMessage("No donations found for Donee ID: " + doneeID);
+        }
+
+        GeneralFunction.repeatPrint("-", 100);
+
+        DoneeUI.printEmptyLine();
+        GeneralFunction.enterToContinue();
+    }
+
+    public static void filterDonees(ListInterface<Donee> donees) {
         Scanner scanner = new Scanner(System.in);
         int filterChoice;
 
@@ -598,7 +677,7 @@ public class DoneeFunctions {
         GeneralFunction.enterToContinue();
     }
 
-    public static void summaryReport(ArrayList<Donee> donees){
+    public static void summaryReport(ListInterface<Donee> donees){
         int highUrgencyCount = 0;
         int mediumUrgencyCount = 0;
         int lowUrgencyCount = 0;
@@ -617,7 +696,10 @@ public class DoneeFunctions {
 
         GeneralFunction.printTitle("Donee Management Subsystem Summary Report", 87, "--", "|");
 
-        for (Donee donee : doneeList) {
+        //Donee Urgency
+        Iterator<Donee> doneeIterator = donees.iterator();
+        while (doneeIterator.hasNext()) {
+            Donee donee = doneeIterator.next();
             String urgency = donee.getDoneeUrgency();
             if ("High".equalsIgnoreCase(urgency)) {
                 highUrgencyCount++;
@@ -631,10 +713,13 @@ public class DoneeFunctions {
         DoneeUI.reportDoneeUrgencyUI(highUrgencyCount,mediumUrgencyCount,lowUrgencyCount);
 
         DoneeUI.printEmptyLine();
-        GeneralFunction.repeatPrint("=", 50);
+        GeneralFunction.repeatPrint("=", 87);
         DoneeUI.printEmptyLine();
 
-        for (Donee donee : doneeList) {
+        //Donee Type
+        doneeIterator = donees.iterator(); // Reset iterator
+        while (doneeIterator.hasNext()) {
+            Donee donee = doneeIterator.next();
             String doneeType = donee.getDoneeType();
             if ("Individual".equalsIgnoreCase(doneeType)) {
                 individualCount++;
@@ -648,10 +733,13 @@ public class DoneeFunctions {
         DoneeUI.reportDoneeTypeUI(individualCount, organisationCount, familyCount);
 
         DoneeUI.printEmptyLine();
-        GeneralFunction.repeatPrint("=", 50);
+        GeneralFunction.repeatPrint("=", 87);
         DoneeUI.printEmptyLine();
 
-        for (Donee donee : doneeList) {
+        //Donee Item Category Required
+        doneeIterator = donees.iterator(); // Reset iterator
+        while (doneeIterator.hasNext()) {
+            Donee donee = doneeIterator.next();
             String doneeCategory = donee.getItemCategoryRequired();
             if ("Food".equalsIgnoreCase(doneeCategory)) {
                 foodCount++;
@@ -678,10 +766,9 @@ public class DoneeFunctions {
 
         DoneeUI.printEmptyLine();
         GeneralFunction.enterToContinue();
-
     }
 
-    public static void main (String[] args) {
+    public static void doneeHandler() {
         DoneeFunctions doneeFunctions = new DoneeFunctions();
         doneeFunctions.runDoneeManagement();
     }

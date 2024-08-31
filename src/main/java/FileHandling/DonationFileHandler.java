@@ -28,7 +28,6 @@ import java.util.Iterator;
 import java.util.Scanner;
 
 //public class DonationFileHandler implements FileHandlingInterface<Donation>{
-
 //     @Override
 //     public void checkAndCreateFile(String filename) {
 //         File file = new File(filename);
@@ -39,7 +38,6 @@ import java.util.Scanner;
 //             } else {
 //                 //System.out.println("File exists: " + filename);
 //                 System.out.println("System Ready");
-                
 //             }
 //         } catch (IOException e) {
 //             System.err.println("Error creating the file: " + e.getMessage());
@@ -70,8 +68,10 @@ import java.util.Scanner;
 //
 //    }
 //}
-public class DonationFileHandler{
+public class DonationFileHandler {
+
     private DonorFunctions donorHandling = new DonorFunctions();
+
     //Load Files
     //Load Donation Record File
     public void loadIntoDR(ListInterface<DonationRecord> recordList) {
@@ -104,11 +104,15 @@ public class DonationFileHandler{
                     String[] qty2 = dataInLine[3].split(",");
                     String[] amt2 = dataInLine[4].split(",");
                     donationDateTime = LocalDateTime.parse(dataInLine[5], dateFormat);
-                    for (String qty3 : qty2) {
-                        qty.add(Integer.valueOf(qty3));
+                    if (!qty2[0].equals("")) {
+                        for (String qty3 : qty2) {
+                            qty.add(Integer.valueOf(qty3));
+                        }
                     }
-                    for (String amt3 : amt2) {
-                        amt.add(Double.valueOf(amt3));
+                    if (!amt2[0].equals("")) {
+                        for (String amt3 : amt2) {
+                            amt.add(Double.valueOf(amt3));
+                        }
                     }
                     for (String code : item2) {
                         Iterator<DonationItem> iterator = itemList.iterator();
@@ -150,26 +154,38 @@ public class DonationFileHandler{
             while (iterator.hasNext()) {
                 DonationRecord record = iterator.next();
                 String line = record.getRecordID() + "#" + record.getDonor().getId() + "#";
-                for (int i = 0; i < record.getItem().size(); i++) {
-                    if (i != record.getItem().size() - 1) {
-                        line += record.getItem().get(i).getItemCode() + ",";
-                    } else {
-                        line += record.getItem().get(i).getItemCode() + "#";
+                if (record.getItem().size() != 0) {
+                    for (int i = 0; i < record.getItem().size(); i++) {
+                        if (i != record.getItem().size() - 1) {
+                            line += record.getItem().get(i).getItemCode() + ",";
+                        } else {
+                            line += record.getItem().get(i).getItemCode() + "#";
+                        }
                     }
+                }else{
+                    line += "#";
                 }
-                for (int i = 0; i < record.getQty().size(); i++) {
-                    if (i != record.getQty().size() - 1) {
-                        line += record.getQty().get(i) + ",";
-                    } else {
-                        line += record.getQty().get(i) + "#";
+                if (record.getQty().size() != 0) {
+                    for (int i = 0; i < record.getQty().size(); i++) {
+                        if (i != record.getQty().size() - 1) {
+                            line += record.getQty().get(i) + ",";
+                        } else {
+                            line += record.getQty().get(i) + "#";
+                        }
                     }
+                }else{
+                    line += "#";
                 }
-                for (int i = 0; i < record.getAmount().size(); i++) {
-                    if (i != record.getAmount().size() - 1) {
-                        line += record.getAmount().get(i) + ",";
-                    } else {
-                        line += record.getAmount().get(i) + "#";
+                if (record.getAmount().size() != 0) {
+                    for (int i = 0; i < record.getAmount().size(); i++) {
+                        if (i != record.getAmount().size() - 1) {
+                            line += record.getAmount().get(i) + ",";
+                        } else {
+                            line += record.getAmount().get(i) + "#";
+                        }
                     }
+                }else{
+                    line += "#";
                 }
                 line += record.getDonationDateTime().format(dateFormat);
                 writeFile.write(line + "\n");

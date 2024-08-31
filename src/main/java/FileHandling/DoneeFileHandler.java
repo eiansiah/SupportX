@@ -1,7 +1,13 @@
 package FileHandling;
 
+/*
+ *  author: Siah E-Ian
+ *  ID: 2307610
+ * */
+
 import Libraries.ArrayList;
 import Libraries.Color;
+import Libraries.ListInterface;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -11,6 +17,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Iterator;
 
 import Entity.Donee;
 
@@ -41,8 +48,8 @@ public class DoneeFileHandler implements FileHandlingInterface<Donee> {
     }
 
     @Override
-    public ArrayList<Donee> readData(String filename) {
-        ArrayList<Donee> donees = new ArrayList<>();
+    public ListInterface<Donee> readData(String filename) {
+        ListInterface<Donee> donees = new ArrayList<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
@@ -61,10 +68,15 @@ public class DoneeFileHandler implements FileHandlingInterface<Donee> {
 
     @Override
     public void updateData(String filename, Donee selectedDonee) {
-        ArrayList<Donee> donees = readData(filename);
+        ListInterface<Donee> donees = readData(filename);
 
-        for (Donee donee : donees) {
+        Iterator<Donee> doneeIterator = donees.iterator();
+
+        while (doneeIterator.hasNext()) {
+            Donee donee = doneeIterator.next();
+
             if (donee.getDoneeID().equals(selectedDonee.getDoneeID())) {
+                // Update the donee details
                 donee.setName(selectedDonee.getName());
                 donee.setEmail(selectedDonee.getEmail());
                 donee.setPhone(selectedDonee.getPhone());
@@ -72,16 +84,18 @@ public class DoneeFileHandler implements FileHandlingInterface<Donee> {
                 donee.setDoneeType(selectedDonee.getDoneeType());
                 donee.setItemCategoryRequired(selectedDonee.getItemCategoryRequired());
                 donee.setDoneeUrgency(selectedDonee.getDoneeUrgency());
-                break;
+                break; // Exit the loop once the donee is found and updated
             }
         }
         updateMultipleData(filename, donees);
     }
 
     @Override
-    public void updateMultipleData(String filename, ArrayList<Donee> donees) {
+    public void updateMultipleData(String filename, ListInterface<Donee> donees) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
-            for (Donee donee : donees) {
+            Iterator<Donee> doneeIterator = donees.iterator();
+            while (doneeIterator.hasNext()) {
+                Donee donee = doneeIterator.next();
                 writer.write(donee.toString() + "\n");
             }
         } catch (IOException e) {
@@ -91,7 +105,7 @@ public class DoneeFileHandler implements FileHandlingInterface<Donee> {
 
     @Override
     public void deleteData(String filename, String doneeID){
-        ArrayList<Donee> donees = readData(filename);
+        ListInterface<Donee> donees = readData(filename);
 
         // Find the donor with the given ID and remove it
         for (int i = 0; i < donees.size(); i++) {

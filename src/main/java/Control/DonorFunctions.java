@@ -8,15 +8,12 @@ import Entity.Donor;
 import FileHandling.DonorFileHandler;
 
 //ADT
-import Libraries.ArrayList;
-import Libraries.GeneralFunction;
-import Libraries.Hashmap;
+import Libraries.*;
 
 //Boundaries
 import Boundary.DonorUI;
 
 //Utilities
-import Libraries.Queue;
 import Utilities.NewValidation;
 import Utilities.Message;
 
@@ -24,14 +21,14 @@ import java.time.LocalDate;
 
 public class DonorFunctions {
 
-    private static ArrayList<Donor> donorArrayList;
+    private static ListInterface<Donor> donorArrayList;
 
     // ArrayList to temporary store data for donation item
-    private static ArrayList<DonationItem> donationItemArrayList = new ArrayList<>();
+    private static ListInterface<DonationItem> donationItemArrayList = new ArrayList<>();
     // ArrayList to temporary store data for donation item
-    private static ArrayList<DonationRecord> donationRecordArrayList = new ArrayList<>();
+    private static ListInterface<DonationRecord> donationRecordArrayList = new ArrayList<>();
     // HashMap to store Donor ID -> List of Donations
-    private Hashmap<String, ArrayList<DonationRecord>> donorDonationsMap = new Hashmap<>();
+    private Hashmap<String, ListInterface<DonationRecord>> donorDonationsMap = new Hashmap<>();
 
     private static final DonorFileHandler donorFileHandler = new DonorFileHandler();
 
@@ -39,7 +36,7 @@ public class DonorFunctions {
         donorArrayList = readDonors();
     }
 
-    public static ArrayList<Donor> readDonors(){
+    public static ListInterface<Donor> readDonors(){
         return donorFileHandler.readData("donor.txt");
     }
 
@@ -69,7 +66,7 @@ public class DonorFunctions {
 //        }
 //    }
 
-    public static void runDonorSystem() {
+    public void runDonorSystem() {
         int choice = 0;
 
         donorFileHandler.checkAndCreateFile("donor.txt");
@@ -114,10 +111,12 @@ public class DonorFunctions {
     }
 
     public static Donor checkIfDonorExist(String donorID) {
-        ArrayList<Donor> checkDonors = readDonors(); // Assuming readDonors() retrieves the list of donors
+        ListInterface<Donor> checkDonors = readDonors(); // Assuming readDonors() retrieves the list of donors
 
         // Check for the donor by ID
-        for (Donor donor : checkDonors) {
+        for (int i = 0; i < checkDonors.size(); i++) {
+            Donor donor = checkDonors.get(i);
+
             if (donor.getId().equals(donorID)) {
                 return donor; // Return the entire Donor object if found
             }
@@ -215,13 +214,15 @@ public class DonorFunctions {
         return new Donor(donorId, name, email, phone, category, type);
     }
 
-    public static void deleteDonor(ArrayList<Donor> donors) {
+    public static void deleteDonor(ListInterface<Donor> donors) {
         Donor selectedDonor = null;
 
         String donorIDToDelete = DonorUI.inputRemoveDonorIDUI();
 
         // Search for the donor by ID
-        for (Donor donor : donors) {
+        for (int i = 0; i < donors.size(); i++) {
+            Donor donor = donors.get(i);
+
             if (donor.getId().equals(donorIDToDelete)) {
                 selectedDonor = donor;
                 break;
@@ -251,12 +252,14 @@ public class DonorFunctions {
         }
     }
 
-    public static void modifyDonor(ArrayList<Donor> donors) {
+    public static void modifyDonor(ListInterface<Donor> donors) {
         Donor selectedDonor = null;
         String donorIDToModify = DonorUI.inputUpdateDonorIDUI();
 
         // Search for the donor by ID
-        for (Donor donor : donors) {
+        for (int i = 0; i < donors.size(); i++) {
+            Donor donor = donors.get(i);
+
             if (donor.getId().equals(donorIDToModify)) {
                 selectedDonor = donor;
                 break;
@@ -386,7 +389,7 @@ public class DonorFunctions {
         }
     }
 
-    public static void displayDonors(ArrayList<Donor> donors) {
+    public static void displayDonors(ListInterface<Donor> donors) {
 
         int pageSize = 10;  // Number of donors to display per page
         int currentPage = 0;
@@ -421,7 +424,9 @@ public class DonorFunctions {
                 case "D":
                     String donorID = DonorUI.inputCheckDonorIDUI();
                     Donor selectedDonor = null;
-                    for (Donor donor : donors) {
+                    for (int i = 0; i < donors.size(); i++) {
+                        Donor donor = donors.get(i);
+
                         if (donor.getId().equals(donorID)) {
                             selectedDonor = donor;
                             break;
@@ -556,7 +561,7 @@ public class DonorFunctions {
         }
     }
 
-    public static void viewDonorReport(ArrayList<Donor> donors) {
+    public void viewDonorReport(ListInterface<Donor> donors) {
         // Initialize the queue and enqueue filter criteria
         Queue<String> filterQueue = new Queue<>();
         filterQueue.enqueue("Public");
@@ -594,9 +599,9 @@ public class DonorFunctions {
         DonorUI.pressKeyToContinue();
     }
 
-//    public static void main (String[] args) {
-//        DonorFunctions donorFunctions = new DonorFunctions(); //Create an arraylist
-//        donorFunctions.runDonorSystem();
-//
-//    }
+    public static void main (String[] args) {
+        DonorFunctions donorFunctions = new DonorFunctions(); //Create an arraylist
+        donorFunctions.runDonorSystem();
+
+    }
 }
