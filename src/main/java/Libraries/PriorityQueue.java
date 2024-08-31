@@ -1,8 +1,8 @@
 package Libraries;
 
 /*
- *  author: Saw Khoo Zi Chong
- *  ID: 2307609
+ *  author: Sim Hor Kang
+ *  ID: 2307611
  * */
 
 import java.util.Arrays;

@@ -1,6 +1,10 @@
 package Utilities;
 
-import java.util.Scanner;
+/*
+ *  author: Siah E-Ian, Sim Hor Kang
+ *  ID: 2307610, 2307611
+ * */
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
