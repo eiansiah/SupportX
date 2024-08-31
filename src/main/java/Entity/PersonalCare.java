@@ -6,10 +6,10 @@ package Entity;
 
 import java.time.LocalDate;
 
-/**
- *
- * @author Ko Jie Qi
- */
+/*
+ *  author: Ko Jie Qi
+ *  ID: 2307589
+ * */
 public class PersonalCare extends DonationItem{
     private double netWeight;
     private LocalDate expiryDate;
