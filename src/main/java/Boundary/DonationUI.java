@@ -370,7 +370,7 @@ public class DonationUI {
         Iterator<DonationItem> iterator = moneyList.iterator();
         while (iterator.hasNext()) {
             DonationItem item = iterator.next();
-            System.out.printf("%-10s %-20s %-20s %-30s\n", item.getItemCode(), item.getItemName(), ((Money) item).getAmount(), ((Money) item).getSource());
+            System.out.printf("%-10s %-20s %-20.2f %-30s\n", item.getItemCode(), item.getItemName(), ((Money) item).getAmount(), ((Money) item).getSource());
         }
         generalFunc.repeatPrint("-", 83);
         System.out.print("\n");
@@ -667,13 +667,13 @@ public class DonationUI {
     }
 
     public void displaySingleRecordWithoutDonorIDMoney(DonationRecord record, int i, int amtIndex) {
-        System.out.printf("%-25s %-10s %-20s %-10s %-20s\n", "", record.getItem().get(i).getItemCode(),
+        System.out.printf("%-25s %-10s %-20s %-10.2f %-20s\n", "", record.getItem().get(i).getItemCode(),
                 record.getItem().get(i).getItemName(), record.getAmount().get(amtIndex), "");
     }
 
     public void displaySingleRecordWithoutDonorIDMoney(DonationRecord record, int amtIndex) {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        System.out.printf("%-25s %-10s %-20s %-10s %-20s\n", record.getRecordID(), record.getItem().get(0).getItemCode(),
+        System.out.printf("%-25s %-10s %-20s %-10.2f %-20s\n", record.getRecordID(), record.getItem().get(0).getItemCode(),
                 record.getItem().get(0).getItemName(), record.getAmount().get(amtIndex), record.getDonationDateTime().format(dateFormat));
     }
 
@@ -701,14 +701,14 @@ public class DonationUI {
     }
 
     public void displaySingleRecordWithDonorIDMoney(DonationRecord record, int i, int amtIndex) {
-        System.out.printf("%-25s %-10s %-20s %-10s %-20s %-10s %-20s\n", record.getRecordID(), record.getDonor().getId(),
+        System.out.printf("%-25s %-10s %-20s %-10s %-20s %-10.2f %-20s\n", record.getRecordID(), record.getDonor().getId(),
                 record.getDonor().getName(), record.getItem().get(0).getItemCode(), record.getItem().get(i).getItemName(),
                 record.getAmount().get(amtIndex), "");
     }
 
     public void displaySingleRecordWithDonorIDMoney(DonationRecord record, int amtIndex) {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        System.out.printf("%-25s %-10s %-20s %-10s %-20s %-10s %-20s\n", record.getRecordID(), record.getDonor().getId(),
+        System.out.printf("%-25s %-10s %-20s %-10s %-20s %-10.2f %-20s\n", record.getRecordID(), record.getDonor().getId(),
                 record.getDonor().getName(), record.getItem().get(0).getItemCode(), record.getItem().get(0).getItemName(),
                 record.getAmount().get(amtIndex), record.getDonationDateTime().format(dateFormat));
     }
@@ -828,13 +828,13 @@ public class DonationUI {
     public void displayFullDonationListTableHeader() {
         generalFunc.repeatPrint("-", 93);
         System.out.print("\n");
-        System.out.printf("%-10s %-30s %-20s %-30s\n", "Item Code", "Item Name", "Quantity/Amount", "Venue Code/ Event Code");
+        System.out.printf("%-10s %-30s %-20s %-30s\n", "Item Code", "Item Name", "Quantity/Amount1", "Venue Code/ Event Code");
         generalFunc.repeatPrint("-", 93);
         System.out.print("\n");
     }
 
     public void displayFullDonationItemMoney(DonationItem item) {
-        System.out.printf("%-10s %-30s %-20s %-30s\n", item.getItemCode(), item.getItemName(), ((Money) item).getAmount(), ((Money) item).getSource());
+        System.out.printf("%-10s %-30s %-20.2f %-30s\n", item.getItemCode(), item.getItemName(), ((Money) item).getAmount(), ((Money) item).getSource());
     }
 
     public void displayFullDonationItemNotMoney(DonationItem item) {
