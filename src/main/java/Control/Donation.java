@@ -3,6 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Control;
+/*
+ *  author: Ko Jie Qi
+ *  ID: 2307589
+ * */
 //import entity
 
 import Boundary.DonationUI;
@@ -20,16 +24,8 @@ import Entity.Donor;
 import Control.DonorFunctions;
 import FileHandling.DonationFileHandler;
 
-//import basic library
-//file
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-
 //date
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 //for sort
@@ -42,8 +38,6 @@ import Libraries.ListInterface;
 import static Main.Event.EventHandler.searchEventByEventID;
 import Utilities.Message;
 import java.util.Iterator;
-//will be removed for boundary
-import java.util.Scanner;
 
 /**
  *
@@ -784,10 +778,10 @@ public class Donation {
 
     //Check Venue Code - Control
     public boolean checkVenueCode(String _vc) {
-        String [] venueList=new String[3];
+        String[] venueList = new String[3];
         fileHandler.loadVenueCode(venueList);
-        for(String venue:venueList){
-            if(_vc.equals(venue)){
+        for (String venue : venueList) {
+            if (_vc.equals(venue)) {
                 return true;
             }
         }
@@ -1726,9 +1720,9 @@ public class Donation {
                     }
                 }
             }
-            generalFunc.repeatPrint("-",93);
+            generalFunc.repeatPrint("-", 93);
             //generalFunc.printEmptyEmptyLine();
-            System.out.println("\n");
+            generalFunc.printEmptyLine();
         } else {
             donationUI.displayEmptyList();
         }
@@ -1907,8 +1901,8 @@ public class Donation {
                 }
             }
         }
-        generalFunc.repeatPrint("-",121);
-        System.out.print("\n");
+        generalFunc.repeatPrint("-", 121);
+        generalFunc.printEmptyLine();
     }
 
     public void displaySingleDonorRecords(ListInterface<DonationRecord> dRecordList, Donor donor) {
@@ -1918,8 +1912,8 @@ public class Donation {
             DonationRecord record = iterator.next();
             displaySingleRecordWithoutDonorID(record);
         }
-        generalFunc.repeatPrint("-",89);
-        System.out.print("\n");
+        generalFunc.repeatPrint("-", 89);
+        generalFunc.printEmptyLine();
     }
 
     public void displaySingleRecordWithoutDonorID(DonationRecord record) {
@@ -3392,14 +3386,14 @@ public class Donation {
                     }
                 }
             } else {
-                if(item instanceof Money){
+                if (item instanceof Money) {
                     if (((Money) item).getAmount() >= a) {
-                    itemlist.remove(item);
-                }
-                }else{
+                        itemlist.remove(item);
+                    }
+                } else {
                     if (item.getQuantity() >= a) {
-                    itemlist.remove(item);
-                }
+                        itemlist.remove(item);
+                    }
                 }
             }
         }
@@ -3546,6 +3540,31 @@ public class Donation {
         }
         donationUI.displayReport2Header();
         donationUI.displayReport2Content(max, maxIndex);
+        displayTotalContributers();
+    }
+
+    public void displayTotalContributers() {
+        ListInterface<DonationRecord> fullRecord = new ArrayList<>();
+        ListInterface<String> usedIDList = new ArrayList<>();
+        fileHandler.loadIntoDR(fullRecord);
+        donationUI.displayDonationDonorHeader();
+        Iterator<DonationRecord> iterator = fullRecord.iterator();
+        while (iterator.hasNext()) {
+            DonationRecord record = iterator.next();
+            //check if existed
+            boolean notRepeated = true;
+            Iterator<String> iterator3 = usedIDList.iterator();
+            while (iterator3.hasNext()) {
+                String currentID = iterator3.next();
+                if (currentID.equals(record.getDonor().getId())) {
+                    notRepeated = false;
+                }
+            }
+            if (notRepeated) {
+                usedIDList.add(record.getDonor().getId());
+            }
+        }
+        donationUI.displayNumOfDonor(usedIDList.size());
     }
 
 }
