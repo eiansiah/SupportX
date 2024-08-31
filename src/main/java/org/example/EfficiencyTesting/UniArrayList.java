@@ -112,6 +112,7 @@ public class UniArrayList<T> implements Serializable {
         for (int index = 0; !found && (index < numberOfEntries); index++) {
             if (anEntry.equals(array[index])) {
                 found = true;
+                break;
             }
         }
         return found;
