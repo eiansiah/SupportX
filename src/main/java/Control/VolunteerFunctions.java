@@ -21,11 +21,11 @@ public class VolunteerFunctions {
     private static final Scanner scanner = new Scanner(System.in);
     private static final String FILE_NAME = "volunteers.txt";
     private static final VolunteerFileHandler fileHandler = new VolunteerFileHandler();
-    private static final ListInterface<Volunteer> volunteers = new ArrayList<>();
+    private static ListInterface<Volunteer> volunteers = new ArrayList<>();
     
         public void runVolunteerSystem() {
 
-        fileHandler.checkAndCreateFile("volunteer.txt");
+        fileHandler.checkAndCreateFile("volunteers.txt");
         
         while (true) {
             try {
@@ -98,16 +98,11 @@ public class VolunteerFunctions {
             return;
         }
 
-        for (int i = 0; i < upcomingEvents.size(); i++) {
-            
-
-            VolunteerUI.upcomingEventsUI();
-        }
+        VolunteerUI.upcomingEventsUI(upcomingEvents);
 
         Event eventChosen;
         while (true) {
-            System.out.print("Enter event ID: ");
-            String eventID = scanner.nextLine().trim();
+            String eventID = VolunteerUI.inputEventID_UI();
 
             Event event = EventHandler.searchEventByEventID(eventID);
 
@@ -119,17 +114,14 @@ public class VolunteerFunctions {
             }
         }
 
-        //Display
-        for (int i = 0; i < volunteers.size(); i++) {
-            Volunteer volunteer = volunteers.get(i);
+        //Display Volunteer List
+        volunteers = fileHandler.readData("volunteers.txt");
+        VolunteerUI.listVolunteersUI(volunteers);
 
-            System.out.println(volunteer.toString());
-        }
 
         String volunteerID;
         while (true) {
-            System.out.print("Enter volunteer ID: ");
-            volunteerID = scanner.nextLine().trim();
+            volunteerID = VolunteerUI.inputVolunteerID_UI();
 
             boolean idExist = false;
             for (int i = 0; i < volunteers.size(); i++) {
@@ -174,10 +166,9 @@ public class VolunteerFunctions {
     }
 
     private static void searchEventsByVolunteer() {
-        //TODO: refer to EventHandler.java getEventVolunteerJoined?
-        System.out.print("Enter Volunteer ID to search: ");
-        String volunteerID = scanner.nextLine().trim();
-
+        //unable to read data from file
+        String volunteerID = VolunteerUI.volunteerIDtoSearchUI();
+        volunteers = fileHandler.readData("volunteers.txt");
         Volunteer volunteerToSearch = null;
 
         for (int i = 0; i < volunteers.size(); i++) {
@@ -190,11 +181,8 @@ public class VolunteerFunctions {
         }
 
         if (volunteerToSearch != null) {
-            System.out.println("\nVolunteer Details");
-            System.out.println("-------------------");
-            System.out.println("ID: " + volunteerToSearch.getId());
-            System.out.println("Name: " + volunteerToSearch.getName());
-            System.out.println("Availability: " + volunteerToSearch.getAvailability());
+            
+            VolunteerUI.volunteerDetailsUI(volunteerToSearch);
 
             // Retrieve events associated with this volunteer
             ListInterface<EventVolunteer> eventVolunteers = EventHandler.getEventVolunteerJoined(volunteerID);
@@ -642,7 +630,7 @@ public class VolunteerFunctions {
         System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------");
     }
 
-    private static void viewSummaryReport() {
+    public static void viewSummaryReport() {
 
         // Check if there are any volunteers available
         if (volunteers.isEmpty()) {
@@ -769,7 +757,7 @@ public class VolunteerFunctions {
     }
 
     // Helper method to list event IDs participated by a volunteer
-    private static String listEventIDs(ArrayList<EventVolunteer> eventVolunteers) {
+    public static String listEventIDs(ArrayList<EventVolunteer> eventVolunteers) {
         StringBuilder eventIDs = new StringBuilder();
         for (EventVolunteer ev : eventVolunteers) {
             eventIDs.append(ev.eventID()).append(", ");
@@ -782,19 +770,13 @@ public class VolunteerFunctions {
     }
 
     private static void listVolunteers() {
+        volunteers = fileHandler.readData("volunteers.txt");
         if (volunteers.isEmpty()) {
             Message.displayDataNotFoundMessage("No volunteers available.");
             return;
         }
 
-        System.out.println("List of Volunteers");
-        System.out.println("-------------------");
-
-        for (int i = 0; i < volunteers.size(); i++) {
-            Volunteer volunteer = volunteers.get(i);
-
-            System.out.println(volunteer.getId() + " " + volunteer.getName());
-        }
+        VolunteerUI.listVolunteersUI(volunteers);
     }
 
     private static void filterVolunteers() {

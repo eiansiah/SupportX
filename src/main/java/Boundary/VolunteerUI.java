@@ -1,7 +1,7 @@
 package Boundary;
 
+import Control.VolunteerFunctions;
 import Entity.Volunteer;
-import Control.VolunteerManagement;
 import Main.Event.Event;
 import Main.Event.EventVolunteer;
 
@@ -34,11 +34,11 @@ public class VolunteerUI {
         return scanner.nextLine().trim();
     }
 
-    private static void displayNoUpcomingEvents() {
-        System.out.println("No upcoming events. ");
-    }
+    //private static void displayNoUpcomingEvents() {
+    //    System.out.println("No upcoming events. ");
+    //}
 
-    public static void upcomingEventsUI() {
+    public static void upcomingEventsUI(ListInterface<Event> upcomingEvents) {
         for (int i = 0; i < upcomingEvents.size(); i++) {
             Event event = upcomingEvents.get(i);
 
@@ -47,32 +47,34 @@ public class VolunteerUI {
         }
     }
 
-    private static String inputEventID_UI() {
+    public static String inputEventID_UI() {
+        System.out.println("");
         System.out.print("Enter event ID: ");
         return scanner.nextLine().trim();
     }
 
-    private static void volunteersUI(ArrayList<Volunteer> volunteers) {
+    public static void volunteersUI(ArrayList<Volunteer> volunteers) {
         for (Volunteer volunteer : volunteers) {
             System.out.println(volunteer.toString());
         }
     }
 
-    private static String inputVolunteerID_UI() {
+    public static String inputVolunteerID_UI() {
+        System.out.println("");
         System.out.print("Enter volunteer ID: ");
         return scanner.nextLine().trim();
     }
     
-    private static void assignedVolunteerUI(Event eventChosen, String volunteerID) {
-        System.out.println(volunteerID + " has been assigned to " + eventChosen.eventID());
-    }
+    //private static void assignedVolunteerUI(Event eventChosen, String volunteerID) {
+    //    System.out.println(volunteerID + " has been assigned to " + eventChosen.eventID());
+    //}
 
-    private static String volunteerIDtoSearchUI() {
+    public static String volunteerIDtoSearchUI() {
         System.out.print("Enter Volunteer ID to search: ");
         return scanner.nextLine().trim();
     }
 
-    private static void volunteerDetailsUI(Volunteer volunteerToSearch) {
+    public static void volunteerDetailsUI(Volunteer volunteerToSearch) {
         System.out.println("\nVolunteer Details");
         System.out.println("-------------------");
         System.out.println("ID: " + volunteerToSearch.getId());
@@ -301,7 +303,7 @@ public class VolunteerUI {
                         volunteer.getId(),
                         volunteer.getName(),
                         volunteer.getGender(),
-                        VolunteerManagement.listEventIDs(eventVolunteers), // Helper method to list event IDs
+                        VolunteerFunctions.listEventIDs(eventVolunteers), // Helper method to list event IDs
                         eventVolunteers.size()); // Total number of events participated
     }
 
@@ -321,10 +323,13 @@ public class VolunteerUI {
         System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------");
     }
 
-    private static void listVolunteersUI(ArrayList<Volunteer> volunteers){
+    public static void listVolunteersUI(ListInterface<Volunteer> volunteers){
+        System.out.println(" ");
         System.out.println("List of Volunteers");
         System.out.println("-------------------");
-        for (Volunteer volunteer : volunteers) {
+        for (int i = 0; i < volunteers.size(); i++) {
+            Volunteer volunteer = volunteers.get(i);
+
             System.out.println(volunteer.getId() + " " + volunteer.getName());
         }
     }
