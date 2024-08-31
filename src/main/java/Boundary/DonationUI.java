@@ -14,10 +14,9 @@ import Entity.MedicalDevice;
 import Entity.Medicine;
 import Entity.Money;
 import Entity.PersonalCare;
+import FileHandling.DonationFileHandler;
 import Libraries.GeneralFunction;
 import Libraries.ListInterface;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
@@ -32,6 +31,7 @@ public class DonationUI {
     //--------------------------------------------------------------Input-------------------------------------------------------------------------
     Scanner scanner = new Scanner(System.in);
     private GeneralFunction generalFunc = new GeneralFunction();
+    private DonationFileHandler fileHandler = new DonationFileHandler();
 
     //get item code
     public String inputRecordIDRemove() {
@@ -252,11 +252,11 @@ public class DonationUI {
     //Display Food 
 
     public void displayFood(ListInterface<DonationItem> foodList) {
-        generalFunc.repeatPrint("-",126);
+        generalFunc.repeatPrint("-", 126);
         System.out.print("\n");
         System.out.printf("%-10s %-20s %-20s %-20s %-20s %-15s %-15s\n", "Item Code", "Item Name", "Net Weight (kg)", "Expiry Date", "Food Type",
                 "Quantity", "Venue Code");
-        generalFunc.repeatPrint("-",126);
+        generalFunc.repeatPrint("-", 126);
         System.out.print("\n");
         Iterator<DonationItem> iterator = foodList.iterator();
         while (iterator.hasNext()) {
@@ -264,16 +264,16 @@ public class DonationUI {
             System.out.printf("%-10s %-20s %-20s %-20s %-20s %-15s %-15s\n", item.getItemCode(), item.getItemName(), ((Food) item).getNetWeight(),
                     ((Food) item).getExpiryDate(), ((Food) item).getFoodType(), item.getQuantity(), ((Food) item).getVenueCode());
         }
-        generalFunc.repeatPrint("-",126);
+        generalFunc.repeatPrint("-", 126);
         System.out.print("\n");
     }
 
     //Display Beverage 
     public void displayBeverage(ListInterface<DonationItem> beverageList) {
-        generalFunc.repeatPrint("-",105);
+        generalFunc.repeatPrint("-", 105);
         System.out.print("\n");
         System.out.printf("%-10s %-20s %-20s %-20s %-15s %-15s\n", "Item Code", "Item Name", "Net Volume (ml)", "Expiry Date", "Quantity", "Venue Code");
-        generalFunc.repeatPrint("-",105);
+        generalFunc.repeatPrint("-", 105);
         System.out.print("\n");
         Iterator<DonationItem> iterator = beverageList.iterator();
         while (iterator.hasNext()) {
@@ -281,17 +281,17 @@ public class DonationUI {
             System.out.printf("%-10s %-20s %-20s %-20s %-15s %-15s\n", item.getItemCode(), item.getItemName(), ((Beverage) item).getNetVolume(),
                     ((Beverage) item).getExpiryDate(), item.getQuantity(), ((Beverage) item).getVenueCode());
         }
-        generalFunc.repeatPrint("-",105);
+        generalFunc.repeatPrint("-", 105);
         System.out.print("\n");
     }
 
     //Display Clothing 
     public void displayClothing(ListInterface<DonationItem> clothingList) {
-        generalFunc.repeatPrint("-",147);
+        generalFunc.repeatPrint("-", 147);
         System.out.print("\n");
         System.out.printf("%-10s %-20s %-20s %-20s %-20s %-20s %-15s %-15s\n", "Item Code", "Item Name", "Clothing Category",
                 "Gender", "Age Group", "Size", "Quantity", "Venue Code");
-        generalFunc.repeatPrint("-",147);
+        generalFunc.repeatPrint("-", 147);
         System.out.print("\n");
         Iterator<DonationItem> iterator = clothingList.iterator();
         while (iterator.hasNext()) {
@@ -300,16 +300,16 @@ public class DonationUI {
                     ((Clothing) item).getClothingCategory(), ((Clothing) item).getGender(), ((Clothing) item).getAge(),
                     ((Clothing) item).getSize(), item.getQuantity(), ((Clothing) item).getVenueCode());
         }
-        generalFunc.repeatPrint("-",147);
+        generalFunc.repeatPrint("-", 147);
         System.out.print("\n");
     }
 
     //Display Medical Device 
     public void displayMedicalDevice(ListInterface<DonationItem> medicalDeviceList) {
-        generalFunc.repeatPrint("-",114);
+        generalFunc.repeatPrint("-", 114);
         System.out.print("\n");
         System.out.printf("%-10s %-20s %-15s %-15s %-50s\n", "Item Code", "Item Name", "Quantity", "Venue Code", "Description");
-        generalFunc.repeatPrint("-",114);
+        generalFunc.repeatPrint("-", 114);
         System.out.print("\n");
         Iterator<DonationItem> iterator = medicalDeviceList.iterator();
         while (iterator.hasNext()) {
@@ -317,18 +317,18 @@ public class DonationUI {
             System.out.printf("%-10s %-20s %-15s %-15s %-50s\n", item.getItemCode(), item.getItemName(), item.getQuantity(),
                     ((MedicalDevice) item).getVenueCode(), ((MedicalDevice) item).getDescription());
         }
-        generalFunc.repeatPrint("-",114);
+        generalFunc.repeatPrint("-", 114);
         System.out.print("\n");
     }
 
     //Display Personal Care 
     public void displayPersonalCare(ListInterface<DonationItem> personalCareList) {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        generalFunc.repeatPrint("-",153);
+        generalFunc.repeatPrint("-", 153);
         System.out.print("\n");
         System.out.printf("%-10s %-20s %-25s %-10s %-15s %-20s %-15s %-15s %-15s\n", "Item Code", "Item Name", "Personal Care Category",
                 "Gender", "Age Group", "Net Weight (g)", "Expiry date", "Quantity", "Venue Code");
-        generalFunc.repeatPrint("-",153);
+        generalFunc.repeatPrint("-", 153);
         System.out.print("\n");
         Iterator<DonationItem> iterator = personalCareList.iterator();
         while (iterator.hasNext()) {
@@ -352,33 +352,33 @@ public class DonationUI {
                         ((PersonalCare) item).getVenueCode());
             }
         }
-        generalFunc.repeatPrint("-",153);
+        generalFunc.repeatPrint("-", 153);
         System.out.print("\n");
     }
 
     //Display Money 
     public void displayMoney(ListInterface<DonationItem> moneyList) {
-        generalFunc.repeatPrint("-",83);
+        generalFunc.repeatPrint("-", 83);
         System.out.print("\n");
         System.out.printf("%-10s %-20s %-20s %-30s\n", "Item Code", "Item Name", "Amount (RM)", "Source");
-        generalFunc.repeatPrint("-",83);
+        generalFunc.repeatPrint("-", 83);
         System.out.print("\n");
         Iterator<DonationItem> iterator = moneyList.iterator();
         while (iterator.hasNext()) {
             DonationItem item = iterator.next();
             System.out.printf("%-10s %-20s %-20s %-30s\n", item.getItemCode(), item.getItemName(), ((Money) item).getAmount(), ((Money) item).getSource());
         }
-        generalFunc.repeatPrint("-",83);
+        generalFunc.repeatPrint("-", 83);
         System.out.print("\n");
     }
 
     //Display Medicine 
     public void displayMedicine(ListInterface<DonationItem> medicineList) {
-        generalFunc.repeatPrint("-",204);
+        generalFunc.repeatPrint("-", 204);
         System.out.print("\n");
         System.out.printf("%-10s %-20s %-15s %-15s %-15s %-20s %-20s %-15s %-15s %-50s\n", "Item Code", "Item Name", "Dosage Form",
                 "Gender", "Age Group", "Net Weight (g)", "Expiry date", "Quantity", "Venue Code", "Description");
-        generalFunc.repeatPrint("-",204);
+        generalFunc.repeatPrint("-", 204);
         System.out.print("\n");
         Iterator<DonationItem> iterator = medicineList.iterator();
         while (iterator.hasNext()) {
@@ -387,7 +387,7 @@ public class DonationUI {
                     ((Medicine) item).getDosageForm(), ((Medicine) item).getGender(), ((Medicine) item).getAge(), ((Medicine) item).getNetWeight(),
                     ((Medicine) item).getExpiryDate(), item.getQuantity(), ((Medicine) item).getVenueCode(), ((Medicine) item).getDescription());
         }
-        generalFunc.repeatPrint("-",204);
+        generalFunc.repeatPrint("-", 204);
         System.out.print("\n");
     }
 
@@ -506,18 +506,12 @@ public class DonationUI {
 
     public void displayVenueCode() {
         System.out.println("Venue Code:");
-        try {
-            File myObj = new File("Venue.txt");
-            Scanner readerFile = new Scanner(myObj);
-            while (readerFile.hasNextLine()) {
-                String[] venueList = readerFile.nextLine().split("#");
-                System.out.printf("%-10s %-20s\n", venueList[0], venueList[1]);
-            }
-            readerFile.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
+        String[][] venueList = new String[3][2];
+        fileHandler.loadVenueCodeWithPlace(venueList);
+        for (int i = 0; i < 3; i++) {
+            System.out.printf("%-10s %-20s\n", venueList[i][0], venueList[i][1]);
         }
+
     }
     //Display Add Medical Device Instruction 
 
@@ -691,14 +685,14 @@ public class DonationUI {
     }
 
     public void displaySingleDonorRecordsHeader(Donor donor) {
-        generalFunc.repeatPrint("-",89);
+        generalFunc.repeatPrint("-", 89);
         System.out.print("\n");
         System.out.println("Donor ID: " + donor.getId());
         System.out.println("Donor Name: " + donor.getName());
-        generalFunc.repeatPrint("-",89);
+        generalFunc.repeatPrint("-", 89);
         System.out.print("\n");
         System.out.printf("%-25s %-10s %-20s %-10s %-20s\n", "Donation Record ID", "Item Code", "Item Name", "Quantity", "Date Time");
-        generalFunc.repeatPrint("-",89);
+        generalFunc.repeatPrint("-", 89);
         System.out.print("\n");
     }
 
@@ -728,11 +722,11 @@ public class DonationUI {
     }
 
     public void displayDonationRecordTableHeader() {
-        generalFunc.repeatPrint("-",121);
+        generalFunc.repeatPrint("-", 121);
         System.out.print("\n");
         System.out.printf("%-25s %-10s %-20s %-10s %-20s %-10s %-20s\n", "Donation Record ID", "Donor ID", "Donor Name", "Item Code",
                 "Item Name", "Quantity", "Date Time");
-        generalFunc.repeatPrint("-",121);
+        generalFunc.repeatPrint("-", 121);
         System.out.print("\n");
     }
 
@@ -828,10 +822,10 @@ public class DonationUI {
     }
 
     public void displayFullDonationListTableHeader() {
-        generalFunc.repeatPrint("-",93);
+        generalFunc.repeatPrint("-", 93);
         System.out.print("\n");
         System.out.printf("%-10s %-30s %-20s %-30s\n", "Item Code", "Item Name", "Quantity/Amount", "Venue Code/ Event Code");
-        generalFunc.repeatPrint("-",93);
+        generalFunc.repeatPrint("-", 93);
         System.out.print("\n");
     }
 
