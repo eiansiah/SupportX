@@ -430,7 +430,7 @@ public class Donation {
                 if (!(_temp.equalsIgnoreCase("X"))) {
                     _tempOption = Integer.parseInt(_temp);
                     if (!(_tempOption >= 1 && _tempOption <= 9)) {
-                        msgHandling.displayGeneralErrorMsg("Invalid Clothing Category Option. Please enter a valid option (1-8).");
+                        msgHandling.displayGeneralErrorMsg("Invalid Clothing Category Option. Please enter a valid option (1-9).");
                     } else {
                         break;
                     }
@@ -438,7 +438,7 @@ public class Donation {
                     return "";
                 }
             } catch (Exception ex) {
-                msgHandling.displayGeneralErrorMsg("Invalid Clothing Category Option. Please enter a valid option (1-8).");
+                msgHandling.displayGeneralErrorMsg("Invalid Clothing Category Option. Please enter a valid option (1-9).");
             }
         }
         switch (_tempOption) {
@@ -516,7 +516,7 @@ public class Donation {
                 if (!(_temp.equalsIgnoreCase("X"))) {
                     _tempOption = Integer.parseInt(_temp);
                     if (!(_tempOption >= 1 && _tempOption <= 6)) {
-                        msgHandling.displayGeneralErrorMsg("Invalid Age Group Option. Please enter a valid option (1-8).");
+                        msgHandling.displayGeneralErrorMsg("Invalid Age Group Option. Please enter a valid option (1-6).");
                     } else {
                         break;
                     }
@@ -524,7 +524,7 @@ public class Donation {
                     return "";
                 }
             } catch (Exception ex) {
-                msgHandling.displayGeneralErrorMsg("Invalid Age Group Option. Please enter a valid option (1-8).");
+                msgHandling.displayGeneralErrorMsg("Invalid Age Group Option. Please enter a valid option (1-6).");
             }
         }
         switch (_tempOption) {
@@ -631,8 +631,8 @@ public class Donation {
                 _temp = donationUI.inputPCCat();
                 if (!(_temp.equalsIgnoreCase("X"))) {
                     _tempOption = Integer.parseInt(_temp);
-                    if (!(_tempOption >= 1 && _tempOption <= 9)) {
-                        msgHandling.displayGeneralErrorMsg("Invalid Personal Care Category Option. Please enter a valid option (1-8).");
+                    if (!(_tempOption >= 1 && _tempOption <= 5)) {
+                        msgHandling.displayGeneralErrorMsg("Invalid Personal Care Category Option. Please enter a valid option (1-5).");
                     } else {
                         break;
                     }
@@ -640,7 +640,7 @@ public class Donation {
                     return "";
                 }
             } catch (Exception ex) {
-                msgHandling.displayGeneralErrorMsg("Invalid Personal Care Category Option. Please enter a valid option (1-8).");
+                msgHandling.displayGeneralErrorMsg("Invalid Personal Care Category Option. Please enter a valid option (1-5).");
             }
         }
         switch (_tempOption) {
@@ -671,8 +671,8 @@ public class Donation {
                 _temp = donationUI.inputDosageForm();
                 if (!(_temp.equalsIgnoreCase("X"))) {
                     _tempOption = Integer.parseInt(_temp);
-                    if (!(_tempOption >= 1 && _tempOption <= 9)) {
-                        msgHandling.displayGeneralErrorMsg("Invalid Dosage Form Option. Please enter a valid option (1-8).");
+                    if (!(_tempOption >= 1 && _tempOption <= 5)) {
+                        msgHandling.displayGeneralErrorMsg("Invalid Dosage Form Option. Please enter a valid option (1-5).");
                     } else {
                         break;
                     }
@@ -680,7 +680,7 @@ public class Donation {
                     return "";
                 }
             } catch (Exception ex) {
-                msgHandling.displayGeneralErrorMsg("Invalid Dosage Form Option. Please enter a valid option (1-8).");
+                msgHandling.displayGeneralErrorMsg("Invalid Dosage Form Option. Please enter a valid option (1-5).");
             }
         }
         switch (_tempOption) {
@@ -1709,7 +1709,6 @@ public class Donation {
 
     //Display Donation
     public void displayAllDonation(ListInterface<DonationItem> fullList) {
-        donationUI.displayFullDonationListHeader();
         if (!fullList.isEmpty()) {
             donationUI.displayFullDonationListTableHeader();
             Iterator<DonationItem> iterator = fullList.iterator();
@@ -1734,6 +1733,9 @@ public class Donation {
                     }
                 }
             }
+            generalFunc.repeatPrint("-",93);
+            //generalFunc.printEmptyEmptyLine();
+            System.out.println("\n");
         } else {
             donationUI.displayEmptyList();
         }
@@ -1802,6 +1804,7 @@ public class Donation {
 
     //Search Donation
     public void searchDonation() {
+        donationUI.displaySearchDonationHeader();
         ListInterface<DonationItem> fullList = new ArrayList<>();
         fileHandler.loadIntoAll(fullList);
         displayAllDonation(fullList);
@@ -1815,7 +1818,7 @@ public class Donation {
             if (code.isEmpty()) {
                 msgHandling.displayInvalidInputMessage("Please do not leave the field blank.");
             } else {
-                if (code.equals("X")) {
+                if (code.equalsIgnoreCase("X")) {
                     break;
                 } else {
                     boolean valid = false;
@@ -1834,7 +1837,7 @@ public class Donation {
                 }
             }
         }
-        if (!code.equals("X")) {
+        if (!code.equalsIgnoreCase("X")) {
             Iterator<DonationItem> iterator = fullList.iterator();
             while (iterator.hasNext()) {
                 DonationItem item = iterator.next();
@@ -1911,6 +1914,8 @@ public class Donation {
                 }
             }
         }
+        generalFunc.repeatPrint("-",121);
+        System.out.print("\n");
     }
 
     public void displaySingleDonorRecords(ListInterface<DonationRecord> dRecordList, Donor donor) {
@@ -1920,7 +1925,8 @@ public class Donation {
             DonationRecord record = iterator.next();
             displaySingleRecordWithoutDonorID(record);
         }
-
+        generalFunc.repeatPrint("-",89);
+        System.out.print("\n");
     }
 
     public void displaySingleRecordWithoutDonorID(DonationRecord record) {
@@ -2955,7 +2961,7 @@ public class Donation {
         } else if (option == 2) {
             amdOption = checkMenuWithOp(6);
         } else {
-            amdOption = checkMenuWithOp(8);
+            amdOption = checkMenuWithOp(7);
         }
         return amdOption;
     }
@@ -3054,6 +3060,7 @@ public class Donation {
         ListInterface<DonationItem> itemlist = new ArrayList<>();
         ListInterface<DonationItem> fullList = new ArrayList<>();
         fileHandler.loadIntoAll(fullList);
+        donationUI.displayFullDonationListHeader();
         displayAllDonation(fullList);
         int filter = 0, sort = 0, option = 0;
         if (fullList.isEmpty()) {
@@ -3136,6 +3143,7 @@ public class Donation {
                     fullList = new ArrayList<>();
                     fileHandler.loadIntoAll(fullList);
                     sortBeforeDisplay(fullList, sort);
+                    donationUI.displayFullDonationListHeader();
                     displayAllDonation(fullList);
                 } else {
                     //let user filter by quantity
@@ -3144,6 +3152,7 @@ public class Donation {
                     fqOption = checkMenuWithOp(4);
                     if (fqOption != 4) {
                         filterByQuantity(fullList, sort, fqOption);
+                        donationUI.displayFullDonationListHeader();
                         displayAllDonation(fullList);
                     } else {
                         break;
@@ -3370,16 +3379,34 @@ public class Donation {
         while (iterator2.hasNext()) {
             DonationItem item = iterator2.next();
             if (fq == 1) {
-                if (item.getQuantity() <= a) {
-                    itemlist.remove(item);
+                if (item instanceof Money) {
+                    if (((Money) item).getAmount() <= a) {
+                        itemlist.remove(item);
+                    }
+                } else {
+                    if (item.getQuantity() <= a) {
+                        itemlist.remove(item);
+                    }
                 }
             } else if (fq == 2) {
-                if (item.getQuantity() < a || item.getQuantity() > b) {
-                    itemlist.remove(item);
+                if (item instanceof Money) {
+                    if (((Money) item).getAmount() < a || ((Money) item).getAmount() > b) {
+                        itemlist.remove(item);
+                    }
+                } else {
+                    if (item.getQuantity() < a || item.getQuantity() > b) {
+                        itemlist.remove(item);
+                    }
                 }
             } else {
-                if (item.getQuantity() >= a) {
+                if(item instanceof Money){
+                    if (((Money) item).getAmount() >= a) {
                     itemlist.remove(item);
+                }
+                }else{
+                    if (item.getQuantity() >= a) {
+                    itemlist.remove(item);
+                }
                 }
             }
         }
