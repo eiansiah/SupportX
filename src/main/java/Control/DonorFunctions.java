@@ -9,7 +9,7 @@
 
 package Control;
 
-import Entity.DonationItem;
+//Entity
 import Entity.DonationRecord;
 import Entity.Donor;
 
@@ -26,18 +26,12 @@ import Boundary.DonorUI;
 import Utilities.NewValidation;
 import Utilities.Message;
 
+//Misc
 import java.time.LocalDate;
 
 public class DonorFunctions {
 
     private static ListInterface<Donor> donorArrayList;
-
-    // ArrayList to temporary store data for donation item
-    private static ListInterface<DonationItem> donationItemArrayList = new ArrayList<>();
-    // ArrayList to temporary store data for donation item
-    private static ListInterface<DonationRecord> donationRecordArrayList = new ArrayList<>();
-    // HashMap to store Donor ID -> List of Donations
-    private Hashmap<String, ListInterface<DonationRecord>> donorDonationsMap = new Hashmap<>();
 
     private static final DonorFileHandler donorFileHandler = new DonorFileHandler();
 
@@ -49,38 +43,12 @@ public class DonorFunctions {
         return donorFileHandler.readData("donor.txt");
     }
 
-    public void printDonationRecords(ArrayList<DonationRecord> donationRecords) {
-        for (DonationRecord record : donationRecords) {
-            System.out.println(record);
-            System.out.println(); // Print a blank line between records
-        }
-    }
-
-
-//    private void populateDonorMaps() {
-//        for (Donor donor : donorArrayList) {
-//            String donorID = donor.getId(); // Assuming Donor class has a getDonorID() method
-//
-//            // Retrieve and add donations for this donor
-//            ArrayList<Donation> donations = donor.getDonations(); // Assuming Donor class has a getDonations() method
-//            if (donations != null && !donations.isEmpty()) {
-//                donorDonationsMap.put(donorID, donations);
-//            }
-//
-//            // Retrieve and add events for this donor
-//            ArrayList<Event> events = donor.getEvents(); // Assuming Donor class has a getEvents() method
-//            if (events != null && !events.isEmpty()) {
-//                donorEventsMap.put(donorID, events);
-//            }
-//        }
-//    }
-
     public static void runDonorSystem() {
         int choice = 0;
 
         donorFileHandler.checkAndCreateFile("donor.txt");
 
-        DonorUI.DonorWelcomeMessage();
+        GeneralFunction.printTitle("Welcome to Donor Subsystem!", 60, "--", "|");
 
         do {
 
@@ -107,7 +75,7 @@ public class DonorFunctions {
                     displayDonors(readDonors());
                     break;
                 case 5: //View Donor Donation
-                    //displayDonorDonation();
+                    displayDonorDonationConnection(DonorUI.inputCheckDonorIDUI());
                     break;
                 case 6: //View reports
                     viewDonorReport(readDonors());
@@ -131,7 +99,7 @@ public class DonorFunctions {
             }
         }
 
-//        // If the donor is not found, display a message and return null
+        // If the donor is not found, display a message and return null
 //        Message.displayDataNotFoundMessage("Donor with ID " + donorID + " was not found.");
         return null;
     }
@@ -219,8 +187,9 @@ public class DonorFunctions {
 
         } while (!isValid);
 
+        LocalDate registeredDate = LocalDate.now();
 
-        return new Donor(donorId, name, email, phone, category, type);
+        return new Donor(donorId, name, email, phone, category, type, registeredDate);
     }
 
     public static void deleteDonor(ListInterface<Donor> donors) {
@@ -246,7 +215,8 @@ public class DonorFunctions {
                     selectedDonor.getEmail(),
                     selectedDonor.getPhone(),
                     selectedDonor.getCategory(),
-                    selectedDonor.getType()
+                    selectedDonor.getType(),
+                    selectedDonor.getRegisteredDate()
             );
 
             if (confirmation.equals("Y")) {
@@ -283,7 +253,8 @@ public class DonorFunctions {
                     selectedDonor.getEmail(),
                     selectedDonor.getPhone(),
                     selectedDonor.getCategory(),
-                    selectedDonor.getType()
+                    selectedDonor.getType(),
+                    selectedDonor.getRegisteredDate()
             );
 
             if (confirmation.equals("Y")) {
@@ -449,11 +420,11 @@ public class DonorFunctions {
                                 selectedDonor.getEmail(),
                                 selectedDonor.getPhone(),
                                 selectedDonor.getCategory(),
-                                selectedDonor.getType()
+                                selectedDonor.getType(),
+                                selectedDonor.getRegisteredDate()
                         );
 
-//                        DonorUI.displayDonorDonation(donorDonationsMap, donorID);
-//                        DonorUI.displayDonorEvent(donorEventsMap, donorID);
+
 
                     } else {
                         DonorUI.donorNotFoundMsg(donorID);
@@ -602,15 +573,104 @@ public class DonorFunctions {
         }
 
         GeneralFunction.printTitle("Donor Subsystem Summary Report", 87, "--", "|");
+        GeneralFunction.printTitle("Total Number of Donors", 87, "--", "|");
+        DonorUI.totalNumberOfDonors(donors.size());
         GeneralFunction.printTitle("Summary Number of Donors by Different Types and Category", 87, "--", "|");
         DonorUI.viewSummaryDonorData(filterCounts);
+        GeneralFunction.printTitle("Donor with the Most Donations Record", 87, "--", "|");
+        displayDonationData();
+        GeneralFunction.printTitle("Number fo Donor That Joined This Month", 87, "--", "|");
+        displayDonorJoinedThisMonth();
         GeneralFunction.printTitle("Report generated on: " + LocalDate.now(), 87, "--", "|");
         DonorUI.pressKeyToContinue();
     }
 
-    public static void main (String[] args) {
-        DonorFunctions donorFunctions = new DonorFunctions(); //Create an arraylist
-        donorFunctions.runDonorSystem();
+
+    public static void displayDonorDonationConnection(String donorId){
+        Donation donation = new Donation();
+        ListInterface<DonationRecord> donationRecord = new ArrayList<>();
+        donationRecord = donation.findRecordsForADonor(donorId);
+
+        for (int i = 0; i < donationRecord.size(); i++){
+            DonationRecord record = donationRecord.get(i);
+//            System.out.println("Record ID: " + record.getRecordID());
+//            System.out.println("Donor: " + record.getDonor().getId());
+                DonorUI.showRecordID(record.getDonor().getId());
+            for (int itemIterator = 0; itemIterator < record.getItem().size(); itemIterator++){
+//                System.out.println("Items: " + record.getItem().get(itemIterator));
+                DonorUI.showItemData(record.getItem().get(itemIterator));
+            }
+//            System.out.println("Donation Date/Time: " + record.getDonationDateTime());
+            DonorUI.showItemDate(record.getDonationDateTime());
+            System.out.println();
+        }
+    }
+
+    public static void displayDonationData() {
+
+        // Initialize Donor ArrayList
+        ListInterface<Donor> donorDetails = readDonors();
+
+        // Initialize Donation ArrayList
+        Donation donation = new Donation();
+        ListInterface<DonationRecord> donationDetails = new ArrayList<>();
+
+        // Variables to track the donor with the most records
+        Donor topDonor = null;
+        int maxRecords = 0;
+
+        for (int i = 0; i < donorDetails.size(); i++) {
+            // Read through all donors and get their ID
+            String donorID = donorDetails.get(i).getId();
+
+            // Pass donorID to get all donation data for that one ID
+            ListInterface<DonationRecord> currentDonorDonations = donation.findRecordsForADonor(donorID);
+
+            // Add all records from the current donor to the main donationDetails list
+            for (int j = 0; j < currentDonorDonations.size(); j++) {
+                donationDetails.add(currentDonorDonations.get(j));
+            }
+
+            // Check if the current donor has the most records
+            if (currentDonorDonations.size() > maxRecords) {
+                maxRecords = currentDonorDonations.size();
+                topDonor = donorDetails.get(i);
+            }
+        }
+
+        // Output the donor with the most records
+        if (topDonor != null) {
+            DonorUI.donorWithMostRecord(topDonor.getId(),topDonor.getName(),maxRecords);
+        } else {
+            Message.displayDataNotFoundMessage("No donors found.");
+        }
+    }
+
+    public static void displayDonorJoinedThisMonth(){
+        // Get the current month and year
+        LocalDate currentDate = LocalDate.now();
+        int currentMonth = currentDate.getMonthValue();
+        int currentYear = currentDate.getYear();
+
+        // Retrieve donor data
+        ListInterface<Donor> donorData = readDonors();
+
+        // Counter for the number of donors who joined this month
+        int donorsJoinedThisMonth = 0;
+
+        // Get number of donors who joined this month
+        for (int i = 0; i < donorData.size(); i++) {
+            Donor donor = donorData.get(i);
+            LocalDate registeredDate = donor.getRegisteredDate();
+
+            // Check if the donor joined in the current month and year
+            if (registeredDate.getMonthValue() == currentMonth && registeredDate.getYear() == currentYear) {
+                donorsJoinedThisMonth++;
+            }
+        }
+
+        DonorUI.donorAddedThisMonth(donorsJoinedThisMonth);
 
     }
+
 }

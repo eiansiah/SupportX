@@ -65,7 +65,8 @@ public class Main {
                     DoneeFunctions.doneeHandler();
                     break;
                 case 3:
-
+                    Donation donationFunction = new Donation();
+                    donationFunction.donationHome();
                     break;
                 case 4:
 
