@@ -195,6 +195,12 @@ public class DoneeUI {
         return scanner.nextLine().trim();
     }
 
+    public static void displayDonationDetailsUI(String doneeID){
+        System.out.println("\nDonations received by Donee ID: " + doneeID);
+        GeneralFunction.repeatPrint("-", 100);
+        System.out.printf("\n%-20s %-20s %-20s %-20s %-20s%n", "Distribution ID", "Item Code", "Item Name", "Quantity", "Received Date");
+    }
+
     public static String filterDoneeUI(){
         System.out.println("\nFilter Donees by Category:");
         System.out.println("1. Donee Type");

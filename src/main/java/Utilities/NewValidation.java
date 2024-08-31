@@ -19,7 +19,7 @@ public class NewValidation {
     }
 
     public static boolean validatePhone(String phone) {
-        Pattern phoneFormat = Pattern.compile("^(\\d{10,11})$");
+        Pattern phoneFormat = Pattern.compile("^01([0-9]{8,9})$");
             Matcher matcher = phoneFormat.matcher(phone);
         return matcher.matches() && !phone.isEmpty();
     }
