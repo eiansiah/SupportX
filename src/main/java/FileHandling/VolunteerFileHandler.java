@@ -1,3 +1,9 @@
+/*
+ *  Author: Tan Qian Yiin
+ *  ID: 2307616
+ *
+ * */
+
 package FileHandling;
 
 import Libraries.ArrayList;

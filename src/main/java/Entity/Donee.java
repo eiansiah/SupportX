@@ -1,11 +1,9 @@
-package Entity;
-
 /*
  *  author: Siah E-Ian
  *  ID: 2307610
  * */
 
-import Main.Applicants;
+package Entity;
 
 import java.time.LocalDate;
 

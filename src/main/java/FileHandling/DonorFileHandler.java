@@ -1,3 +1,9 @@
+/*
+ *  Author: Sim Hor Kang
+ *  ID: 2307611
+ *
+ * */
+
 package FileHandling;
 
 import java.io.BufferedReader;

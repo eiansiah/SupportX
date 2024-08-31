@@ -1,6 +1,10 @@
 package Entity;
+/*
+ *  Author: Tan Qian Yiin
+ *  ID: 2307616
+ *
+ * */
 
-import Main.Applicants;
 import java.io.Serializable;
 
 public class Volunteer extends Applicants implements Serializable {

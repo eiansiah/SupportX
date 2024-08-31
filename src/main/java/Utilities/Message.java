@@ -1,3 +1,15 @@
+/*
+ *  Author: Sim Hor Kang
+ *  ID: 2307611
+ *
+ *  Co-author: Siah E-ian
+ *  ID: 2307610
+ *
+ *  Co-author: Saw Khoo Zi Chong
+ *  ID: 2307611
+ *
+ * */
+
 package Utilities;
 
 import Libraries.Color;

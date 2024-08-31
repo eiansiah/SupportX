@@ -1,6 +1,10 @@
-package Entity;
+/*
+ *  Author: Sim Hor Kang
+ *  ID: 2307611
+ *
+ * */
 
-import Main.Applicants;
+package Entity;
 
 public class Donor extends Applicants {
 

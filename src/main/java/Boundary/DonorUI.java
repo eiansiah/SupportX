@@ -1,3 +1,12 @@
+/*
+ *  Author: Sim Hor Kang
+ *  ID: 2307611
+ *
+ *  Co-author: Siah E-ian
+ *  ID: 2307610
+ *
+ * */
+
 package Boundary;
 
 import Control.Donation;
