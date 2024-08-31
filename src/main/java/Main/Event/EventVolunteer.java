@@ -1,5 +1,10 @@
 package Main.Event;
 
+/*
+ *  author: Saw Khoo Zi Chong
+ *  ID: 2307609
+ * */
+
 public class EventVolunteer{
     private final String eventID;
     private final String volunteerID;
