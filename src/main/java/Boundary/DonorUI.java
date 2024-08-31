@@ -1,14 +1,17 @@
 package Boundary;
 
 import Control.Donation;
-import Entity.Donor;
-import Libraries.Hashmap;
-import Main.Event.Event;
 
+import Entity.Donor;
+
+import Libraries.GeneralFunction;
+import Libraries.Hashmap;
 import Libraries.ArrayList;
 import Libraries.Color;
+
 import Utilities.Message;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class DonorUI {
@@ -223,32 +226,26 @@ public class DonorUI {
     }
 
 
-    public static void displayDonorEvent(Hashmap<String, ArrayList<Event>> donorEventsMap, String donorID) {
-        System.out.println("\nEVENT DETAILS\n");
-
-        ArrayList<Event> events = donorEventsMap.get(donorID);
-
-        if (events == null || events.isEmpty()) {
-            System.out.println("This donor has not attended any events.");
-        } else {
-            System.out.printf("%-15s%-25s%-20s%n", "Event ID", "Event Type", "Date Attended");
-
-            for (Event event : events) {
-                System.out.printf("%-15s%-25s%-20s%n");
-//                        ,event.getEventID(),
-//                        event.getEventType(),
-//                        event.getDateAttended());
-            }
-        }
-    }
-
-
     public static void donorNotFoundMsg(String donorID){
         System.out.println(Color.RED + "Donor with ID " + donorID + " not found." + Color.RESET);
     }
 
     public static void pressKeyToGoBack(){
-        System.out.println("Press any key to return to previous page.....");
+        System.out.print("Press any key to return to previous page.....");
+        try {
+            System.in.read();  // Reads a single character (byte) from the input stream
+        } catch (IOException e) {
+            e.printStackTrace();  // Handle any potential IO exceptions
+        }
+    }
+
+    public static void pressKeyToContinue(){
+        System.out.print("Press any key to continue after you have finish reading..... ");
+        try {
+            System.in.read();  // Reads a single character (byte) from the input stream
+        } catch (IOException e) {
+            e.printStackTrace();  // Handle any potential IO exceptions
+        }
     }
 
     public static int filterMenu(){
@@ -301,6 +298,31 @@ public class DonorUI {
         System.out.println("3 - Sort by ID Descending");
         System.out.print("Choose a sorting criterion: ");
         return scanner.nextInt();
+    }
+
+    public static void viewSummaryDonorData(ArrayList <Integer> filterCount){
+        int publicCount = filterCount.get(0);
+        int privateCount = filterCount.get(1);
+        int governmentCount = filterCount.get(2);
+        int individualCount = filterCount.get(3);
+        int organizationCount = filterCount.get(4);
+
+
+        // Donor Type Breakdown
+        System.out.printf("|%-28s|%-28s|%-27s|%n", centerString("Public", 28), centerString("Private", 28), centerString("Government", 27));
+        System.out.printf("|%-28s|%-28s|%-27s|%n", centerString(String.valueOf(publicCount), 28), centerString(String.valueOf(privateCount), 28), centerString(String.valueOf(governmentCount), 27));
+
+        GeneralFunction.repeatPrint("-", 87);
+        GeneralFunction.printEmptyLine();
+        // Donor Category Breakdown
+        System.out.printf("|%-42s|%-42s|%n", centerString("Individual", 42), centerString("Organization", 42));
+        System.out.printf("|%-42s|%-42s|%n", centerString(String.valueOf(individualCount), 42), centerString(String.valueOf(organizationCount), 42));
+    }
+
+    private static String centerString(String text, int width) {
+        int padding = (width - text.length()) / 2;
+        String format = "%" + padding + "s%s%" + padding + "s";
+        return String.format(format, "", text, "");
     }
 
 }
