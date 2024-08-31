@@ -13,7 +13,7 @@ import java.util.Scanner;
 public class VolunteerUI {
 
     private static final Scanner scanner = new Scanner(System.in);
-
+    
     public static String mainMenu() {
         System.out.println(Color.BLUE + "\nVolunteer Management System" + Color.RESET);
         System.out.println("----------------------------");
@@ -31,7 +31,7 @@ public class VolunteerUI {
         System.out.println(" ");
         System.out.print("Enter choice: ");
 
-        return scanner.nextLine().trim();
+        return scanner.next().trim();
     }
 
     //private static void displayNoUpcomingEvents() {
@@ -82,10 +82,11 @@ public class VolunteerUI {
         System.out.println("Availability: " + volunteerToSearch.getAvailability());
     }
 
-    private static void eventsJoinedUI(ArrayList<Event> events) {
+    public static void eventsJoinedUI(ArrayList<Event> events) {
         System.out.println("\nEvents Joined by Volunteer");
         System.out.println("---------------------------");
-        for (Event event : events) {
+        for (int i = 0; i < events.size(); i++) {
+            Event event = events.get(i);
             System.out.println("Event ID: " + event.eventID());
             System.out.println("Event Name: " + event.description());
             System.out.println("Date Joined: " + event.startDateTime());
@@ -93,81 +94,82 @@ public class VolunteerUI {
         }
     }
 
-    private static void addVolunteerUI() {
+    public static void addVolunteerUI() {
         System.out.println("\nEnter Volunteer details");
         System.out.println("-------------------------");
     }
 
-    private static String inputVolunteerNameUI() {
+    public static String inputVolunteerNameUI() {
         System.out.print("Enter name: ");
         return scanner.nextLine().trim();
     }
 
-    private static String inputVolunteerAgeUI() {
+    public static String inputVolunteerAgeUI() {
         System.out.print("Enter age: ");
         return scanner.nextLine().trim();
     }
 
-    private static String inputVolunteerGenderUI() {
-        System.out.print("Enter gender (Male, Female, Other): ");
+    public static String inputVolunteerGenderUI() {
+        System.out.print("Enter gender (Male, Female): ");
         return scanner.nextLine().trim();
     }
 
-    private static String inputVolunteerPhoneUI() {
+    public static String inputVolunteerPhoneUI() {
         System.out.print("Enter contact number: ");
         return scanner.nextLine().trim();
     }
 
-    private static String inputVolunteerEmailUI() {
+    public static String inputVolunteerEmailUI() {
         System.out.print("Enter email: ");
         return scanner.nextLine().trim();
     }
 
-    private static String inputVolunteerAvailabilityUI() {
+    public static String inputVolunteerAvailabilityUI() {
         System.out.print("Enter availability (Weekdays, Weekends): ");
         return scanner.nextLine().trim();
     }
 
-    private static void displayAddVolunteerMsg() {
-        System.out.println(Color.GREEN + "Volunteer added successfully." + Color.RESET);
-    }
-
-    private static void removeVolunteerUI() {
+    public static void removeVolunteerUI() {
+        System.out.println("");
         System.out.println("Removing Volunteer...");
     }
 
-    private static void listOfVolunteersUI(ArrayList<Volunteer> volunteers) {
+    public static void listOfVolunteersUI(ListInterface<Volunteer> volunteers) {
+        System.out.println("");
         System.out.println("List of Volunteers:");
-        for (Volunteer volunteer : volunteers) {
+        System.out.println("");
+        for (int i = 0; i < volunteers.size(); i++) {
+            Volunteer volunteer = volunteers.get(i);
             System.out.println(volunteer.getId() + " " + volunteer.getName());
         }
     }
 
-    private static String inputVolunteerUItoDeleteUI() {
+    public static String inputVolunteerUItoDeleteUI() {
+        System.out.println("");
         System.out.print("Enter Volunteer ID to delete: ");
         return scanner.nextLine().trim();
     }
 
-    private static void displayRemoveVolunteerMsg() {
-        System.out.println(Color.GREEN + "Volunteer deleted successfully." + Color.RESET);
-    }
-
-    private static void modifyVolunteerUI() {
+    public static void modifyVolunteerUI() {
+        System.out.println("");
         System.out.println("Modify Volunteer");
         System.out.println("-------------------");
     }
 
-    private static String inputVolunteerIDtoModifyUI() {
+    public static String inputVolunteerIDtoModifyUI() {
+        System.out.println("");
         System.out.print("Enter Volunteer ID to modify: ");
-        return scanner.nextLine().trim();
+        return scanner.next().trim();
     }
 
-    private static int inputDataToModifyUI() {
-        System.out.println("Select data to modify:");   
+    public static int inputDataToModifyUI() {
+        System.out.println("");
+        System.out.println("Select data to modify:");
+        System.out.println("");
         System.out.println("1. Name");
         System.out.println("2. Age");
         System.out.println("3. Gender");
-        System.out.println("4. Phone");
+        System.out.println("4. Contact Number");
         System.out.println("5. Email");
         System.out.println("6. Availability");
         System.out.println("7. Back");
@@ -177,46 +179,37 @@ public class VolunteerUI {
         return scanner.nextInt();
     }
 
-    private static void displayModifyVolunteerMsg() {
-        System.out.println();
-        System.out.println(Color.GREEN + "Volunteer details updated successfully." + Color.RESET);
-    }
-
-    private static String inputModifyNameUI() {
+    public static String inputModifyNameUI() {
         System.out.print("Enter new name (leave blank to keep current): ");
-        return scanner.nextLine().trim();
+        return scanner.next().trim();
     }
 
-    private static String inputModifyAgeUI() {
+    public static String inputModifyAgeUI() {
         System.out.print("Enter new age (leave blank to keep current): ");
-        return scanner.nextLine().trim();
+        return scanner.next().trim();
     }
 
-    private static String inputModifyGenderUI() {
-        System.out.print("Enter new gender (Male, Female, Other) (leave blank to keep current): ");
-        System.out.println();
-        return scanner.nextLine().trim();
+    public static String inputModifyGenderUI() {
+        System.out.print("Enter new gender (Male, Female) (leave blank to keep current): ");
+        return scanner.next().trim();
     }
 
-    private static String inputModifyPhoneUI() {
+    public static String inputModifyPhoneUI() {
         System.out.print("Enter new contact number (leave blank to keep current): ");
-        System.out.println(" ");
-        return scanner.nextLine().trim();
+        return scanner.next().trim();
     }
 
-    private static String inputModifyEmailUI() {
+    public static String inputModifyEmailUI() {
         System.out.print("Enter new email (leave blank to keep current): ");
-        System.out.println(" ");
-        return scanner.nextLine().trim();
+        return scanner.next().trim();
     }
 
-    private static String inputModifyAvailabilityUI() {
+    public static String inputModifyAvailabilityUI() {
         System.out.print("Enter new availability (Weekdays, Weekends) (leave blank to keep current): ");
-        System.out.println(" ");
-        return scanner.nextLine().trim();
+        return scanner.next().trim();
     }
 
-    private static void moreVolunteerDetailsUI(Volunteer volunteerToSearch) {
+    public static void moreVolunteerDetailsUI(Volunteer volunteerToSearch) {
         System.out.println("\nVolunteer Details");
         System.out.println("-------------------");
         System.out.println("ID: " + volunteerToSearch.getId());
@@ -228,7 +221,7 @@ public class VolunteerUI {
         System.out.println("Availability: " + volunteerToSearch.getAvailability());
     }
 
-    private static void listVolunteerEventsUI(){
+    public static void listVolunteerEventsUI(){
         System.out.println(" ");
         System.out.println("Volunteers and Their Events");
         System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------");
@@ -236,8 +229,9 @@ public class VolunteerUI {
         System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------");
     }
 
-    private static void listParticipatedVolunteerEventsUI(Volunteer volunteer, ArrayList<Event> events) {
-        for (Event event : events) {
+    public static void listParticipatedVolunteerEventsUI(Volunteer volunteer, ListInterface<Event> events) {
+        for (int j = 0; j < events.size(); j++) {
+            Event event = events.get(j);
             System.out.printf("%-15s %-20s %-15s %-30s %-20s %-30s %-30s%n",
                     volunteer.getId(),
                     volunteer.getName(),
@@ -249,7 +243,7 @@ public class VolunteerUI {
         }
     }
 
-    private static void listVolunteerNoEventsUI(Volunteer volunteer) {
+    public static void listVolunteerNoEventsUI(Volunteer volunteer) {
         System.out.printf("%-15s %-20s %-15s %-30s %-20s %-30s %-30s%n",
                         volunteer.getId(),
                         volunteer.getName(),
@@ -260,11 +254,11 @@ public class VolunteerUI {
                         "N/A");
     }
 
-    private static void displayListVolunteerEventsEndline(){
+    public static void displayListVolunteerEventsEndline(){
         System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------");
     }
 
-    private static void top3VolunteersUI(){
+    public static void top3VolunteersUI(){
         System.out.println("");
         System.out.println("Top 3 Volunteers with the Most Events");
         System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------");
@@ -272,8 +266,9 @@ public class VolunteerUI {
         System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------");
     }
 
-    private static void top3VolunteerEventsUI(Volunteer volunteer, ArrayList<Event> events){
-        for (Event event : events) {
+    public static void top3VolunteerEventsUI(Volunteer volunteer, ListInterface<Event> events){
+        for (int j = 0; j < events.size(); j++) {
+            Event event = events.get(j);
             System.out.printf("%-15s %-20s %-15s %-30s %-20s %-30s %-30s%n",
                     volunteer.getId(),
                     volunteer.getName(),
@@ -285,20 +280,20 @@ public class VolunteerUI {
         }
     }
 
-    private static void displayTop3VolunteersEndline(){
+    public static void displayTop3VolunteersEndline(){
         System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------");
         System.out.println("");
         System.out.println("");
     }
 
-    private static void viewSummaryReportUI(){
+    public static void viewSummaryReportUI(){
         System.out.println("Summary Report: Volunteers and Their Events Participation");
         System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------");
         System.out.printf("%-15s %-20s %-10s %-25s %-15s%n", "Volunteer ID", "Volunteer Name", "Gender", "Events Participated", "Total Events");
         System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------");
     }
 
-    private static void viewSummaryReportEventsUI(Volunteer volunteer, ArrayList<EventVolunteer> eventVolunteers){
+    public static void viewSummaryReportEventCountUI(Volunteer volunteer, ListInterface<EventVolunteer> eventVolunteers){
         System.out.printf("%-15s %-20s %-10s %-25s %-15d%n",
                         volunteer.getId(),
                         volunteer.getName(),
@@ -307,7 +302,7 @@ public class VolunteerUI {
                         eventVolunteers.size()); // Total number of events participated
     }
 
-    private static void viewSummaryReportNoEventsUI(Volunteer volunteer){
+    public static void viewSummaryReportNoEventsUI(Volunteer volunteer){
         System.out.printf("%-15s %-20s %-10s %-25s %-15s%n",
                         volunteer.getId(),
                         volunteer.getName(),
@@ -316,7 +311,7 @@ public class VolunteerUI {
                         "0");
     }
 
-    private static void viewSummaryReportGendersUI(int maleCount, int femaleCount){
+    public static void viewSummaryReportGendersUI(int maleCount, int femaleCount){
         System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------");
         System.out.println("Total Male Volunteers: " + maleCount);
         System.out.println("Total Female Volunteers: " + femaleCount);
@@ -334,7 +329,7 @@ public class VolunteerUI {
         }
     }
 
-    private static int filterVolunteersUI(){
+    public static int filterVolunteersUI(){
         System.out.println("Filter Volunteers by:");
         System.out.println("1. Age");
         System.out.println("2. Gender");
@@ -345,43 +340,43 @@ public class VolunteerUI {
         return scanner.nextInt();
     }
 
-    private static int inputMinimumAgeUI(){
+    public static int inputMinimumAgeUI(){
         System.out.print("Enter minimum age: ");
         return scanner.nextInt();
     }
 
-    private static int inputMaximumAgeUI(){
+    public static int inputMaximumAgeUI(){
         System.out.print("Enter maximum age: ");
         return scanner.nextInt();
     }
 
-    private static void filterByAgeUI(int minAge, int maxAge){
+    public static void filterByAgeUI(int minAge, int maxAge){
         System.out.println("Volunteers between " + minAge + " and " + maxAge + " years old:");
     }
 
-    private static void filterVolunteerUI(Volunteer volunteer){
+    public static void filterVolunteerUI(Volunteer volunteer){
         System.out.println(volunteer.getId() + " " + volunteer.getName());
     }
 
-    private static String inputFilterByGenderUI(){
-        System.out.print("Enter gender to filter by (Male, Female, Other):");
+    public static String inputFilterByGenderUI(){
+        System.out.print("Enter gender to filter by (Male, Female):");
         return scanner.nextLine().trim();
     }
 
-    private static void filterByGenderUI(String gender){
+    public static void filterByGenderUI(String gender){
         System.out.println("Volunteers with gender " + gender + ":");
     }
 
-    private static String inputFilterByAvailabilityUI(){
+    public static String inputFilterByAvailabilityUI(){
         System.out.print("Enter availability to filter by (Weekdays, Weekends): ");
         return scanner.nextLine().trim();
     }
 
-    private static void filterByAvailabilityUI(String availability){
+    public static void filterByAvailabilityUI(String availability){
         System.out.println("Volunteers available on " + availability + ":");
     }
     
-    private static void displayEmptyString(){
+    public static void displayEmptyString(){
         System.out.println(" ");
     }
 }
