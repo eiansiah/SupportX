@@ -12,6 +12,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import Libraries.Color;
 import Entity.Donor;
@@ -52,11 +54,13 @@ public class DonorFileHandler implements FileHandlingInterface<Donor>{
         @Override
         public ListInterface<Donor> readData(String filename) {
             ListInterface<Donor> donors = new ArrayList<>();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     String[] parts = line.split(",");
-                    Donor donor = new Donor(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5]);
+                    LocalDate registeredDate = LocalDate.parse(parts[6], formatter);
+                    Donor donor = new Donor(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],registeredDate);
     //                donor.setId(parts[0]);
     //                donor.setName(parts[1]);
     //                donor.setEmail(parts[2]);

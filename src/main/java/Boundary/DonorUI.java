@@ -11,6 +11,7 @@ package Boundary;
 
 import Control.Donation;
 
+import Entity.DonationItem;
 import Entity.Donor;
 
 import Libraries.*;
@@ -18,15 +19,18 @@ import Libraries.*;
 import Utilities.Message;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class DonorUI {
 
     private static final Scanner scanner = new Scanner(System.in);
 
-    public static void DonorWelcomeMessage() {
-        System.out.println("\nEntering Donor System!");
-    }
+//    public static void DonorWelcomeMessage() {
+//        System.out.println("\nEntering Donor System!");
+//    }
 
     public static String getMainMenuChoice(){
         System.out.println("\nDonor System Main Menu\n");
@@ -92,16 +96,17 @@ public class DonorUI {
         return scanner.next().trim();
     }
 
-    public static String deleteConfirmation(String id, String name, String email, String phone , String category, String type){
+    public static String deleteConfirmation(String id, String name, String email, String phone , String category, String type , LocalDate registeredDate){
 
-        displaySelectedDonorDetail(id, name, email, phone, category, type);
+        displaySelectedDonorDetail(id, name, email, phone, category, type, registeredDate);
 
         System.out.print("\nAre you sure you want to delete this donor? (Y/N): ");
-        return scanner.nextLine().trim().toUpperCase();
+        return scanner.next().trim().toUpperCase();
     }
 
-    public static void displaySelectedDonorDetail(String id, String name, String email, String phone , String category, String type){
+    public static void displaySelectedDonorDetail(String id, String name, String email, String phone , String category, String type , LocalDate registeredDate){
         // Display the donor's information before deletion
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         System.out.println("\nDonor Details:");
         System.out.printf("%-15s: %s%n", "ID", id);
         System.out.printf("%-15s: %s%n", "Name", name);
@@ -109,20 +114,15 @@ public class DonorUI {
         System.out.printf("%-15s: %s%n", "Phone", phone);
         System.out.printf("%-15s: %s%n", "Category", category);
         System.out.printf("%-15s: %s%n", "Type", type);
+        System.out.printf("%-15s: %s%n", "Registered Date", registeredDate);
     }
 
-    public static String displayDonorToBeUpdated(String id, String name, String email, String phone , String category, String type){
-        // Display the donor's information before deletion
-        System.out.println("\nDonor Details:");
-        System.out.printf("%-15s: %s%n", "ID", id);
-        System.out.printf("%-15s: %s%n", "Name", name);
-        System.out.printf("%-15s: %s%n", "Email", email);
-        System.out.printf("%-15s: %s%n", "Phone", phone);
-        System.out.printf("%-15s: %s%n", "Category", category);
-        System.out.printf("%-15s: %s%n", "Type", type);
+    public static String displayDonorToBeUpdated(String id, String name, String email, String phone , String category, String type, LocalDate registeredDate){
+        // Display the donor's information before updated
+        displaySelectedDonorDetail(id,name, email,phone, category,type,registeredDate);
 
         System.out.print("\nDo you want to proceed with modifying this donor? (Y/N): ");
-        return scanner.nextLine().trim().toUpperCase();
+        return scanner.next().trim().toUpperCase();
     }
 
     public static String promptUpdatePart(){
@@ -333,4 +333,29 @@ public class DonorUI {
         return String.format(format, "", text, "");
     }
 
+    public static void donorWithMostRecord(String id, String name , int maxRecord){
+        System.out.printf("|%-28s|%-28s|%-27s|%n", centerString("Donor ID", 28), centerString("Donor Name", 28), centerString("Number of Records", 28));
+        System.out.printf("|%-28s|%-28s|%-27s|%n", centerString(id, 28), centerString(name, 28), centerString(String.valueOf(maxRecord), 27));
+    }
+
+    public static void donorAddedThisMonth(int number){
+        System.out.printf("|%-85s|%n", centerString(String.valueOf(number), 85));
+
+    }
+
+    public static void totalNumberOfDonors(int number){
+        System.out.printf("|%-85s|%n", centerString(String.valueOf(number), 85));
+    }
+
+    public static void showRecordID(String id){
+        System.out.println("Record ID: " + id);
+    }
+
+    public static void showItemData(DonationItem item){
+        System.out.println("Items: " + item);
+    }
+
+    public static void showItemDate(LocalDateTime date){
+        System.out.println("Items: " + date);
+    }
 }
