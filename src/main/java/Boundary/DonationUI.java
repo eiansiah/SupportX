@@ -1088,6 +1088,10 @@ public class DonationUI {
         }
         System.out.println("as of " + LocalDate.now());
     }
+    
+    public void displayNumOfDonor(int num) {
+        System.out.println("Total Distinct Contributors: " + num);
+    }
 
     public void displayReport2Content(int max[], int maxIndex[]) {
         for (int i = 0; i < 71; i++) {
