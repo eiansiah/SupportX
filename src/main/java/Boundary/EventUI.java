@@ -183,6 +183,7 @@ public class EventUI {
         System.out.println("| 6. Remove an event from a volunteer   |");
         System.out.println("| 7. List all events for a volunteer    |");
         System.out.println("| 8. Generate summary reports           |");
+        System.out.println("| 9. Exit subsystem                     |");
         System.out.print("|");
         GeneralFunction.repeatPrint("-", 39);
         System.out.println("|");
