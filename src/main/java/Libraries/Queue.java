@@ -2,6 +2,11 @@
 
 package Libraries;
 
+/*
+ *  author: Saw Khoo Zi Chong
+ *  ID: 2307609
+ * */
+
 import java.util.Arrays;
 
 public class Queue<T> implements QueueInterface<T> {
