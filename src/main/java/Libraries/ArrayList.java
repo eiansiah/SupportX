@@ -3,7 +3,7 @@
 package Libraries;
 
 /*
- *  author: Saw Khoo Zi Chong + ?
+ *  author: Saw Khoo Zi Chong + Ko Jie Qi
  *  ID: 2307609 + ?
  * */
 
