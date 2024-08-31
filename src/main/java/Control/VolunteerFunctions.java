@@ -1,10 +1,10 @@
 package Control;
 
 
+import Boundary.VolunteerUI;
 import Entity.Volunteer;
 import FileHandling.VolunteerFileHandler;
 import Libraries.ArrayList;
-import Libraries.Color;
 import Libraries.Hashmap;
 import Libraries.ListInterface;
 import Main.Event.Event;
@@ -12,6 +12,8 @@ import Main.Event.EventHandler;
 import Main.Event.EventStatus;
 import Main.Event.EventVolunteer;
 import Utilities.Message;
+import Utilities.NewValidation;
+
 import java.util.Scanner;
 
 public class VolunteerFunctions {
@@ -23,27 +25,11 @@ public class VolunteerFunctions {
     
         public void runVolunteerSystem() {
 
-        fileHandler.checkAndCreateFile("volunteer.txt");
+        fileHandler.checkAndCreateFile("volunteers.txt");
         
         while (true) {
             try {
-                System.out.println(Color.BLUE + "\nVolunteer Management System" + Color.RESET);
-                System.out.println("----------------------------");
-                System.out.println("1. Add Volunteer");
-                System.out.println("2. Delete Volunteer");
-                System.out.println("3. Modify Volunteer");
-                System.out.println("4. Search Volunteer");
-                System.out.println("5. Assign Volunteer");
-                System.out.println("6. List All Volunteers");
-                System.out.println("7. List of Volunteers and Events");
-                System.out.println("8. Filter Volunteers");
-                System.out.println("9. Search Events by Volunteer");
-                System.out.println("10. View Summary Reports");
-                System.out.println("11. Back");
-                System.out.println(" ");
-                System.out.print("Enter choice: ");
-
-                String input = scanner.nextLine().trim();
+                String input = VolunteerUI.mainMenu();
 
                 if (input.isEmpty()) {
                     Message.displayGeneralErrorMsg("Input cannot be empty. Please try again.");
@@ -90,6 +76,8 @@ public class VolunteerFunctions {
                         viewSummaryReport();
                         break;
                     case 11:
+                        //test this
+                        Message.displayExitMessage();
                         return;
                     default:
                         Message.displayInvalidInputMessage("Invalid choice. Please try again.");
@@ -106,20 +94,15 @@ public class VolunteerFunctions {
 
         //Display!!
         if (upcomingEvents == null || upcomingEvents.isEmpty()) {
-            System.out.println("No upcoming event. ");
+            Message.displayGeneralMessage("No upcoming event. ");
             return;
         }
 
-        for (int i = 0; i < upcomingEvents.size(); i++) {
-            Event event = upcomingEvents.get(i);
-
-            System.out.println(event.eventID() + " " + event.startDateTime() + " " + event.endDateTime() + " " + event.venue());
-        }
+        VolunteerUI.upcomingEventsUI(upcomingEvents);
 
         Event eventChosen;
         while (true) {
-            System.out.print("Enter event ID: ");
-            String eventID = scanner.nextLine().trim();
+            String eventID = VolunteerUI.inputEventID_UI();
 
             Event event = EventHandler.searchEventByEventID(eventID);
 
@@ -131,17 +114,14 @@ public class VolunteerFunctions {
             }
         }
 
-        //Display
-        for (int i = 0; i < volunteers.size(); i++) {
-            Volunteer volunteer = volunteers.get(i);
+        //Display Volunteer List
+        volunteers = fileHandler.readData("volunteers.txt");
+        VolunteerUI.listVolunteersUI(volunteers);
 
-            System.out.println(volunteer.toString());
-        }
 
         String volunteerID;
         while (true) {
-            System.out.print("Enter volunteer ID: ");
-            volunteerID = scanner.nextLine().trim();
+            volunteerID = VolunteerUI.inputVolunteerID_UI();
 
             boolean idExist = false;
             for (int i = 0; i < volunteers.size(); i++) {
@@ -186,10 +166,9 @@ public class VolunteerFunctions {
     }
 
     private static void searchEventsByVolunteer() {
-        //TODO: refer to EventHandler.java getEventVolunteerJoined?
-        System.out.print("Enter Volunteer ID to search: ");
-        String volunteerID = scanner.nextLine().trim();
-
+        //unable to read data from file
+        String volunteerID = VolunteerUI.volunteerIDtoSearchUI();
+        volunteers = fileHandler.readData("volunteers.txt");
         Volunteer volunteerToSearch = null;
 
         for (int i = 0; i < volunteers.size(); i++) {
@@ -202,11 +181,8 @@ public class VolunteerFunctions {
         }
 
         if (volunteerToSearch != null) {
-            System.out.println("\nVolunteer Details");
-            System.out.println("-------------------");
-            System.out.println("ID: " + volunteerToSearch.getId());
-            System.out.println("Name: " + volunteerToSearch.getName());
-            System.out.println("Availability: " + volunteerToSearch.getAvailability());
+            
+            VolunteerUI.volunteerDetailsUI(volunteerToSearch);
 
             // Retrieve events associated with this volunteer
             ListInterface<EventVolunteer> eventVolunteers = EventHandler.getEventVolunteerJoined(volunteerID);
@@ -254,7 +230,7 @@ public class VolunteerFunctions {
         do {
             System.out.print("Enter your name: ");
             name = scanner.nextLine();
-            if (!isValidInput(name)) {
+            if (!NewValidation.isValidInput(name)) {
                 Message.displayInvalidInputMessage("Sorry! Empty field! Please enter a valid name.");
             } else if (!name.matches("[a-zA-Z\\s-]+")) {
                 Message.displayInvalidInputMessage("Sorry! Invalid name. Please enter a valid name containing only letters.");
@@ -297,27 +273,27 @@ public class VolunteerFunctions {
         do {
             System.out.print("Enter contact number: ");
             phone = scanner.nextLine().trim();
-            if (!isValidContactNumber(phone)) {
+            if (!NewValidation.isValidContactNumber(phone)) {
                 Message.displayInvalidInputMessage("Invalid contact number. Please try again.");
             } else {
                 volunteer.setPhone(phone);
                 break;
             }
-        } while (!isValidContactNumber(phone));
+        } while (!NewValidation.isValidContactNumber(phone));
 
         String email;
         do {
             System.out.print("Enter your email: ");
             email = scanner.nextLine().trim();
-            if (!isValidInput(email)) {
+            if (!NewValidation.isValidInput(email)) {
                 Message.displayInvalidInputMessage("Empty field! Please enter valid data.");
-            } else if (!isValidEmail(email)) {
+            } else if (!NewValidation.isValidEmail(email)) {
                 Message.displayInvalidInputMessage("Invalid email format. Please try again.");
             } else {
                 volunteer.setEmail(email);
                 break;
             }
-        } while (!isValidEmail(email) || !isValidInput(email));
+        } while (!NewValidation.isValidEmail(email) || !NewValidation.isValidInput(email));
 
         String availability;
         do {
@@ -511,7 +487,7 @@ public class VolunteerFunctions {
                 volunteer.setGender(gender);
                 break;
             } else {
-                Message.displayGeneralMessage("Invalid gender. Please enter 'Male' or 'Female'.");
+                Message.displayGeneralErrorMsg("Invalid gender. Please enter 'Male' or 'Female'.");
             }
         }
     }
@@ -524,11 +500,11 @@ public class VolunteerFunctions {
             if (phone.isEmpty()) {
                 break;
             }
-            if (isValidContactNumber(phone)) {
+            if (NewValidation.isValidContactNumber(phone)) {
                 volunteer.setPhone(phone);
                 break;
             } else {
-                Message.displayGeneralMessage("Invalid contact number. Please try again." + Color.RESET);
+                Message.displayGeneralErrorMsg("Invalid contact number. Please try again.");
             }
         }
     }
@@ -541,11 +517,11 @@ public class VolunteerFunctions {
             if (email.isEmpty()) {
                 break;
             }
-            if (isValidEmail(email)) {
+            if (NewValidation.isValidEmail(email)) {
                 volunteer.setEmail(email);
                 break;
             } else {
-                Message.displayGeneralMessage("Invalid email format. Please try again.");
+                Message.displayGeneralErrorMsg("Invalid email format. Please try again.");
             }
         }
     }
@@ -561,7 +537,7 @@ public class VolunteerFunctions {
                 volunteer.setAvailability(availability);
                 break;
             } else {
-                Message.displayGeneralMessage("Invalid availability. Please enter 'Weekdays' or 'Weekends'.");
+                Message.displayGeneralErrorMsg("Invalid availability. Please enter 'Weekdays' or 'Weekends'.");
             }
         }
     }
@@ -592,13 +568,13 @@ public class VolunteerFunctions {
             System.out.println("Email: " + volunteerToSearch.getEmail());
             System.out.println("Availability: " + volunteerToSearch.getAvailability());
         } else {
-            System.out.println(Color.YELLOW + "Volunteer does not exist." + Color.RESET);
+            Message.displayDataNotFoundMessage("Volunteer does not exist.");
         }
     }
 
     private static void listVolunteerEvents() {
         if (volunteers.isEmpty()) {
-            System.out.println(Color.YELLOW + "No volunteers available." + Color.RESET);
+            Message.displayDataNotFoundMessage("No volunteers available.");
             return;
         }
 
@@ -654,11 +630,11 @@ public class VolunteerFunctions {
         System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------");
     }
 
-    private static void viewSummaryReport() {
+    public static void viewSummaryReport() {
 
         // Check if there are any volunteers available
         if (volunteers.isEmpty()) {
-            System.out.println(Color.YELLOW + "No volunteers available." + Color.RESET);
+            Message.displayDataNotFoundMessage("No volunteers available.");
             return;
         }
 
@@ -724,7 +700,7 @@ public class VolunteerFunctions {
         System.out.println("");
 
         if (volunteers.isEmpty()) {
-            System.out.println(Color.YELLOW + "No volunteers available." + Color.RESET);
+            Message.displayDataNotFoundMessage("No volunteers available.");
             return;
         }
 
@@ -781,7 +757,7 @@ public class VolunteerFunctions {
     }
 
     // Helper method to list event IDs participated by a volunteer
-    private static String listEventIDs(ArrayList<EventVolunteer> eventVolunteers) {
+    public static String listEventIDs(ArrayList<EventVolunteer> eventVolunteers) {
         StringBuilder eventIDs = new StringBuilder();
         for (EventVolunteer ev : eventVolunteers) {
             eventIDs.append(ev.eventID()).append(", ");
@@ -794,19 +770,13 @@ public class VolunteerFunctions {
     }
 
     private static void listVolunteers() {
+        volunteers = fileHandler.readData("volunteers.txt");
         if (volunteers.isEmpty()) {
-            System.out.println(Color.YELLOW + "No volunteers available." + Color.RESET);
+            Message.displayDataNotFoundMessage("No volunteers available.");
             return;
         }
 
-        System.out.println("List of Volunteers");
-        System.out.println("-------------------");
-
-        for (int i = 0; i < volunteers.size(); i++) {
-            Volunteer volunteer = volunteers.get(i);
-
-            System.out.println(volunteer.getId() + " " + volunteer.getName());
-        }
+        VolunteerUI.listVolunteersUI(volunteers);
     }
 
     private static void filterVolunteers() {
@@ -831,7 +801,7 @@ public class VolunteerFunctions {
                 filterByAvailability();
                 break;
             default:
-                System.out.println(Color.RED + "Invalid choice. Please try again." + Color.RESET);
+                Message.displayGeneralErrorMsg("Invalid choice. Please try again.");
         }
     }
 
@@ -857,16 +827,16 @@ public class VolunteerFunctions {
             }
         }
         if (!found) {
-            System.out.println(Color.YELLOW + "No volunteers found within the specified age range." + Color.RESET);
+            Message.displayDataNotFoundMessage("No volunteers found within the specified age range.");
         }
     }
 
     private static void filterByGender() {
-        System.out.print("Enter gender to filter by (Male, Female, Other): ");
+        System.out.print("Enter gender to filter by (Male, Female): ");
         String gender = scanner.nextLine().trim();
 
-        if (!(gender.equalsIgnoreCase("Male") || gender.equalsIgnoreCase("Female") || gender.equalsIgnoreCase("Other"))) {
-            System.out.println(Color.RED + "Invalid gender. Please enter 'Male', 'Female', or 'Other'." + Color.RESET);
+        if (!(gender.equalsIgnoreCase("Male") || gender.equalsIgnoreCase("Female"))) {
+            Message.displayGeneralErrorMsg("Invalid gender. Please enter 'Male' or 'Female'.");
             return;
         }
 
@@ -882,7 +852,7 @@ public class VolunteerFunctions {
         }
 
         if (!found) {
-            System.out.println(Color.YELLOW + "No volunteers found with the specified gender." + Color.RESET);
+            Message.displayDataNotFoundMessage("No volunteers found with the specified gender.");
         }
     }
 
@@ -891,7 +861,7 @@ public class VolunteerFunctions {
         String availability = scanner.nextLine().trim();
 
         if (!(availability.equalsIgnoreCase("Weekdays") || availability.equalsIgnoreCase("Weekends"))) {
-            System.out.println(Color.RED + "Invalid availability. Please enter 'Weekdays' or 'Weekends'." + Color.RESET);
+            Message.displayGeneralErrorMsg("Invalid availability. Please enter 'Weekdays' or 'Weekends'.");
             return;
         }
 
@@ -908,19 +878,13 @@ public class VolunteerFunctions {
         }
 
         if (!found) {
-            System.out.println(Color.YELLOW + "No volunteers found with the specified availability." + Color.RESET);
+            Message.displayDataNotFoundMessage("No volunteers found with the specified availability.");
         }
     }
-
-    private static boolean isValidInput(String input) {
-        return input != null && !input.trim().isEmpty();
+    
+    public static void main (String args[]){
+        VolunteerFunctions volunteerFunctions = new VolunteerFunctions();
+        volunteerFunctions.runVolunteerSystem();
     }
 
-    private static boolean isValidContactNumber(String phone) {
-        return phone.matches("^01\\d{8,9}$");
-    }
-
-    private static boolean isValidEmail(String email) {
-        return email.matches("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$");
-    }
 }

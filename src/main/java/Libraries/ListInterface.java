@@ -5,6 +5,7 @@ import java.util.Iterator;
 
 public interface ListInterface<T>{
     void add(T element);
+    void add(int index, T element);
     int size();
     T get(int index);
     T set(int index, T element);

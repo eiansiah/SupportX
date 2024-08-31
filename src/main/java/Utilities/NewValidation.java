@@ -121,5 +121,18 @@ public class NewValidation {
 
         return doneeUrgency;
     }
+    
+    //check for empty input
+    public static boolean isValidInput(String input) {
+        return input != null && !input.trim().isEmpty();
+    }
+
+    public static boolean isValidContactNumber(String phone) {
+        return phone.matches("^01\\d{8,9}$");
+    }
+
+    public static boolean isValidEmail(String email) {
+        return email.matches("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$");
+    }
 
 }
