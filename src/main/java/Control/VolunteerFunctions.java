@@ -1,6 +1,5 @@
 package Control;
 
-
 import Boundary.VolunteerUI;
 import Entity.Volunteer;
 import FileHandling.VolunteerFileHandler;
@@ -17,16 +16,16 @@ import Utilities.NewValidation;
 import java.util.Scanner;
 
 public class VolunteerFunctions {
-    
+
     private static final Scanner scanner = new Scanner(System.in);
     private static final String FILE_NAME = "volunteers.txt";
     private static final VolunteerFileHandler fileHandler = new VolunteerFileHandler();
     private static ListInterface<Volunteer> volunteers = new ArrayList<>();
-    
-        public void runVolunteerSystem() {
+
+    public void runVolunteerSystem() {
 
         fileHandler.checkAndCreateFile("volunteers.txt");
-        
+
         while (true) {
             try {
                 String input = VolunteerUI.mainMenu();
@@ -117,7 +116,6 @@ public class VolunteerFunctions {
         //Display Volunteer List
         volunteers = fileHandler.readData("volunteers.txt");
         VolunteerUI.listVolunteersUI(volunteers);
-
 
         String volunteerID;
         while (true) {
@@ -246,7 +244,7 @@ public class VolunteerFunctions {
 
         String gender;
         do {
-            gender =  VolunteerUI.inputVolunteerGenderUI();
+            gender = VolunteerUI.inputVolunteerGenderUI();
             if (!(gender.equalsIgnoreCase("Male") || gender.equalsIgnoreCase("Female"))) {
                 Message.displayInvalidInputMessage("Invalid gender. Please enter 'Male' or 'Female'.");
             } else {
@@ -351,7 +349,7 @@ public class VolunteerFunctions {
 
             Volunteer volunteerToModify = null;
 
-            for (int i = 0; i < volunteers.size() ; i++) {
+            for (int i = 0; i < volunteers.size(); i++) {
                 Volunteer volunteer = volunteers.get(i);
 
                 if (volunteer.getId().equals(volunteerID)) {
@@ -363,7 +361,7 @@ public class VolunteerFunctions {
             if (volunteerToModify != null) {
                 while (true) {
                     int modifyChoice = VolunteerUI.inputDataToModifyUI();
-                    
+
                     switch (modifyChoice) {
                         case 1:
                             modifyName(volunteerToModify);
@@ -400,6 +398,7 @@ public class VolunteerFunctions {
         String name = VolunteerUI.inputModifyNameUI();
         if (!name.isEmpty() && name.matches("[a-zA-Z\\s-]+")) {
             volunteer.setName(name);
+            Message.displaySuccessMessage("Name changed succesfully!");
         } else if (!name.isEmpty()) {
             Message.displayGeneralErrorMsg("Invalid name. Please enter a valid name containing only letters.");
         }
@@ -419,6 +418,7 @@ public class VolunteerFunctions {
                 VolunteerUI.displayEmptyString();
                 if (age > 0) {
                     volunteer.setAge(ageInput);
+                    Message.displaySuccessMessage("Age changed succesfully!");
                     break;
                 } else {
                     Message.displayInvalidInputMessage("Age must be a positive number. Please try again.");
@@ -438,6 +438,7 @@ public class VolunteerFunctions {
             }
             if (gender.equalsIgnoreCase("Male") || gender.equalsIgnoreCase("Female")) {
                 volunteer.setGender(gender);
+                Message.displaySuccessMessage("Gender changed succesfully!");
                 break;
             } else {
                 Message.displayGeneralErrorMsg("Invalid gender. Please enter 'Male' or 'Female'.");
@@ -454,6 +455,7 @@ public class VolunteerFunctions {
             }
             if (NewValidation.isValidContactNumber(phone)) {
                 volunteer.setPhone(phone);
+                Message.displaySuccessMessage("Contact Number changed succesfully!");
                 break;
             } else {
                 Message.displayGeneralErrorMsg("Invalid contact number. Please try again.");
@@ -470,7 +472,7 @@ public class VolunteerFunctions {
             }
             if (NewValidation.isValidEmail(email)) {
                 volunteer.setEmail(email);
-                
+                Message.displaySuccessMessage("Email changed succesfully!");
                 break;
             } else {
                 Message.displayGeneralErrorMsg("Invalid email format. Please try again.");
@@ -486,6 +488,7 @@ public class VolunteerFunctions {
             }
             if (availability.equalsIgnoreCase("Weekdays") || availability.equalsIgnoreCase("Weekends")) {
                 volunteer.setAvailability(availability);
+                Message.displaySuccessMessage("Availability changed succesfully!");
                 break;
             } else {
                 Message.displayGeneralErrorMsg("Invalid availability. Please enter 'Weekdays' or 'Weekends'.");
@@ -509,7 +512,7 @@ public class VolunteerFunctions {
         }
 
         if (volunteerToSearch != null) {
-            VolunteerUI.moreVolunteerDetailsUI(volunteerToSearch);
+            VolunteerUI.searchVolunteerDetailsUI(volunteerToSearch);
         } else {
             Message.displayDataNotFoundMessage("Volunteer does not exist.");
         }
@@ -526,7 +529,6 @@ public class VolunteerFunctions {
         for (int i = 0; i < volunteers.size(); i++) {
             Volunteer volunteer = volunteers.get(i);
 
-
             // Get the list of events the volunteer has participated in
             ListInterface<EventVolunteer> eventVolunteers = EventHandler.getEventVolunteerJoined(volunteer.getId());
             ListInterface<Event> events = new ArrayList<>();
@@ -540,7 +542,7 @@ public class VolunteerFunctions {
             // If the volunteer has participated in events, list them
             if (eventVolunteers != null && !eventVolunteers.isEmpty()) {
 
-                VolunteerUI.listParticipatedVolunteerEventsUI(volunteer,events);
+                VolunteerUI.listParticipatedVolunteerEventsUI(volunteer, events);
             } else {
                 // If the volunteer hasn't participated in any events, indicate so
                 VolunteerUI.listVolunteerNoEventsUI(volunteer);
@@ -577,7 +579,6 @@ public class VolunteerFunctions {
         for (int i = 0; i < volunteers.size(); i++) {
             Volunteer volunteer = volunteers.get(i);
 
-
             if (count >= 3) {
                 break; // Only display the top 3
             }
@@ -593,13 +594,12 @@ public class VolunteerFunctions {
             }
 
             // List the events participated by the volunteer
-            VolunteerUI.top3VolunteerEventsUI(volunteer,events);
+            VolunteerUI.top3VolunteerEventsUI(volunteer, events);
 
             count++;
         }
 
         VolunteerUI.displayTop3VolunteersEndline();
-        
 
         if (volunteers.isEmpty()) {
             Message.displayDataNotFoundMessage("No volunteers available.");
@@ -612,7 +612,7 @@ public class VolunteerFunctions {
 
         // Header for the summary report
         VolunteerUI.viewSummaryReportUI();
-        
+
         // Iterate over each volunteer to generate the report
         for (int i = 0; i < volunteers.size(); i++) {
             Volunteer volunteer = volunteers.get(i);
@@ -631,7 +631,7 @@ public class VolunteerFunctions {
             if (eventVolunteers != null && !eventVolunteers.isEmpty()) {
                 // Display the count of events joined by the volunteer
                 VolunteerUI.viewSummaryReportEventCountUI(volunteer, eventVolunteers);
-       
+
             } else {
                 // If no events participated, display '0'
                 VolunteerUI.viewSummaryReportNoEventsUI(volunteer);
@@ -665,8 +665,8 @@ public class VolunteerFunctions {
 
         VolunteerUI.listVolunteersUI(volunteers);
     }
-    
-    public static void main (String args[]){
+
+    public static void main(String args[]) {
         VolunteerFunctions volunteerFunctions = new VolunteerFunctions();
         volunteerFunctions.runVolunteerSystem();
     }
