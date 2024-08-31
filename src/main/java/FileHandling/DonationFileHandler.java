@@ -601,4 +601,38 @@ public class DonationFileHandler {
             e.printStackTrace();
         }
     }
+    
+    public void loadVenueCode(String[] _vc){
+        int index=0;
+        try {
+            File myObj = new File("Venue.txt");
+            Scanner readerFile = new Scanner(myObj);
+            while (readerFile.hasNextLine()) {
+                String[] venueList = readerFile.nextLine().split("#");
+                _vc[index]=venueList[0];
+                index++;
+            }
+            readerFile.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+    public void loadVenueCodeWithPlace(String[][] _vc){
+        int rowindex=0;
+        try {
+            File myObj = new File("Venue.txt");
+            Scanner readerFile = new Scanner(myObj);
+            while (readerFile.hasNextLine()) {
+                String[] venueList = readerFile.nextLine().split("#");
+                _vc[rowindex][0]=venueList[0];
+                _vc[rowindex][1]=venueList[1];
+                rowindex++;
+            }
+            readerFile.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
 }
