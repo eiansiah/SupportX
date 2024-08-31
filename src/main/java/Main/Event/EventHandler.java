@@ -110,7 +110,7 @@ public class EventHandler {
         Event eventChosen;
 
         while(true){
-            String eventID = getEventInputUI("Enter event ID: ");;
+            String eventID = getEventInputUI("Enter event ID: ");
 
             if(eventID.length() != 6){
                 displayGeneralErrorMsg("EventID invalid. Please try again.");
