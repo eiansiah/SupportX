@@ -16,7 +16,6 @@ import Utilities.Message;
 
 import java.util.Iterator;
 import java.util.Objects;
-import java.util.Scanner;
 
 public class DoneeFilter {
     public static void filterByType(ListInterface<Donee> donees) {
@@ -122,7 +121,6 @@ public class DoneeFilter {
 
     public static void filterByUrgency(ListInterface<Donee> donees){
         int filterUrgency;
-        Scanner scanner = new Scanner(System.in);
 
         do {
             while (true) { //Input Validation Loop

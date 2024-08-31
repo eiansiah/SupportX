@@ -87,7 +87,7 @@ DNE00086,Theda Messenbird,tmessenbird2d@xing.com,0163008888,14th Floor,Family,Pe
 DNE00087,Robinet Dows,rdows2e@nba.com,01015506010,14th Floor,Organization,Medicine,Moderate,2024-08-26
 DNE00088,Morton Madgewick,mmadgewick2f@phpbb.com,0141845183,Suite 6,Organization,Medicine,Low,2024-08-26
 DNE00089,Agnes Hort,ahort2g@addtoany.com,01135461987,PO Box 49945,Family,Personal Care,Low,2024-08-26
-DNE00090,Ronny Imesen,rimesen2h@printfriendly.com,0189735331,7th Floor,Family,Monetary Aid,Moderate,2024-08-26
+DNE00090,Saw Khoo,rimesen2h@printfriendly.com,0189735331,7th Floor,Family,Monetary Aid,Moderate,2024-08-26
 DNE00091,Brodie McMechan,bmcmechan2i@tiny.cc,0115445824,Room 1604,Individual,Clothing,Low,2024-08-26
 DNE00092,Zaria Renac,zrenac2j@disqus.com,01830130787,Suite 88,Organization,Food,Moderate,2024-08-27
 DNE00093,Scarlet Baldin,sbaldin2k@trellian.com,0131031972,11th Floor,Individual,Beverage,Moderate,2024-08-27
@@ -98,3 +98,5 @@ DNE00097,Quint Farnish,qfarnish2o@com.com,01292149543,Room 544,Individual,Moneta
 DNE00098,Rene Rallings,rrallings2p@gizmodo.com,0124977052,Suite 71,Family,Personal Care,Moderate,2024-08-31
 DNE00099,Catherin Ashcroft,cashcroft2q@nationalgeographic.com,01679494379,Apt 1838,Family,Personal Care,Low,2024-08-31
 DNE00100,Arly Patsall,apatsall2r@ycombinator.com,01688814887,3rd Floor,Organization,Food,High,2024-08-31
+DNE00101,Eddie,eddie@gmail.com,0124568745,Kuala Selangor,Family,Clothing,High,2024-08-31
+DNE00102,Qian Yiin,qianyiin@gmail.com,0125478965,Petaling jaya,Individual,Beverage,Low,2024-08-31

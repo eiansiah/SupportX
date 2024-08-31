@@ -84,10 +84,6 @@ public class DoneeSorter {
         PriorityQueue<Donee> priorityQueue = new PriorityQueue<>(doneePriorityComparator);
 
         // Enqueue all donees into the priority queue
-//        for (Donee donee : object) {
-//            priorityQueue.enqueue(donee);
-//        }
-
         Iterator<Donee> doneeIterator = object.iterator();
 
         while (doneeIterator.hasNext()) {
