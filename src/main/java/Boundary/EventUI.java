@@ -11,6 +11,7 @@ import Main.Event.EventVolunteer;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.Scanner;
 
 public class EventUI {
@@ -103,7 +104,10 @@ public class EventUI {
     }
 
     public static void removeEventUI(){
-        EventDisplay(EventHandler.getAllEvent(), "All events", 102);
+        ListInterface<Event> events = EventHandler.getAllEvent();
+        events.sort(Comparator.comparing(Event::eventStatus));
+
+        EventDisplay(events, "All events", 102);
     }
 
     public static void searchEventUI(){
