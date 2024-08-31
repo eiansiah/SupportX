@@ -4,10 +4,7 @@ import Control.Donation;
 
 import Entity.Donor;
 
-import Libraries.GeneralFunction;
-import Libraries.Hashmap;
-import Libraries.ArrayList;
-import Libraries.Color;
+import Libraries.*;
 
 import Utilities.Message;
 
@@ -140,7 +137,7 @@ public class DonorUI {
         System.out.println(Color.RED + "Donor with ID " + donorIDToModify + " has been deleted." + Color.RESET);
     }
 
-    public static String displayDonorTable(int pageSize, int currentPage, int totalDonors, ArrayList<Donor> donors, int start, int end,boolean showCategory, boolean showType){
+    public static String displayDonorTable(int pageSize, int currentPage, int totalDonors, ListInterface<Donor> donors, int start, int end, boolean showCategory, boolean showType){
         System.out.println("\nLIST OF DONORS (Page " + (currentPage + 1) + ")\n");
         // Adjust the header based on what needs to be displayed
 
@@ -206,17 +203,19 @@ public class DonorUI {
         return scanner.nextLine().trim();
     }
 
-    public static void displayDonorDonation(Hashmap<String, ArrayList<Donation>> donorDonationsMap, String donorID) {
+    public static void displayDonorDonation(Hashmap<String, ListInterface<Donation>> donorDonationsMap, String donorID) {
         System.out.println("\nDONATION DETAILS\n");
 
-        ArrayList<Donation> donations = donorDonationsMap.get(donorID);
+        ListInterface<Donation> donations = donorDonationsMap.get(donorID);
 
         if (donations == null || donations.isEmpty()) {
             System.out.println("This donor has not made any donations.");
         } else {
             System.out.printf("%-15s%-25s%-20s%n", "Donation ID", "Donation Type", "Date of Donation");
 
-            for (Donation donation : donations) {
+            for (int i = 0; i < donations.size(); i++) {
+                Donation donation = donations.get(i);
+
                 System.out.printf("%-15s%-25s%-20s%n");
 //                        ,donation.getDonationID(),
 //                        donation.getDonationType(),
