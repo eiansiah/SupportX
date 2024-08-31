@@ -16,8 +16,8 @@ import Utilities.Search;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Comparator;
 import java.util.Random;
-import java.util.Scanner;
 
 import static Boundary.EventUI.*;
 import static Utilities.Message.*;
@@ -106,6 +106,7 @@ public class EventHandler {
 
     private static void removeEvent(){
         removeEventUI();
+        displayGeneralYellowMessage("Event sorted based on event status");
 
         Event eventChosen;
 
@@ -148,6 +149,7 @@ public class EventHandler {
             }
 
             ListInterface<Event> events = EventHandler.searchAllEventByEventName(eventName);
+            events.sort(Comparator.comparing(Event::eventStatus));
 
             if(events == null || events.isEmpty()){
                 displayGeneralErrorMsg("Event name does not exist. Please try again.");
@@ -155,6 +157,7 @@ public class EventHandler {
             }
 
             EventDisplay(events, "All events", 102);
+            displayGeneralYellowMessage("Event sorted based on event status");
         }
     }
 
@@ -163,7 +166,7 @@ public class EventHandler {
 
         ListInterface<Event> events = EventHandler.searchAllEventByEventStatus(EventStatus.UPCOMING);
 
-        if(events == null){
+        if(events == null || events.isEmpty()){
             displayGeneralErrorMsg("No upcoming event to modify.");
             GeneralFunction.enterToContinue();
             return;
@@ -203,8 +206,10 @@ public class EventHandler {
         GeneralFunction.clearScreen();
 
         ListInterface<Event> allEvents = EventHandler.getAllEvent();
+        allEvents.sort(Comparator.comparing(Event::eventStatus));
 
         EventDisplay(allEvents, "All events", 102);
+        displayGeneralYellowMessage("Event sorted based on event status");
 
         GeneralFunction.enterToContinue();
     }
@@ -248,7 +253,10 @@ public class EventHandler {
             return null;
         }
 
+        eventsJoined.sort(Comparator.comparing(EventVolunteer::eventID));
+
         listVolunteerJoinedEvent(eventsJoined);
+        displayGeneralYellowMessage("Event sorted based on eventID");
 
         return eventsJoined;
     }
@@ -327,7 +335,6 @@ public class EventHandler {
     private static LocalDateTime getStartTimeInput(){
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         LocalDateTime eventStartDateTime = null;
-        Scanner sc = new Scanner(System.in);
 
         while(true){
             try{
@@ -349,7 +356,6 @@ public class EventHandler {
     private static LocalDateTime getEndTimeInput(LocalDateTime startDateTime){
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         LocalDateTime eventEndDateTime = null;
-        Scanner sc = new Scanner(System.in);
 
         while(true){
             try{
