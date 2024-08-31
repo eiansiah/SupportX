@@ -3,6 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Boundary;
+/*
+ *  author: Ko Jie Qi
+ *  ID: 2307589
+ * */
 
 import Entity.Beverage;
 import Entity.Clothing;
@@ -1087,6 +1091,10 @@ public class DonationUI {
             System.out.print(" ");
         }
         System.out.println("as of " + LocalDate.now());
+    }
+    
+    public void displayNumOfDonor(int num) {
+        System.out.println("Total Distinct Contributors: " + num);
     }
 
     public void displayReport2Content(int max[], int maxIndex[]) {
