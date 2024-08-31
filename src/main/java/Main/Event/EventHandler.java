@@ -3,9 +3,13 @@ package Main.Event;
 /*
  *  author: Saw Khoo Zi Chong
  *  ID: 2307609
+ *
+ * Notes:
+ * iterator: getEventVolunteerJoined getAllEvent
  * */
 
 import Boundary.EventUI;
+import Entity.DonationItem;
 import FileHandling.UniversalFileHandler;
 import Libraries.ArrayList;
 import Libraries.Color;
@@ -17,6 +21,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.Random;
 
 import static Boundary.EventUI.*;
@@ -503,8 +508,10 @@ public class EventHandler {
         ListInterface<String> eventsString = UniversalFileHandler.readData(eventFilePath);
         ListInterface<Event> events = new ArrayList<>();
 
-        for (int i = 0; i < eventsString.size(); i++) {
-            String eventString = eventsString.get(i);
+        Iterator<String> iterator = eventsString.iterator();
+
+        while(iterator.hasNext()){
+            String eventString = iterator.next();
 
             Event event = new Event(eventString);
             events.add(event);
@@ -567,8 +574,10 @@ public class EventHandler {
             return null;
         }
 
-        for (int i = 0; i < eventVolunteerListString.size(); i++) {
-            String eventVolunteerString = eventVolunteerListString.get(i);
+        Iterator<String> iterator = eventVolunteerListString.iterator();
+
+        while (iterator.hasNext()){
+            String eventVolunteerString = iterator.next();
 
             EventVolunteer event = new EventVolunteer(eventVolunteerString);
             eventVolunteers.add(event);
