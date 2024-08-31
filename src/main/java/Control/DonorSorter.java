@@ -1,6 +1,11 @@
+/*
+ *  Author: Sim Hor Kang
+ *  ID: 2307611
+ *
+ * */
+
 package Control;
 
-import Libraries.ArrayList;
 import Entity.Donor;
 import Libraries.ListInterface;
 

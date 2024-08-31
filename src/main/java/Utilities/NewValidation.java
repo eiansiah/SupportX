@@ -1,8 +1,12 @@
 package Utilities;
 
 /*
- *  author: Siah E-Ian, Sim Hor Kang
- *  ID: 2307610, 2307611
+ *  Author: Siah E-ian
+ *  ID: 2307610
+ *
+ *  Co-Author: Sim Hor Kang
+ *  ID: 2307611
+ *
  * */
 
 import java.util.regex.Matcher;

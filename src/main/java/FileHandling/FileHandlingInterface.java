@@ -1,7 +1,7 @@
 package FileHandling;
 
 /*
- *  author: Sim Hor Kang
+ *  Author: Sim Hor Kang
  *  ID: 2307611
  * */
 

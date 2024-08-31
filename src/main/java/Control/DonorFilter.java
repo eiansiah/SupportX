@@ -1,3 +1,9 @@
+/*
+ *  Author: Sim Hor Kang
+ *  ID: 2307611
+ *
+ * */
+
 package Control;
 
 import FileHandling.DonorFileHandler;

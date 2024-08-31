@@ -1,8 +1,12 @@
 package Libraries;
 
 /*
- *  author: Saw Khoo Zi Chong + Sim Hor Kang
- *  ID: 2307609 + 2307611
+ *  Author: Saw Khoo Zi Chong
+ *  ID: 2307611
+ *
+ *  Co-author: Sim Hor Kang
+ *  ID: 2307611
+ *
  * */
 
 public class Color {

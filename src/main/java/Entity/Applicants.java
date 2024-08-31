@@ -1,4 +1,10 @@
-package Main;
+/*
+ *  Author: Sim Hor Kang
+ *  ID: 2307611
+ *
+ * */
+
+package Entity;
 
 //Use be DonorSystem.Donor,Donee and Volunteers
 public abstract class Applicants {
