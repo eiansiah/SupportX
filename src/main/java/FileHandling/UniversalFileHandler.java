@@ -1,5 +1,10 @@
 package FileHandling;
 
+/*
+ *  author: Saw Khoo Zi Chong
+ *  ID: 2307609
+ * */
+
 import Libraries.ArrayList;
 import Libraries.Color;
 import Libraries.Debug;

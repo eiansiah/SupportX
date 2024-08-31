@@ -1,5 +1,10 @@
 package Main.Event;
 
+/*
+*  author: Saw Khoo Zi Chong
+*  ID: 2307609
+* */
+
 import java.time.LocalDateTime;
 
 public class Event{
