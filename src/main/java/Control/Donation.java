@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Control;
+
 /*
  *  author: Ko Jie Qi
  *  ID: 2307589
@@ -267,9 +268,9 @@ public class Donation {
             _name = donationUI.inputName();
             if (_name.isEmpty()) {
                 msgHandling.displayGeneralErrorMsg("Invalid Item Name. Please do not leave the field empty.");
-            } else if(_name.contains("#")){
+            } else if (_name.contains("#")) {
                 msgHandling.displayGeneralErrorMsg("Invalid Item Name. Please do not consist of # in the item name.");
-            }else {
+            } else {
                 return _name;
             }
         }
@@ -282,9 +283,9 @@ public class Donation {
             _description = donationUI.inputDescription();
             if (_description.isEmpty()) {
                 msgHandling.displayGeneralErrorMsg("Invalid Description. Please do not leave the field empty.");
-            } else if(_description.contains("#")){
+            } else if (_description.contains("#")) {
                 msgHandling.displayGeneralErrorMsg("Invalid Item Name. Please do not consist of # in the item name.");
-            }else {
+            } else {
                 return _description;
             }
         }
@@ -732,10 +733,23 @@ public class Donation {
                 _temp = donationUI.inputAmt();
                 if (!(_temp.equalsIgnoreCase("X"))) {
                     _amount = Double.parseDouble(_temp);
-                    if (_amount <= 0.0) {
-                        msgHandling.displayGeneralErrorMsg("Invalid Money Amount. Please enter an amount that is more than zero.");
+                    if (_temp.contains(".")) {
+                        String[] parts = _temp.split("\\.");
+                        if (parts.length == 2 && parts[1].length() <= 2 && parts[1].length() > 0) {
+                            if (_amount <= 0.0) {
+                                msgHandling.displayGeneralErrorMsg("Invalid Money Amount. Please enter an amount that is more than zero.");
+                            } else {
+                                return _amount;
+                            }
+                        } else {
+                            msgHandling.displayGeneralErrorMsg("Invalid Money Amount. Please enter an amount with 2 decimal place only.");
+                        }
                     } else {
-                        return _amount;
+                        if (_amount <= 0.0) {
+                            msgHandling.displayGeneralErrorMsg("Invalid Money Amount. Please enter an amount that is more than zero.");
+                        } else {
+                            return _amount;
+                        }
                     }
                 } else {
                     return 0;
