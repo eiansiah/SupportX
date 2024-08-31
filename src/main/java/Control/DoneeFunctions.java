@@ -30,16 +30,11 @@ import Boundary.DoneeUI;
 public class DoneeFunctions {
 
     private static ListInterface<Donee> doneeList = new ArrayList<>();
-//    private static ArrayList<Donee> doneeList;
     private static final DoneeFileHandler fileHandler = new DoneeFileHandler();
 
     public DoneeFunctions (){
         doneeList = readDonees();
     }
-
-//    public static ArrayList<Donee> readDonees(){
-//        return fileHandler.readData("donee.txt");
-//    }
 
     public static ListInterface<Donee> readDonees(){
         return fileHandler.readData("donee.txt");
@@ -505,6 +500,7 @@ public class DoneeFunctions {
                         } else {
                             DoneeUI.displayLastPageMessage();
                         }
+                        done = true;
                         displayOptionValid = true;
                         break;
                     case "D":
@@ -515,12 +511,7 @@ public class DoneeFunctions {
                         } while (doneeID.isEmpty());
 
                         Donee selectedDonee = null;
-//                        for (Donee donee : donees) {
-//                            if (donee.getDoneeID().equals(doneeID)) {
-//                                selectedDonee = donee;
-//                                break;
-//                            }
-//                        }
+
                         Iterator<Donee> doneeIterator = donees.iterator();
 
                         while (doneeIterator.hasNext()) {
@@ -642,7 +633,6 @@ public class DoneeFunctions {
     }
 
     public static void filterDonees(ListInterface<Donee> donees) {
-        Scanner scanner = new Scanner(System.in);
         int filterChoice;
 
         do {
