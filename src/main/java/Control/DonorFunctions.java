@@ -66,7 +66,7 @@ public class DonorFunctions {
 //        }
 //    }
 
-    public void runDonorSystem() {
+    public static void runDonorSystem() {
         int choice = 0;
 
         donorFileHandler.checkAndCreateFile("donor.txt");
@@ -561,7 +561,7 @@ public class DonorFunctions {
         }
     }
 
-    public void viewDonorReport(ListInterface<Donor> donors) {
+    public static void viewDonorReport(ListInterface<Donor> donors) {
         // Initialize the queue and enqueue filter criteria
         Queue<String> filterQueue = new Queue<>();
         filterQueue.enqueue("Public");
