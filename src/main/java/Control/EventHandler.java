@@ -411,10 +411,6 @@ public class EventHandler {
             return null;
         }
 
-        /*if (_minVolunteerPax < 0 || _maxVolunteerPax < 0 ) {
-            return null;
-        }*/
-
         if(_venue.isEmpty()) {
             return null;
         }
@@ -425,8 +421,6 @@ public class EventHandler {
                 _startDateTime,
                 _endDateTime,
                 _venue,
-                /*_minVolunteerPax,
-                _maxVolunteerPax,*/
                 _description,
                 EventStatus.UPCOMING
         );

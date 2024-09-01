@@ -12,6 +12,7 @@ public class ArrayListEfficiency {
         System.out.println("Time taken to add 999 element (java): " + NumberFormat.getNumberInstance(Locale.US).format(java(999)) + "ns");
         System.out.println();
 
+        testAvgRun(10, 999);
         testAvgRun(100, 999);
         testAvgRun(999, 999);
         testAvgRun(9999, 999);
@@ -36,9 +37,9 @@ public class ArrayListEfficiency {
             java += java(sampleSize);
         }
 
-        System.out.println("Average custom of "+ runs + " runs adding " +sampleSize+" element: " + custom / runs);
-        System.out.println("Average uni of "+ runs + " runs adding " +sampleSize+" element: " + uni / runs);
-        System.out.println("Average java of "+ runs + " runs adding " +sampleSize+" element: " + java / runs);
+        System.out.println("Average custom of "+ runs + " runs adding " +sampleSize+" element: " + custom / runs + " ns");
+        System.out.println("Average uni of "+ runs + " runs adding " +sampleSize+" element: " + uni / runs + " ns");
+        System.out.println("Average java of "+ runs + " runs adding " +sampleSize+" element: " + java / runs + " ns");
         System.out.println();
     }
 
