@@ -9,7 +9,6 @@ package Control;
  *  ID: 2307589
  * */
 //import entity
-
 import Boundary.DonationUI;
 import Entity.DonationItem;
 import Entity.DonationRecord;
@@ -1646,12 +1645,34 @@ public class Donation {
                                     msgHandling.displaySuccessMessage("Item removed successfully!");
                                     Iterator<DonationRecord> iterator3 = recordlist.iterator();
                                     while (iterator3.hasNext()) {
+                                        int qtyIndex = 0;
+                                        int amtIndex = 0;
                                         DonationRecord record = iterator3.next();
                                         Iterator<DonationItem> iterator2 = record.getItem().iterator();
                                         while (iterator2.hasNext()) {
                                             DonationItem recordItem = iterator2.next();
                                             if (recordItem.getItemCode().equals(_temp)) {
                                                 record.getItem().remove(recordItem);
+                                                if (recordItem instanceof Money) {
+                                                    for (int j = 0; j < record.getAmount().size(); j++) {
+                                                        if (amtIndex == j) {
+                                                            record.getAmount().remove(record.getAmount().get(j));
+                                                            break;
+                                                        }
+                                                    }
+                                                } else {
+                                                    for (int j = 0; j < record.getQty().size(); j++) {
+                                                        if (qtyIndex == j) {
+                                                            record.getQty().remove(record.getQty().get(j));
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            if (recordItem instanceof Money) {
+                                                amtIndex++;
+                                            } else {
+                                                qtyIndex++;
                                             }
                                         }
                                         if (!record.getItem().isEmpty()) {
@@ -2202,7 +2223,12 @@ public class Donation {
                                         }
                                     }
                                     record.getItem().remove(itemToBeRemoved);
-                                    record.getQty().remove(qtyIndex);
+                                    for (int j = 0; j < record.getQty().size(); j++) {
+                                        if (qtyIndex == j) {
+                                            record.getQty().remove(record.getQty().get(j));
+                                            break;
+                                        }
+                                    }
                                     if (!record.getItem().isEmpty()) {
                                         DonationRecord afterAmendRecord = record;
                                         recordlist2.add(afterAmendRecord);
@@ -2824,7 +2850,12 @@ public class Donation {
                                         }
                                     }
                                     record.getItem().remove(itemToBeRemoved);
-                                    record.getAmount().remove(amtIndex);
+                                    for (int j = 0; j < record.getAmount().size(); j++) {
+                                        if (amtIndex == j) {
+                                            record.getAmount().remove(record.getAmount().get(j));
+                                            break;
+                                        }
+                                    }
                                     if (!record.getItem().isEmpty()) {
                                         DonationRecord afterAmendRecord = record;
                                         recordlist2.add(afterAmendRecord);
