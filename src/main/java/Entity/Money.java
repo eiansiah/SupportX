@@ -4,10 +4,10 @@
  */
 package Entity;
 
-/**
- *
- * @author Ko Jie Qi
- */
+/*
+ *  author: Ko Jie Qi
+ *  ID: 2307589
+ * */
 public class Money extends DonationItem{
     private double amount;
     private String source;
