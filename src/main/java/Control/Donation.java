@@ -3144,7 +3144,7 @@ public class Donation {
                         break;
                     }
                 } else {
-                    if (filter == 0 && (sort >= 1 || sort <= 4)) {
+                    if (filter == 0 && (sort >= 1 && sort <= 4)) {
                         donationUI.displayFullDonationActionMenuAftSort();
                         option = checkMenuWithOp(4);
                         if (option == 1) {
