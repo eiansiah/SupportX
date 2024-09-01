@@ -542,6 +542,8 @@ public class VolunteerFunctions {
     }
 
     private static void listVolunteerEvents() {
+        volunteers = fileHandler.readData("volunteers.txt");
+
         if (volunteers.isEmpty()) {
             Message.displayDataNotFoundMessage("No volunteers available.");
             return;
