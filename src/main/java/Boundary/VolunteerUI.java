@@ -22,9 +22,9 @@ public class VolunteerUI {
     private static final Scanner scanner = new Scanner(System.in);
 
     public static String mainMenu() {
-        System.out.println("\n-------------------------------");
-        System.out.println(Color.BLUE + "Volunteer Management Subsystem" + Color.RESET);
-        System.out.println("-------------------------------");
+        System.out.println("\n--------------------------------");
+        System.out.println(Color.BLUE + "Volunteer Subsystem's Main Menu" + Color.RESET);
+        System.out.println("--------------------------------");
         System.out.println("1. Add Volunteer");
         System.out.println("2. Remove Volunteer");
         System.out.println("3. Modify Volunteer");
@@ -97,8 +97,8 @@ public class VolunteerUI {
     }
 
     public static void addVolunteerUI() {
-        System.out.println("\nEnter Volunteer details");
-        System.out.println("-----------------------");
+        System.out.println("\nEnter New Volunteer details");
+        System.out.println("----------------------------");
     }
 
     public static String inputVolunteerNameUI() {
@@ -300,7 +300,7 @@ public class VolunteerUI {
     }
 
     public static void viewSummaryReportUI() {
-        System.out.println("Summary Report: Volunteers and Their Events Participation");
+        System.out.println("Volunteers and Their Events Participation");
         System.out.println("---------------------------------------------------------------------------------------");
         System.out.printf("%-15s %-20s %-10s %-25s %-15s%n", "Volunteer ID", "Volunteer Name", "Gender", "Events Participated", "Total Events");
         System.out.println("---------------------------------------------------------------------------------------");

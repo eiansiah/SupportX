@@ -10,6 +10,7 @@ import Entity.Volunteer;
 import DAO.VolunteerFileHandler;
 import ADT.ArrayList;
 import ADT.ListInterface;
+import Utilities.GeneralFunction;
 import Utilities.Message;
 
 public class VolunteerFilter {
@@ -18,6 +19,7 @@ public class VolunteerFilter {
     private static ListInterface<Volunteer> volunteers = new ArrayList<>();
 
     public static void filterVolunteers() {
+        GeneralFunction.clearScreen();
 
         while (true) {
             try {
@@ -51,6 +53,7 @@ public class VolunteerFilter {
         int maxAge = VolunteerUI.inputMaximumAgeUI();
 
         boolean found = false;
+        GeneralFunction.clearScreen();
         VolunteerUI.filterByAgeUI(minAge, maxAge);
 
         for (int i = 0; i < volunteers.size(); i++) {
@@ -65,9 +68,13 @@ public class VolunteerFilter {
         if (!found) {
             Message.displayDataNotFoundMessage("No volunteers found within the specified age range.");
         }
+        VolunteerUI.displayEmptyString();
+        GeneralFunction.enterToContinue();
+        GeneralFunction.clearScreen();
     }
 
     private static void filterByGender() {
+
         String gender = VolunteerUI.inputFilterByGenderUI();
 
         if (!(gender.equalsIgnoreCase("Male") || gender.equalsIgnoreCase("Female"))) {
@@ -76,6 +83,7 @@ public class VolunteerFilter {
         }
 
         boolean found = false;
+        GeneralFunction.clearScreen();
         VolunteerUI.filterByGenderUI(gender);
 
         for (int i = 0; i < volunteers.size(); i++) {
@@ -90,9 +98,13 @@ public class VolunteerFilter {
         if (!found) {
             Message.displayDataNotFoundMessage("No volunteers found with the specified gender.");
         }
+        VolunteerUI.displayEmptyString();
+        GeneralFunction.enterToContinue();
+        GeneralFunction.clearScreen();
     }
 
     private static void filterByAvailability() {
+
         String availability = VolunteerUI.inputFilterByAvailabilityUI();
 
         if (!(availability.equalsIgnoreCase("Weekdays") || availability.equalsIgnoreCase("Weekends"))) {
@@ -101,6 +113,7 @@ public class VolunteerFilter {
         }
 
         boolean found = false;
+        GeneralFunction.clearScreen();
         VolunteerUI.filterByAvailabilityUI(availability);
 
         for (int i = 0; i < volunteers.size(); i++) {
@@ -115,6 +128,11 @@ public class VolunteerFilter {
         if (!found) {
             Message.displayDataNotFoundMessage("No volunteers found with the specified availability.");
         }
+        
+        VolunteerUI.displayEmptyString();
+        GeneralFunction.enterToContinue();
+        GeneralFunction.clearScreen();
     }
+    
 
 }
