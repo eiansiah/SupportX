@@ -1627,6 +1627,7 @@ public class Donation {
             } else {
                 itemlist = new ArrayList<>();
                 displayBasedOnCatOption(option, itemlist);
+                recordlist.clear();
                 fileHandler.loadIntoDR(recordlist);
                 //ask to remove which
                 if (!itemlist.isEmpty()) {
@@ -2796,6 +2797,7 @@ public class Donation {
             ListInterface<DonationRecord> searchResultsRecord = new ArrayList<>();
             ListInterface<DonationRecord> recordlist = new ArrayList<>();
             ListInterface<DonationRecord> recordlist2 = new ArrayList<>();
+            recordlist.clear();
             fileHandler.loadIntoDR(recordlist);
             searchRecord(itemCode, searchResultsRecord);
             displayDonationRecordAssociated(searchResultsRecord);
