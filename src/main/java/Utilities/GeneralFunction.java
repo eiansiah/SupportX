@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class GeneralFunction {
     public static void enterToContinue(){
         Scanner sc = new Scanner(System.in);
-        System.out.println("Enter to continue");
+        System.out.print("Enter to continue");
         sc.nextLine();
     }
 

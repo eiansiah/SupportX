@@ -52,8 +52,8 @@ public class EventUI {
         GeneralFunction.clearScreen();
 
         System.out.println(Color.YELLOW + "Disclaimer" + Color.RESET);
-        System.out.println(Color.YELLOW + "1. Only upcoming event allow to modify" + Color.RESET);
-        System.out.println(Color.YELLOW + "2. Time of the event are not allow to modify to avoid crashed schedule" + Color.RESET);
+        System.out.println(Color.YELLOW + "1. Only upcoming event allow to modify." + Color.RESET);
+        System.out.println(Color.YELLOW + "2. Time of the event are not allow to modify to avoid crashed schedule." + Color.RESET);
     }
 
     public static void listAllEvent(ListInterface<String> eventVolunteers){
@@ -110,7 +110,7 @@ public class EventUI {
     public static void subsystemMenuDisplay(){
         GeneralFunction.clearScreen();
 
-        GeneralFunction.printTitle("Event menu", 41, "-", "|");
+        GeneralFunction.printTitle("Event Menu", 41, "-", "|");
         System.out.println("| 1. Add a new event                    |");
         System.out.println("| 2. Remove an event                    |");
         System.out.println("| 3. Search an event                    |");
