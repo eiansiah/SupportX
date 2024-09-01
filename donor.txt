@@ -49,6 +49,6 @@ DNR00048,Reuben Moughton,rmoughton1c@simplemachines.org,4231735850,Government,Or
 DNR00049,Arin Leete,aleete1d@1und1.de,1883232657,Private,Organization,2024-06-25
 DNR00050,Stacee Swyndley,sswyndley1e@opensource.org,9933091575,Private,Organization,2024-06-28
 DNR00051,dededed,dedede@gmail.com,0123334444,Individual,Organization,2024-09-01
-DNR00052,DED DEDE,BHUEBI@GBIN.DE,0123332222,Organization,Organization,2024-09-01
-DNR00053,SAKAI SIM,wsws@swswsw,0123389990,Individual,Organization,2024-09-01
 DNR00054,new test,adsd@sdf.df,0173434343,Individual,Organization,2024-09-01
+DNR00055,WSWSWW,SWWW@SWSWS,0123338888,Government,Individual,2024-09-01
+DNR00056,swswws,swswswsw@wsswsws,0129998888,Government,Organization,2024-09-01
