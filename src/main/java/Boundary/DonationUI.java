@@ -828,7 +828,7 @@ public class DonationUI {
     public void displayFullDonationListTableHeader() {
         generalFunc.repeatPrint("-", 93);
         System.out.print("\n");
-        System.out.printf("%-10s %-30s %-20s %-30s\n", "Item Code", "Item Name", "Quantity/Amount1", "Venue Code/ Event Code");
+        System.out.printf("%-10s %-30s %-20s %-30s\n", "Item Code", "Item Name", "Quantity/Amount", "Venue Code/ Event Code");
         generalFunc.repeatPrint("-", 93);
         System.out.print("\n");
     }
