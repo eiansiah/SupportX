@@ -2,7 +2,7 @@ package Utilities;
 
 public class Debug {
 
-    private static final boolean debug = true;
+    private static final boolean debug = false;
 
     private static final String textColor = Color.YELLOW;
 

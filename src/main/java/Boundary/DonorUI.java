@@ -53,9 +53,9 @@ public class DonorUI {
     }
 
     public static String inputDonorNameUI() {
+        Scanner nameScanner = new Scanner(System.in);
         System.out.print("Enter new donor name: ");
-        scanner.nextLine();
-        return scanner.nextLine().trim();
+        return nameScanner.nextLine().trim();
     }
 
     public static String inputDonorEmailUI(){
@@ -88,16 +88,16 @@ public class DonorUI {
 
     public static String inputRemoveDonorIDUI(){
         // Get the ID to be deleted
+        Scanner removeID = new Scanner(System.in);
         System.out.print("\nWhich Donor Would you like to remove? Please enter their ID: ");
-        scanner.nextLine();  // Consume the leftover newline
-        return scanner.nextLine().trim();
+        return removeID.nextLine().trim();
     }
 
     public static String inputUpdateDonorIDUI(){
         // Get the ID to be deleted
+        Scanner updateID = new Scanner(System.in);
         System.out.print("\nWhich Donor Would you like to update? Please enter their ID: ");
-        scanner.nextLine();  // Consume the leftover newline
-        return scanner.nextLine().trim();
+        return updateID.nextLine().trim();
     }
 
     public static String deleteConfirmation(String id, String name, String email, String phone , String category, String type , LocalDate registeredDate){
@@ -207,13 +207,10 @@ public class DonorUI {
     }
 
     public static String inputCheckDonorIDUI(){
-        // Clear the buffer if needed
-        if (scanner.hasNextLine()) {
-            scanner.nextLine();
-        }
+        Scanner checkID = new Scanner(System.in);
         // Get the ID to be checked
         System.out.print("Enter Donor ID to view details: ");
-        return scanner.nextLine().trim();
+        return checkID.nextLine().trim();
     }
 
 
@@ -247,12 +244,11 @@ public class DonorUI {
         System.out.println("4 - Undo Filter");
         System.out.println("5 - Cancel Filter");
         System.out.print("Select a filter option: ");
-        scanner.nextLine();
-        return scanner.nextLine();
+        Scanner filterScanner = new Scanner(System.in);
+        return filterScanner.nextLine();
     }
 
     public static String filterChoiceName() {
-        scanner.nextLine();
         System.out.print("Enter starting letter: ");
         String input = scanner.next();
 
@@ -271,7 +267,7 @@ public class DonorUI {
         System.out.println("2. Private");
         System.out.println("3. Public");
         System.out.print("Enter category number: ");
-        return scanner.nextLine();
+        return scanner.next();
     }
 
     public static String filterChoiceType(){
@@ -279,7 +275,7 @@ public class DonorUI {
         System.out.println("1. Individual");
         System.out.println("2. Organization");
         System.out.print("Enter type number: ");
-        return scanner.nextLine();
+        return scanner.next();
     }
 
     public static String SortMenu(){
@@ -296,7 +292,6 @@ public class DonorUI {
         int governmentCount = filterCount.get(2);
         int individualCount = filterCount.get(3);
         int organizationCount = filterCount.get(4);
-
 
         // Donor Type Breakdown
         System.out.printf("|%-28s|%-28s|%-27s|%n", centerString("Public", 28), centerString("Private", 28), centerString("Government", 27));
