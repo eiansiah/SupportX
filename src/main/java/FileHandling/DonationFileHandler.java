@@ -1,5 +1,8 @@
 package FileHandling;
-
+/*
+ *  author: Ko Jie Qi
+ *  ID: 2307589
+ * */
 import Control.DonorFunctions;
 import Entity.Beverage;
 import Entity.Clothing;
@@ -14,11 +17,8 @@ import Entity.PersonalCare;
 import Libraries.ArrayList;
 import Libraries.ListInterface;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -27,47 +27,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.Scanner;
 
-//public class DonationFileHandler implements FileHandlingInterface<Donation>{
-//     @Override
-//     public void checkAndCreateFile(String filename) {
-//         File file = new File(filename);
-//         try {
-//             if (!file.exists()) {
-//                 file.createNewFile();
-//                 System.out.println("File created: " + filename);
-//             } else {
-//                 //System.out.println("File exists: " + filename);
-//                 System.out.println("System Ready");
-//             }
-//         } catch (IOException e) {
-//             System.err.println("Error creating the file: " + e.getMessage());
-//         }
-//     }
-//    @Override
-//    public void saveData(String filename, Donation entity) {
-//
-//    }
-//
-//    @Override
-//    public ArrayList<Donation> readData(String filename) {
-//        return null;
-//    }
-//
-//    @Override
-//    public void updateData(String filename, Donation entity) {
-//
-//    }
-//
-//    @Override
-//    public void updateMultipleData(String filename, ArrayList<Donation> entity) {
-//
-//    }
-//
-//    @Override
-//    public void deleteData(String filename, Donation enitity){
-//
-//    }
-//}
 public class DonationFileHandler {
 
     private DonorFunctions donorHandling = new DonorFunctions();
@@ -597,6 +556,40 @@ public class DonationFileHandler {
             }
             writeFile.close();
         } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+    
+    public void loadVenueCode(String[] _vc){
+        int index=0;
+        try {
+            File myObj = new File("Venue.txt");
+            Scanner readerFile = new Scanner(myObj);
+            while (readerFile.hasNextLine()) {
+                String[] venueList = readerFile.nextLine().split("#");
+                _vc[index]=venueList[0];
+                index++;
+            }
+            readerFile.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+    public void loadVenueCodeWithPlace(String[][] _vc){
+        int rowindex=0;
+        try {
+            File myObj = new File("Venue.txt");
+            Scanner readerFile = new Scanner(myObj);
+            while (readerFile.hasNextLine()) {
+                String[] venueList = readerFile.nextLine().split("#");
+                _vc[rowindex][0]=venueList[0];
+                _vc[rowindex][1]=venueList[1];
+                rowindex++;
+            }
+            readerFile.close();
+        } catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }

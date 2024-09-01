@@ -9,10 +9,10 @@ import java.time.LocalDateTime;
 import Libraries.ArrayList;
 import Libraries.ListInterface;
 
-/**
- *
- * @author Ko Jie Qi
- */
+/*
+ *  author: Ko Jie Qi
+ *  ID: 2307589
+ * */
 public class DonationRecord {
     private int recordID;
     private Donor donor;
