@@ -14,6 +14,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Iterator;
 
 import Utilities.Color;
 import Entity.Donor;
@@ -80,8 +81,9 @@ public class DonorFileHandler implements FileHandlingInterface<Donor>{
         public void updateData(String filename, Donor selectedDonor) {
             ListInterface<Donor> donors = readData(filename);
 
-            for (int i = 0; i < donors.size(); i++) {
-                Donor donor = donors.get(i);
+            Iterator<Donor> donorIterator = donors.iterator();
+            while (donorIterator.hasNext()) {
+                Donor donor = donorIterator.next();
 
                 if (donor.getId().equals(selectedDonor.getId())) {
                     donor.setName(selectedDonor.getName());
@@ -99,8 +101,10 @@ public class DonorFileHandler implements FileHandlingInterface<Donor>{
         @Override
         public void updateMultipleData(String filename, ListInterface<Donor> donors) {
            try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
-               for (int i = 0; i < donors.size(); i++) {
-                   Donor donor = donors.get(i);
+               // Use an iterator to loop through the donor list
+               Iterator<Donor> donorIterator = donors.iterator();
+               while (donorIterator.hasNext()) {
+                   Donor donor = donorIterator.next();
 
                    writer.write(donor.toString() + "\n");
                }
@@ -115,11 +119,13 @@ public class DonorFileHandler implements FileHandlingInterface<Donor>{
             ListInterface<Donor> donors = readData(filename);
 
             // Find the donor with the given ID and remove it
-            for (int i = 0; i < donors.size(); i++) {
-                 if (donors.get(i).getId().equals(donorID)) {
-                    donors.remove(i);
-                    System.out.println(Color.YELLOW + "Donor with ID " + donorID + " has been removed." + Color.RESET);
-                    break;  // Exit the loop after removing the donor
+            Iterator<Donor> donorIterator = donors.iterator();
+            while (donorIterator.hasNext()) {
+                Donor donor = donorIterator.next();
+                 if (donor.getId().equals(donorID)) {
+                     donorIterator.remove();
+                     System.out.println(Color.YELLOW + "Donor with ID " + donorID + " has been removed." + Color.RESET);
+                     break;  // Exit the loop after removing the donor
                 }
             }
              // Rewrite the updated list back to the file
