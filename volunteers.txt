@@ -6,3 +6,4 @@ VL00109,e-ian,21,male,01982982723,ee@ii.aa,weekends
 VL00110,hengheng,20,female,0128787272,pp@ll.com,weekdays
 VL00111,chanyeol,23,male,0187287287,tt@ss.com,weekdays
 VL00112,kai,24,male,0172862525,kk@aa.ii,weekdays
+VL00113,low kang qi,18,male,0123456789,lkq@kq.kq,weekends
