@@ -440,108 +440,118 @@ public class DonorFunctions {
                     break;
 
                 case "F":
-                    int filterChoice = DonorUI.filterMenu();
+                    String filterChoice = DonorUI.filterMenu();
 
-                    if (filterChoice == 1) {
-                        String input = DonorUI.filterChoiceName();
-                        if (!input.isEmpty()) {
-                            char letter = input.charAt(0);
-                            stateStack.push(donors);
-                            donors = DonorFilter.filterByName(donors, letter);
+                    try {
+                        if (filterChoice.equals("1")) {
+                            String input = DonorUI.filterChoiceName();
+                            if (!input.isEmpty()) {
+                                char letter = input.charAt(0);
+                                stateStack.push(donors);
+                                donors = DonorFilter.filterByName(donors, letter);
 
-                            if (donors.isEmpty()) {
-                                Message.displayDataNotFoundMessage("No donors found with names starting with " + letter + ".");
-                            }
-                        }
-                    } else if (filterChoice == 2) {
-                        int categoryChoice = DonorUI.filterChoiceCategory();
-                        String category = null;
-                        showCategory = true;
-
-                        switch (categoryChoice) {
-                            case 1:
-                                category = "Government";
-                                break;
-                            case 2:
-                                category = "Private";
-                                break;
-                            case 3:
-                                category = "Public";
-                                break;
-                            default:
-                                Message.displayInvalidChoiceMessage("Please select a valid option.");
-                                break;
-                        }
-
-                        if (category != null) {
-                            stateStack.push(donors);  // Save the current state before filtering
-                            donors = DonorFilter.filterByCategory(donors, category);
-
-                            if (donors.isEmpty()) {
-                                Message.displayDataNotFoundMessage("No donors found in the '" + category + "' category.");
-                            }
-                        }
-                    } else if (filterChoice == 3) {
-                        int typeChoice = DonorUI.filterChoiceType();
-                        String type = null;
-                        showType = true;
-
-                        switch (typeChoice) {
-                            case 1:
-                                type = "Individual";
-                                break;
-                            case 2:
-                                type = "Organization";
-                                break;
-                            default:
-                                Message.displayInvalidChoiceMessage("Please select a valid option.");
-                                break;
-                        }
-
-                        if (type != null) {
-                            stateStack.push(donors);  // Save the current state before filtering
-                            donors = DonorFilter.filterByType(donors, type);
-
-                            if (donors.isEmpty()) {
-                                Message.displayDataNotFoundMessage("No donors found of type '" + type + "'.");
-                            }
-                        }
-                    } else if (filterChoice == 4) {
-                        if (!stateStack.isEmpty()) {
-                            donors = stateStack.pop();  // Restore the previous state
-
-                            // Initialize flags to determine if any category or type filters are active
-                            boolean hasCategoryFilter = false;
-                            boolean hasTypeFilter = false;
-
-                            // Peek into the previous state to determine showCategory and showType
-                            if (!stateStack.isEmpty()) {
-                                ListInterface<Donor> previousState = stateStack.peek();
-
-                                // Determine if showCategory should be true
-                                if (previousState != null && !previousState.isEmpty()) {
-                                    hasCategoryFilter = !DonorFilter.filterByCategory(previousState, "Government").isEmpty()
-                                            || !DonorFilter.filterByCategory(previousState, "Private").isEmpty()
-                                            || !DonorFilter.filterByCategory(previousState, "Public").isEmpty();
-
-                                    // Determine if showType should be true
-                                    hasTypeFilter = !DonorFilter.filterByType(previousState, "Individual").isEmpty()
-                                            || !DonorFilter.filterByType(previousState, "Organization").isEmpty();
+                                if (donors.isEmpty()) {
+                                    Message.displayDataNotFoundMessage("No donors found with names starting with " + letter + ".");
                                 }
-                                showCategory = hasCategoryFilter;
-                                showType = hasTypeFilter;
-
-                            } else {
-                                // If stack is empty, reset both
-                                showCategory = false;
-                                showType = false;
                             }
-                        }
+                        } else if (filterChoice.equals("2")) {
+                            String categoryChoiceStr = DonorUI.filterChoiceCategory();
+                            int categoryChoice = Integer.parseInt(categoryChoiceStr); // Parse the string to an integer
+                            String category = null;
+                            showCategory = true;
 
-                    }else if (filterChoice == 5) {
-                        Message.displayFilterCancelMessage();
-                    } else {
-                        Message.displayInvalidChoiceMessage("Please select a valid option.");
+                            switch (categoryChoice) {
+                                case 1:
+                                    category = "Government";
+                                    break;
+                                case 2:
+                                    category = "Private";
+                                    break;
+                                case 3:
+                                    category = "Public";
+                                    break;
+                                default:
+                                    Message.displayInvalidChoiceMessage("Please select a valid option.");
+                                    break;
+                            }
+
+                            if (category != null) {
+                                stateStack.push(donors);  // Save the current state before filtering
+                                donors = DonorFilter.filterByCategory(donors, category);
+
+                                if (donors.isEmpty()) {
+                                    Message.displayDataNotFoundMessage("No donors found in the '" + category + "' category.");
+                                }
+                            }
+                        } else if (filterChoice.equals("3")) {
+                            String typeChoiceStr = DonorUI.filterChoiceType();
+                            int typeChoice = Integer.parseInt(typeChoiceStr); // Parse the string to an integer
+                            String type = null;
+                            showType = true;
+
+                            switch (typeChoice) {
+                                case 1:
+                                    type = "Individual";
+                                    break;
+                                case 2:
+                                    type = "Organization";
+                                    break;
+                                default:
+                                    Message.displayInvalidChoiceMessage("Please select a valid option.");
+                                    break;
+                            }
+
+                            if (type != null) {
+                                stateStack.push(donors);  // Save the current state before filtering
+                                donors = DonorFilter.filterByType(donors, type);
+
+                                if (donors.isEmpty()) {
+                                    Message.displayDataNotFoundMessage("No donors found of type '" + type + "'.");
+                                }
+                            }
+                        } else if (filterChoice.equals("4")) {
+                            if (!stateStack.isEmpty()) {
+                                donors = stateStack.pop();  // Restore the previous state
+
+                                // Initialize flags to determine if any category or type filters are active
+                                boolean hasCategoryFilter = false;
+                                boolean hasTypeFilter = false;
+
+                                // Peek into the previous state to determine showCategory and showType
+                                if (!stateStack.isEmpty()) {
+                                    ListInterface<Donor> previousState = stateStack.peek();
+
+                                    // Determine if showCategory should be true
+                                    if (previousState != null && !previousState.isEmpty()) {
+                                        hasCategoryFilter = !DonorFilter.filterByCategory(previousState, "Government").isEmpty()
+                                                || !DonorFilter.filterByCategory(previousState, "Private").isEmpty()
+                                                || !DonorFilter.filterByCategory(previousState, "Public").isEmpty();
+
+                                        // Determine if showType should be true
+                                        hasTypeFilter = !DonorFilter.filterByType(previousState, "Individual").isEmpty()
+                                                || !DonorFilter.filterByType(previousState, "Organization").isEmpty();
+                                    }
+                                    showCategory = hasCategoryFilter;
+                                    showType = hasTypeFilter;
+
+                                } else {
+                                    // If stack is empty, reset both
+                                    showCategory = false;
+                                    showType = false;
+                                }
+                            }
+
+                        } else if (filterChoice.equals("5")) {
+                            Message.displayFilterCancelMessage();
+                        } else {
+                            Message.displayInvalidChoiceMessage("Please select a valid option.");
+                        }
+                    } catch (NumberFormatException e) {
+                        // Handle invalid integer conversion, such as when parsing a non-integer string
+                        Message.displayInvalidChoiceMessage("Invalid input! Please enter a valid number.");
+                    } catch (Exception e) {
+                        // Handle any other unexpected exceptions
+                        Message.displayGeneralErrorMsg("An unexpected error occurred: " + e.getMessage());
                     }
 
                     totalDonors = donors.size();
@@ -549,21 +559,28 @@ public class DonorFunctions {
                     break;
 
                 case "S":
-                    int sortOption = DonorUI.SortMenu();
+                    String sortOptionInput  = DonorUI.SortMenu();
 
-                    switch (sortOption) {
-                        case 1:
-                            DonorSorter.sortName(donors);
-                            break;
-                        case 2:
-                            DonorSorter.sortNameDescending(donors);
-                            break;
-                        case 3:
-                            DonorSorter.reverseID(donors);
-                            break;
-                        default:
-                            Message.displayInvalidChoiceMessage("Please select a valid sorting option.");
-                            break;
+                    try {
+                        int sortOption = Integer.parseInt(sortOptionInput);  // Attempt to parse the input to an integer
+
+                        switch (sortOption) {
+                            case 1:
+                                DonorSorter.sortName(donors);
+                                break;
+                            case 2:
+                                DonorSorter.sortNameDescending(donors);
+                                break;
+                            case 3:
+                                DonorSorter.reverseID(donors);
+                                break;
+                            default:
+                                Message.displayInvalidChoiceMessage("Invalid input! Please select a valid sorting option from 1 to 3.");
+                                break;
+                        }
+                    } catch (NumberFormatException e) {
+                        // Handle the case where input is not a valid integer
+                        Message.displayInvalidChoiceMessage("Invalid input! Please enter a number from 1 to 3.");
                     }
                     break;
 
@@ -627,6 +644,28 @@ public class DonorFunctions {
         Donation donation = new Donation();
         ListInterface<DonationRecord> donationRecord = new ArrayList<>();
         donationRecord = donation.findRecordsForADonor(donorId);
+        ListInterface<Donor> donorDetails = readDonors();
+
+        // Check if the donor exists in donorDetails
+        boolean donorExists = false;
+        for (int i = 0; i < donorDetails.size(); i++) {
+            if (donorDetails.get(i).getId().equals(donorId)) {
+                donorExists = true;
+                break;
+            }
+        }
+
+        // If donor does not exist, display a message and exit
+        if (!donorExists) {
+            Message.displayDataNotFoundMessage("Donor does not exist found.");
+            return;
+        }
+
+
+        if (donationRecord == null || donationRecord.isEmpty()) {
+            Message.displayDataNotFoundMessage("Donor has not made any donations.");
+            return;  // Exit the method if no records are found
+        }
 
         for (int i = 0; i < donationRecord.size(); i++){
             DonationRecord record = donationRecord.get(i);

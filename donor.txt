@@ -48,3 +48,6 @@ DNR00047,Mace Kennsley,mkennsley1b@google.cn,8483322430,Government,Organization,
 DNR00048,Reuben Moughton,rmoughton1c@simplemachines.org,4231735850,Government,Organization,2024-12-22
 DNR00049,Arin Leete,aleete1d@1und1.de,1883232657,Private,Organization,2024-06-25
 DNR00050,Stacee Swyndley,sswyndley1e@opensource.org,9933091575,Private,Organization,2024-06-28
+DNR00051,dededed,dedede@gmail.com,0123334444,Individual,Organization,2024-09-01
+DNR00052,DED DEDE,BHUEBI@GBIN.DE,0123332222,Organization,Organization,2024-09-01
+DNR00053,SAKAI SIM,wsws@swswsw,0123389990,Individual,Organization,2024-09-01

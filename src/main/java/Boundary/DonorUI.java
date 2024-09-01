@@ -54,6 +54,7 @@ public class DonorUI {
 
     public static String inputDonorNameUI() {
         System.out.print("Enter new donor name: ");
+        scanner.nextLine();  // Consume the leftover newline
         return scanner.nextLine().trim();
     }
 
@@ -73,8 +74,7 @@ public class DonorUI {
         System.out.println("2. Private");
         System.out.println("3. Public");
         System.out.print("Enter new category number: ");
-
-        return scanner.next().trim();
+        return scanner.nextLine().trim();
     }
 
     public static String inputDonorTypeUI(){
@@ -82,20 +82,21 @@ public class DonorUI {
         System.out.println("1. Individual");
         System.out.println("2. Organization");
         System.out.print("Please enter new donor type: ");
-
-        return scanner.next().trim();
+        return scanner.nextLine().trim();
     }
 
     public static String inputRemoveDonorIDUI(){
         // Get the ID to be deleted
         System.out.print("\nWhich Donor Would you like to remove? Please enter their ID: ");
-        return scanner.next().trim();
+        scanner.nextLine();  // Consume the leftover newline
+        return scanner.nextLine().trim();
     }
 
     public static String inputUpdateDonorIDUI(){
         // Get the ID to be deleted
         System.out.print("\nWhich Donor Would you like to update? Please enter their ID: ");
-        return scanner.next().trim();
+        scanner.nextLine();  // Consume the leftover newline
+        return scanner.nextLine().trim();
     }
 
     public static String deleteConfirmation(String id, String name, String email, String phone , String category, String type , LocalDate registeredDate){
@@ -103,7 +104,8 @@ public class DonorUI {
         displaySelectedDonorDetail(id, name, email, phone, category, type, registeredDate);
 
         System.out.print("\nAre you sure you want to delete this donor? (Y/N): ");
-        return scanner.next().trim().toUpperCase();
+        scanner.nextLine();  // Consume the leftover newline
+        return scanner.nextLine().trim().toUpperCase();
     }
 
     public static void displaySelectedDonorDetail(String id, String name, String email, String phone , String category, String type , LocalDate registeredDate){
@@ -124,7 +126,8 @@ public class DonorUI {
         displaySelectedDonorDetail(id,name, email,phone, category,type,registeredDate);
 
         System.out.print("\nDo you want to proceed with modifying this donor? (Y/N): ");
-        return scanner.next().trim().toUpperCase();
+        scanner.nextLine();  // Consume the leftover newline
+        return scanner.nextLine().trim().toUpperCase();
     }
 
     public static String promptUpdatePart(){
@@ -137,6 +140,7 @@ public class DonorUI {
         System.out.println("5 - Type");
         System.out.println("X - Stop updating");
         System.out.print("Please select an option (1-5 or X): ");
+        scanner.nextLine();  // Consume the leftover newline
         return scanner.nextLine().trim();
     }
 
@@ -237,7 +241,7 @@ public class DonorUI {
         }
     }
 
-    public static int filterMenu(){
+    public static String filterMenu(){
         System.out.println("\nFilter Options:");
         System.out.println("1 - Filter by Name Starting Letter");
         System.out.println("2 - Filter by Category");
@@ -245,7 +249,8 @@ public class DonorUI {
         System.out.println("4 - Undo Filter");
         System.out.println("5 - Cancel Filter");
         System.out.print("Select a filter option: ");
-        return scanner.nextInt();
+        scanner.nextLine();
+        return scanner.nextLine();
     }
 
     public static String filterChoiceName() {
@@ -262,31 +267,29 @@ public class DonorUI {
         return input.toUpperCase();
     }
 
-    public static int filterChoiceCategory(){
+    public static String filterChoiceCategory(){
         System.out.println("\nSelect category:");
         System.out.println("1. Government");
         System.out.println("2. Private");
         System.out.println("3. Public");
         System.out.print("Enter category number: ");
-        scanner.nextLine();
-        return scanner.nextInt();
+        return scanner.nextLine();
     }
 
-    public static int filterChoiceType(){
+    public static String filterChoiceType(){
         System.out.println("\nSelect type:");
         System.out.println("1. Individual");
         System.out.println("2. Organization");
         System.out.print("Enter type number: ");
-        scanner.nextLine();
-        return scanner.nextInt();
+        return scanner.nextLine();
     }
 
-    public static int SortMenu(){
+    public static String SortMenu(){
         System.out.println("\n1 - Sort by Name Ascending");
         System.out.println("2 - Sort by Name Descending");
         System.out.println("3 - Sort by ID Descending");
         System.out.print("Choose a sorting criterion: ");
-        return scanner.nextInt();
+        return scanner.next();
     }
 
     public static void viewSummaryDonorData(ArrayList <Integer> filterCount){
