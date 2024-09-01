@@ -701,8 +701,8 @@ public class DonationUI {
     }
 
     public void displaySingleRecordWithDonorIDMoney(DonationRecord record, int i, int amtIndex) {
-        System.out.printf("%-25s %-10s %-20s %-10s %-20s %-10.2f %-20s\n", record.getRecordID(), record.getDonor().getId(),
-                record.getDonor().getName(), record.getItem().get(0).getItemCode(), record.getItem().get(i).getItemName(),
+        System.out.printf("%-25s %-10s %-20s %-10s %-20s %-10.2f %-20s\n", "", "",
+                "", record.getItem().get(0).getItemCode(), record.getItem().get(i).getItemName(),
                 record.getAmount().get(amtIndex), "");
     }
 
