@@ -6,8 +6,8 @@ package Control;
  * */
 
 import Entity.Donee;
-import Libraries.ListInterface;
-import Libraries.PriorityQueue;
+import ADT.ListInterface;
+import ADT.PriorityQueue;
 
 import java.util.Comparator;
 import java.util.Iterator;

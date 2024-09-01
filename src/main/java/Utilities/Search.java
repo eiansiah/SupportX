@@ -5,9 +5,8 @@ package Utilities;
  *  ID: 2307609
  * */
 
-import FileHandling.UniversalFileHandler;
-import Libraries.ArrayList;
-import Libraries.Debug;
+import DAO.UniversalFileHandler;
+import ADT.ArrayList;
 
 public class Search {
 

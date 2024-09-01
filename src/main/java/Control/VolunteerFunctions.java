@@ -3,19 +3,19 @@
  *  ID: 2307616
  *
  * */
+
 package Control;
 
 import Boundary.VolunteerUI;
 import Entity.Volunteer;
-import FileHandling.VolunteerFileHandler;
-import Libraries.ArrayList;
-import Libraries.GeneralFunction;
-import Libraries.Hashmap;
-import Libraries.ListInterface;
-import Main.Event.Event;
-import Main.Event.EventHandler;
-import Main.Event.EventStatus;
-import Main.Event.EventVolunteer;
+import DAO.VolunteerFileHandler;
+import ADT.ArrayList;
+import ADT.Hashmap;
+import ADT.ListInterface;
+import Entity.Event;
+import Entity.EventStatus;
+import Entity.EventVolunteer;
+import Utilities.GeneralFunction;
 import Utilities.Message;
 import Utilities.NewValidation;
 
@@ -25,7 +25,7 @@ public class VolunteerFunctions {
     private static final VolunteerFileHandler fileHandler = new VolunteerFileHandler();
     private static ListInterface<Volunteer> volunteers = new ArrayList<>();
 
-    public void runVolunteerSystem() {
+    public static void runVolunteerSystem() {
 
         fileHandler.checkAndCreateFile("volunteers.txt");
 
@@ -78,6 +78,7 @@ public class VolunteerFunctions {
                         viewSummaryReport();
                         break;
                     case 11:
+                        //test this
                         Message.displayExitMessage();
                         return;
                     default:
@@ -730,11 +731,6 @@ public class VolunteerFunctions {
 
         VolunteerUI.displayEmptyString();
         GeneralFunction.enterToContinue();
-    }
-
-    public static void main(String args[]) {
-        VolunteerFunctions volunteerFunctions = new VolunteerFunctions();
-        volunteerFunctions.runVolunteerSystem();
     }
 
 }
