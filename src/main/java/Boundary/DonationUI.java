@@ -756,7 +756,7 @@ public class DonationUI {
     }
 
     public void displayClothingListHeader() {
-        System.out.println("\nClothingList");
+        System.out.println("\nClothing List");
     }
 
     public void displayBeverageListHeader() {
