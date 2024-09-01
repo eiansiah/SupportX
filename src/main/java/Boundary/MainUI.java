@@ -1,7 +1,7 @@
 package Boundary;
 
-import Libraries.Color;
-import Libraries.GeneralFunction;
+import Utilities.Color;
+import Utilities.GeneralFunction;
 
 import java.util.Random;
 import java.util.Scanner;

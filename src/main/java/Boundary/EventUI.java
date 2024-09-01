@@ -1,13 +1,11 @@
 package Boundary;
 
-import Libraries.ArrayList;
-import Libraries.Color;
-import Libraries.GeneralFunction;
-import Libraries.ListInterface;
-import Main.Event.Event;
-import Main.Event.EventHandler;
-import Main.Event.EventStatus;
-import Main.Event.EventVolunteer;
+import Utilities.Color;
+import Utilities.GeneralFunction;
+import ADT.ListInterface;
+import Entity.Event;
+import Control.EventHandler;
+import Entity.EventVolunteer;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

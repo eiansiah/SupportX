@@ -7,9 +7,9 @@ package Boundary;
 
 import Entity.Donee;
 
-import Libraries.Color;
-import Libraries.GeneralFunction;
-import Libraries.ListInterface;
+import Utilities.Color;
+import Utilities.GeneralFunction;
+import ADT.ListInterface;
 
 import java.time.LocalDate;
 import java.util.Scanner;

@@ -14,15 +14,16 @@ import Entity.DonationRecord;
 import Entity.Donor;
 
 //Data Handling
-import FileHandling.DonorFileHandler;
+import DAO.DonorFileHandler;
 
 //ADT
-import Libraries.*;
+import ADT.*;
 
 //Boundaries
 import Boundary.DonorUI;
 
 //Utilities
+import Utilities.GeneralFunction;
 import Utilities.NewValidation;
 import Utilities.Message;
 
