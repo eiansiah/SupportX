@@ -3382,7 +3382,7 @@ public class Donation {
 
     public boolean checkNumB(String num, int a) {
         try {
-            if (Integer.parseInt(num) > 0 && Integer.parseInt(num) <= a) {
+            if (Integer.parseInt(num) >= a) {
                 return true;
             } else {
                 msgHandling.displayGeneralErrorMsg("Invalid Number Entered! Number must be more than 0. ");
