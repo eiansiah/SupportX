@@ -41,19 +41,19 @@ public class EventHandler {
                     String _action = getSubSystemMenuAction();
 
                     if (_action.isEmpty()) {
-                        displayGeneralErrorMsg("Input can't be empty");
+                        displayGeneralErrorMsg("Input can't be empty.");
                         continue;
                     }
 
                     try {
                         action = Integer.parseInt(_action);
                     } catch (NumberFormatException e) {
-                        displayGeneralErrorMsg("Input is not a number");
+                        displayGeneralErrorMsg("Input is not a number.");
                         continue;
                     }
 
                     if (action < 1 || action > 9) {
-                        displayGeneralErrorMsg("Invalid action");
+                        displayGeneralErrorMsg("Invalid action.");
                         continue;
                     }
 
@@ -105,7 +105,7 @@ public class EventHandler {
 
         EventHandler.addNewEvent(eventName, eventStartDateTime, eventEndDateTime, venue, description);
 
-        displaySuccessMessage("New event added");
+        displaySuccessMessage("New event added.");
 
         GeneralFunction.enterToContinue();
     }
@@ -135,7 +135,7 @@ public class EventHandler {
         }
 
         EventHandler.removeEvent(eventChosen);
-        displaySuccessMessage("Removed event");
+        displaySuccessMessage("Removed event.");
         GeneralFunction.enterToContinue();
     }
 
@@ -146,7 +146,7 @@ public class EventHandler {
             String eventName = getEventInputUI("Enter event name (x to stop): ");
 
             if(eventName.isEmpty()){
-                displayGeneralErrorMsg("Input can't be empty");
+                displayGeneralErrorMsg("Input can't be empty.");
                 continue;
             }
 
@@ -204,7 +204,7 @@ public class EventHandler {
 
         EventHandler.modifyEvent(eventID, eventName, venue, description, EventStatus.UPCOMING);
 
-        displaySuccessMessage("Event modified");
+        displaySuccessMessage("Event modified.");
         GeneralFunction.enterToContinue();
     }
 
@@ -215,7 +215,7 @@ public class EventHandler {
         allEvents.sort(Comparator.comparing(Event::eventStatus));
 
         EventDisplay(allEvents, "All events", 102);
-        displayGeneralYellowMessage("Event sorted based on event status");
+        displayGeneralYellowMessage("Event sorted based on event status.");
 
         GeneralFunction.enterToContinue();
     }
@@ -238,7 +238,7 @@ public class EventHandler {
             volunteerID = getEventInputUI("Enter volunteerID to view event list: ");
 
             if(volunteerID.isEmpty()){
-                displayGeneralErrorMsg("Input can't be empty");
+                displayGeneralErrorMsg("Input can't be empty.");
                 continue;
             }
 
@@ -253,7 +253,7 @@ public class EventHandler {
         ListInterface <EventVolunteer> eventsJoined = EventHandler.getEventVolunteerJoined(volunteerID);
 
         if(eventsJoined == null){
-            displayGeneralErrorMsg("Volunteer doesn't join any event");
+            displayGeneralErrorMsg("Volunteer doesn't join any event.");
             GeneralFunction.enterToContinue();
 
             return null;
@@ -262,7 +262,7 @@ public class EventHandler {
         eventsJoined.sort(Comparator.comparing(EventVolunteer::eventID));
 
         listVolunteerJoinedEvent(eventsJoined);
-        displayGeneralYellowMessage("Event sorted based on eventID");
+        displayGeneralYellowMessage("Event sorted based on eventID.");
 
         return eventsJoined;
     }
@@ -279,7 +279,7 @@ public class EventHandler {
             String eventID = getEventInputUI("Enter event ID to opt out event: ");
 
             if(eventID.isEmpty()){
-                displayGeneralErrorMsg("Input can't be empty");
+                displayGeneralErrorMsg("Input can't be empty.");
                 continue;
             }
 
@@ -288,7 +288,7 @@ public class EventHandler {
 
                 if(eventVolunteer.eventID().equals(eventID)){
                     EventHandler.removeVolunteerFromVolunteerEvent(eventID, eventVolunteer.VolunteerID());
-                    displaySuccessMessage("Remove successfully");
+                    displaySuccessMessage("Remove successfully.");
 
                     GeneralFunction.enterToContinue();
                     return;
@@ -330,7 +330,7 @@ public class EventHandler {
             eventName = getEventInputUI("Enter event name: ");
 
             if (eventName.isEmpty()) {
-                displayGeneralErrorMsg("Input can't be empty");
+                displayGeneralErrorMsg("Input can't be empty.");
                 continue;
             }
 
@@ -387,7 +387,7 @@ public class EventHandler {
             venue = getEventInputUI("Enter venue: ");
 
             if(venue.isEmpty()){
-                displayGeneralErrorMsg("Input can't be empty");
+                displayGeneralErrorMsg("Input can't be empty.");
                 continue;
             }
 
