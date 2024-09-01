@@ -16,11 +16,11 @@ import java.util.Scanner;
 import Entity.DonationDistribution;
 import Entity.Donee;
 
-import FileHandling.DoneeFileHandler;
+import DAO.DoneeFileHandler;
 
-import Libraries.GeneralFunction;
-import Libraries.ArrayList;
-import Libraries.ListInterface;
+import Utilities.GeneralFunction;
+import ADT.ArrayList;
+import ADT.ListInterface;
 
 import Utilities.Message;
 import Utilities.NewValidation;

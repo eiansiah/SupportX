@@ -14,8 +14,10 @@ import Control.Donation;
 import Entity.DonationItem;
 import Entity.Donor;
 
-import Libraries.*;
+import ADT.*;
 
+import Utilities.Color;
+import Utilities.GeneralFunction;
 import Utilities.Message;
 
 import java.io.IOException;

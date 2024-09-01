@@ -1,9 +1,0 @@
-
-
-tree based arraylist
-example:
-        node
-      /   \
-   array  node
-         /    \
-       array array

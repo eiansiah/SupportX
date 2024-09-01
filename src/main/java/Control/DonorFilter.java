@@ -6,10 +6,10 @@
 
 package Control;
 
-import FileHandling.DonorFileHandler;
-import Libraries.ArrayList;
+import DAO.DonorFileHandler;
+import ADT.ArrayList;
 import Entity.Donor;
-import Libraries.ListInterface;
+import ADT.ListInterface;
 
 public class DonorFilter {
 

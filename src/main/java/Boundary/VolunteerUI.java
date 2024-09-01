@@ -1,32 +1,40 @@
+/*
+ *  Author: Tan Qian Yiin
+ *  ID: 2307616
+ *
+ * */
 package Boundary;
 
 import Control.VolunteerFunctions;
 import Entity.Volunteer;
-import Main.Event.Event;
-import Main.Event.EventVolunteer;
+import Entity.Event;
+import Entity.EventVolunteer;
 
-import Libraries.ArrayList;
-import Libraries.Color;
-import Libraries.ListInterface;
+import ADT.ArrayList;
+import Utilities.Color;
+import ADT.ListInterface;
+
 import java.util.Scanner;
+import java.time.format.DateTimeFormatter;
 
 public class VolunteerUI {
 
     private static final Scanner scanner = new Scanner(System.in);
 
     public static String mainMenu() {
-        System.out.println(Color.BLUE + "\nVolunteer Management System" + Color.RESET);
-        System.out.println("----------------------------");
+        System.out.println("\n-------------------------------");
+        System.out.println(Color.BLUE + "Volunteer Management Subsystem" + Color.RESET);
+        System.out.println("-------------------------------");
         System.out.println("1. Add Volunteer");
-        System.out.println("2. Delete Volunteer");
+        System.out.println("2. Remove Volunteer");
         System.out.println("3. Modify Volunteer");
         System.out.println("4. Search Volunteer");
-        System.out.println("5. Assign Volunteer");
-        System.out.println("6. List All Volunteers");
-        System.out.println("7. List of Volunteers and Events");
-        System.out.println("8. Filter Volunteers");
-        System.out.println("9. Search Events by Volunteer");
-        System.out.println("10. View Summary Reports");
+        System.out.println("5. Assign Volunteer to Events");
+        System.out.println("6. List all Volunteers");
+        System.out.println("7. List of Volunteers and Their Events");
+        System.out.println("8. Filter Volunteers based on criteria");
+        System.out.println("9. Search Events under a Volunteer");
+        System.out.println("10. View Summary Report");
         System.out.println("11. Back");
         System.out.println(" ");
         System.out.print("Enter choice: ");
@@ -37,8 +45,8 @@ public class VolunteerUI {
     public static void upcomingEventsUI(ListInterface<Event> upcomingEvents) {
         for (int i = 0; i < upcomingEvents.size(); i++) {
             Event event = upcomingEvents.get(i);
-
-            System.out.println(event.eventID() + " " + event.startDateTime() + " " + event.endDateTime() + " " + event.venue());
+            DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            System.out.println(event.eventID() + " " + event.startDateTime().format(df) + " " + event.endDateTime().format(df) + " " + event.venue());
 
         }
     }
@@ -61,10 +69,8 @@ public class VolunteerUI {
         return scanner.nextLine().trim();
     }
 
-    //private static void assignedVolunteerUI(Event eventChosen, String volunteerID) {
-    //    System.out.println(volunteerID + " has been assigned to " + eventChosen.eventID());
-    //}
     public static String volunteerIDtoSearchUI() {
+        System.out.println("");
         System.out.print("Enter Volunteer ID to search: ");
         return scanner.nextLine().trim();
     }
@@ -82,9 +88,10 @@ public class VolunteerUI {
         System.out.println("---------------------------");
         for (int i = 0; i < events.size(); i++) {
             Event event = events.get(i);
+            DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             System.out.println("Event ID: " + event.eventID());
-            System.out.println("Event Name: " + event.description());
-            System.out.println("Date Joined: " + event.startDateTime());
+            System.out.println("Event Name: " + event.eventName());
+            System.out.println("Date Joined: " + event.startDateTime().format(df));
             System.out.println("---------------------------");
         }
     }
@@ -219,21 +226,22 @@ public class VolunteerUI {
         System.out.println(" ");
         System.out.println("Volunteers and Their Events");
         System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------");
-        System.out.printf("%-15s %-20s %-15s %-30s %-20s %-30s %-30s%n", "Volunteer ID", "Volunteer Name", "Event ID", "Event Description", "Event Venue", "Event Start Date & Time", "Event End Date & Time");
+        System.out.printf("%-15s %-20s %-15s %-30s %-20s %-30s %-30s%n", "Volunteer ID", "Volunteer Name", "Event ID", "Event Name", "Event Venue", "Event Start Date & Time", "Event End Date & Time");
         System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------");
     }
 
     public static void listParticipatedVolunteerEventsUI(Volunteer volunteer, ListInterface<Event> events) {
         for (int j = 0; j < events.size(); j++) {
             Event event = events.get(j);
+            DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             System.out.printf("%-15s %-20s %-15s %-30s %-20s %-30s %-30s%n",
                     volunteer.getId(),
                     volunteer.getName(),
                     event.eventID(),
-                    event.description(),
+                    event.eventName(),
                     event.venue(),
-                    event.startDateTime(),
-                    event.endDateTime());
+                    event.startDateTime().format(df),
+                    event.endDateTime().format(df));
         }
     }
 
@@ -256,22 +264,33 @@ public class VolunteerUI {
         System.out.println("");
         System.out.println("Volunteers Event Registration History");
         System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------");
-        System.out.printf("%-15s %-20s %-15s %-30s %-20s %-30s %-30s%n", "Volunteer ID", "Volunteer Name", "Event ID", "Event Description", "Event Venue", "Event Start Date & Time", "Event End Date & Time");
+        System.out.printf("%-15s %-20s %-15s %-30s %-20s %-30s %-30s%n", "Volunteer ID", "Volunteer Name", "Event ID", "Event Name", "Event Venue", "Event Start Date & Time", "Event End Date & Time");
         System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------");
     }
 
     public static void volunteerEventsHistoryUI(Volunteer volunteer, ListInterface<Event> events) {
         for (int j = 0; j < events.size(); j++) {
             Event event = events.get(j);
+            DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             System.out.printf("%-15s %-20s %-15s %-30s %-20s %-30s %-30s%n",
                     volunteer.getId(),
                     volunteer.getName(),
                     event.eventID(),
-                    event.description(),
+                    event.eventName(),
                     event.venue(),
-                    event.startDateTime(),
-                    event.endDateTime());
+                    event.startDateTime().format(df),
+                    event.endDateTime().format(df));
         }
+    }
+
+    public static void displayReportHeader() {
+        System.out.printf("""
+                         ----------------------------------------------------------------------------
+                         |                                                                          |
+                         |                   SUMMARY REPORT OF VOLUNTEER SUBSYSTEM                  |
+                         |                                                                          |
+                         ----------------------------------------------------------------------------""");
+        System.out.println(" ");
     }
 
     public static void displayVolunteersEndline() {
@@ -347,10 +366,21 @@ public class VolunteerUI {
         System.out.println("1. Age");
         System.out.println("2. Gender");
         System.out.println("3. Availability");
+        System.out.println("4. Back");
         System.out.println(" ");
         System.out.print("Enter choice: ");
 
         return Integer.parseInt(scanner.nextLine().trim());
+    }
+
+    public static void clearInvalidInput() {
+        scanner.nextLine();
+    }
+
+    public static void upcomingEventsHeader() {
+        System.out.println("");
+        System.out.println("Upcoming Events");
+        System.out.println("------------------");
     }
 
     public static int inputMinimumAgeUI() {
