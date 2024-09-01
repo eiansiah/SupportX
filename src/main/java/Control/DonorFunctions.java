@@ -10,6 +10,7 @@
 package Control;
 
 //Entity
+import Entity.DonationItem;
 import Entity.DonationRecord;
 import Entity.Donor;
 
@@ -29,6 +30,7 @@ import Utilities.Message;
 
 //Misc
 import java.time.LocalDate;
+import java.util.Iterator;
 import java.util.Scanner;
 
 public class DonorFunctions {
@@ -93,8 +95,16 @@ public class DonorFunctions {
         ListInterface<Donor> checkDonors = readDonors(); // Assuming readDonors() retrieves the list of donors
 
         // Check for the donor by ID
-        for (int i = 0; i < checkDonors.size(); i++) {
-            Donor donor = checkDonors.get(i);
+//        for (int i = 0; i < checkDonors.size(); i++) {
+//            Donor donor = checkDonors.get(i);
+//
+//            if (donor.getId().equals(donorID)) {
+//                return donor; // Return the entire Donor object if found
+//            }
+//        }
+        Iterator<Donor> donorIterator = checkDonors.iterator();
+        while (donorIterator.hasNext()) {
+            Donor donor = donorIterator.next();
 
             if (donor.getId().equals(donorID)) {
                 return donor; // Return the entire Donor object if found
@@ -201,13 +211,23 @@ public class DonorFunctions {
 
         String donorIDToDelete = DonorUI.inputRemoveDonorIDUI();
 
-        // Search for the donor by ID
-        for (int i = 0; i < donors.size(); i++) {
-            Donor donor = donors.get(i);
+//        // Search for the donor by ID
+//        for (int i = 0; i < donors.size(); i++) {
+//            Donor donor = donors.get(i);
+//
+//            if (donor.getId().equals(donorIDToDelete)) {
+//                selectedDonor = donor;
+//                break;
+//            }
+//        }
 
+        // Use iterator to search for the donor by ID
+        Iterator<Donor> donorIterator = donors.iterator();
+        while (donorIterator.hasNext()) {
+            Donor donor = donorIterator.next();
             if (donor.getId().equals(donorIDToDelete)) {
                 selectedDonor = donor;
-                break;
+                break; // Exit the loop once the donor is found
             }
         }
 
@@ -239,13 +259,13 @@ public class DonorFunctions {
         Donor selectedDonor = null;
         String donorIDToModify = DonorUI.inputUpdateDonorIDUI();
 
-        // Search for the donor by ID
-        for (int i = 0; i < donors.size(); i++) {
-            Donor donor = donors.get(i);
-
+        // Use iterator to search for the donor by ID
+        Iterator<Donor> donorIterator = donors.iterator();
+        while (donorIterator.hasNext()) {
+            Donor donor = donorIterator.next();
             if (donor.getId().equals(donorIDToModify)) {
                 selectedDonor = donor;
-                break;
+                break; // Exit the loop once the donor is found
             }
         }
 
@@ -410,37 +430,48 @@ public class DonorFunctions {
                     }
                     break;
 
-                case "D":
-                    String donorID = DonorUI.inputCheckDonorIDUI();
-                    Donor selectedDonor = null;
-                    for (int i = 0; i < donors.size(); i++) {
-                        Donor donor = donors.get(i);
+                    case "D":
+                        String donorID = DonorUI.inputCheckDonorIDUI();
+                        Donor selectedDonor = null;
+//                        for (int i = 0; i < donors.size(); i++) {
+//                            Donor donor = donors.get(i);
+//
+//                            if (donor.getId().equals(donorID)) {
+//                                selectedDonor = donor;
+//                                break;
+//                            }
+//                        }
 
-                        if (donor.getId().equals(donorID)) {
-                            selectedDonor = donor;
-                            break;
+                        // Use an iterator to search for the donor by ID
+                        Iterator<Donor> donorIterator = donors.iterator();
+                        while (donorIterator.hasNext()) {
+                            Donor donor = donorIterator.next();
+
+                            if (donor.getId().equals(donorID)) {
+                                selectedDonor = donor;
+                                break;
+                            }
                         }
-                    }
 
-                    if (selectedDonor != null) {
-                        DonorUI.displaySelectedDonorDetail(
-                                selectedDonor.getId(),
-                                selectedDonor.getName(),
-                                selectedDonor.getEmail(),
-                                selectedDonor.getPhone(),
-                                selectedDonor.getCategory(),
-                                selectedDonor.getType(),
-                                selectedDonor.getRegisteredDate()
-                        );
-
+                        if (selectedDonor != null) {
+                            DonorUI.displaySelectedDonorDetail(
+                                    selectedDonor.getId(),
+                                    selectedDonor.getName(),
+                                    selectedDonor.getEmail(),
+                                    selectedDonor.getPhone(),
+                                    selectedDonor.getCategory(),
+                                    selectedDonor.getType(),
+                                    selectedDonor.getRegisteredDate()
+                            );
 
 
-                    } else {
-                        DonorUI.donorNotFoundMsg(donorID);
-                    }
 
-                    DonorUI.pressKeyToGoBack();
-                    break;
+                        } else {
+                            DonorUI.donorNotFoundMsg(donorID);
+                        }
+
+                        DonorUI.pressKeyToGoBack();
+                        break;
 
                 case "F":
                     String filterChoice = DonorUI.filterMenu();
@@ -642,7 +673,6 @@ public class DonorFunctions {
         DonorUI.pressKeyToContinue();
     }
 
-
     public static void displayDonorDonationConnection(String donorId){
         Donation donation = new Donation();
         ListInterface<DonationRecord> donationRecord = new ArrayList<>();
@@ -651,8 +681,17 @@ public class DonorFunctions {
 
         // Check if the donor exists in donorDetails
         boolean donorExists = false;
-        for (int i = 0; i < donorDetails.size(); i++) {
-            if (donorDetails.get(i).getId().equals(donorId)) {
+//        for (int i = 0; i < donorDetails.size(); i++) {
+//            if (donorDetails.get(i).getId().equals(donorId)) {
+//                donorExists = true;
+//                break;
+//            }
+//        }
+
+        Iterator<Donor> donorIterator = donorDetails.iterator();
+        while (donorIterator.hasNext()) {
+            Donor donor = donorIterator.next();
+            if (donor.getId().equals(donorId)) {
                 donorExists = true;
                 break;
             }
@@ -670,14 +709,20 @@ public class DonorFunctions {
             return;  // Exit the method if no records are found
         }
 
-        for (int i = 0; i < donationRecord.size(); i++){
-            DonationRecord record = donationRecord.get(i);
+//        for (int i = 0; i < donationRecord.size(); i++){
+//            DonationRecord record = donationRecord.get(i);
+        Iterator<DonationRecord> recordIterator = donationRecord.iterator();
+        while (recordIterator.hasNext()) {
+            DonationRecord record = recordIterator.next();
 //            System.out.println("Record ID: " + record.getRecordID());
 //            System.out.println("Donor: " + record.getDonor().getId());
-                DonorUI.showRecordID(record.getDonor().getId());
-            for (int itemIterator = 0; itemIterator < record.getItem().size(); itemIterator++){
-//                System.out.println("Items: " + record.getItem().get(itemIterator));
-                DonorUI.showItemData(record.getItem().get(itemIterator));
+            DonorUI.showRecordID(record.getRecordID());
+//            for (int itemIterator = 0; itemIterator < record.getItem().size(); itemIterator++){
+//                DonorUI.showItemData(record.getItem().get(itemIterator));
+//            }
+            Iterator<DonationItem> itemIterator = record.getItem().iterator();
+            while (itemIterator.hasNext()) {
+                DonorUI.showItemData(itemIterator.next());
             }
 //            System.out.println("Donation Date/Time: " + record.getDonationDateTime());
             DonorUI.showItemDate(record.getDonationDateTime());
@@ -698,22 +743,45 @@ public class DonorFunctions {
         Donor topDonor = null;
         int maxRecords = 0;
 
-        for (int i = 0; i < donorDetails.size(); i++) {
+//        for (int i = 0; i < donorDetails.size(); i++) {
+//            // Read through all donors and get their ID
+//            String donorID = donorDetails.get(i).getId();
+//
+//            // Pass donorID to get all donation data for that one ID
+//            ListInterface<DonationRecord> currentDonorDonations = donation.findRecordsForADonor(donorID);
+//
+//            // Add all records from the current donor to the main donationDetails list
+//            for (int j = 0; j < currentDonorDonations.size(); j++) {
+//                donationDetails.add(currentDonorDonations.get(j));
+//            }
+//
+//            // Check if the current donor has the most records
+//            if (currentDonorDonations.size() > maxRecords) {
+//                maxRecords = currentDonorDonations.size();
+//                topDonor = donorDetails.get(i);
+//            }
+//        }
+
+        // Use an iterator to loop through donorDetails
+        Iterator<Donor> donorIterator = donorDetails.iterator();
+        while (donorIterator.hasNext()) {
             // Read through all donors and get their ID
-            String donorID = donorDetails.get(i).getId();
+            Donor currentDonor = donorIterator.next();
+            String donorID = currentDonor.getId();
 
             // Pass donorID to get all donation data for that one ID
             ListInterface<DonationRecord> currentDonorDonations = donation.findRecordsForADonor(donorID);
 
             // Add all records from the current donor to the main donationDetails list
-            for (int j = 0; j < currentDonorDonations.size(); j++) {
-                donationDetails.add(currentDonorDonations.get(j));
+            Iterator<DonationRecord> recordIterator = currentDonorDonations.iterator();
+            while (recordIterator.hasNext()) {
+                donationDetails.add(recordIterator.next());
             }
 
             // Check if the current donor has the most records
             if (currentDonorDonations.size() > maxRecords) {
                 maxRecords = currentDonorDonations.size();
-                topDonor = donorDetails.get(i);
+                topDonor = currentDonor;
             }
         }
 
@@ -737,9 +805,21 @@ public class DonorFunctions {
         // Counter for the number of donors who joined this month
         int donorsJoinedThisMonth = 0;
 
-        // Get number of donors who joined this month
-        for (int i = 0; i < donorData.size(); i++) {
-            Donor donor = donorData.get(i);
+//        // Get number of donors who joined this month
+//        for (int i = 0; i < donorData.size(); i++) {
+//            Donor donor = donorData.get(i);
+//            LocalDate registeredDate = donor.getRegisteredDate();
+//
+//            // Check if the donor joined in the current month and year
+//            if (registeredDate.getMonthValue() == currentMonth && registeredDate.getYear() == currentYear) {
+//                donorsJoinedThisMonth++;
+//            }
+//        }
+
+        // Use an iterator to loop through donorData
+        Iterator<Donor> donorIterator = donorData.iterator();
+        while (donorIterator.hasNext()) {
+            Donor donor = donorIterator.next();
             LocalDate registeredDate = donor.getRegisteredDate();
 
             // Check if the donor joined in the current month and year

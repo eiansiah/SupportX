@@ -328,7 +328,7 @@ public class DonorUI {
         System.out.printf("|%-85s|%n", centerString(String.valueOf(number), 85));
     }
 
-    public static void showRecordID(String id){
+    public static void showRecordID(int id){
         System.out.println("Record ID: " + id);
     }
 
