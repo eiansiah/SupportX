@@ -3,6 +3,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Control;
+
+/*
+ *  author: Ko Jie Qi
+ *  ID: 2307589
+ * */
 //import entity
 
 import Boundary.DonationUI;
@@ -20,16 +25,8 @@ import Entity.Donor;
 import Control.DonorFunctions;
 import FileHandling.DonationFileHandler;
 
-//import basic library
-//file
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-
 //date
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 //for sort
@@ -42,8 +39,6 @@ import Libraries.ListInterface;
 import static Main.Event.EventHandler.searchEventByEventID;
 import Utilities.Message;
 import java.util.Iterator;
-//will be removed for boundary
-import java.util.Scanner;
 
 /**
  *
@@ -273,6 +268,8 @@ public class Donation {
             _name = donationUI.inputName();
             if (_name.isEmpty()) {
                 msgHandling.displayGeneralErrorMsg("Invalid Item Name. Please do not leave the field empty.");
+            } else if (_name.contains("#")) {
+                msgHandling.displayGeneralErrorMsg("Invalid Item Name. Please do not consist of # in the item name.");
             } else {
                 return _name;
             }
@@ -283,9 +280,11 @@ public class Donation {
     public String getNvalidateDescription() {
         String _description;
         while (true) {
-            _description = donationUI.inputName();
+            _description = donationUI.inputDescription();
             if (_description.isEmpty()) {
                 msgHandling.displayGeneralErrorMsg("Invalid Description. Please do not leave the field empty.");
+            } else if (_description.contains("#")) {
+                msgHandling.displayGeneralErrorMsg("Invalid Item Name. Please do not consist of # in the item name.");
             } else {
                 return _description;
             }
@@ -430,7 +429,7 @@ public class Donation {
                 if (!(_temp.equalsIgnoreCase("X"))) {
                     _tempOption = Integer.parseInt(_temp);
                     if (!(_tempOption >= 1 && _tempOption <= 9)) {
-                        msgHandling.displayGeneralErrorMsg("Invalid Clothing Category Option. Please enter a valid option (1-8).");
+                        msgHandling.displayGeneralErrorMsg("Invalid Clothing Category Option. Please enter a valid option (1-9).");
                     } else {
                         break;
                     }
@@ -438,7 +437,7 @@ public class Donation {
                     return "";
                 }
             } catch (Exception ex) {
-                msgHandling.displayGeneralErrorMsg("Invalid Clothing Category Option. Please enter a valid option (1-8).");
+                msgHandling.displayGeneralErrorMsg("Invalid Clothing Category Option. Please enter a valid option (1-9).");
             }
         }
         switch (_tempOption) {
@@ -516,7 +515,7 @@ public class Donation {
                 if (!(_temp.equalsIgnoreCase("X"))) {
                     _tempOption = Integer.parseInt(_temp);
                     if (!(_tempOption >= 1 && _tempOption <= 6)) {
-                        msgHandling.displayGeneralErrorMsg("Invalid Age Group Option. Please enter a valid option (1-8).");
+                        msgHandling.displayGeneralErrorMsg("Invalid Age Group Option. Please enter a valid option (1-6).");
                     } else {
                         break;
                     }
@@ -524,7 +523,7 @@ public class Donation {
                     return "";
                 }
             } catch (Exception ex) {
-                msgHandling.displayGeneralErrorMsg("Invalid Age Group Option. Please enter a valid option (1-8).");
+                msgHandling.displayGeneralErrorMsg("Invalid Age Group Option. Please enter a valid option (1-6).");
             }
         }
         switch (_tempOption) {
@@ -631,8 +630,8 @@ public class Donation {
                 _temp = donationUI.inputPCCat();
                 if (!(_temp.equalsIgnoreCase("X"))) {
                     _tempOption = Integer.parseInt(_temp);
-                    if (!(_tempOption >= 1 && _tempOption <= 9)) {
-                        msgHandling.displayGeneralErrorMsg("Invalid Personal Care Category Option. Please enter a valid option (1-8).");
+                    if (!(_tempOption >= 1 && _tempOption <= 5)) {
+                        msgHandling.displayGeneralErrorMsg("Invalid Personal Care Category Option. Please enter a valid option (1-5).");
                     } else {
                         break;
                     }
@@ -640,7 +639,7 @@ public class Donation {
                     return "";
                 }
             } catch (Exception ex) {
-                msgHandling.displayGeneralErrorMsg("Invalid Personal Care Category Option. Please enter a valid option (1-8).");
+                msgHandling.displayGeneralErrorMsg("Invalid Personal Care Category Option. Please enter a valid option (1-5).");
             }
         }
         switch (_tempOption) {
@@ -671,8 +670,8 @@ public class Donation {
                 _temp = donationUI.inputDosageForm();
                 if (!(_temp.equalsIgnoreCase("X"))) {
                     _tempOption = Integer.parseInt(_temp);
-                    if (!(_tempOption >= 1 && _tempOption <= 9)) {
-                        msgHandling.displayGeneralErrorMsg("Invalid Dosage Form Option. Please enter a valid option (1-8).");
+                    if (!(_tempOption >= 1 && _tempOption <= 5)) {
+                        msgHandling.displayGeneralErrorMsg("Invalid Dosage Form Option. Please enter a valid option (1-5).");
                     } else {
                         break;
                     }
@@ -680,7 +679,7 @@ public class Donation {
                     return "";
                 }
             } catch (Exception ex) {
-                msgHandling.displayGeneralErrorMsg("Invalid Dosage Form Option. Please enter a valid option (1-8).");
+                msgHandling.displayGeneralErrorMsg("Invalid Dosage Form Option. Please enter a valid option (1-5).");
             }
         }
         switch (_tempOption) {
@@ -734,10 +733,23 @@ public class Donation {
                 _temp = donationUI.inputAmt();
                 if (!(_temp.equalsIgnoreCase("X"))) {
                     _amount = Double.parseDouble(_temp);
-                    if (_amount <= 0.0) {
-                        msgHandling.displayGeneralErrorMsg("Invalid Money Amount. Please enter an amount that is more than zero.");
+                    if (_temp.contains(".")) {
+                        String[] parts = _temp.split("\\.");
+                        if (parts.length == 2 && parts[1].length() <= 2 && parts[1].length() > 0) {
+                            if (_amount <= 0.0) {
+                                msgHandling.displayGeneralErrorMsg("Invalid Money Amount. Please enter an amount that is more than zero.");
+                            } else {
+                                return _amount;
+                            }
+                        } else {
+                            msgHandling.displayGeneralErrorMsg("Invalid Money Amount. Please enter an amount with 2 decimal place only.");
+                        }
                     } else {
-                        return _amount;
+                        if (_amount <= 0.0) {
+                            msgHandling.displayGeneralErrorMsg("Invalid Money Amount. Please enter an amount that is more than zero.");
+                        } else {
+                            return _amount;
+                        }
                     }
                 } else {
                     return 0;
@@ -784,19 +796,12 @@ public class Donation {
 
     //Check Venue Code - Control
     public boolean checkVenueCode(String _vc) {
-        try {
-            File myObj = new File("Venue.txt");
-            Scanner readerFile = new Scanner(myObj);
-            while (readerFile.hasNextLine()) {
-                String[] venueList = readerFile.nextLine().split("#");
-                if (venueList[0].equals(_vc)) {
-                    return true;
-                }
+        String[] venueList = new String[3];
+        fileHandler.loadVenueCode(venueList);
+        for (String venue : venueList) {
+            if (_vc.equals(venue)) {
+                return true;
             }
-            readerFile.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
         }
         return false;
     }
@@ -1709,7 +1714,6 @@ public class Donation {
 
     //Display Donation
     public void displayAllDonation(ListInterface<DonationItem> fullList) {
-        donationUI.displayFullDonationListHeader();
         if (!fullList.isEmpty()) {
             donationUI.displayFullDonationListTableHeader();
             Iterator<DonationItem> iterator = fullList.iterator();
@@ -1734,6 +1738,9 @@ public class Donation {
                     }
                 }
             }
+            generalFunc.repeatPrint("-", 93);
+            //generalFunc.printEmptyEmptyLine();
+            generalFunc.printEmptyLine();
         } else {
             donationUI.displayEmptyList();
         }
@@ -1802,6 +1809,7 @@ public class Donation {
 
     //Search Donation
     public void searchDonation() {
+        donationUI.displaySearchDonationHeader();
         ListInterface<DonationItem> fullList = new ArrayList<>();
         fileHandler.loadIntoAll(fullList);
         displayAllDonation(fullList);
@@ -1815,7 +1823,7 @@ public class Donation {
             if (code.isEmpty()) {
                 msgHandling.displayInvalidInputMessage("Please do not leave the field blank.");
             } else {
-                if (code.equals("X")) {
+                if (code.equalsIgnoreCase("X")) {
                     break;
                 } else {
                     boolean valid = false;
@@ -1834,7 +1842,7 @@ public class Donation {
                 }
             }
         }
-        if (!code.equals("X")) {
+        if (!code.equalsIgnoreCase("X")) {
             Iterator<DonationItem> iterator = fullList.iterator();
             while (iterator.hasNext()) {
                 DonationItem item = iterator.next();
@@ -1911,6 +1919,8 @@ public class Donation {
                 }
             }
         }
+        generalFunc.repeatPrint("-", 121);
+        generalFunc.printEmptyLine();
     }
 
     public void displaySingleDonorRecords(ListInterface<DonationRecord> dRecordList, Donor donor) {
@@ -1920,7 +1930,8 @@ public class Donation {
             DonationRecord record = iterator.next();
             displaySingleRecordWithoutDonorID(record);
         }
-
+        generalFunc.repeatPrint("-", 89);
+        generalFunc.printEmptyLine();
     }
 
     public void displaySingleRecordWithoutDonorID(DonationRecord record) {
@@ -2955,7 +2966,7 @@ public class Donation {
         } else if (option == 2) {
             amdOption = checkMenuWithOp(6);
         } else {
-            amdOption = checkMenuWithOp(8);
+            amdOption = checkMenuWithOp(7);
         }
         return amdOption;
     }
@@ -3054,6 +3065,7 @@ public class Donation {
         ListInterface<DonationItem> itemlist = new ArrayList<>();
         ListInterface<DonationItem> fullList = new ArrayList<>();
         fileHandler.loadIntoAll(fullList);
+        donationUI.displayFullDonationListHeader();
         displayAllDonation(fullList);
         int filter = 0, sort = 0, option = 0;
         if (fullList.isEmpty()) {
@@ -3136,6 +3148,7 @@ public class Donation {
                     fullList = new ArrayList<>();
                     fileHandler.loadIntoAll(fullList);
                     sortBeforeDisplay(fullList, sort);
+                    donationUI.displayFullDonationListHeader();
                     displayAllDonation(fullList);
                 } else {
                     //let user filter by quantity
@@ -3144,6 +3157,7 @@ public class Donation {
                     fqOption = checkMenuWithOp(4);
                     if (fqOption != 4) {
                         filterByQuantity(fullList, sort, fqOption);
+                        donationUI.displayFullDonationListHeader();
                         displayAllDonation(fullList);
                     } else {
                         break;
@@ -3370,16 +3384,34 @@ public class Donation {
         while (iterator2.hasNext()) {
             DonationItem item = iterator2.next();
             if (fq == 1) {
-                if (item.getQuantity() <= a) {
-                    itemlist.remove(item);
+                if (item instanceof Money) {
+                    if (((Money) item).getAmount() <= a) {
+                        itemlist.remove(item);
+                    }
+                } else {
+                    if (item.getQuantity() <= a) {
+                        itemlist.remove(item);
+                    }
                 }
             } else if (fq == 2) {
-                if (item.getQuantity() < a || item.getQuantity() > b) {
-                    itemlist.remove(item);
+                if (item instanceof Money) {
+                    if (((Money) item).getAmount() < a || ((Money) item).getAmount() > b) {
+                        itemlist.remove(item);
+                    }
+                } else {
+                    if (item.getQuantity() < a || item.getQuantity() > b) {
+                        itemlist.remove(item);
+                    }
                 }
             } else {
-                if (item.getQuantity() >= a) {
-                    itemlist.remove(item);
+                if (item instanceof Money) {
+                    if (((Money) item).getAmount() >= a) {
+                        itemlist.remove(item);
+                    }
+                } else {
+                    if (item.getQuantity() >= a) {
+                        itemlist.remove(item);
+                    }
                 }
             }
         }
@@ -3526,6 +3558,31 @@ public class Donation {
         }
         donationUI.displayReport2Header();
         donationUI.displayReport2Content(max, maxIndex);
+        displayTotalContributers();
+    }
+
+    public void displayTotalContributers() {
+        ListInterface<DonationRecord> fullRecord = new ArrayList<>();
+        ListInterface<String> usedIDList = new ArrayList<>();
+        fileHandler.loadIntoDR(fullRecord);
+        donationUI.displayDonationDonorHeader();
+        Iterator<DonationRecord> iterator = fullRecord.iterator();
+        while (iterator.hasNext()) {
+            DonationRecord record = iterator.next();
+            //check if existed
+            boolean notRepeated = true;
+            Iterator<String> iterator3 = usedIDList.iterator();
+            while (iterator3.hasNext()) {
+                String currentID = iterator3.next();
+                if (currentID.equals(record.getDonor().getId())) {
+                    notRepeated = false;
+                }
+            }
+            if (notRepeated) {
+                usedIDList.add(record.getDonor().getId());
+            }
+        }
+        donationUI.displayNumOfDonor(usedIDList.size());
     }
 
 }
