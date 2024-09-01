@@ -22,8 +22,7 @@ import Entity.Medicine;
 import Entity.Money;
 import Entity.Donor;
 //import other subsystem function
-import Control.DonorFunctions;
-import FileHandling.DonationFileHandler;
+import DAO.DonationFileHandler;
 
 //date
 import java.time.LocalDate;
@@ -33,10 +32,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 
 //import adt
-import Libraries.ArrayList;
-import Libraries.GeneralFunction;
-import Libraries.ListInterface;
-import static Main.Event.EventHandler.searchEventByEventID;
+import ADT.ArrayList;
+import Utilities.GeneralFunction;
+import ADT.ListInterface;
+import static Control.EventHandler.searchEventByEventID;
 import Utilities.Message;
 import java.util.Iterator;
 

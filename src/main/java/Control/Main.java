@@ -19,11 +19,9 @@
 
 package Control;
 
-import Boundary.DonorUI;
 import Boundary.MainUI;
-import Libraries.GeneralFunction;
-import Main.Event.EventHandler;
-import Control.DonorFunctions;
+import Utilities.GeneralFunction;
+
 import static Utilities.Message.*;
 
 public class Main {
@@ -65,10 +63,10 @@ public class Main {
                     DoneeFunctions.doneeHandler();
                     break;
                 case 3:
-
+                    new Donation().donationHome();
                     break;
                 case 4:
-
+                        VolunteerFunctions.runVolunteerSystem();
                     break;
                 case 5:
                     EventHandler.subsystemMenu();

@@ -9,9 +9,9 @@ import Boundary.DoneeUI;
 
 import Entity.Donee;
 
-import Libraries.GeneralFunction;
+import Utilities.GeneralFunction;
 
-import Libraries.ListInterface;
+import ADT.ListInterface;
 import Utilities.Message;
 
 import java.util.Iterator;

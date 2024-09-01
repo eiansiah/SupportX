@@ -7,9 +7,9 @@ package Control;
 
 import Boundary.VolunteerUI;
 import Entity.Volunteer;
-import FileHandling.VolunteerFileHandler;
-import Libraries.ArrayList;
-import Libraries.ListInterface;
+import DAO.VolunteerFileHandler;
+import ADT.ArrayList;
+import ADT.ListInterface;
 import Utilities.Message;
 
 public class VolunteerFilter {

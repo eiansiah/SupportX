@@ -15,8 +15,6 @@
 
 package Utilities;
 
-import Libraries.Color;
-
 public class Message {
 
     public static void displayGeneralErrorMsg(String errorMsg) {

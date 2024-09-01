@@ -7,12 +7,12 @@ package Boundary;
 
 import Control.VolunteerFunctions;
 import Entity.Volunteer;
-import Main.Event.Event;
-import Main.Event.EventVolunteer;
+import Entity.Event;
+import Entity.EventVolunteer;
 
-import Libraries.ArrayList;
-import Libraries.Color;
-import Libraries.ListInterface;
+import ADT.ArrayList;
+import Utilities.Color;
+import ADT.ListInterface;
 
 import java.util.Scanner;
 import java.time.format.DateTimeFormatter;
