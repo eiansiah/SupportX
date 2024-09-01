@@ -18,6 +18,7 @@ import Entity.EventVolunteer;
 import Utilities.GeneralFunction;
 import Utilities.Message;
 import Utilities.NewValidation;
+import java.util.Iterator;
 
 public class VolunteerFunctions {
 
@@ -213,7 +214,7 @@ public class VolunteerFunctions {
             if (eventVolunteers != null && !eventVolunteers.isEmpty()) {
                 VolunteerUI.eventsJoinedUI((ArrayList<Event>) events);
             } else {
-                Message.displayDataNotFoundMessage("No events found for this volunteer.");
+                Message.displayGeneralMessage("No events found for this volunteer.");
             }
         } else {
             Message.displayInvalidInputMessage("Volunteer does not exist.");
@@ -607,8 +608,9 @@ public class VolunteerFunctions {
 
         VolunteerUI.listVolunteerEventsUI();
 
-        for (int i = 0; i < volunteers.size(); i++) {
-            Volunteer volunteer = volunteers.get(i);
+        Iterator<Volunteer> iterator = volunteers.iterator();
+        while(iterator.hasNext()) {
+            Volunteer volunteer = iterator.next();
 
             // Get the list of events the volunteer has participated in
             ListInterface<EventVolunteer> eventVolunteers = EventHandler.getEventVolunteerJoined(volunteer.getId());
