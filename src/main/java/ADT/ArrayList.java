@@ -42,7 +42,9 @@ public class ArrayList<T> implements ListInterface<T>, Iterable<T>{
      * @throws IndexOutOfBoundsException if the index is out of range
      */
     public void add(int index, T newElement) {
-        checkAddRange(index);
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size " + index);
+        }
 
         if (size == elementData.length) {
             ensureCapacity(); // increase current capacity of list, make it
