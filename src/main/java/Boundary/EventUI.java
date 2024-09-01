@@ -110,7 +110,7 @@ public class EventUI {
     public static void subsystemMenuDisplay(){
         GeneralFunction.clearScreen();
 
-        GeneralFunction.printTitle("Event Menu", 41, "-", "|");
+        GeneralFunction.printTitle("Event Management Subsystem", 41, "-", "|");
         System.out.println("| 1. Add a new event                    |");
         System.out.println("| 2. Remove an event                    |");
         System.out.println("| 3. Search an event                    |");
