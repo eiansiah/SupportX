@@ -326,7 +326,7 @@ public class Donation {
                 }
                 if (!(_temp.equalsIgnoreCase("X"))) {
                     _netWeight = Double.parseDouble(_temp);
-                    if (_netWeight <= 0.0 && _netWeight == -999) {
+                    if (_netWeight <= 0.0 && _netWeight != -999) {
                         msgHandling.displayGeneralErrorMsg("Invalid Net Weight. Please enter a net weight that is more than zero.");
                     } else {
                         return _netWeight;
