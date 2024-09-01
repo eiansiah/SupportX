@@ -3104,6 +3104,8 @@ public class Donation {
         donationUI.displayFullDonationListHeader();
         displayAllDonation(fullList);
         int filter = 0, sort = 0, option = 0;
+        int fcOption = 0;
+        int fqOption = 0;
         if (fullList.isEmpty()) {
             generalFunc.enterToContinue();
         } else {
@@ -3116,8 +3118,12 @@ public class Donation {
                         break;
                     } else if (option == 1) {
                         filter = 1;
+                        donationUI.displayDonationCategory();
+                        fcOption = checkMenuWithOp(8);
                     } else if (option == 2) {
                         filter = 2;
+                        donationUI.displayFilterQtyOp();
+                        fqOption = checkMenuWithOp(4);
                     } else if (option == 3) {
                         sort = 1;
                     } else if (option == 4) {
@@ -3149,8 +3155,12 @@ public class Donation {
                         option = checkMenuWithOp(4);
                         if (option == 1) {
                             filter = 1;
+                            donationUI.displayDonationCategory();
+                            fcOption = checkMenuWithOp(8);
                         } else if (option == 2) {
                             filter = 2;
+                            donationUI.displayFilterQtyOp();
+                            fqOption = checkMenuWithOp(4);
                         } else if (option == 3) {
                             sort = 0;
                         }
@@ -3172,9 +3182,6 @@ public class Donation {
                 }
                 if (filter == 1) {
                     itemlist = new ArrayList<>();
-                    int fcOption;
-                    donationUI.displayDonationCategory();
-                    fcOption = checkMenuWithOp(8);
                     if (fcOption != 8) {
                         displayBasedOnCatOptionSort(fcOption, itemlist, sort);
                     } else {
@@ -3189,9 +3196,6 @@ public class Donation {
                     displayAllDonation(fullList);
                 } else {
                     //let user filter by quantity
-                    int fqOption;
-                    donationUI.displayFilterQtyOp();
-                    fqOption = checkMenuWithOp(4);
                     if (fqOption != 4) {
                         filterByQuantity(fullList, sort, fqOption);
                         generalFunc.clearScreen();
