@@ -19,7 +19,6 @@ public interface ListInterface<T>{
     boolean contains(T element);
     void clear();
     //void ensureCapacity();
-    void display();
     int indexOf(T element);
     int lastIndexOf(T element);
     boolean isEmpty();

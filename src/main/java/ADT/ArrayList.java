@@ -172,7 +172,6 @@ public class ArrayList<T> implements ListInterface<T>, Iterable<T>{
     /**
      * Display ArrayList in terms of 1D array only
      */
-    @Override
     public void display() {
         System.out.print("Displaying list : ");
         for (int i = 0; i < size; i++) {
