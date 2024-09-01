@@ -51,3 +51,4 @@ DNR00050,Stacee Swyndley,sswyndley1e@opensource.org,9933091575,Private,Organizat
 DNR00051,dededed,dedede@gmail.com,0123334444,Individual,Organization,2024-09-01
 DNR00054,new test,adsd@sdf.df,0173434343,Individual,Organization,2024-09-01
 DNR00055,WSWSWW,SWWW@SWSWS,0123338888,Government,Individual,2024-09-01
+DNR00056,SOHAI,SOHAI@GMAIL.COM,01233344444,Government,Organization,2024-09-02

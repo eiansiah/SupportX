@@ -129,8 +129,6 @@ public class DonorFunctions {
     public static Donor inputDonorDetails(String donorId){
         boolean isValid;
         DonorUI.addDonorUI();
-        Scanner scanner = new Scanner(System.in);
-        scanner.nextLine();
         String name;
         do {
             name = DonorUI.inputDonorNameUI(); // input from boundary file
@@ -297,6 +295,8 @@ public class DonorFunctions {
                                 isValid = NewValidation.validateName(name);
                                 if (!isValid) {
                                     Message.displayInvalidFormatMessage("name");
+                                } else {
+                                    selectedDonor.setName(name);
                                 }
                             } while (!isValid);
                             break;
@@ -307,8 +307,11 @@ public class DonorFunctions {
                                 isValid = NewValidation.validateEmail(email);
                                 if (!isValid) {
                                     Message.displayInvalidFormatMessage("email");
+                                } else {
+                                    selectedDonor.setEmail(email);
                                 }
-                            } while (!isValid);
+                            }
+                            while (!isValid);
                             break;
                         case "3":
                             String phone;
@@ -317,18 +320,19 @@ public class DonorFunctions {
                                 isValid = NewValidation.validatePhone(phone);
                                 if (!isValid) {
                                     Message.displayInvalidFormatMessage("phone");
+                                } else {
+                                    selectedDonor.setPhone(phone);
                                 }
                             } while (!isValid);
-
                             break;
                         case "4":
                             String category = "";
                             do{
-                                int categoyrChoice = 0;
+                                int categoryChoice = 0;
                                 String donorCategoryChoice = DonorUI.inputDonorCategoryUI();
                                 try {
-                                    categoyrChoice = Integer.parseInt(donorCategoryChoice);
-                                    if (categoyrChoice >= 1 && categoyrChoice <= 3) {
+                                    categoryChoice = Integer.parseInt(donorCategoryChoice);
+                                    if (categoryChoice >= 1 && categoryChoice <= 3) {
                                         isValid = true;  // Exit loop for valid choice input
                                     } else {
                                         Message.displayInvalidChoiceMessage("Please select a valid item category (1-3).");
@@ -339,8 +343,10 @@ public class DonorFunctions {
                                     isValid = false;
                                 }
 
-                                if (isValid)
-                                    category = NewValidation.validateDonorType(categoyrChoice);
+                                if (isValid){
+                                    category = NewValidation.validateDonorType(categoryChoice);
+                                    selectedDonor.setCategory(category);
+                                }
                             }while (!isValid);
                             break;
                         case "5":
@@ -361,9 +367,10 @@ public class DonorFunctions {
                                     isValid = false;
                                 }
 
-                                if (isValid)
+                                if (isValid){
                                     type = NewValidation.validateDonorType(typeChoice);
-
+                                    selectedDonor.setType(type);
+                                }
                             } while (!isValid);
 
                             break;
@@ -378,12 +385,11 @@ public class DonorFunctions {
 
                     if (!choice.equalsIgnoreCase("X")) {
                         DonorUI.displayUpdatedDonorMsg(donorIDToModify);
+                        // Update the donor in the file after all modifications
+                        donorFileHandler.updateMultipleData("donor.txt", donors);
                     }
 
                 } while (!choice.equalsIgnoreCase("X"));
-
-                // Update the donor in the file after all modifications
-                donorFileHandler.updateMultipleData("donor.txt", donors);
 
             } else {
                 Message.displayUpdateCancelMessage();

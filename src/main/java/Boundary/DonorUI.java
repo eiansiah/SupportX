@@ -54,6 +54,7 @@ public class DonorUI {
 
     public static String inputDonorNameUI() {
         System.out.print("Enter new donor name: ");
+        scanner.nextLine();
         return scanner.nextLine().trim();
     }
 
