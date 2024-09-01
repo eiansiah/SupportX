@@ -6,39 +6,43 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 public class ArrayListEfficiency {
-
-    public static int sampleSize = 9999;
-
     public static void main(String[] args) {
+        System.out.println("Time taken to add 999 element (custom): " + NumberFormat.getNumberInstance(Locale.US).format(custom(999)) + "ns");
+        System.out.println("Time taken to add 999 element (university): " + NumberFormat.getNumberInstance(Locale.US).format(university(999)) + "ns");
+        System.out.println("Time taken to add 999 element (java): " + NumberFormat.getNumberInstance(Locale.US).format(java(999)) + "ns");
+        System.out.println();
 
-        System.out.println("Time taken (university): " + NumberFormat.getNumberInstance(Locale.US).format(university()) + "ns");
-        System.out.println("Time taken (custom): " + NumberFormat.getNumberInstance(Locale.US).format(custom()) + "ns");
-        System.out.println("Time taken (java): " + NumberFormat.getNumberInstance(Locale.US).format(java()) + "ns");
+        testAvgRun(100, 999);
+        testAvgRun(999, 999);
+        testAvgRun(9999, 999);
+        testAvgRun(99999, 999);
+        testAvgRun(999999, 999);
+    }
 
-
+    public static void testAvgRun(int sampleSize, int runs){
         long custom = 0;
         long uni= 0;
         long java = 0;
-        int time= 100;
 
-        for (int i = 0; i < time; i++) {
-            uni += university();
+        for (int i = 0; i < runs; i++) {
+            uni += university(sampleSize);
         }
 
-        for (int i = 0; i < time; i++) {
-            custom += custom();
+        for (int i = 0; i < runs; i++) {
+            custom += custom(sampleSize);
         }
 
-        for (int i = 0; i < time; i++) {
-            java += java();
+        for (int i = 0; i < runs; i++) {
+            java += java(sampleSize);
         }
 
-        System.out.println("Average custom: " + custom / time);
-        System.out.println("Average uni: " + uni / time);
-        System.out.println("Average java: " + java / time);
+        System.out.println("Average custom of "+ runs + " runs adding " +sampleSize+" element: " + custom / runs);
+        System.out.println("Average uni of "+ runs + " runs adding " +sampleSize+" element: " + uni / runs);
+        System.out.println("Average java of "+ runs + " runs adding " +sampleSize+" element: " + java / runs);
+        System.out.println();
     }
 
-    public static long university() {
+    public static long university(int sampleSize) {
         long startTime2 = System.nanoTime();
 
         UniArrayList<String> listJava = new UniArrayList<>();
@@ -56,7 +60,7 @@ public class ArrayListEfficiency {
         return total;
     }
 
-    public static long custom(){
+    public static long custom(int sampleSize){
         long startTime = System.nanoTime();
 
         ArrayList<String> list = new ArrayList<>();
@@ -74,7 +78,7 @@ public class ArrayListEfficiency {
         return total;
     }
 
-    public static long java(){
+    public static long java(int sampleSize){
         long startTime = System.nanoTime();
 
         java.util.ArrayList<String> list = new java.util.ArrayList<>();
