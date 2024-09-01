@@ -7,7 +7,7 @@
 package Control;
 
 import Entity.Donor;
-import Libraries.ListInterface;
+import ADT.ListInterface;
 
 public class DonorSorter {
 

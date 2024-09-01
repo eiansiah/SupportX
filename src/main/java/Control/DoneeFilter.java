@@ -9,9 +9,9 @@ import Boundary.DoneeUI;
 
 import Entity.Donee;
 
-import Libraries.GeneralFunction;
+import Utilities.GeneralFunction;
 
-import Libraries.ListInterface;
+import ADT.ListInterface;
 import Utilities.Message;
 
 import java.util.Iterator;
@@ -23,6 +23,7 @@ public class DoneeFilter {
 
         do {
             while (true) { //Input Validation Loop
+                GeneralFunction.clearScreen();
                 String filterTypeInput = DoneeUI.filterDoneeTypeUI(); // Read the input as a string and trim any surrounding spaces
 
                 if (filterTypeInput.isEmpty()) {
@@ -56,6 +57,7 @@ public class DoneeFilter {
             }
 
             if (filterType != 4) {
+                DoneeUI.printEmptyLine();
                 GeneralFunction.enterToContinue();
             }
         } while (filterType != 4);
@@ -64,6 +66,7 @@ public class DoneeFilter {
     public static void individualFilter(ListInterface<Donee> donees){
         boolean found = false;
 
+        GeneralFunction.clearScreen();
         DoneeUI.individualFilterUI();
         Iterator<Donee> iterator = donees.iterator();
 
@@ -84,6 +87,7 @@ public class DoneeFilter {
     public static void organizationFilter(ListInterface<Donee> donees){
         boolean found = false;
 
+        GeneralFunction.clearScreen();
         DoneeUI.organizationFilterUI();
         Iterator<Donee> iterator = donees.iterator();
 
@@ -103,6 +107,7 @@ public class DoneeFilter {
     public static void familyFilter(ListInterface<Donee> donees){
         boolean found = false;
 
+        GeneralFunction.clearScreen();
         DoneeUI.familyFilterUI();
         Iterator<Donee> iterator = donees.iterator();
 
@@ -124,6 +129,7 @@ public class DoneeFilter {
 
         do {
             while (true) { //Input Validation Loop
+                GeneralFunction.clearScreen();
                 String filterUrgencyInput = DoneeUI.filterUrgencyTypeUI();  // Read the input as a string and trim any surrounding spaces
 
                 if (filterUrgencyInput.isEmpty()) {
@@ -157,6 +163,7 @@ public class DoneeFilter {
             }
 
             if (filterUrgency != 4) {
+                DoneeUI.printEmptyLine();
                 GeneralFunction.enterToContinue();
             }
         } while (filterUrgency != 4);
@@ -165,6 +172,7 @@ public class DoneeFilter {
     public static void filterLowUrgency(ListInterface<Donee> donees){
         boolean found = false;
 
+        GeneralFunction.clearScreen();
         DoneeUI.filterLowUrgencyUI();
         Iterator<Donee> iterator = donees.iterator();
 
@@ -184,6 +192,7 @@ public class DoneeFilter {
     public static void filterModerateUrgency(ListInterface<Donee> donees){
         boolean found = false;
 
+        GeneralFunction.clearScreen();
         DoneeUI.filterModerateUrgencyUI();
         Iterator<Donee> iterator = donees.iterator();
 
@@ -203,6 +212,7 @@ public class DoneeFilter {
     public static void filterHighUrgency(ListInterface<Donee> donees){
         boolean found = false;
 
+        GeneralFunction.clearScreen();
         DoneeUI.filterHighUrgencyUI();
         Iterator<Donee> iterator = donees.iterator();
 
