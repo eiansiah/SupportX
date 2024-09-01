@@ -229,7 +229,7 @@ public class DonationUI {
     //Display Donation Action Menu 
     public void displayMenuDonationHome() {
         generalFunc.clearScreen();
-        generalFunc.printTitle("Donation", 51, "-", "|");
+        generalFunc.printTitle("Donation Management Subsystem", 51, "-", "|");
         System.out.println("1. Add Donation");
         System.out.println("2. Remove Donation");
         System.out.println("3. Search Donation");
