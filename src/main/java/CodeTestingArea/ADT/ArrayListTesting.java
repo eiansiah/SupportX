@@ -153,12 +153,16 @@ public class ArrayListTesting {
         list.add("16");
         list.add("17");
 
-        list.display();
+        for (int i = 0; i < list.size(); i++) {
+            System.out.print(list.get(i) + " ");
+        }
 
         System.out.println();
         list.add(3, "4");
 
-        list.display();
+        for (int i = 0; i < list.size(); i++) {
+            System.out.print(list.get(i) + " ");
+        }
     }
 }
 

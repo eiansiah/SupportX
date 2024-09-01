@@ -170,16 +170,6 @@ public class ArrayList<T> implements ListInterface<T>, Iterable<T>{
     }
 
     /**
-     * Display ArrayList in terms of 1D array only
-     */
-    public void display() {
-        System.out.print("Displaying list : ");
-        for (int i = 0; i < size; i++) {
-            System.out.print(elementData[i] + " ");
-        }
-    }
-
-    /**
      * Returns the index of the first occurrence of the specified element
      * in this list, or -1 if this list does not contain the element.
      */
