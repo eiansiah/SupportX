@@ -29,6 +29,7 @@ import Utilities.Message;
 
 //Misc
 import java.time.LocalDate;
+import java.util.Scanner;
 
 public class DonorFunctions {
 
@@ -118,6 +119,8 @@ public class DonorFunctions {
     public static Donor inputDonorDetails(String donorId){
         boolean isValid;
         DonorUI.addDonorUI();
+        Scanner scanner = new Scanner(System.in);
+        scanner.nextLine();
         String name;
         do {
             name = DonorUI.inputDonorNameUI(); // input from boundary file
@@ -154,7 +157,7 @@ public class DonorFunctions {
                 if (choice >= 1 && choice <= 3) {
                     isValid = true;  // Exit loop for valid choice input
                 } else {
-                    Message.displayInvalidChoiceMessage("Please select a valid item category (1-3).");
+                    Message.displayInvalidChoiceMessage("Please select a valid category (1-3).");
                     isValid = false;
                 }
             } catch (NumberFormatException e) {  // Catch any non-integer inputs
@@ -163,7 +166,7 @@ public class DonorFunctions {
             }
 
             if (isValid)
-                category = NewValidation.validateDonorType(choice);
+                category = NewValidation.validateCategory(choice);
         }while (!isValid);
 
         String type = "";
@@ -175,7 +178,7 @@ public class DonorFunctions {
                 if (choice >= 1 && choice <= 2) {
                     isValid = true;  // Exit loop for valid choice input
                 } else {
-                    Message.displayInvalidChoiceMessage("Please select a valid item category (1-2).");
+                    Message.displayInvalidChoiceMessage("Please select a valid type (1-2).");
                     isValid = false;
                 }
             } catch (NumberFormatException e) {  // Catch any non-integer inputs
@@ -345,7 +348,7 @@ public class DonorFunctions {
 
                             break;
 
-                        case "X":
+                        case "X", "x":
                             Message.displayEndUpdateMessage();
                             break;
                         default:
