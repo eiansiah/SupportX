@@ -54,18 +54,17 @@ public class DonorUI {
 
     public static String inputDonorNameUI() {
         System.out.print("Enter new donor name: ");
-        scanner.nextLine();  // Consume the leftover newline
         return scanner.nextLine().trim();
     }
 
     public static String inputDonorEmailUI(){
         System.out.print("Enter new donor email: ");
-        return scanner.nextLine().trim();
+        return scanner.next().trim();
     }
 
     public static String inputDonorPhoneUI(){
         System.out.print("Enter new donor phone: ");
-        return scanner.nextLine().trim();
+        return scanner.next().trim();
     }
 
     public static String inputDonorCategoryUI(){
@@ -74,7 +73,8 @@ public class DonorUI {
         System.out.println("2. Private");
         System.out.println("3. Public");
         System.out.print("Enter new category number: ");
-        return scanner.nextLine().trim();
+
+        return scanner.next().trim();
     }
 
     public static String inputDonorTypeUI(){
@@ -82,7 +82,7 @@ public class DonorUI {
         System.out.println("1. Individual");
         System.out.println("2. Organization");
         System.out.print("Please enter new donor type: ");
-        return scanner.nextLine().trim();
+        return scanner.next().trim();
     }
 
     public static String inputRemoveDonorIDUI(){
@@ -104,8 +104,7 @@ public class DonorUI {
         displaySelectedDonorDetail(id, name, email, phone, category, type, registeredDate);
 
         System.out.print("\nAre you sure you want to delete this donor? (Y/N): ");
-        scanner.nextLine();  // Consume the leftover newline
-        return scanner.nextLine().trim().toUpperCase();
+        return scanner.next().trim().toUpperCase();
     }
 
     public static void displaySelectedDonorDetail(String id, String name, String email, String phone , String category, String type , LocalDate registeredDate){
@@ -126,8 +125,7 @@ public class DonorUI {
         displaySelectedDonorDetail(id,name, email,phone, category,type,registeredDate);
 
         System.out.print("\nDo you want to proceed with modifying this donor? (Y/N): ");
-        scanner.nextLine();  // Consume the leftover newline
-        return scanner.nextLine().trim().toUpperCase();
+        return scanner.next().trim().toUpperCase();
     }
 
     public static String promptUpdatePart(){
@@ -140,8 +138,7 @@ public class DonorUI {
         System.out.println("5 - Type");
         System.out.println("X - Stop updating");
         System.out.print("Please select an option (1-5 or X): ");
-        scanner.nextLine();  // Consume the leftover newline
-        return scanner.nextLine().trim();
+        return scanner.next().trim();
     }
 
     public static void displayDeleteDonorMsg(String donorIDToDelete){
@@ -149,7 +146,7 @@ public class DonorUI {
     }
 
     public static void displayUpdatedDonorMsg(String donorIDToModify){
-        System.out.println(Color.RED + "Donor with ID " + donorIDToModify + " has been deleted." + Color.RESET);
+        System.out.println(Color.BRIGHT_GREEN + "Donor with ID " + donorIDToModify + " has been updated." + Color.RESET);
     }
 
     public static String displayDonorTable(int pageSize, int currentPage, int totalDonors, ListInterface<Donor> donors, int start, int end, boolean showCategory, boolean showType){
