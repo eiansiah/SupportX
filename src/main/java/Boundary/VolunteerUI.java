@@ -83,7 +83,7 @@ public class VolunteerUI {
         for (int i = 0; i < events.size(); i++) {
             Event event = events.get(i);
             System.out.println("Event ID: " + event.eventID());
-            System.out.println("Event Name: " + event.description());
+            System.out.println("Event Name: " + event.eventName());
             System.out.println("Date Joined: " + event.startDateTime());
             System.out.println("---------------------------");
         }
@@ -219,7 +219,7 @@ public class VolunteerUI {
         System.out.println(" ");
         System.out.println("Volunteers and Their Events");
         System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------");
-        System.out.printf("%-15s %-20s %-15s %-30s %-20s %-30s %-30s%n", "Volunteer ID", "Volunteer Name", "Event ID", "Event Description", "Event Venue", "Event Start Date & Time", "Event End Date & Time");
+        System.out.printf("%-15s %-20s %-15s %-30s %-20s %-30s %-30s%n", "Volunteer ID", "Volunteer Name", "Event ID", "Event Name", "Event Venue", "Event Start Date & Time", "Event End Date & Time");
         System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------");
     }
 
@@ -230,7 +230,7 @@ public class VolunteerUI {
                     volunteer.getId(),
                     volunteer.getName(),
                     event.eventID(),
-                    event.description(),
+                    event.eventName(),
                     event.venue(),
                     event.startDateTime(),
                     event.endDateTime());
