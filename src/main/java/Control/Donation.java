@@ -1628,6 +1628,7 @@ public class Donation {
                 itemlist = new ArrayList<>();
                 displayBasedOnCatOption(option, itemlist);
                 recordlist.clear();
+                recordlist2.clear();
                 fileHandler.loadIntoDR(recordlist);
                 //ask to remove which
                 if (!itemlist.isEmpty()) {
