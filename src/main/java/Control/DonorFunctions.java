@@ -673,7 +673,7 @@ public class DonorFunctions {
         DonorUI.viewSummaryDonorData(filterCounts);
         GeneralFunction.printTitle("Donor with the Most Donations Record", 87, "--", "|");
         displayDonationData();
-        GeneralFunction.printTitle("Number fo Donor That Joined This Month", 87, "--", "|");
+        GeneralFunction.printTitle("Number of Donor That Joined This Month", 87, "--", "|");
         displayDonorJoinedThisMonth();
         GeneralFunction.printTitle("Report generated on: " + LocalDate.now(), 87, "--", "|");
         DonorUI.pressKeyToContinue();
