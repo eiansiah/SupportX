@@ -228,7 +228,7 @@ public class DonationUI {
 
     //Display Donation Action Menu 
     public void displayMenuDonationHome() {
-        System.out.print("\n");
+        generalFunc.clearScreen();
         generalFunc.printTitle("Donation", 51, "-", "|");
         System.out.println("1. Add Donation");
         System.out.println("2. Remove Donation");
@@ -400,7 +400,7 @@ public class DonationUI {
     }
 
     public void displayAddPageHeader() {
-        System.out.print("\n");
+        generalFunc.clearScreen();
         generalFunc.printTitle("Add Donation", 51, "-", "|");
     }
 
@@ -413,12 +413,12 @@ public class DonationUI {
     }
 
     public void displayRemoveDonationHeader() {
-        System.out.print("\n");
+        generalFunc.clearScreen();
         generalFunc.printTitle("Remove Donation", 51, "-", "|");
     }
 
     public void displaySearchDonationHeader() {
-        System.out.print("\n");
+        generalFunc.clearScreen();
         generalFunc.printTitle("Search Donation", 51, "-", "|");
     }
     //Display Add Beverage Instruction 
@@ -527,7 +527,7 @@ public class DonationUI {
     }
 
     public void displayAmendDetailsHeader() {
-        System.out.print("\n");
+        generalFunc.clearScreen();
         generalFunc.printTitle("Amend Donation", 51, "-", "|");
     }
 

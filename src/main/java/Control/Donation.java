@@ -2989,6 +2989,7 @@ public class Donation {
 
     //Display Track Donation
     public void displayTrackDonation() {
+        generalFunc.clearScreen();
         donationUI.displayTrackDonationHeader();
         ListInterface<DonationItem> itemlist = new ArrayList<>();
         for (int i = 1; i <= 7; i++) {
@@ -3005,6 +3006,7 @@ public class Donation {
 
     //Donation-Donor List with Filter & Sorting
     public void donationDonor() {
+        generalFunc.clearScreen();
         ListInterface<DonationRecord> fullRecord = new ArrayList<>();
         ListInterface<DonationRecord> fullRecord2 = new ArrayList<>();
         ListInterface<DonationRecord> checkedList = new ArrayList<>();
@@ -3061,6 +3063,7 @@ public class Donation {
     //Full Donation List with Filter & Sorting
 
     public void fullDonation() {
+        generalFunc.clearScreen();
         ListInterface<DonationItem> itemlist = new ArrayList<>();
         ListInterface<DonationItem> fullList = new ArrayList<>();
         fileHandler.loadIntoAll(fullList);
@@ -3147,6 +3150,7 @@ public class Donation {
                     fullList = new ArrayList<>();
                     fileHandler.loadIntoAll(fullList);
                     sortBeforeDisplay(fullList, sort);
+                    generalFunc.clearScreen();
                     donationUI.displayFullDonationListHeader();
                     displayAllDonation(fullList);
                 } else {
@@ -3156,6 +3160,7 @@ public class Donation {
                     fqOption = checkMenuWithOp(4);
                     if (fqOption != 4) {
                         filterByQuantity(fullList, sort, fqOption);
+                        generalFunc.clearScreen();
                         donationUI.displayFullDonationListHeader();
                         displayAllDonation(fullList);
                     } else {
@@ -3260,6 +3265,7 @@ public class Donation {
 //Display Based On Option - Boundary
 
     public void displayBasedOnCatOptionSort(int option, ListInterface<DonationItem> itemlist, int sort) {
+        generalFunc.clearScreen();
         if (option == 7) {
             donationUI.displayMoneyListHeader();
             fileHandler.loadIntoMoney(itemlist);
@@ -3420,6 +3426,7 @@ public class Donation {
 
     //Summary Report
     public void donationReport() {
+        generalFunc.clearScreen();
         donationUI.displaySummaryReportChoices();
         int option = checkMenuWithOp(3);
         if (option == 1) {
@@ -3434,6 +3441,7 @@ public class Donation {
 
     //Report 1 - Report of Expired Items by Category as of today
     public void displayReport1() {
+        generalFunc.clearScreen();
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         //display expired item by category
         //display Topic
@@ -3504,6 +3512,7 @@ public class Donation {
 
     //Report 2 - Top 3 Most Donated Non-Money Item Category Report in 2024
     public void displayReport2() {
+        generalFunc.clearScreen();
         ListInterface<DonationItem> fullList = new ArrayList<>();
         fileHandler.loadIntoAll(fullList);
         int total[] = new int[6];
