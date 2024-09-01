@@ -1,13 +1,11 @@
 package Boundary;
 
-import Libraries.ArrayList;
-import Libraries.Color;
-import Libraries.GeneralFunction;
-import Libraries.ListInterface;
-import Main.Event.Event;
-import Main.Event.EventHandler;
-import Main.Event.EventStatus;
-import Main.Event.EventVolunteer;
+import Utilities.Color;
+import Utilities.GeneralFunction;
+import ADT.ListInterface;
+import Entity.Event;
+import Control.EventHandler;
+import Entity.EventVolunteer;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -15,72 +13,6 @@ import java.util.Comparator;
 import java.util.Scanner;
 
 public class EventUI {
-    /*private static void subsystemMenu(){
-        Scanner sc = new Scanner(System.in);
-
-        root: {
-            while(true) {
-                GeneralFunction.clearScreen();
-
-                subsystemMenuDisplay();
-
-                int action = 0;
-                while (true) {
-                    System.out.print("Enter action: ");
-
-                    String _action = sc.nextLine().trim();
-
-                    if (_action.isEmpty()) {
-                        displayGeneralErrorMsg("Input can't be empty");
-                        continue;
-                    }
-
-                    try {
-                        action = Integer.parseInt(_action);
-                    } catch (NumberFormatException e) {
-                        displayGeneralErrorMsg("Input is not a number");
-                        continue;
-                    }
-
-                    if (action < 1 || action > 9) {
-                        displayGeneralErrorMsg("Invalid action");
-                        continue;
-                    }
-
-                    break;
-                }
-
-                switch (action) {
-                    case 1:
-                        addNewEventUI();
-                        break;
-                    case 2:
-                        removeEventUI();
-                        break;
-                    case 3:
-                        searchEventUI();
-                        break;
-                    case 4:
-                        amendEventDetailsUI();
-                        break;
-                    case 5:
-                        listAllEventUI();
-                        break;
-                    case 6:
-                        removeEventFromVolunteerUI();
-                        break;
-                    case 7:
-                        listAllEventForVolunteerUI();
-                        break;
-                    case 8:
-                        generateReportsUI();
-                        break;
-                    case 9:
-                        break root;
-                }
-            }
-        }
-    }*/
 
     public static String getSubSystemMenuAction() {
         Scanner sc = new Scanner(System.in);

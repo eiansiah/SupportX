@@ -8,15 +8,14 @@ package Control;
 
 import Boundary.VolunteerUI;
 import Entity.Volunteer;
-import FileHandling.VolunteerFileHandler;
-import Libraries.ArrayList;
-import Libraries.Color;
-import Libraries.Hashmap;
-import Libraries.ListInterface;
-import Main.Event.Event;
-import Main.Event.EventHandler;
-import Main.Event.EventStatus;
-import Main.Event.EventVolunteer;
+import DAO.VolunteerFileHandler;
+import ADT.ArrayList;
+import Utilities.Color;
+import ADT.Hashmap;
+import ADT.ListInterface;
+import Entity.Event;
+import Entity.EventStatus;
+import Entity.EventVolunteer;
 
 import java.util.Scanner;
 

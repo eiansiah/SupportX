@@ -19,20 +19,15 @@
 
 package Control;
 
-import Boundary.DonorUI;
 import Boundary.MainUI;
-import Libraries.GeneralFunction;
-import Main.Event.EventHandler;
-import Control.DonorFunctions;
+import Utilities.GeneralFunction;
+
 import static Utilities.Message.*;
 
 public class Main {
     public static void main(String[] args) {
-
-        //TODO: ADT hashmap with multiple key
-        //TODO: Multi algorithm to store data. example: <List> list of donee --> filter with condition --> <Queue> Delivery flow, near to far to near (circle)
         GeneralFunction.clearScreen();
-        //MainUI.randomPicture();
+
         MainUI.printLogo();
 
         EventHandler.updateEventStatus();
@@ -65,10 +60,10 @@ public class Main {
                     DoneeFunctions.doneeHandler();
                     break;
                 case 3:
-
+                    new Donation().donationHome();
                     break;
                 case 4:
-
+                        VolunteerFunctions.runVolunteerSystem();
                     break;
                 case 5:
                     EventHandler.subsystemMenu();

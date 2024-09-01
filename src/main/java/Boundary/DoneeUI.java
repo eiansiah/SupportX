@@ -7,9 +7,16 @@ package Boundary;
 
 import Entity.Donee;
 
+<<<<<<< HEAD
 import Libraries.Color;
 import Libraries.GeneralFunction;
 import Libraries.ListInterface;
+import Utilities.Message;
+=======
+import Utilities.Color;
+import Utilities.GeneralFunction;
+import ADT.ListInterface;
+>>>>>>> f3c7cca2cfa2c0bb211336e5f8374794f8cdc5a6
 
 import java.time.LocalDate;
 import java.util.Scanner;
@@ -35,6 +42,19 @@ public class DoneeUI {
         System.out.print("\nSelect an option to proceed : ");
 
         return scanner.nextLine().trim();
+    }
+
+    public static String obtainDoneeId(){
+        Scanner scanner = new Scanner(System.in);
+        String doneeId;
+
+        doneeId = scanner.nextLine().trim();
+
+        if (doneeId.isEmpty()) {
+            Message.displayEmptyInputMessage("Please enter a valid Donee ID.");
+        }
+
+        return doneeId;
     }
 
     public static void addDoneeUI() {
@@ -105,7 +125,9 @@ public class DoneeUI {
     }
 
     public static void displayIndividualDoneeDetailsUI(String doneeID, String name, String email, String phone, String address, String doneeType, String itemCategory, String doneeUrgency, LocalDate registeredDate){
-        System.out.println("\nDonee Details:");
+        System.out.println("\n**Donee Details**");
+        GeneralFunction.repeatPrint("-",50);
+        DoneeUI.printEmptyLine();
         System.out.printf("%-25s: %s%n", "Donee ID", doneeID);
         System.out.printf("%-25s: %s%n", "Name", name);
         System.out.printf("%-25s: %s%n", "Email", email);
@@ -115,6 +137,8 @@ public class DoneeUI {
         System.out.printf("%-25s: %s%n", "Item Category Required", itemCategory);
         System.out.printf("%-25s: %s%n", "Donee Urgency", doneeUrgency);
         System.out.printf("%-25s: %s%n", "Registered Date", registeredDate);
+        GeneralFunction.repeatPrint("-",50);
+        DoneeUI.printEmptyLine();
     }
 
     public static String deleteDoneeConfirmationUI(){
@@ -131,6 +155,7 @@ public class DoneeUI {
     }
 
     public static void modifyDoneeUI(){
+        System.out.println("**Modify Donee Details**");
         System.out.print("\nWhich donee would you like to modify?");
         System.out.print("Please enter the Donee ID: ");
     }
@@ -315,6 +340,11 @@ public class DoneeUI {
         int padding = (width - text.length()) / 2;
         String format = "%" + padding + "s%s%" + padding + "s";
         return String.format(format, "", text, "");
+    }
+
+    public static void viewDistributionUI(){
+        System.out.println("**Donation Distribution Details for each Donee**");
+        System.out.print("\nEnter Donee ID to view details: ");
     }
 
     public static void printEmptyLine(){

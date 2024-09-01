@@ -11,16 +11,15 @@ package Control;
 
 import java.time.LocalDate;
 import java.util.Iterator;
-import java.util.Scanner;
 
 import Entity.DonationDistribution;
 import Entity.Donee;
 
-import FileHandling.DoneeFileHandler;
+import DAO.DoneeFileHandler;
 
-import Libraries.GeneralFunction;
-import Libraries.ArrayList;
-import Libraries.ListInterface;
+import Utilities.GeneralFunction;
+import ADT.ArrayList;
+import ADT.ListInterface;
 
 import Utilities.Message;
 import Utilities.NewValidation;
@@ -46,6 +45,7 @@ public class DoneeFunctions {
         fileHandler.checkAndCreateFile("donee.txt");
 
         do {
+            GeneralFunction.clearScreen();
             DoneeUI.mainWelcomeMessage();
 
             String inputChoice = DoneeUI.getMainMenuChoice();
@@ -86,19 +86,6 @@ public class DoneeFunctions {
             }
 
         } while (choice != 8);
-    }
-
-    public static String obtainDoneeId(){
-        Scanner scanner = new Scanner(System.in);
-        String doneeId;
-
-        doneeId = scanner.nextLine().trim();
-
-        if (doneeId.isEmpty()) {
-            Message.displayEmptyInputMessage("Please enter a valid Donee ID.");
-        }
-
-        return doneeId;
     }
 
     public static void addDonee() {
@@ -238,7 +225,7 @@ public class DoneeFunctions {
 
         do {
             DoneeUI.deleteDoneeUI();
-            doneeId = obtainDoneeId().toUpperCase();
+            doneeId = DoneeUI.obtainDoneeId().toUpperCase();
         } while (doneeId.isEmpty());
 
         if (doneeId.equals("X")){
@@ -298,8 +285,9 @@ public class DoneeFunctions {
         String doneeId;
 
         do {
+            GeneralFunction.clearScreen();
             DoneeUI.modifyDoneeUI();
-            doneeId = obtainDoneeId();
+            doneeId = DoneeUI.obtainDoneeId();
         } while (doneeId.isEmpty());
 
         Iterator<Donee> doneeIterator = donees.iterator();
@@ -311,6 +299,7 @@ public class DoneeFunctions {
                 doneeFound = true;
                 char choice = ' ';
 
+                GeneralFunction.clearScreen();
                 DoneeUI.displayIndividualDoneeDetailsUI(doneeSelected.getDoneeID(), doneeSelected.getName(), doneeSelected.getEmail(), doneeSelected.getPhone(), doneeSelected.getAddress(), doneeSelected.getDoneeType(), doneeSelected.getItemCategoryRequired(), doneeSelected.getDoneeUrgency(), doneeSelected.getRegisteredDate());
 
                 do {
@@ -414,7 +403,7 @@ public class DoneeFunctions {
                                     }
 
                                     if (isValid)
-                                        itemCategory = NewValidation.validateItemCategory(choice);
+                                        itemCategory = NewValidation.validateItemCategory(itemCategoryOption);
 
                                 } while (!isValid);
                                 doneeSelected.setItemCategoryRequired(itemCategory);
@@ -438,7 +427,7 @@ public class DoneeFunctions {
                                     }
 
                                     if (isValid)
-                                        doneeUrgency = NewValidation.validateDoneeUrgency(choice);
+                                        doneeUrgency = NewValidation.validateDoneeUrgency(doneeUrgencyOption);
 
                                 } while (!isValid);
                                 doneeSelected.setDoneeUrgency(doneeUrgency);
@@ -478,10 +467,11 @@ public class DoneeFunctions {
 
             do{
                 do {
+                    GeneralFunction.clearScreen();
                     displayOption = DoneeUI.displayDoneeTableUI(start, currentPage, end, donees, totalDonees);
 
                     if (displayOption.isEmpty()) {
-                        Message.displayEmptyInputMessage("Empty input detected. Please enter a valid option (D, S, X)");
+                        Message.displayEmptyInputMessage("Empty input detected. Please enter a valid option (D, S, X).");
                     }
                 } while (displayOption.isEmpty());
 
@@ -507,7 +497,7 @@ public class DoneeFunctions {
                         String doneeID;
                         do {
                             DoneeUI.displayDoneeUI();
-                            doneeID = obtainDoneeId().toUpperCase();
+                            doneeID = DoneeUI.obtainDoneeId().toUpperCase();
                         } while (doneeID.isEmpty());
 
                         Donee selectedDonee = null;
@@ -524,6 +514,7 @@ public class DoneeFunctions {
                         }
 
                         if (selectedDonee != null) {
+                            GeneralFunction.clearScreen();
                             DoneeUI.displayIndividualDoneeDetailsUI(selectedDonee.getDoneeID(), selectedDonee.getName(), selectedDonee.getEmail(), selectedDonee.getPhone(), selectedDonee.getAddress(), selectedDonee.getDoneeType(), selectedDonee.getItemCategoryRequired(), selectedDonee.getDoneeUrgency(), selectedDonee.getRegisteredDate());
                         } else {
                             Message.displayDataNotFoundMessage("Donee with ID " + doneeID + " was not found.");
@@ -536,6 +527,7 @@ public class DoneeFunctions {
                         int sortOption;
 
                         while (true) { //Input Validation Loop
+                            GeneralFunction.clearScreen();
                             String inputSortOption = DoneeUI.sortDoneeUI();
 
                             if (inputSortOption.isEmpty()) {
@@ -598,12 +590,14 @@ public class DoneeFunctions {
         ListInterface<DonationDistribution> donationList = initializeDistribution();
 
         // Get user input for the donee ID
-        DoneeUI.displayDoneeUI();
-        String doneeID = obtainDoneeId();
+        GeneralFunction.clearScreen();
+        DoneeUI.viewDistributionUI();
+        String doneeID = DoneeUI.obtainDoneeId();
 
         // Display matching donations
         boolean found = false;
 
+        GeneralFunction.clearScreen();
         DoneeUI.displayDonationDetailsUI(doneeID);
 
         Iterator<DonationDistribution> distributionIterator = donationList.iterator();
@@ -637,6 +631,7 @@ public class DoneeFunctions {
 
         do {
             while (true) { //Input Validation Loop
+                GeneralFunction.clearScreen();
                 String filterInput = DoneeUI.filterDoneeUI();  // Read the input as a string and trim any surrounding spaces
 
                 if (filterInput.isEmpty()) {
@@ -688,6 +683,7 @@ public class DoneeFunctions {
 
         doneeList = donees;
 
+        GeneralFunction.clearScreen();
         GeneralFunction.printTitle("Donee Management Subsystem Summary Report", 87, "--", "|");
 
         //Donee Urgency

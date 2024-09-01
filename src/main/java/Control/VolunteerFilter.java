@@ -3,14 +3,13 @@
  *  ID: 2307616
  *
  * */
-
 package Control;
 
 import Boundary.VolunteerUI;
 import Entity.Volunteer;
-import FileHandling.VolunteerFileHandler;
-import Libraries.ArrayList;
-import Libraries.ListInterface;
+import DAO.VolunteerFileHandler;
+import ADT.ArrayList;
+import ADT.ListInterface;
 import Utilities.Message;
 
 public class VolunteerFilter {
@@ -19,21 +18,31 @@ public class VolunteerFilter {
     private static ListInterface<Volunteer> volunteers = new ArrayList<>();
 
     public static void filterVolunteers() {
-        volunteers = fileHandler.readData("volunteers.txt");
-        int filterChoice = VolunteerUI.filterVolunteersUI();
 
-        switch (filterChoice) {
-            case 1:
-                filterByAge();
-                break;
-            case 2:
-                filterByGender();
-                break;
-            case 3:
-                filterByAvailability();
-                break;
-            default:
-                Message.displayGeneralErrorMsg("Invalid choice. Please try again.");
+        while (true) {
+            try {
+                volunteers = fileHandler.readData("volunteers.txt");
+                int filterChoice = VolunteerUI.filterVolunteersUI();
+
+                switch (filterChoice) {
+                    case 1:
+                        filterByAge();
+                        break;
+                    case 2:
+                        filterByGender();
+                        break;
+                    case 3:
+                        filterByAvailability();
+                        break;
+                    case 4:
+                        return;
+                    default:
+                        Message.displayGeneralErrorMsg("Invalid choice. Please try again.");
+                        break;
+                }
+            } catch (Exception ex) {
+                Message.displayGeneralErrorMsg("Invalid choice. Please enter a number.");
+            }
         }
     }
 

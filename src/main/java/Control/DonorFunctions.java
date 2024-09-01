@@ -9,35 +9,31 @@
 
 package Control;
 
-import Entity.DonationItem;
+//Entity
 import Entity.DonationRecord;
 import Entity.Donor;
 
 //Data Handling
-import FileHandling.DonorFileHandler;
+import DAO.DonorFileHandler;
 
 //ADT
-import Libraries.*;
+import ADT.*;
 
 //Boundaries
 import Boundary.DonorUI;
 
 //Utilities
+import Utilities.GeneralFunction;
 import Utilities.NewValidation;
 import Utilities.Message;
 
+//Misc
 import java.time.LocalDate;
+import java.util.Scanner;
 
 public class DonorFunctions {
 
     private static ListInterface<Donor> donorArrayList;
-
-    // ArrayList to temporary store data for donation item
-    private static ListInterface<DonationItem> donationItemArrayList = new ArrayList<>();
-    // ArrayList to temporary store data for donation item
-    private static ListInterface<DonationRecord> donationRecordArrayList = new ArrayList<>();
-    // HashMap to store Donor ID -> List of Donations
-    private Hashmap<String, ListInterface<DonationRecord>> donorDonationsMap = new Hashmap<>();
 
     private static final DonorFileHandler donorFileHandler = new DonorFileHandler();
 
@@ -49,38 +45,12 @@ public class DonorFunctions {
         return donorFileHandler.readData("donor.txt");
     }
 
-    public void printDonationRecords(ArrayList<DonationRecord> donationRecords) {
-        for (DonationRecord record : donationRecords) {
-            System.out.println(record);
-            System.out.println(); // Print a blank line between records
-        }
-    }
-
-
-//    private void populateDonorMaps() {
-//        for (Donor donor : donorArrayList) {
-//            String donorID = donor.getId(); // Assuming Donor class has a getDonorID() method
-//
-//            // Retrieve and add donations for this donor
-//            ArrayList<Donation> donations = donor.getDonations(); // Assuming Donor class has a getDonations() method
-//            if (donations != null && !donations.isEmpty()) {
-//                donorDonationsMap.put(donorID, donations);
-//            }
-//
-//            // Retrieve and add events for this donor
-//            ArrayList<Event> events = donor.getEvents(); // Assuming Donor class has a getEvents() method
-//            if (events != null && !events.isEmpty()) {
-//                donorEventsMap.put(donorID, events);
-//            }
-//        }
-//    }
-
     public static void runDonorSystem() {
         int choice = 0;
 
         donorFileHandler.checkAndCreateFile("donor.txt");
 
-        DonorUI.DonorWelcomeMessage();
+        GeneralFunction.printTitle("Welcome to Donor Subsystem!", 60, "--", "|");
 
         do {
 
@@ -107,7 +77,7 @@ public class DonorFunctions {
                     displayDonors(readDonors());
                     break;
                 case 5: //View Donor Donation
-                    //displayDonorDonation();
+                    displayDonorDonationConnection(DonorUI.inputCheckDonorIDUI());
                     break;
                 case 6: //View reports
                     viewDonorReport(readDonors());
@@ -131,7 +101,7 @@ public class DonorFunctions {
             }
         }
 
-//        // If the donor is not found, display a message and return null
+        // If the donor is not found, display a message and return null
 //        Message.displayDataNotFoundMessage("Donor with ID " + donorID + " was not found.");
         return null;
     }
@@ -149,6 +119,8 @@ public class DonorFunctions {
     public static Donor inputDonorDetails(String donorId){
         boolean isValid;
         DonorUI.addDonorUI();
+        Scanner scanner = new Scanner(System.in);
+        scanner.nextLine();
         String name;
         do {
             name = DonorUI.inputDonorNameUI(); // input from boundary file
@@ -185,7 +157,7 @@ public class DonorFunctions {
                 if (choice >= 1 && choice <= 3) {
                     isValid = true;  // Exit loop for valid choice input
                 } else {
-                    Message.displayInvalidChoiceMessage("Please select a valid item category (1-3).");
+                    Message.displayInvalidChoiceMessage("Please select a valid category (1-3).");
                     isValid = false;
                 }
             } catch (NumberFormatException e) {  // Catch any non-integer inputs
@@ -194,7 +166,7 @@ public class DonorFunctions {
             }
 
             if (isValid)
-                category = NewValidation.validateDonorType(choice);
+                category = NewValidation.validateCategory(choice);
         }while (!isValid);
 
         String type = "";
@@ -206,7 +178,7 @@ public class DonorFunctions {
                 if (choice >= 1 && choice <= 2) {
                     isValid = true;  // Exit loop for valid choice input
                 } else {
-                    Message.displayInvalidChoiceMessage("Please select a valid item category (1-2).");
+                    Message.displayInvalidChoiceMessage("Please select a valid type (1-2).");
                     isValid = false;
                 }
             } catch (NumberFormatException e) {  // Catch any non-integer inputs
@@ -219,8 +191,9 @@ public class DonorFunctions {
 
         } while (!isValid);
 
+        LocalDate registeredDate = LocalDate.now();
 
-        return new Donor(donorId, name, email, phone, category, type);
+        return new Donor(donorId, name, email, phone, category, type, registeredDate);
     }
 
     public static void deleteDonor(ListInterface<Donor> donors) {
@@ -246,7 +219,8 @@ public class DonorFunctions {
                     selectedDonor.getEmail(),
                     selectedDonor.getPhone(),
                     selectedDonor.getCategory(),
-                    selectedDonor.getType()
+                    selectedDonor.getType(),
+                    selectedDonor.getRegisteredDate()
             );
 
             if (confirmation.equals("Y")) {
@@ -283,7 +257,8 @@ public class DonorFunctions {
                     selectedDonor.getEmail(),
                     selectedDonor.getPhone(),
                     selectedDonor.getCategory(),
-                    selectedDonor.getType()
+                    selectedDonor.getType(),
+                    selectedDonor.getRegisteredDate()
             );
 
             if (confirmation.equals("Y")) {
@@ -373,7 +348,7 @@ public class DonorFunctions {
 
                             break;
 
-                        case "X":
+                        case "X", "x":
                             Message.displayEndUpdateMessage();
                             break;
                         default:
@@ -406,6 +381,11 @@ public class DonorFunctions {
         boolean done = false;
         boolean showCategory = false;
         boolean showType = false;
+
+        Stack<ListInterface<Donor>> stateStack = new Stack<>(); // Stack to store donor list states
+
+        // Save the initial state (original list) into the stack
+        stateStack.push(donors);
 
         while (!done) {
             int start = currentPage * pageSize;
@@ -449,11 +429,11 @@ public class DonorFunctions {
                                 selectedDonor.getEmail(),
                                 selectedDonor.getPhone(),
                                 selectedDonor.getCategory(),
-                                selectedDonor.getType()
+                                selectedDonor.getType(),
+                                selectedDonor.getRegisteredDate()
                         );
 
-//                        DonorUI.displayDonorDonation(donorDonationsMap, donorID);
-//                        DonorUI.displayDonorEvent(donorEventsMap, donorID);
+
 
                     } else {
                         DonorUI.donorNotFoundMsg(donorID);
@@ -463,77 +443,118 @@ public class DonorFunctions {
                     break;
 
                 case "F":
-                    int filterChoice = DonorUI.filterMenu();
+                    String filterChoice = DonorUI.filterMenu();
 
-                    if (filterChoice == 1) {
-                        String input = DonorUI.filterChoiceName();
-                        if (!input.isEmpty()) {
-                            char letter = input.charAt(0);
-                            donors = DonorFilter.filterByName(donors, letter);
+                    try {
+                        if (filterChoice.equals("1")) {
+                            String input = DonorUI.filterChoiceName();
+                            if (!input.isEmpty()) {
+                                char letter = input.charAt(0);
+                                stateStack.push(donors);
+                                donors = DonorFilter.filterByName(donors, letter);
 
-                            if (donors.isEmpty()) {
-                                Message.displayDataNotFoundMessage("No donors found with names starting with " + letter + ".");
+                                if (donors.isEmpty()) {
+                                    Message.displayDataNotFoundMessage("No donors found with names starting with " + letter + ".");
+                                }
                             }
-                        }
-                    } else if (filterChoice == 2) {
-                        int categoryChoice = DonorUI.filterChoiceCategory();
-                        String category = null;
-                        showCategory = true;
+                        } else if (filterChoice.equals("2")) {
+                            String categoryChoiceStr = DonorUI.filterChoiceCategory();
+                            int categoryChoice = Integer.parseInt(categoryChoiceStr); // Parse the string to an integer
+                            String category = null;
+                            showCategory = true;
 
-                        switch (categoryChoice) {
-                            case 1:
-                                category = "Government";
-                                break;
-                            case 2:
-                                category = "Private";
-                                break;
-                            case 3:
-                                category = "Public";
-                                break;
-                            default:
-                                Message.displayInvalidChoiceMessage("Please select a valid option.");
-                                break;
-                        }
-
-                        if (category != null) {
-                            donors = DonorFilter.filterByCategory(donors, category);
-
-                            if (donors.isEmpty()) {
-                                Message.displayDataNotFoundMessage("No donors found in the '" + category + "' category.");
+                            switch (categoryChoice) {
+                                case 1:
+                                    category = "Government";
+                                    break;
+                                case 2:
+                                    category = "Private";
+                                    break;
+                                case 3:
+                                    category = "Public";
+                                    break;
+                                default:
+                                    Message.displayInvalidChoiceMessage("Please select a valid option.");
+                                    break;
                             }
-                        }
-                    } else if (filterChoice == 3) {
-                        int typeChoice = DonorUI.filterChoiceType();
-                        String type = null;
-                        showType = true;
 
-                        switch (typeChoice) {
-                            case 1:
-                                type = "Individual";
-                                break;
-                            case 2:
-                                type = "Organization";
-                                break;
-                            default:
-                                Message.displayInvalidChoiceMessage("Please select a valid option.");
-                                break;
-                        }
+                            if (category != null) {
+                                stateStack.push(donors);  // Save the current state before filtering
+                                donors = DonorFilter.filterByCategory(donors, category);
 
-                        if (type != null) {
-                            donors = DonorFilter.filterByType(donors, type);
-
-                            if (donors.isEmpty()) {
-                                Message.displayDataNotFoundMessage("No donors found of type '" + type + "'.");
+                                if (donors.isEmpty()) {
+                                    Message.displayDataNotFoundMessage("No donors found in the '" + category + "' category.");
+                                }
                             }
+                        } else if (filterChoice.equals("3")) {
+                            String typeChoiceStr = DonorUI.filterChoiceType();
+                            int typeChoice = Integer.parseInt(typeChoiceStr); // Parse the string to an integer
+                            String type = null;
+                            showType = true;
+
+                            switch (typeChoice) {
+                                case 1:
+                                    type = "Individual";
+                                    break;
+                                case 2:
+                                    type = "Organization";
+                                    break;
+                                default:
+                                    Message.displayInvalidChoiceMessage("Please select a valid option.");
+                                    break;
+                            }
+
+                            if (type != null) {
+                                stateStack.push(donors);  // Save the current state before filtering
+                                donors = DonorFilter.filterByType(donors, type);
+
+                                if (donors.isEmpty()) {
+                                    Message.displayDataNotFoundMessage("No donors found of type '" + type + "'.");
+                                }
+                            }
+                        } else if (filterChoice.equals("4")) {
+                            if (!stateStack.isEmpty()) {
+                                donors = stateStack.pop();  // Restore the previous state
+
+                                // Initialize flags to determine if any category or type filters are active
+                                boolean hasCategoryFilter = false;
+                                boolean hasTypeFilter = false;
+
+                                // Peek into the previous state to determine showCategory and showType
+                                if (!stateStack.isEmpty()) {
+                                    ListInterface<Donor> previousState = stateStack.peek();
+
+                                    // Determine if showCategory should be true
+                                    if (previousState != null && !previousState.isEmpty()) {
+                                        hasCategoryFilter = !DonorFilter.filterByCategory(previousState, "Government").isEmpty()
+                                                || !DonorFilter.filterByCategory(previousState, "Private").isEmpty()
+                                                || !DonorFilter.filterByCategory(previousState, "Public").isEmpty();
+
+                                        // Determine if showType should be true
+                                        hasTypeFilter = !DonorFilter.filterByType(previousState, "Individual").isEmpty()
+                                                || !DonorFilter.filterByType(previousState, "Organization").isEmpty();
+                                    }
+                                    showCategory = hasCategoryFilter;
+                                    showType = hasTypeFilter;
+
+                                } else {
+                                    // If stack is empty, reset both
+                                    showCategory = false;
+                                    showType = false;
+                                }
+                            }
+
+                        } else if (filterChoice.equals("5")) {
+                            Message.displayFilterCancelMessage();
+                        } else {
+                            Message.displayInvalidChoiceMessage("Please select a valid option.");
                         }
-                    } else if (filterChoice == 4) {
-                        donors = DonorFilter.resetFilter(donors);
-                        showCategory = false;
-                        showType = false;
-                    }else if (filterChoice == 5) {
-                        Message.displayFilterCancelMessage();
-                    } else {
-                        Message.displayInvalidChoiceMessage("Please select a valid option.");
+                    } catch (NumberFormatException e) {
+                        // Handle invalid integer conversion, such as when parsing a non-integer string
+                        Message.displayInvalidChoiceMessage("Invalid input! Please enter a valid number.");
+                    } catch (Exception e) {
+                        // Handle any other unexpected exceptions
+                        Message.displayGeneralErrorMsg("An unexpected error occurred: " + e.getMessage());
                     }
 
                     totalDonors = donors.size();
@@ -541,21 +562,28 @@ public class DonorFunctions {
                     break;
 
                 case "S":
-                    int sortOption = DonorUI.SortMenu();
+                    String sortOptionInput  = DonorUI.SortMenu();
 
-                    switch (sortOption) {
-                        case 1:
-                            DonorSorter.sortName(donors);
-                            break;
-                        case 2:
-                            DonorSorter.sortNameDescending(donors);
-                            break;
-                        case 3:
-                            DonorSorter.reverseID(donors);
-                            break;
-                        default:
-                            Message.displayInvalidChoiceMessage("Please select a valid sorting option.");
-                            break;
+                    try {
+                        int sortOption = Integer.parseInt(sortOptionInput);  // Attempt to parse the input to an integer
+
+                        switch (sortOption) {
+                            case 1:
+                                DonorSorter.sortName(donors);
+                                break;
+                            case 2:
+                                DonorSorter.sortNameDescending(donors);
+                                break;
+                            case 3:
+                                DonorSorter.reverseID(donors);
+                                break;
+                            default:
+                                Message.displayInvalidChoiceMessage("Invalid input! Please select a valid sorting option from 1 to 3.");
+                                break;
+                        }
+                    } catch (NumberFormatException e) {
+                        // Handle the case where input is not a valid integer
+                        Message.displayInvalidChoiceMessage("Invalid input! Please enter a number from 1 to 3.");
                     }
                     break;
 
@@ -602,15 +630,126 @@ public class DonorFunctions {
         }
 
         GeneralFunction.printTitle("Donor Subsystem Summary Report", 87, "--", "|");
+        GeneralFunction.printTitle("Total Number of Donors", 87, "--", "|");
+        DonorUI.totalNumberOfDonors(donors.size());
         GeneralFunction.printTitle("Summary Number of Donors by Different Types and Category", 87, "--", "|");
         DonorUI.viewSummaryDonorData(filterCounts);
+        GeneralFunction.printTitle("Donor with the Most Donations Record", 87, "--", "|");
+        displayDonationData();
+        GeneralFunction.printTitle("Number fo Donor That Joined This Month", 87, "--", "|");
+        displayDonorJoinedThisMonth();
         GeneralFunction.printTitle("Report generated on: " + LocalDate.now(), 87, "--", "|");
         DonorUI.pressKeyToContinue();
     }
 
-    public static void main (String[] args) {
-        DonorFunctions donorFunctions = new DonorFunctions(); //Create an arraylist
-        donorFunctions.runDonorSystem();
+
+    public static void displayDonorDonationConnection(String donorId){
+        Donation donation = new Donation();
+        ListInterface<DonationRecord> donationRecord = new ArrayList<>();
+        donationRecord = donation.findRecordsForADonor(donorId);
+        ListInterface<Donor> donorDetails = readDonors();
+
+        // Check if the donor exists in donorDetails
+        boolean donorExists = false;
+        for (int i = 0; i < donorDetails.size(); i++) {
+            if (donorDetails.get(i).getId().equals(donorId)) {
+                donorExists = true;
+                break;
+            }
+        }
+
+        // If donor does not exist, display a message and exit
+        if (!donorExists) {
+            Message.displayDataNotFoundMessage("Donor does not exist found.");
+            return;
+        }
+
+
+        if (donationRecord == null || donationRecord.isEmpty()) {
+            Message.displayDataNotFoundMessage("Donor has not made any donations.");
+            return;  // Exit the method if no records are found
+        }
+
+        for (int i = 0; i < donationRecord.size(); i++){
+            DonationRecord record = donationRecord.get(i);
+//            System.out.println("Record ID: " + record.getRecordID());
+//            System.out.println("Donor: " + record.getDonor().getId());
+                DonorUI.showRecordID(record.getDonor().getId());
+            for (int itemIterator = 0; itemIterator < record.getItem().size(); itemIterator++){
+//                System.out.println("Items: " + record.getItem().get(itemIterator));
+                DonorUI.showItemData(record.getItem().get(itemIterator));
+            }
+//            System.out.println("Donation Date/Time: " + record.getDonationDateTime());
+            DonorUI.showItemDate(record.getDonationDateTime());
+            System.out.println();
+        }
+    }
+
+    public static void displayDonationData() {
+
+        // Initialize Donor ArrayList
+        ListInterface<Donor> donorDetails = readDonors();
+
+        // Initialize Donation ArrayList
+        Donation donation = new Donation();
+        ListInterface<DonationRecord> donationDetails = new ArrayList<>();
+
+        // Variables to track the donor with the most records
+        Donor topDonor = null;
+        int maxRecords = 0;
+
+        for (int i = 0; i < donorDetails.size(); i++) {
+            // Read through all donors and get their ID
+            String donorID = donorDetails.get(i).getId();
+
+            // Pass donorID to get all donation data for that one ID
+            ListInterface<DonationRecord> currentDonorDonations = donation.findRecordsForADonor(donorID);
+
+            // Add all records from the current donor to the main donationDetails list
+            for (int j = 0; j < currentDonorDonations.size(); j++) {
+                donationDetails.add(currentDonorDonations.get(j));
+            }
+
+            // Check if the current donor has the most records
+            if (currentDonorDonations.size() > maxRecords) {
+                maxRecords = currentDonorDonations.size();
+                topDonor = donorDetails.get(i);
+            }
+        }
+
+        // Output the donor with the most records
+        if (topDonor != null) {
+            DonorUI.donorWithMostRecord(topDonor.getId(),topDonor.getName(),maxRecords);
+        } else {
+            Message.displayDataNotFoundMessage("No donors found.");
+        }
+    }
+
+    public static void displayDonorJoinedThisMonth(){
+        // Get the current month and year
+        LocalDate currentDate = LocalDate.now();
+        int currentMonth = currentDate.getMonthValue();
+        int currentYear = currentDate.getYear();
+
+        // Retrieve donor data
+        ListInterface<Donor> donorData = readDonors();
+
+        // Counter for the number of donors who joined this month
+        int donorsJoinedThisMonth = 0;
+
+        // Get number of donors who joined this month
+        for (int i = 0; i < donorData.size(); i++) {
+            Donor donor = donorData.get(i);
+            LocalDate registeredDate = donor.getRegisteredDate();
+
+            // Check if the donor joined in the current month and year
+            if (registeredDate.getMonthValue() == currentMonth && registeredDate.getYear() == currentYear) {
+                donorsJoinedThisMonth++;
+            }
+        }
+
+        DonorUI.donorAddedThisMonth(donorsJoinedThisMonth);
 
     }
+
 }

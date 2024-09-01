@@ -11,22 +11,28 @@ package Boundary;
 
 import Control.Donation;
 
+import Entity.DonationItem;
 import Entity.Donor;
 
-import Libraries.*;
+import ADT.*;
 
+import Utilities.Color;
+import Utilities.GeneralFunction;
 import Utilities.Message;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class DonorUI {
 
     private static final Scanner scanner = new Scanner(System.in);
 
-    public static void DonorWelcomeMessage() {
-        System.out.println("\nEntering Donor System!");
-    }
+//    public static void DonorWelcomeMessage() {
+//        System.out.println("\nEntering Donor System!");
+//    }
 
     public static String getMainMenuChoice(){
         System.out.println("\nDonor System Main Menu\n");
@@ -53,12 +59,12 @@ public class DonorUI {
 
     public static String inputDonorEmailUI(){
         System.out.print("Enter new donor email: ");
-        return scanner.nextLine().trim();
+        return scanner.next().trim();
     }
 
     public static String inputDonorPhoneUI(){
         System.out.print("Enter new donor phone: ");
-        return scanner.nextLine().trim();
+        return scanner.next().trim();
     }
 
     public static String inputDonorCategoryUI(){
@@ -76,32 +82,34 @@ public class DonorUI {
         System.out.println("1. Individual");
         System.out.println("2. Organization");
         System.out.print("Please enter new donor type: ");
-
         return scanner.next().trim();
     }
 
     public static String inputRemoveDonorIDUI(){
         // Get the ID to be deleted
         System.out.print("\nWhich Donor Would you like to remove? Please enter their ID: ");
-        return scanner.next().trim();
+        scanner.nextLine();  // Consume the leftover newline
+        return scanner.nextLine().trim();
     }
 
     public static String inputUpdateDonorIDUI(){
         // Get the ID to be deleted
         System.out.print("\nWhich Donor Would you like to update? Please enter their ID: ");
-        return scanner.next().trim();
+        scanner.nextLine();  // Consume the leftover newline
+        return scanner.nextLine().trim();
     }
 
-    public static String deleteConfirmation(String id, String name, String email, String phone , String category, String type){
+    public static String deleteConfirmation(String id, String name, String email, String phone , String category, String type , LocalDate registeredDate){
 
-        displaySelectedDonorDetail(id, name, email, phone, category, type);
+        displaySelectedDonorDetail(id, name, email, phone, category, type, registeredDate);
 
         System.out.print("\nAre you sure you want to delete this donor? (Y/N): ");
-        return scanner.nextLine().trim().toUpperCase();
+        return scanner.next().trim().toUpperCase();
     }
 
-    public static void displaySelectedDonorDetail(String id, String name, String email, String phone , String category, String type){
+    public static void displaySelectedDonorDetail(String id, String name, String email, String phone , String category, String type , LocalDate registeredDate){
         // Display the donor's information before deletion
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         System.out.println("\nDonor Details:");
         System.out.printf("%-15s: %s%n", "ID", id);
         System.out.printf("%-15s: %s%n", "Name", name);
@@ -109,20 +117,15 @@ public class DonorUI {
         System.out.printf("%-15s: %s%n", "Phone", phone);
         System.out.printf("%-15s: %s%n", "Category", category);
         System.out.printf("%-15s: %s%n", "Type", type);
+        System.out.printf("%-15s: %s%n", "Registered Date", registeredDate);
     }
 
-    public static String displayDonorToBeUpdated(String id, String name, String email, String phone , String category, String type){
-        // Display the donor's information before deletion
-        System.out.println("\nDonor Details:");
-        System.out.printf("%-15s: %s%n", "ID", id);
-        System.out.printf("%-15s: %s%n", "Name", name);
-        System.out.printf("%-15s: %s%n", "Email", email);
-        System.out.printf("%-15s: %s%n", "Phone", phone);
-        System.out.printf("%-15s: %s%n", "Category", category);
-        System.out.printf("%-15s: %s%n", "Type", type);
+    public static String displayDonorToBeUpdated(String id, String name, String email, String phone , String category, String type, LocalDate registeredDate){
+        // Display the donor's information before updated
+        displaySelectedDonorDetail(id,name, email,phone, category,type,registeredDate);
 
         System.out.print("\nDo you want to proceed with modifying this donor? (Y/N): ");
-        return scanner.nextLine().trim().toUpperCase();
+        return scanner.next().trim().toUpperCase();
     }
 
     public static String promptUpdatePart(){
@@ -135,7 +138,7 @@ public class DonorUI {
         System.out.println("5 - Type");
         System.out.println("X - Stop updating");
         System.out.print("Please select an option (1-5 or X): ");
-        return scanner.nextLine().trim();
+        return scanner.next().trim();
     }
 
     public static void displayDeleteDonorMsg(String donorIDToDelete){
@@ -143,7 +146,7 @@ public class DonorUI {
     }
 
     public static void displayUpdatedDonorMsg(String donorIDToModify){
-        System.out.println(Color.RED + "Donor with ID " + donorIDToModify + " has been deleted." + Color.RESET);
+        System.out.println(Color.BRIGHT_GREEN + "Donor with ID " + donorIDToModify + " has been updated." + Color.RESET);
     }
 
     public static String displayDonorTable(int pageSize, int currentPage, int totalDonors, ListInterface<Donor> donors, int start, int end, boolean showCategory, boolean showType){
@@ -212,27 +215,6 @@ public class DonorUI {
         return scanner.nextLine().trim();
     }
 
-    public static void displayDonorDonation(Hashmap<String, ListInterface<Donation>> donorDonationsMap, String donorID) {
-        System.out.println("\nDONATION DETAILS\n");
-
-        ListInterface<Donation> donations = donorDonationsMap.get(donorID);
-
-        if (donations == null || donations.isEmpty()) {
-            System.out.println("This donor has not made any donations.");
-        } else {
-            System.out.printf("%-15s%-25s%-20s%n", "Donation ID", "Donation Type", "Date of Donation");
-
-            for (int i = 0; i < donations.size(); i++) {
-                Donation donation = donations.get(i);
-
-                System.out.printf("%-15s%-25s%-20s%n");
-//                        ,donation.getDonationID(),
-//                        donation.getDonationType(),
-//                        donation.getDateOfDonation());
-            }
-        }
-    }
-
 
     public static void donorNotFoundMsg(String donorID){
         System.out.println(Color.RED + "Donor with ID " + donorID + " not found." + Color.RESET);
@@ -256,15 +238,16 @@ public class DonorUI {
         }
     }
 
-    public static int filterMenu(){
+    public static String filterMenu(){
         System.out.println("\nFilter Options:");
         System.out.println("1 - Filter by Name Starting Letter");
         System.out.println("2 - Filter by Category");
         System.out.println("3 - Filter by Type");
-        System.out.println("4 - Clear Filter");
+        System.out.println("4 - Undo Filter");
         System.out.println("5 - Cancel Filter");
         System.out.print("Select a filter option: ");
-        return scanner.nextInt();
+        scanner.nextLine();
+        return scanner.nextLine();
     }
 
     public static String filterChoiceName() {
@@ -281,31 +264,29 @@ public class DonorUI {
         return input.toUpperCase();
     }
 
-    public static int filterChoiceCategory(){
+    public static String filterChoiceCategory(){
         System.out.println("\nSelect category:");
         System.out.println("1. Government");
         System.out.println("2. Private");
         System.out.println("3. Public");
         System.out.print("Enter category number: ");
-        scanner.nextLine();
-        return scanner.nextInt();
+        return scanner.nextLine();
     }
 
-    public static int filterChoiceType(){
+    public static String filterChoiceType(){
         System.out.println("\nSelect type:");
         System.out.println("1. Individual");
         System.out.println("2. Organization");
         System.out.print("Enter type number: ");
-        scanner.nextLine();
-        return scanner.nextInt();
+        return scanner.nextLine();
     }
 
-    public static int SortMenu(){
+    public static String SortMenu(){
         System.out.println("\n1 - Sort by Name Ascending");
         System.out.println("2 - Sort by Name Descending");
         System.out.println("3 - Sort by ID Descending");
         System.out.print("Choose a sorting criterion: ");
-        return scanner.nextInt();
+        return scanner.next();
     }
 
     public static void viewSummaryDonorData(ArrayList <Integer> filterCount){
@@ -333,4 +314,29 @@ public class DonorUI {
         return String.format(format, "", text, "");
     }
 
+    public static void donorWithMostRecord(String id, String name , int maxRecord){
+        System.out.printf("|%-28s|%-28s|%-27s|%n", centerString("Donor ID", 28), centerString("Donor Name", 28), centerString("Number of Records", 28));
+        System.out.printf("|%-28s|%-28s|%-27s|%n", centerString(id, 28), centerString(name, 28), centerString(String.valueOf(maxRecord), 27));
+    }
+
+    public static void donorAddedThisMonth(int number){
+        System.out.printf("|%-85s|%n", centerString(String.valueOf(number), 85));
+
+    }
+
+    public static void totalNumberOfDonors(int number){
+        System.out.printf("|%-85s|%n", centerString(String.valueOf(number), 85));
+    }
+
+    public static void showRecordID(String id){
+        System.out.println("Record ID: " + id);
+    }
+
+    public static void showItemData(DonationItem item){
+        System.out.println("Items: " + item);
+    }
+
+    public static void showItemDate(LocalDateTime date){
+        System.out.println("Items: " + date);
+    }
 }

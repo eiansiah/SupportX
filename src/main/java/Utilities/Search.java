@@ -5,9 +5,8 @@ package Utilities;
  *  ID: 2307609
  * */
 
-import FileHandling.UniversalFileHandler;
-import Libraries.ArrayList;
-import Libraries.Debug;
+import DAO.UniversalFileHandler;
+import ADT.ArrayList;
 
 public class Search {
 
@@ -114,43 +113,4 @@ public class Search {
 
         return temp;
     }
-
-    /*public static ArrayList<String> searchAllMatchesString(String _filePath, String textToSearch, String separator, int index, boolean ascendingOrder, int sortIndex) {
-        ArrayList<String> fileData = UniversalFileHandler.readData(_filePath);
-        ArrayList<String> temp = new ArrayList<>();
-        ArrayList<String> tempSorted = new ArrayList<>();
-
-        if(fileData == null) return null;
-
-        for(String data: fileData) {
-            String[] dataFragment = data.split(separator);
-
-            if(index >= dataFragment.length) {
-                Debug.printDebugMsgln("Invalid index: " + index + " searchAllMatchesString");
-                return null;
-            }
-
-            if(dataFragment[index].contains(textToSearch)) {
-                temp.add(data);
-            }
-        }
-
-        int currentIndex = 0;
-        while(!temp.isEmpty()){
-            String[] dataFragment = temp.get(currentIndex).split(separator);
-
-            if(sortIndex >= dataFragment.length) {
-                Debug.printDebugMsgln("Invalid sort index: " + index + " searchAllMatchesString");
-                return null;
-            }
-
-            if(ascendingOrder){
-
-            }
-
-            currentIndex++;
-        }
-
-        return temp;
-    } */
 }
