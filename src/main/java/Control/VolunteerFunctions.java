@@ -3,13 +3,13 @@
  *  ID: 2307616
  *
  * */
-
 package Control;
 
 import Boundary.VolunteerUI;
 import Entity.Volunteer;
 import FileHandling.VolunteerFileHandler;
 import Libraries.ArrayList;
+import Libraries.GeneralFunction;
 import Libraries.Hashmap;
 import Libraries.ListInterface;
 import Main.Event.Event;
@@ -19,11 +19,8 @@ import Main.Event.EventVolunteer;
 import Utilities.Message;
 import Utilities.NewValidation;
 
-import java.util.Scanner;
-
 public class VolunteerFunctions {
 
-    private static final Scanner scanner = new Scanner(System.in);
     private static final String FILE_NAME = "volunteers.txt";
     private static final VolunteerFileHandler fileHandler = new VolunteerFileHandler();
     private static ListInterface<Volunteer> volunteers = new ArrayList<>();
@@ -81,7 +78,6 @@ public class VolunteerFunctions {
                         viewSummaryReport();
                         break;
                     case 11:
-                        //test this
                         Message.displayExitMessage();
                         return;
                     default:
@@ -89,7 +85,7 @@ public class VolunteerFunctions {
                 }
             } catch (Exception e) {
                 Message.displayInvalidInputMessage("An error occurred. Please try again!!!");
-                scanner.nextLine();
+                VolunteerUI.clearInvalidInput();
             }
         }
     }
@@ -103,6 +99,7 @@ public class VolunteerFunctions {
             return;
         }
 
+        VolunteerUI.upcomingEventsHeader();
         VolunteerUI.upcomingEventsUI(upcomingEvents);
 
         Event eventChosen;
@@ -171,7 +168,11 @@ public class VolunteerFunctions {
 
     private static void searchEventsByVolunteer() {
         volunteers = fileHandler.readData("volunteers.txt");
-        //unable to read data from file
+
+        //display volunteer list
+        VolunteerUI.listOfVolunteersUI(volunteers);
+
+        //input volunteer ID
         String volunteerID = VolunteerUI.volunteerIDtoSearchUI();
         Volunteer volunteerToSearch = null;
 
@@ -206,6 +207,9 @@ public class VolunteerFunctions {
         } else {
             Message.displayInvalidInputMessage("Volunteer does not exist.");
         }
+
+        VolunteerUI.displayEmptyString();
+        GeneralFunction.enterToContinue();
 
     }
 
@@ -521,6 +525,10 @@ public class VolunteerFunctions {
 
     private static void searchVolunteer() {
         volunteers = fileHandler.readData("volunteers.txt");
+
+        //display volunteer list
+        VolunteerUI.listOfVolunteersUI(volunteers);
+
         String volunteerID = VolunteerUI.volunteerIDtoSearchUI();
 
         Volunteer volunteerToSearch = null;
@@ -539,6 +547,9 @@ public class VolunteerFunctions {
         } else {
             Message.displayDataNotFoundMessage("Volunteer does not exist.");
         }
+
+        VolunteerUI.displayEmptyString();
+        GeneralFunction.enterToContinue();
     }
 
     private static void listVolunteerEvents() {
@@ -575,10 +586,13 @@ public class VolunteerFunctions {
         }
 
         VolunteerUI.displayListVolunteerEventsEndline();
+        VolunteerUI.displayEmptyString();
+        GeneralFunction.enterToContinue();
     }
 
     public static void viewSummaryReport() {
         volunteers = fileHandler.readData("volunteers.txt");
+
         // Check if there are any volunteers available
         if (volunteers.isEmpty()) {
             Message.displayDataNotFoundMessage("No volunteers available.");
@@ -595,6 +609,9 @@ public class VolunteerFunctions {
             ListInterface<EventVolunteer> eventVolunteers = EventHandler.getEventVolunteerJoined(volunteer.getId());
             volunteerEventCountMap.put(volunteer.getId(), eventVolunteers.size());
         }
+
+        //Report Header
+        VolunteerUI.displayReportHeader();
 
         // Display the header
         VolunteerUI.volunteersEventHistoryUI();
@@ -664,7 +681,7 @@ public class VolunteerFunctions {
         // Display the total number of male and female volunteers
         VolunteerUI.viewSummaryReportGendersUI(maleCount, femaleCount, totalVolunteers);
 
-        // Step 4: Identify and display the top volunteer
+        // Identify and display the top volunteer
         Volunteer topVolunteer = null;
         int maxEventCount = 0;
 
@@ -684,6 +701,8 @@ public class VolunteerFunctions {
         } else {
             VolunteerUI.noTopVolunteerUI();
         }
+        VolunteerUI.displayEmptyString();
+        GeneralFunction.enterToContinue();
     }
 
     // Helper method to list event IDs participated by a volunteer
@@ -708,6 +727,9 @@ public class VolunteerFunctions {
         }
 
         VolunteerUI.listVolunteersUI(volunteers);
+
+        VolunteerUI.displayEmptyString();
+        GeneralFunction.enterToContinue();
     }
 
     public static void main(String args[]) {
