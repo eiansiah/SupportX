@@ -3385,7 +3385,7 @@ public class Donation {
             if (Integer.parseInt(num) >= a) {
                 return true;
             } else {
-                msgHandling.displayGeneralErrorMsg("Invalid Number Entered! Number must be more than 0. ");
+                msgHandling.displayGeneralErrorMsg("Invalid Number Entered! Number must be more than a. ");
                 return false;
             }
         } catch (Exception ex) {
