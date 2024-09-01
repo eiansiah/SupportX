@@ -35,7 +35,7 @@ public class VolunteerUI {
         System.out.println("8. Filter Volunteers based on criteria");
         System.out.println("9. Search Events under a Volunteer");
         System.out.println("10. View Summary Report");
-        System.out.println("11. Back");
+        System.out.println("11. Exit");
         System.out.println(" ");
         System.out.print("Enter choice: ");
 

@@ -12,6 +12,7 @@ import ADT.ArrayList;
 import ADT.ListInterface;
 import Utilities.GeneralFunction;
 import Utilities.Message;
+import java.util.Iterator;
 
 public class VolunteerFilter {
 
@@ -37,6 +38,7 @@ public class VolunteerFilter {
                         filterByAvailability();
                         break;
                     case 4:
+                        GeneralFunction.clearScreen();
                         return;
                     default:
                         Message.displayGeneralErrorMsg("Invalid choice. Please try again.");
@@ -56,8 +58,9 @@ public class VolunteerFilter {
         GeneralFunction.clearScreen();
         VolunteerUI.filterByAgeUI(minAge, maxAge);
 
-        for (int i = 0; i < volunteers.size(); i++) {
-            Volunteer volunteer = volunteers.get(i);
+        Iterator<Volunteer> iterator = volunteers.iterator();
+        while (iterator.hasNext()) {
+            Volunteer volunteer = iterator.next();
 
             int age = Integer.parseInt(volunteer.getAge());
             if (age >= minAge && age <= maxAge) {
@@ -86,8 +89,9 @@ public class VolunteerFilter {
         GeneralFunction.clearScreen();
         VolunteerUI.filterByGenderUI(gender);
 
-        for (int i = 0; i < volunteers.size(); i++) {
-            Volunteer volunteer = volunteers.get(i);
+        Iterator<Volunteer> iterator = volunteers.iterator();
+        while (iterator.hasNext()) {
+            Volunteer volunteer = iterator.next();
 
             if (volunteer.getGender().equalsIgnoreCase(gender)) {
                 VolunteerUI.filterVolunteerUI(volunteer);
@@ -116,8 +120,9 @@ public class VolunteerFilter {
         GeneralFunction.clearScreen();
         VolunteerUI.filterByAvailabilityUI(availability);
 
-        for (int i = 0; i < volunteers.size(); i++) {
-            Volunteer volunteer = volunteers.get(i);
+        Iterator<Volunteer> iterator = volunteers.iterator();
+        while (iterator.hasNext()) {
+            Volunteer volunteer = iterator.next();
 
             if (volunteer.getAvailability().equalsIgnoreCase(availability)) {
                 VolunteerUI.filterVolunteerUI(volunteer);
@@ -128,11 +133,10 @@ public class VolunteerFilter {
         if (!found) {
             Message.displayDataNotFoundMessage("No volunteers found with the specified availability.");
         }
-        
+
         VolunteerUI.displayEmptyString();
         GeneralFunction.enterToContinue();
         GeneralFunction.clearScreen();
     }
-    
 
 }
