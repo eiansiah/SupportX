@@ -214,27 +214,6 @@ public class DonorUI {
         return scanner.nextLine().trim();
     }
 
-    public static void displayDonorDonation(Hashmap<String, ListInterface<Donation>> donorDonationsMap, String donorID) {
-        System.out.println("\nDONATION DETAILS\n");
-
-        ListInterface<Donation> donations = donorDonationsMap.get(donorID);
-
-        if (donations == null || donations.isEmpty()) {
-            System.out.println("This donor has not made any donations.");
-        } else {
-            System.out.printf("%-15s%-25s%-20s%n", "Donation ID", "Donation Type", "Date of Donation");
-
-            for (int i = 0; i < donations.size(); i++) {
-                Donation donation = donations.get(i);
-
-                System.out.printf("%-15s%-25s%-20s%n");
-//                        ,donation.getDonationID(),
-//                        donation.getDonationType(),
-//                        donation.getDateOfDonation());
-            }
-        }
-    }
-
 
     public static void donorNotFoundMsg(String donorID){
         System.out.println(Color.RED + "Donor with ID " + donorID + " not found." + Color.RESET);
@@ -263,7 +242,7 @@ public class DonorUI {
         System.out.println("1 - Filter by Name Starting Letter");
         System.out.println("2 - Filter by Category");
         System.out.println("3 - Filter by Type");
-        System.out.println("4 - Clear Filter");
+        System.out.println("4 - Undo Filter");
         System.out.println("5 - Cancel Filter");
         System.out.print("Select a filter option: ");
         return scanner.nextInt();

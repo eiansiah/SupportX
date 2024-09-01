@@ -379,6 +379,11 @@ public class DonorFunctions {
         boolean showCategory = false;
         boolean showType = false;
 
+        Stack<ListInterface<Donor>> stateStack = new Stack<>(); // Stack to store donor list states
+
+        // Save the initial state (original list) into the stack
+        stateStack.push(donors);
+
         while (!done) {
             int start = currentPage * pageSize;
             int end = Math.min(start + pageSize, totalDonors);
@@ -441,6 +446,7 @@ public class DonorFunctions {
                         String input = DonorUI.filterChoiceName();
                         if (!input.isEmpty()) {
                             char letter = input.charAt(0);
+                            stateStack.push(donors);
                             donors = DonorFilter.filterByName(donors, letter);
 
                             if (donors.isEmpty()) {
@@ -468,6 +474,7 @@ public class DonorFunctions {
                         }
 
                         if (category != null) {
+                            stateStack.push(donors);  // Save the current state before filtering
                             donors = DonorFilter.filterByCategory(donors, category);
 
                             if (donors.isEmpty()) {
@@ -492,6 +499,7 @@ public class DonorFunctions {
                         }
 
                         if (type != null) {
+                            stateStack.push(donors);  // Save the current state before filtering
                             donors = DonorFilter.filterByType(donors, type);
 
                             if (donors.isEmpty()) {
@@ -499,9 +507,37 @@ public class DonorFunctions {
                             }
                         }
                     } else if (filterChoice == 4) {
-                        donors = DonorFilter.resetFilter(donors);
-                        showCategory = false;
-                        showType = false;
+                        if (!stateStack.isEmpty()) {
+                            donors = stateStack.pop();  // Restore the previous state
+
+                            // Initialize flags to determine if any category or type filters are active
+                            boolean hasCategoryFilter = false;
+                            boolean hasTypeFilter = false;
+
+                            // Peek into the previous state to determine showCategory and showType
+                            if (!stateStack.isEmpty()) {
+                                ListInterface<Donor> previousState = stateStack.peek();
+
+                                // Determine if showCategory should be true
+                                if (previousState != null && !previousState.isEmpty()) {
+                                    hasCategoryFilter = !DonorFilter.filterByCategory(previousState, "Government").isEmpty()
+                                            || !DonorFilter.filterByCategory(previousState, "Private").isEmpty()
+                                            || !DonorFilter.filterByCategory(previousState, "Public").isEmpty();
+
+                                    // Determine if showType should be true
+                                    hasTypeFilter = !DonorFilter.filterByType(previousState, "Individual").isEmpty()
+                                            || !DonorFilter.filterByType(previousState, "Organization").isEmpty();
+                                }
+                                showCategory = hasCategoryFilter;
+                                showType = hasTypeFilter;
+
+                            } else {
+                                // If stack is empty, reset both
+                                showCategory = false;
+                                showType = false;
+                            }
+                        }
+
                     }else if (filterChoice == 5) {
                         Message.displayFilterCancelMessage();
                     } else {
