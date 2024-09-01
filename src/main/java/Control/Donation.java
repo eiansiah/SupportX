@@ -567,35 +567,35 @@ public class Donation {
                         }
                         if (_clothCategory.equals("Footwear")) {
                             if (_age.equals("Kids")) {
-                                if ((Integer.parseInt(_size) >= 10 && Integer.parseInt(_size) >= 13.5)
-                                        || (Integer.parseInt(_size) >= 1 && Integer.parseInt(_size) >= 6)) {
+                                if ((Integer.parseInt(_size) >= 10 && Integer.parseInt(_size) <= 13.5)
+                                        || (Integer.parseInt(_size) >= 1 && Integer.parseInt(_size) <= 6)) {
                                     break;
                                 } else {
                                     msgHandling.displayGeneralErrorMsg("Invalid Clothing Size for " + _age + " " + _clothCategory + ". Please enter a valid size.");
                                 }
                             } else if (_age.equals("Teens")) {
-                                if (Integer.parseInt(_size) >= 6 && Integer.parseInt(_size) >= 8) {
+                                if (Integer.parseInt(_size) >= 6 && Integer.parseInt(_size) <= 8) {
                                     break;
                                 } else {
                                     msgHandling.displayGeneralErrorMsg("Invalid Clothing Size for " + _age + " " + _clothCategory + ". Please enter a valid size.");
                                 }
                             } else {
                                 if (_gender.equals("Men")) {
-                                    if (Integer.parseInt(_size) >= 5 && Integer.parseInt(_size) >= 14) {
+                                    if (Integer.parseInt(_size) >= 5 && Integer.parseInt(_size) <= 14) {
                                         break;
                                     } else {
                                         msgHandling.displayGeneralErrorMsg("Invalid Clothing Size for " + _gender + " " + _age + " "
                                                 + _clothCategory + ". Please enter a valid size.");
                                     }
                                 } else if (_gender.equals("Women")) {
-                                    if (Integer.parseInt(_size) >= 2 && Integer.parseInt(_size) >= 10) {
+                                    if (Integer.parseInt(_size) >= 2 && Integer.parseInt(_size) <= 10) {
                                         break;
                                     } else {
                                         msgHandling.displayGeneralErrorMsg("Invalid Clothing Size for " + _gender + " " + _age + " "
                                                 + _clothCategory + ". Please enter a valid size.");
                                     }
                                 } else {
-                                    if (Integer.parseInt(_size) >= 2 && Integer.parseInt(_size) >= 14) {
+                                    if (Integer.parseInt(_size) >= 2 && Integer.parseInt(_size) <= 14) {
                                         break;
                                     } else {
                                         msgHandling.displayGeneralErrorMsg("Invalid Clothing Size for " + _gender + " " + _age + " "
