@@ -1,2 +1,3 @@
 FD070#Rice#120#1.5#2024-09-08#Whole Grain#V002
 FD890#Noodles#20#0.5#2024-09-07#Whole Grain#V002
+FD094#Canned Pineapple#20#0.4#2024-10-31#Fruit#V001
