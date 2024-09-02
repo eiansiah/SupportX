@@ -450,7 +450,7 @@ public class VolunteerFunctions {
 
         if (!name.isEmpty() && name.matches("[a-zA-Z\\s-]+")) {
             volunteer.setName(name);
-            Message.displaySuccessMessage("Name changed succesfully!");
+            Message.displaySuccessMessage("Name changed successfully!");
         } else if (!name.isEmpty()) {
             Message.displayGeneralErrorMsg("Invalid name. Please enter a valid name containing only letters.");
         }
