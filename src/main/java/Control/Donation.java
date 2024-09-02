@@ -3226,37 +3226,32 @@ public class Donation {
                 DonationItem item = iterator.next();
                 itemlist2.add(item);
             }
-            Iterator<DonationItem> iterator2 = itemlist2.iterator();
-            while (iterator2.hasNext()) {
-                DonationItem item = iterator2.next();
-                if (item instanceof Money) {
+            for(int i=0;i<itemlist.size();i++){
+                if (itemlist.get(0) instanceof Money) {
                     int index = 0;
-                    Iterator<DonationItem> iterator3 = itemlist2.iterator();
-                    while (iterator3.hasNext()) {
-                        DonationItem item2 = iterator3.next();
-                        if (!(item2 instanceof Money)) {
-                            if (Double.parseDouble(String.valueOf(item2.getQuantity())) > ((Money) item).getAmount()) {
-                                itemlist.remove(item);
-                                itemlist.add(index - 1, item);
-                                break;
+                    for(int j=0;j<itemlist2.size();j++) {
+                        if (!(itemlist2.get(j) instanceof Money)) {
+                            if (Double.parseDouble(String.valueOf(itemlist2.get(j).getQuantity())) < ((Money) itemlist.get(0)).getAmount()) {
+                                index++;
                             }
                         } else {
-                            if (((Money) item2).getAmount() > ((Money) item).getAmount()) {
-                                itemlist.remove(item);
-                                itemlist.add(index - 1, item);
-                                break;
+                            if (((Money) itemlist2.get(j)).getAmount() < ((Money) itemlist.get(0)).getAmount()) {
+                                index++;
                             }
-
                         }
-                        index++;
-                        if (index == itemlist2.size() + 1) {
-                            itemlist.remove(item);
-                            itemlist.add(item);
-                        }
+                    }
+                    DonationItem item=itemlist.get(0);
+                    itemlist.remove(item);
+                    itemlist2.remove(item);
+                    if (index != 0) {
+                        itemlist.add(index, item);
+                        itemlist2.add(index, item);
+                    } else {
+                        itemlist.add(index, item);
+                        itemlist2.add(index, item);
                     }
                 }
             }
-
         }
         if (sort == 4) {
             itemlist.sort(Comparator.comparing(DonationItem::getQuantity, (ic1, ic2) -> {
@@ -3281,12 +3276,16 @@ public class Donation {
                             if (Double.parseDouble(String.valueOf(item2.getQuantity())) < ((Money) item).getAmount()) {
                                 itemlist.remove(item);
                                 itemlist.add(index, item);
+                                itemlist2.remove(item);
+                                itemlist2.add(index, item);
                                 break;
                             }
                         } else {
                             if (((Money) item2).getAmount() < ((Money) item).getAmount()) {
                                 itemlist.remove(item);
                                 itemlist.add(index, item);
+                                itemlist2.remove(item);
+                                itemlist2.add(index, item);
                                 break;
                             }
                         }
