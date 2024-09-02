@@ -472,7 +472,7 @@ public class VolunteerFunctions {
                 VolunteerUI.displayEmptyString();
                 if (age > 0) {
                     volunteer.setAge(ageInput);
-                    Message.displaySuccessMessage("Age changed succesfully!");
+                    Message.displaySuccessMessage("Age changed successfully!");
                     break;
                 } else {
                     Message.displayInvalidInputMessage("Age must be a positive number. Please try again.");
@@ -495,7 +495,7 @@ public class VolunteerFunctions {
             }
             if (gender.equalsIgnoreCase("Male") || gender.equalsIgnoreCase("Female")) {
                 volunteer.setGender(gender);
-                Message.displaySuccessMessage("Gender changed succesfully!");
+                Message.displaySuccessMessage("Gender changed successfully!");
                 break;
             } else {
                 Message.displayGeneralErrorMsg("Invalid gender. Please enter 'Male' or 'Female'.");
@@ -515,7 +515,7 @@ public class VolunteerFunctions {
             }
             if (NewValidation.isValidContactNumber(phone)) {
                 volunteer.setPhone(phone);
-                Message.displaySuccessMessage("Contact Number changed succesfully!");
+                Message.displaySuccessMessage("Contact Number changed successfully!");
                 break;
             } else {
                 Message.displayGeneralErrorMsg("Invalid contact number. Please try again.");
@@ -535,7 +535,7 @@ public class VolunteerFunctions {
             }
             if (NewValidation.isValidEmail(email)) {
                 volunteer.setEmail(email);
-                Message.displaySuccessMessage("Email changed succesfully!");
+                Message.displaySuccessMessage("Email changed successfully!");
                 break;
             } else {
                 Message.displayGeneralErrorMsg("Invalid email format. Please try again.");
@@ -555,7 +555,7 @@ public class VolunteerFunctions {
             }
             if (availability.equalsIgnoreCase("Weekdays") || availability.equalsIgnoreCase("Weekends")) {
                 volunteer.setAvailability(availability);
-                Message.displaySuccessMessage("Availability changed succesfully!");
+                Message.displaySuccessMessage("Availability changed successfully!");
                 break;
             } else {
                 Message.displayGeneralErrorMsg("Invalid availability. Please enter 'Weekdays' or 'Weekends'.");
