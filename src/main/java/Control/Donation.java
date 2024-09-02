@@ -38,10 +38,6 @@ import static Control.EventHandler.searchEventByEventID;
 import Utilities.Message;
 import java.util.Iterator;
 
-/**
- *
- * @author vivia
- */
 public class Donation {
 
     public Donation() {
