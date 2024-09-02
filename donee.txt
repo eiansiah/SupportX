@@ -99,4 +99,4 @@ DNE00098,Rene Rallings,rrallings2p@gizmodo.com,0124977052,Suite 71,Family,Person
 DNE00099,Catherin Ashcroft,cashcroft2q@nationalgeographic.com,01679494379,Apt 1838,Family,Personal Care,Low,2024-08-31
 DNE00100,Arly Patsall,apatsall2r@ycombinator.com,01688814887,3rd Floor,Organization,Food,High,2024-08-31
 DNE00101,Eddie,eddie@gmail.com,0124568745,Kuala Selangor,Family,Clothing,High,2024-08-31
-DNE00102,Qian Yiin,qianyiin@gmail.com,0125478965,Petaling jaya,Individual,Beverage,Low,2024-08-31
+DNE00102,Tan Qian Yiin,tanqianyiin@gmail.com,0145879654,Taman Bahagia,Family,Medical Device,High,2024-08-31
