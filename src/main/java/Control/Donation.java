@@ -3163,14 +3163,14 @@ public class Donation {
                     }
                 }
                 if (filter == 1) {
-                    itemlist = new ArrayList<>();
+                    itemlist.clear();
                     if (fcOption != 8) {
                         displayBasedOnCatOptionSort(fcOption, itemlist, sort);
                     } else {
                         break;
                     }
                 } else if (filter == 0) {
-                    fullList = new ArrayList<>();
+                    fullList.clear();
                     fileHandler.loadIntoAll(fullList);
                     sortBeforeDisplay(fullList, sort);
                     generalFunc.clearScreen();
