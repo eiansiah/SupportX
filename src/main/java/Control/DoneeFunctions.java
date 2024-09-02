@@ -103,6 +103,7 @@ public class DoneeFunctions {
 
     public static Donee inputDoneeDetails(String doneeID){
         boolean isValid;
+        GeneralFunction.clearScreen();
         DoneeUI.addDoneeUI();
         String name;
         do {
@@ -224,6 +225,7 @@ public class DoneeFunctions {
         Donee selectedDonee = null;
 
         do {
+            GeneralFunction.clearScreen();
             DoneeUI.deleteDoneeUI();
             doneeId = DoneeUI.obtainDoneeId().toUpperCase();
         } while (doneeId.isEmpty());
@@ -287,7 +289,10 @@ public class DoneeFunctions {
         do {
             GeneralFunction.clearScreen();
             DoneeUI.modifyDoneeUI();
-            doneeId = DoneeUI.obtainDoneeId();
+            doneeId = DoneeUI.obtainDoneeId().toUpperCase();
+            if (doneeId.isEmpty()){
+                GeneralFunction.enterToContinue();
+            }
         } while (doneeId.isEmpty());
 
         Iterator<Donee> doneeIterator = donees.iterator();
@@ -590,9 +595,13 @@ public class DoneeFunctions {
         ListInterface<DonationDistribution> donationList = initializeDistribution();
 
         // Get user input for the donee ID
-        GeneralFunction.clearScreen();
-        DoneeUI.viewDistributionUI();
-        String doneeID = DoneeUI.obtainDoneeId();
+        String doneeID;
+        do {
+            GeneralFunction.clearScreen();
+            DoneeUI.viewDistributionUI();
+            doneeID = DoneeUI.obtainDoneeId().toUpperCase();
+        } while (doneeID.isEmpty());
+
 
         // Display matching donations
         boolean found = false;
