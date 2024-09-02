@@ -335,7 +335,7 @@ public class Donation {
         }
     }
 
-    //Validate Expiry Date - Boundary
+    //Validate Expiry Date
     public LocalDate getNvalidateExpiryDate() {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String _temp;
@@ -3278,7 +3278,7 @@ public class Donation {
             }
         }
     }
-//Display Based On Option - Boundary
+//Display Based On Option
 
     public void displayBasedOnCatOptionSort(int option, ListInterface<DonationItem> itemlist, int sort) {
         generalFunc.clearScreen();
