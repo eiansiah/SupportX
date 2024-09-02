@@ -2830,7 +2830,7 @@ public class Donation {
                                             itemToBeRemoved = item;
                                             break;
                                         }
-                                        if (!(item instanceof Money)) {
+                                        if ((item instanceof Money)) {
                                             amtIndex++;
                                         }
                                     }
