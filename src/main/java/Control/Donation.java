@@ -3208,10 +3208,10 @@ public class Donation {
                 DonationItem item = iterator.next();
                 itemlist2.add(item);
             }
-            for(int i=0;i<itemlist.size();i++){
+            for (int i = 0; i < itemlist.size(); i++) {
                 if (itemlist.get(0) instanceof Money) {
                     int index = 0;
-                    for(int j=0;j<itemlist2.size();j++) {
+                    for (int j = 0; j < itemlist2.size(); j++) {
                         if (!(itemlist2.get(j) instanceof Money)) {
                             if (Double.parseDouble(String.valueOf(itemlist2.get(j).getQuantity())) < ((Money) itemlist.get(0)).getAmount()) {
                                 index++;
@@ -3222,16 +3222,13 @@ public class Donation {
                             }
                         }
                     }
-                    DonationItem item=itemlist.get(0);
+                    DonationItem item = itemlist.get(0);
                     itemlist.remove(item);
                     itemlist2.remove(item);
-                    if (index != 0) {
-                        itemlist.add(index, item);
-                        itemlist2.add(index, item);
-                    } else {
-                        itemlist.add(index, item);
-                        itemlist2.add(index, item);
-                    }
+
+                    itemlist.add(index, item);
+                    itemlist2.add(index, item);
+
                 }
             }
         }
