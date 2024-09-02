@@ -229,7 +229,7 @@ public class DonationUI {
     //Display Donation Action Menu 
     public void displayMenuDonationHome() {
         generalFunc.clearScreen();
-        generalFunc.printTitle("Donation", 51, "-", "|");
+        generalFunc.printTitle("Donation Management Subsystem", 51, "-", "|");
         System.out.println("1. Add Donation");
         System.out.println("2. Remove Donation");
         System.out.println("3. Search Donation");
@@ -584,12 +584,8 @@ public class DonationUI {
         generalFunc.printTitle("Amend Clothing Option", 51, "-", "|");
         System.out.println("1. Item Name");
         System.out.println("2. Quantity");
-        System.out.println("3. Clothing Category");
-        System.out.println("4. Gender");
-        System.out.println("5. Age");
-        System.out.println("6. Size");
-        System.out.println("7. Venue Code");
-        System.out.println("8. Back to Previous Page");
+        System.out.println("3. Venue Code");
+        System.out.println("4. Back to Previous Page");
     }
 
     //Amend Personal Care Option Menu 
@@ -701,8 +697,8 @@ public class DonationUI {
     }
 
     public void displaySingleRecordWithDonorIDMoney(DonationRecord record, int i, int amtIndex) {
-        System.out.printf("%-25s %-10s %-20s %-10s %-20s %-10.2f %-20s\n", record.getRecordID(), record.getDonor().getId(),
-                record.getDonor().getName(), record.getItem().get(0).getItemCode(), record.getItem().get(i).getItemName(),
+        System.out.printf("%-25s %-10s %-20s %-10s %-20s %-10.2f %-20s\n", "", "",
+                "", record.getItem().get(0).getItemCode(), record.getItem().get(i).getItemName(),
                 record.getAmount().get(amtIndex), "");
     }
 
@@ -756,7 +752,7 @@ public class DonationUI {
     }
 
     public void displayClothingListHeader() {
-        System.out.println("\nClothingList");
+        System.out.println("\nClothing List");
     }
 
     public void displayBeverageListHeader() {
@@ -828,7 +824,7 @@ public class DonationUI {
     public void displayFullDonationListTableHeader() {
         generalFunc.repeatPrint("-", 93);
         System.out.print("\n");
-        System.out.printf("%-10s %-30s %-20s %-30s\n", "Item Code", "Item Name", "Quantity/Amount1", "Venue Code/ Event Code");
+        System.out.printf("%-10s %-30s %-20s %-30s\n", "Item Code", "Item Name", "Quantity/Amount", "Venue Code/ Event Code");
         generalFunc.repeatPrint("-", 93);
         System.out.print("\n");
     }

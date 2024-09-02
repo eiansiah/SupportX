@@ -1,4 +1,4 @@
-DNR00001,Reggy Puttrell,rputtrell1@miibeian.gov.cn,8728636340,Public,Organization,2024-06-01
+DNR00001,New Name,rputtrell1@miibeian.gov.cn,8728636340,Public,Organization,2024-06-01
 DNR00002,Zilvia Fiddiman,zfiddiman2@addthis.com,9781224729,Government,Individual,2024-06-05
 DNR00003,Ada Campana,acampana3@twitter.com,5476549590,Public,Organization,2024-06-08
 DNR00004,Lester Teggart,lteggart4@newsvine.com,2293911859,Government,Organization,2024-06-12
@@ -51,4 +51,5 @@ DNR00050,Stacee Swyndley,sswyndley1e@opensource.org,9933091575,Private,Organizat
 DNR00051,dededed,dedede@gmail.com,0123334444,Individual,Organization,2024-09-01
 DNR00054,new test,adsd@sdf.df,0173434343,Individual,Organization,2024-09-01
 DNR00055,WSWSWW,SWWW@SWSWS,0123338888,Government,Individual,2024-09-01
-DNR00056,Testing,adasd@sdfsdf.sdfsdf,0111111111,Organization,Individual,2024-09-02
+DNR00056,SOHAIa,SOHAI@GMAIL.COM,01233344444,Government,Organization,2024-09-02
+DNR00057,SOZHAI,SESESE@SSESES,0123337789,Government,Organization,2024-09-02

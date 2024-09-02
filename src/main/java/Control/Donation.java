@@ -9,7 +9,6 @@ package Control;
  *  ID: 2307589
  * */
 //import entity
-
 import Boundary.DonationUI;
 import Entity.DonationItem;
 import Entity.DonationRecord;
@@ -326,7 +325,7 @@ public class Donation {
                 }
                 if (!(_temp.equalsIgnoreCase("X"))) {
                     _netWeight = Double.parseDouble(_temp);
-                    if (_netWeight <= 0.0 && _netWeight == -999) {
+                    if (_netWeight <= 0.0 && _netWeight != -999) {
                         msgHandling.displayGeneralErrorMsg("Invalid Net Weight. Please enter a net weight that is more than zero.");
                     } else {
                         return _netWeight;
@@ -567,35 +566,35 @@ public class Donation {
                         }
                         if (_clothCategory.equals("Footwear")) {
                             if (_age.equals("Kids")) {
-                                if ((Integer.parseInt(_size) >= 10 && Integer.parseInt(_size) >= 13.5)
-                                        || (Integer.parseInt(_size) >= 1 && Integer.parseInt(_size) >= 6)) {
+                                if ((Integer.parseInt(_size) >= 10 && Integer.parseInt(_size) <= 13.5)
+                                        || (Integer.parseInt(_size) >= 1 && Integer.parseInt(_size) <= 6)) {
                                     break;
                                 } else {
                                     msgHandling.displayGeneralErrorMsg("Invalid Clothing Size for " + _age + " " + _clothCategory + ". Please enter a valid size.");
                                 }
                             } else if (_age.equals("Teens")) {
-                                if (Integer.parseInt(_size) >= 6 && Integer.parseInt(_size) >= 8) {
+                                if (Integer.parseInt(_size) >= 6 && Integer.parseInt(_size) <= 8) {
                                     break;
                                 } else {
                                     msgHandling.displayGeneralErrorMsg("Invalid Clothing Size for " + _age + " " + _clothCategory + ". Please enter a valid size.");
                                 }
                             } else {
                                 if (_gender.equals("Men")) {
-                                    if (Integer.parseInt(_size) >= 5 && Integer.parseInt(_size) >= 14) {
+                                    if (Integer.parseInt(_size) >= 5 && Integer.parseInt(_size) <= 14) {
                                         break;
                                     } else {
                                         msgHandling.displayGeneralErrorMsg("Invalid Clothing Size for " + _gender + " " + _age + " "
                                                 + _clothCategory + ". Please enter a valid size.");
                                     }
                                 } else if (_gender.equals("Women")) {
-                                    if (Integer.parseInt(_size) >= 2 && Integer.parseInt(_size) >= 10) {
+                                    if (Integer.parseInt(_size) >= 2 && Integer.parseInt(_size) <= 10) {
                                         break;
                                     } else {
                                         msgHandling.displayGeneralErrorMsg("Invalid Clothing Size for " + _gender + " " + _age + " "
                                                 + _clothCategory + ". Please enter a valid size.");
                                     }
                                 } else {
-                                    if (Integer.parseInt(_size) >= 2 && Integer.parseInt(_size) >= 14) {
+                                    if (Integer.parseInt(_size) >= 2 && Integer.parseInt(_size) <= 14) {
                                         break;
                                     } else {
                                         msgHandling.displayGeneralErrorMsg("Invalid Clothing Size for " + _gender + " " + _age + " "
@@ -1628,6 +1627,8 @@ public class Donation {
             } else {
                 itemlist = new ArrayList<>();
                 displayBasedOnCatOption(option, itemlist);
+                recordlist.clear();
+                recordlist2.clear();
                 fileHandler.loadIntoDR(recordlist);
                 //ask to remove which
                 if (!itemlist.isEmpty()) {
@@ -1646,12 +1647,34 @@ public class Donation {
                                     msgHandling.displaySuccessMessage("Item removed successfully!");
                                     Iterator<DonationRecord> iterator3 = recordlist.iterator();
                                     while (iterator3.hasNext()) {
+                                        int qtyIndex = 0;
+                                        int amtIndex = 0;
                                         DonationRecord record = iterator3.next();
                                         Iterator<DonationItem> iterator2 = record.getItem().iterator();
                                         while (iterator2.hasNext()) {
                                             DonationItem recordItem = iterator2.next();
                                             if (recordItem.getItemCode().equals(_temp)) {
                                                 record.getItem().remove(recordItem);
+                                                if (recordItem instanceof Money) {
+                                                    for (int j = 0; j < record.getAmount().size(); j++) {
+                                                        if (amtIndex == j) {
+                                                            record.getAmount().remove(record.getAmount().get(j));
+                                                            break;
+                                                        }
+                                                    }
+                                                } else {
+                                                    for (int j = 0; j < record.getQty().size(); j++) {
+                                                        if (qtyIndex == j) {
+                                                            record.getQty().remove(record.getQty().get(j));
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            if (recordItem instanceof Money) {
+                                                amtIndex++;
+                                            } else {
+                                                qtyIndex++;
                                             }
                                         }
                                         if (!record.getItem().isEmpty()) {
@@ -2008,7 +2031,7 @@ public class Donation {
                                     displayAmendOption(option);
                                     amdOption = checkAmendOption(option);
                                     if ((option == 7 && amdOption == 3) || (option == 6 && amdOption == 10) || (option == 5 && amdOption == 5)
-                                            || (option == 4 && amdOption == 9) || (option == 3 && amdOption == 8) || (option == 2 && amdOption == 6)
+                                            || (option == 4 && amdOption == 9) || (option == 3 && amdOption == 4) || (option == 2 && amdOption == 6)
                                             || (option == 1 && amdOption == 7)) {
                                         amend = true;
                                         break;
@@ -2202,7 +2225,12 @@ public class Donation {
                                         }
                                     }
                                     record.getItem().remove(itemToBeRemoved);
-                                    record.getQty().remove(qtyIndex);
+                                    for (int j = 0; j < record.getQty().size(); j++) {
+                                        if (qtyIndex == j) {
+                                            record.getQty().remove(record.getQty().get(j));
+                                            break;
+                                        }
+                                    }
                                     if (!record.getItem().isEmpty()) {
                                         DonationRecord afterAmendRecord = record;
                                         recordlist2.add(afterAmendRecord);
@@ -2461,7 +2489,7 @@ public class Donation {
                 }
             }
             //Age
-        } else if ((amdOption == 6 && (option == 4 || option == 6)) || (amdOption == 5 && option == 3)) {
+        } else if (amdOption == 6 && (option == 4 || option == 6)) {
             donationUI.displayAge();
             _temp = getNvalidateAge();
             if (_temp.equals("")) {
@@ -2473,10 +2501,6 @@ public class Donation {
                     DonationItem item = iterator.next();
                     if (item.getItemCode().equals(itemCode)) {
                         switch (option) {
-                            case 3:
-                                exist = checkExistBeforeClothing(itemlist, item.getItemName(), ((Clothing) item).getSize(),
-                                        ((Clothing) item).getClothingCategory(), _temp, ((Clothing) item).getGender(), ((Clothing) item).getVenueCode());
-                                break;
                             case 4:
                                 exist = checkExistBeforePersonalCare(itemlist, item.getItemName(), ((PersonalCare) item).getExpiryDate(),
                                         ((PersonalCare) item).getNetWeight(), ((PersonalCare) item).getPersonalCareCategory(), _temp,
@@ -2494,9 +2518,6 @@ public class Donation {
                         } else {
                             msgHandling.displaySuccessMessage("Modification Successful!");
                             switch (option) {
-                                case 3:
-                                    ((Clothing) item).setAge(_temp);
-                                    break;
                                 case 4:
                                     ((PersonalCare) item).setAge(_temp);
                                     break;
@@ -2510,7 +2531,7 @@ public class Donation {
                 }
             }
             //Gender
-        } else if ((amdOption == 5 && (option == 4 || option == 6)) || (amdOption == 4 && option == 3)) {
+        } else if (amdOption == 5 && (option == 4 || option == 6)) {
             donationUI.displayGender();
             _temp = getNvalidateGender();
             if (_temp.equals("")) {
@@ -2522,10 +2543,6 @@ public class Donation {
                     DonationItem item = iterator.next();
                     if (item.getItemCode().equals(itemCode)) {
                         switch (option) {
-                            case 3:
-                                exist = checkExistBeforeClothing(itemlist, item.getItemName(), ((Clothing) item).getSize(),
-                                        ((Clothing) item).getClothingCategory(), ((Clothing) item).getAge(), _temp, ((Clothing) item).getVenueCode());
-                                break;
                             case 4:
                                 exist = checkExistBeforePersonalCare(itemlist, item.getItemName(), ((PersonalCare) item).getExpiryDate(),
                                         ((PersonalCare) item).getNetWeight(), ((PersonalCare) item).getPersonalCareCategory(),
@@ -2543,9 +2560,6 @@ public class Donation {
                         } else {
                             msgHandling.displaySuccessMessage("Modification Successful!");
                             switch (option) {
-                                case 3:
-                                    ((Clothing) item).setGender(_temp);
-                                    break;
                                 case 4:
                                     ((PersonalCare) item).setGender(_temp);
                                     break;
@@ -2559,8 +2573,8 @@ public class Donation {
                 }
             }
             //Venue Code
-        } else if ((amdOption == 7 && (option == 3 || option == 6)) || (amdOption == 6 && option == 1) || (amdOption == 5 && option == 2)
-                || (amdOption == 8 && option == 4) || (amdOption == 3 && option == 5)) {
+        } else if ((amdOption == 7 && (option == 6)) || (amdOption == 6 && option == 1) || (amdOption == 5 && option == 2)
+                || (amdOption == 8 && option == 4) || (amdOption == 3 && (option == 3 || option == 5))) {
             donationUI.displayVenueCode();
             _temp = getNvalidateVenueCode();
             if (_temp.equals("")) {
@@ -2770,6 +2784,7 @@ public class Donation {
             ListInterface<DonationRecord> searchResultsRecord = new ArrayList<>();
             ListInterface<DonationRecord> recordlist = new ArrayList<>();
             ListInterface<DonationRecord> recordlist2 = new ArrayList<>();
+            recordlist.clear();
             fileHandler.loadIntoDR(recordlist);
             searchRecord(itemCode, searchResultsRecord);
             displayDonationRecordAssociated(searchResultsRecord);
@@ -2824,7 +2839,12 @@ public class Donation {
                                         }
                                     }
                                     record.getItem().remove(itemToBeRemoved);
-                                    record.getAmount().remove(amtIndex);
+                                    for (int j = 0; j < record.getAmount().size(); j++) {
+                                        if (amtIndex == j) {
+                                            record.getAmount().remove(record.getAmount().get(j));
+                                            break;
+                                        }
+                                    }
                                     if (!record.getItem().isEmpty()) {
                                         DonationRecord afterAmendRecord = record;
                                         recordlist2.add(afterAmendRecord);
@@ -2961,7 +2981,7 @@ public class Donation {
         } else if (option == 4) {
             amdOption = checkMenuWithOp(9);
         } else if (option == 3) {
-            amdOption = checkMenuWithOp(8);
+            amdOption = checkMenuWithOp(4);
         } else if (option == 2) {
             amdOption = checkMenuWithOp(6);
         } else {
@@ -3070,6 +3090,8 @@ public class Donation {
         donationUI.displayFullDonationListHeader();
         displayAllDonation(fullList);
         int filter = 0, sort = 0, option = 0;
+        int fcOption = 0;
+        int fqOption = 0;
         if (fullList.isEmpty()) {
             generalFunc.enterToContinue();
         } else {
@@ -3082,8 +3104,12 @@ public class Donation {
                         break;
                     } else if (option == 1) {
                         filter = 1;
+                        donationUI.displayDonationCategory();
+                        fcOption = checkMenuWithOp(8);
                     } else if (option == 2) {
                         filter = 2;
+                        donationUI.displayFilterQtyOp();
+                        fqOption = checkMenuWithOp(4);
                     } else if (option == 3) {
                         sort = 1;
                     } else if (option == 4) {
@@ -3110,13 +3136,17 @@ public class Donation {
                         break;
                     }
                 } else {
-                    if (filter == 0 && (sort >= 1 || sort <= 4)) {
+                    if (filter == 0 && (sort >= 1 && sort <= 4)) {
                         donationUI.displayFullDonationActionMenuAftSort();
                         option = checkMenuWithOp(4);
                         if (option == 1) {
                             filter = 1;
+                            donationUI.displayDonationCategory();
+                            fcOption = checkMenuWithOp(8);
                         } else if (option == 2) {
                             filter = 2;
+                            donationUI.displayFilterQtyOp();
+                            fqOption = checkMenuWithOp(4);
                         } else if (option == 3) {
                             sort = 0;
                         }
@@ -3138,9 +3168,6 @@ public class Donation {
                 }
                 if (filter == 1) {
                     itemlist = new ArrayList<>();
-                    int fcOption;
-                    donationUI.displayDonationCategory();
-                    fcOption = checkMenuWithOp(8);
                     if (fcOption != 8) {
                         displayBasedOnCatOptionSort(fcOption, itemlist, sort);
                     } else {
@@ -3155,9 +3182,6 @@ public class Donation {
                     displayAllDonation(fullList);
                 } else {
                     //let user filter by quantity
-                    int fqOption;
-                    donationUI.displayFilterQtyOp();
-                    fqOption = checkMenuWithOp(4);
                     if (fqOption != 4) {
                         filterByQuantity(fullList, sort, fqOption);
                         generalFunc.clearScreen();
@@ -3188,37 +3212,32 @@ public class Donation {
                 DonationItem item = iterator.next();
                 itemlist2.add(item);
             }
-            Iterator<DonationItem> iterator2 = itemlist2.iterator();
-            while (iterator2.hasNext()) {
-                DonationItem item = iterator2.next();
-                if (item instanceof Money) {
+            for(int i=0;i<itemlist.size();i++){
+                if (itemlist.get(0) instanceof Money) {
                     int index = 0;
-                    Iterator<DonationItem> iterator3 = itemlist2.iterator();
-                    while (iterator3.hasNext()) {
-                        DonationItem item2 = iterator3.next();
-                        if (!(item2 instanceof Money)) {
-                            if (Double.parseDouble(String.valueOf(item2.getQuantity())) > ((Money) item).getAmount()) {
-                                itemlist.remove(item);
-                                itemlist.add(index - 1, item);
-                                break;
+                    for(int j=0;j<itemlist2.size();j++) {
+                        if (!(itemlist2.get(j) instanceof Money)) {
+                            if (Double.parseDouble(String.valueOf(itemlist2.get(j).getQuantity())) < ((Money) itemlist.get(0)).getAmount()) {
+                                index++;
                             }
                         } else {
-                            if (((Money) item2).getAmount() > ((Money) item).getAmount()) {
-                                itemlist.remove(item);
-                                itemlist.add(index - 1, item);
-                                break;
+                            if (((Money) itemlist2.get(j)).getAmount() < ((Money) itemlist.get(0)).getAmount()) {
+                                index++;
                             }
-
                         }
-                        index++;
-                        if (index == itemlist2.size() + 1) {
-                            itemlist.remove(item);
-                            itemlist.add(item);
-                        }
+                    }
+                    DonationItem item=itemlist.get(0);
+                    itemlist.remove(item);
+                    itemlist2.remove(item);
+                    if (index != 0) {
+                        itemlist.add(index, item);
+                        itemlist2.add(index, item);
+                    } else {
+                        itemlist.add(index, item);
+                        itemlist2.add(index, item);
                     }
                 }
             }
-
         }
         if (sort == 4) {
             itemlist.sort(Comparator.comparing(DonationItem::getQuantity, (ic1, ic2) -> {
@@ -3243,12 +3262,16 @@ public class Donation {
                             if (Double.parseDouble(String.valueOf(item2.getQuantity())) < ((Money) item).getAmount()) {
                                 itemlist.remove(item);
                                 itemlist.add(index, item);
+                                itemlist2.remove(item);
+                                itemlist2.add(index, item);
                                 break;
                             }
                         } else {
                             if (((Money) item2).getAmount() < ((Money) item).getAmount()) {
                                 itemlist.remove(item);
                                 itemlist.add(index, item);
+                                itemlist2.remove(item);
+                                itemlist2.add(index, item);
                                 break;
                             }
                         }
@@ -3348,10 +3371,10 @@ public class Donation {
 
     public boolean checkNumB(String num, int a) {
         try {
-            if (Integer.parseInt(num) > 0 && Integer.parseInt(num) <= a) {
+            if (Integer.parseInt(num) >= a) {
                 return true;
             } else {
-                msgHandling.displayGeneralErrorMsg("Invalid Number Entered! Number must be more than 0. ");
+                msgHandling.displayGeneralErrorMsg("Invalid Number Entered! Number must be more than a. ");
                 return false;
             }
         } catch (Exception ex) {
@@ -3573,7 +3596,6 @@ public class Donation {
         ListInterface<DonationRecord> fullRecord = new ArrayList<>();
         ListInterface<String> usedIDList = new ArrayList<>();
         fileHandler.loadIntoDR(fullRecord);
-        donationUI.displayDonationDonorHeader();
         Iterator<DonationRecord> iterator = fullRecord.iterator();
         while (iterator.hasNext()) {
             DonationRecord record = iterator.next();
