@@ -1621,7 +1621,7 @@ public class Donation {
             if (option == 8) {
                 break;
             } else {
-                itemlist = new ArrayList<>();
+                itemlist.clear();
                 displayBasedOnCatOption(option, itemlist);
                 recordlist.clear();
                 recordlist2.clear();
@@ -3010,7 +3010,7 @@ public class Donation {
         ListInterface<DonationItem> itemlist = new ArrayList<>();
         for (int i = 1; i <= 7; i++) {
             displayBasedOnCatOption(i, itemlist);
-            itemlist = new ArrayList<>();
+            itemlist.clear();
         }
     }
 
