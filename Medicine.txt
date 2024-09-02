@@ -1,2 +1,2 @@
 MN595#Panadol#120#50.0#2025-11-30#Neutral#Adults#V003#Solid#100 tablets per box. For headache.
-MN631#Uphamol#10#20.0#2024-11-30#Neutral#Adults#V002#Solid#For fever.
+MN631#Uphamol#10#20.0#2024-08-30#Neutral#Adults#V002#Solid#For fever.
