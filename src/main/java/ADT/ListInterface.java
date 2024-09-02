@@ -18,13 +18,9 @@ public interface ListInterface<T>{
     boolean remove(int index);
     boolean contains(T element);
     void clear();
-    //void ensureCapacity();
     int indexOf(T element);
     int lastIndexOf(T element);
     boolean isEmpty();
     void sort(Comparator<? super T> comparator);
     Iterator<T> iterator();
-
-
-    //TODO: sorting, removeall?
 }

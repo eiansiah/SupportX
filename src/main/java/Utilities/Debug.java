@@ -1,5 +1,10 @@
 package Utilities;
 
+/*
+ *  Author: Saw Khoo Zi Chong
+ *  ID: 2307609
+ * */
+
 public class Debug {
 
     private static final boolean debug = false;
