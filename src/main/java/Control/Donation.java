@@ -3610,7 +3610,6 @@ public class Donation {
         ListInterface<DonationRecord> fullRecord = new ArrayList<>();
         ListInterface<String> usedIDList = new ArrayList<>();
         fileHandler.loadIntoDR(fullRecord);
-        donationUI.displayDonationDonorHeader();
         Iterator<DonationRecord> iterator = fullRecord.iterator();
         while (iterator.hasNext()) {
             DonationRecord record = iterator.next();
