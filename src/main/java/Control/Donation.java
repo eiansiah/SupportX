@@ -2031,7 +2031,7 @@ public class Donation {
                                     displayAmendOption(option);
                                     amdOption = checkAmendOption(option);
                                     if ((option == 7 && amdOption == 3) || (option == 6 && amdOption == 10) || (option == 5 && amdOption == 5)
-                                            || (option == 4 && amdOption == 9) || (option == 3 && amdOption == 8) || (option == 2 && amdOption == 6)
+                                            || (option == 4 && amdOption == 9) || (option == 3 && amdOption == 4) || (option == 2 && amdOption == 6)
                                             || (option == 1 && amdOption == 7)) {
                                         amend = true;
                                         break;
@@ -2489,7 +2489,7 @@ public class Donation {
                 }
             }
             //Age
-        } else if ((amdOption == 6 && (option == 4 || option == 6)) || (amdOption == 5 && option == 3)) {
+        } else if (amdOption == 6 && (option == 4 || option == 6)) {
             donationUI.displayAge();
             _temp = getNvalidateAge();
             if (_temp.equals("")) {
@@ -2501,10 +2501,6 @@ public class Donation {
                     DonationItem item = iterator.next();
                     if (item.getItemCode().equals(itemCode)) {
                         switch (option) {
-                            case 3:
-                                exist = checkExistBeforeClothing(itemlist, item.getItemName(), ((Clothing) item).getSize(),
-                                        ((Clothing) item).getClothingCategory(), _temp, ((Clothing) item).getGender(), ((Clothing) item).getVenueCode());
-                                break;
                             case 4:
                                 exist = checkExistBeforePersonalCare(itemlist, item.getItemName(), ((PersonalCare) item).getExpiryDate(),
                                         ((PersonalCare) item).getNetWeight(), ((PersonalCare) item).getPersonalCareCategory(), _temp,
@@ -2522,9 +2518,6 @@ public class Donation {
                         } else {
                             msgHandling.displaySuccessMessage("Modification Successful!");
                             switch (option) {
-                                case 3:
-                                    ((Clothing) item).setAge(_temp);
-                                    break;
                                 case 4:
                                     ((PersonalCare) item).setAge(_temp);
                                     break;
@@ -2538,7 +2531,7 @@ public class Donation {
                 }
             }
             //Gender
-        } else if ((amdOption == 5 && (option == 4 || option == 6)) || (amdOption == 4 && option == 3)) {
+        } else if (amdOption == 5 && (option == 4 || option == 6)) {
             donationUI.displayGender();
             _temp = getNvalidateGender();
             if (_temp.equals("")) {
@@ -2550,10 +2543,6 @@ public class Donation {
                     DonationItem item = iterator.next();
                     if (item.getItemCode().equals(itemCode)) {
                         switch (option) {
-                            case 3:
-                                exist = checkExistBeforeClothing(itemlist, item.getItemName(), ((Clothing) item).getSize(),
-                                        ((Clothing) item).getClothingCategory(), ((Clothing) item).getAge(), _temp, ((Clothing) item).getVenueCode());
-                                break;
                             case 4:
                                 exist = checkExistBeforePersonalCare(itemlist, item.getItemName(), ((PersonalCare) item).getExpiryDate(),
                                         ((PersonalCare) item).getNetWeight(), ((PersonalCare) item).getPersonalCareCategory(),
@@ -2571,9 +2560,6 @@ public class Donation {
                         } else {
                             msgHandling.displaySuccessMessage("Modification Successful!");
                             switch (option) {
-                                case 3:
-                                    ((Clothing) item).setGender(_temp);
-                                    break;
                                 case 4:
                                     ((PersonalCare) item).setGender(_temp);
                                     break;
@@ -2587,8 +2573,8 @@ public class Donation {
                 }
             }
             //Venue Code
-        } else if ((amdOption == 7 && (option == 3 || option == 6)) || (amdOption == 6 && option == 1) || (amdOption == 5 && option == 2)
-                || (amdOption == 8 && option == 4) || (amdOption == 3 && option == 5)) {
+        } else if ((amdOption == 7 && (option == 6)) || (amdOption == 6 && option == 1) || (amdOption == 5 && option == 2)
+                || (amdOption == 8 && option == 4) || (amdOption == 3 && (option == 3 || option == 5))) {
             donationUI.displayVenueCode();
             _temp = getNvalidateVenueCode();
             if (_temp.equals("")) {
@@ -2995,7 +2981,7 @@ public class Donation {
         } else if (option == 4) {
             amdOption = checkMenuWithOp(9);
         } else if (option == 3) {
-            amdOption = checkMenuWithOp(8);
+            amdOption = checkMenuWithOp(4);
         } else if (option == 2) {
             amdOption = checkMenuWithOp(6);
         } else {

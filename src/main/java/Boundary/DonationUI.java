@@ -584,12 +584,8 @@ public class DonationUI {
         generalFunc.printTitle("Amend Clothing Option", 51, "-", "|");
         System.out.println("1. Item Name");
         System.out.println("2. Quantity");
-        System.out.println("3. Clothing Category");
-        System.out.println("4. Gender");
-        System.out.println("5. Age");
-        System.out.println("6. Size");
-        System.out.println("7. Venue Code");
-        System.out.println("8. Back to Previous Page");
+        System.out.println("3. Venue Code");
+        System.out.println("4. Back to Previous Page");
     }
 
     //Amend Personal Care Option Menu 
