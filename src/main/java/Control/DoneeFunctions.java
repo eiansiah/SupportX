@@ -3,10 +3,6 @@ package Control;
 /*
  *  author: Siah E-Ian
  *  ID: 2307610
- *
- *  Co-author: Sim Hor Kang
- *  ID: 2307611
- *
  * */
 
 import java.time.LocalDate;
