@@ -46,7 +46,7 @@ public class VolunteerUI {
         for (int i = 0; i < upcomingEvents.size(); i++) {
             Event event = upcomingEvents.get(i);
             DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-            System.out.println(event.eventID() + " " + event.eventName() + " " + event.startDateTime().format(df) + " " + event.endDateTime().format(df) + " " + event.venue());
+            System.out.println(event.eventID() + " " + event.eventName() + " " + event.startDateTime().format(df) + " " + event.venue());
 
         }
     }
